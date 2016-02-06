@@ -1,4 +1,4 @@
-# gauge-python
+# Gauge Python
 Python language runner for [Gauge](https://github.com/getgauge/gauge)
 
 Tested on Python2.7
