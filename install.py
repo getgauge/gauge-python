@@ -8,7 +8,7 @@ from subprocess import call
 
 CWD = os.getcwd()
 
-PLUGIN_FILE_TEMPLATE = 'python-{}'
+PLUGIN_FILE_TEMPLATE = 'gauge-python-{}'
 
 ZIP = 'zip'
 
