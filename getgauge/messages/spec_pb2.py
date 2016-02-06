@@ -17,8 +17,8 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='spec.proto',
-  package='getgauge.messages',
-  serialized_pb=_b('\n\nspec.proto\x12\x0egauge.messages\"\xf6\x01\n\tProtoSpec\x12\x13\n\x0bspecHeading\x18\x01 \x02(\t\x12(\n\x05items\x18\x02 \x03(\x0b\x32\x19.getgauge.messages.ProtoItem\x12\x15\n\risTableDriven\x18\x03 \x02(\x08\x12\x38\n\x0epreHookFailure\x18\x04 \x01(\x0b\x32 .getgauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x05 \x01(\x0b\x32 .getgauge.messages.ProtoHookFailure\x12\x10\n\x08\x66ileName\x18\x06 \x02(\t\x12\x0c\n\x04tags\x18\x07 \x03(\t\"\x80\x04\n\tProtoItem\x12\x34\n\x08itemType\x18\x01 \x02(\x0e\x32\".getgauge.messages.ProtoItem.ItemType\x12\'\n\x04step\x18\x02 \x01(\x0b\x32\x19.getgauge.messages.ProtoStep\x12-\n\x07\x63oncept\x18\x03 \x01(\x0b\x32\x1c.getgauge.messages.ProtoConcept\x12/\n\x08scenario\x18\x04 \x01(\x0b\x32\x1d.getgauge.messages.ProtoScenario\x12\x45\n\x13tableDrivenScenario\x18\x05 \x01(\x0b\x32(.getgauge.messages.ProtoTableDrivenScenario\x12-\n\x07\x63omment\x18\x06 \x01(\x0b\x32\x1c.getgauge.messages.ProtoComment\x12)\n\x05table\x18\x07 \x01(\x0b\x32\x1a.getgauge.messages.ProtoTable\x12\'\n\x04tags\x18\x08 \x01(\x0b\x32\x19.getgauge.messages.ProtoTags\"j\n\x08ItemType\x12\x08\n\x04Step\x10\x01\x12\x0b\n\x07\x43omment\x10\x02\x12\x0b\n\x07\x43oncept\x10\x03\x12\x0c\n\x08Scenario\x10\x04\x12\x17\n\x13TableDrivenScenario\x10\x05\x12\t\n\x05Table\x10\x06\x12\x08\n\x04Tags\x10\x07\"\x94\x03\n\rProtoScenario\x12\x17\n\x0fscenarioHeading\x18\x01 \x02(\t\x12\x0e\n\x06\x66\x61iled\x18\x02 \x02(\x08\x12+\n\x08\x63ontexts\x18\x03 \x03(\x0b\x32\x19.getgauge.messages.ProtoItem\x12\x30\n\rscenarioItems\x18\x04 \x03(\x0b\x32\x19.getgauge.messages.ProtoItem\x12\x38\n\x0epreHookFailure\x18\x05 \x01(\x0b\x32 .getgauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x06 \x01(\x0b\x32 .getgauge.messages.ProtoHookFailure\x12\x0c\n\x04tags\x18\x07 \x03(\t\x12\x15\n\rexecutionTime\x18\x08 \x01(\x03\x12\x0f\n\x07skipped\x18\t \x02(\x08\x12\x12\n\nskipErrors\x18\n \x03(\t\x12\n\n\x02ID\x18\x0b \x01(\t\x12\x30\n\rtearDownSteps\x18\x0c \x03(\x0b\x32\x19.getgauge.messages.ProtoItem\"L\n\x18ProtoTableDrivenScenario\x12\x30\n\tscenarios\x18\x01 \x03(\x0b\x32\x1d.getgauge.messages.ProtoScenario\"\xa7\x01\n\tProtoStep\x12\x12\n\nactualText\x18\x01 \x02(\t\x12\x12\n\nparsedText\x18\x02 \x02(\t\x12+\n\tfragments\x18\x03 \x03(\x0b\x32\x18.getgauge.messages.Fragment\x12\x45\n\x13stepExecutionResult\x18\x04 \x01(\x0b\x32(.getgauge.messages.ProtoStepExecutionResult\"\xb2\x01\n\x0cProtoConcept\x12.\n\x0b\x63onceptStep\x18\x01 \x02(\x0b\x32\x19.getgauge.messages.ProtoStep\x12(\n\x05steps\x18\x02 \x03(\x0b\x32\x19.getgauge.messages.ProtoItem\x12H\n\x16\x63onceptExecutionResult\x18\x03 \x01(\x0b\x32(.getgauge.messages.ProtoStepExecutionResult\"\x19\n\tProtoTags\x12\x0c\n\x04tags\x18\x01 \x03(\t\"\xac\x01\n\x08\x46ragment\x12;\n\x0c\x66ragmentType\x18\x01 \x02(\x0e\x32%.getgauge.messages.Fragment.FragmentType\x12\x0c\n\x04text\x18\x02 \x01(\t\x12,\n\tparameter\x18\x03 \x01(\x0b\x32\x19.getgauge.messages.Parameter\"\'\n\x0c\x46ragmentType\x12\x08\n\x04Text\x10\x01\x12\r\n\tParameter\x10\x02\"\xef\x01\n\tParameter\x12>\n\rparameterType\x18\x01 \x02(\x0e\x32\'.getgauge.messages.Parameter.ParameterType\x12\r\n\x05value\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12)\n\x05table\x18\x04 \x01(\x0b\x32\x1a.getgauge.messages.ProtoTable\"Z\n\rParameterType\x12\n\n\x06Static\x10\x01\x12\x0b\n\x07\x44ynamic\x10\x02\x12\x12\n\x0eSpecial_String\x10\x03\x12\x11\n\rSpecial_Table\x10\x04\x12\t\n\x05Table\x10\x05\"\x1c\n\x0cProtoComment\x12\x0c\n\x04text\x18\x01 \x02(\t\"i\n\nProtoTable\x12.\n\x07headers\x18\x01 \x02(\x0b\x32\x1d.getgauge.messages.ProtoTableRow\x12+\n\x04rows\x18\x02 \x03(\x0b\x32\x1d.getgauge.messages.ProtoTableRow\"\x1e\n\rProtoTableRow\x12\r\n\x05\x63\x65lls\x18\x01 \x03(\t\"\xf6\x01\n\x18ProtoStepExecutionResult\x12=\n\x0f\x65xecutionResult\x18\x01 \x01(\x0b\x32$.getgauge.messages.ProtoExecutionResult\x12\x38\n\x0epreHookFailure\x18\x02 \x01(\x0b\x32 .getgauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x03 \x01(\x0b\x32 .getgauge.messages.ProtoHookFailure\x12\x0f\n\x07skipped\x18\x04 \x02(\x08\x12\x15\n\rskippedReason\x18\x05 \x01(\t\"\xa2\x02\n\x14ProtoExecutionResult\x12\x0e\n\x06\x66\x61iled\x18\x01 \x02(\x08\x12\x18\n\x10recoverableError\x18\x02 \x01(\x08\x12\x14\n\x0c\x65rrorMessage\x18\x03 \x01(\t\x12\x12\n\nstackTrace\x18\x04 \x01(\t\x12\x12\n\nscreenShot\x18\x05 \x01(\x0c\x12\x15\n\rexecutionTime\x18\x06 \x02(\x03\x12\x0f\n\x07message\x18\x07 \x03(\t\x12L\n\terrorType\x18\x08 \x01(\x0e\x32..getgauge.messages.ProtoExecutionResult.ErrorType:\tASSERTION\",\n\tErrorType\x12\r\n\tASSERTION\x10\x01\x12\x10\n\x0cVERIFICATION\x10\x02\"P\n\x10ProtoHookFailure\x12\x12\n\nstackTrace\x18\x01 \x02(\t\x12\x14\n\x0c\x65rrorMessage\x18\x02 \x02(\t\x12\x12\n\nscreenShot\x18\x03 \x01(\x0c\"\xf9\x02\n\x10ProtoSuiteResult\x12\x34\n\x0bspecResults\x18\x01 \x03(\x0b\x32\x1f.getgauge.messages.ProtoSpecResult\x12\x38\n\x0epreHookFailure\x18\x02 \x01(\x0b\x32 .getgauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x03 \x01(\x0b\x32 .getgauge.messages.ProtoHookFailure\x12\x0e\n\x06\x66\x61iled\x18\x04 \x02(\x08\x12\x18\n\x10specsFailedCount\x18\x05 \x02(\x05\x12\x15\n\rexecutionTime\x18\x06 \x01(\x03\x12\x13\n\x0bsuccessRate\x18\x07 \x02(\x02\x12\x13\n\x0b\x65nvironment\x18\x08 \x01(\t\x12\x0c\n\x04tags\x18\t \x01(\t\x12\x13\n\x0bprojectName\x18\n \x02(\t\x12\x11\n\ttimestamp\x18\x0b \x02(\t\x12\x19\n\x11specsSkippedCount\x18\x0c \x02(\x05\"\xe6\x01\n\x0fProtoSpecResult\x12,\n\tprotoSpec\x18\x01 \x02(\x0b\x32\x19.getgauge.messages.ProtoSpec\x12\x15\n\rscenarioCount\x18\x02 \x02(\x05\x12\x1b\n\x13scenarioFailedCount\x18\x03 \x02(\x05\x12\x0e\n\x06\x66\x61iled\x18\x04 \x02(\x08\x12\x1b\n\x13\x66\x61iledDataTableRows\x18\x05 \x03(\x05\x12\x15\n\rexecutionTime\x18\x06 \x01(\x03\x12\x0f\n\x07skipped\x18\x07 \x02(\x08\x12\x1c\n\x14scenarioSkippedCount\x18\t \x02(\x05\"W\n\x0eProtoStepValue\x12\x11\n\tstepValue\x18\x01 \x02(\t\x12\x1e\n\x16parameterizedStepValue\x18\x02 \x02(\t\x12\x12\n\nparameters\x18\x03 \x03(\t')
+  package='gauge.messages',
+  serialized_pb=_b('\n\nspec.proto\x12\x0egauge.messages\"\xf6\x01\n\tProtoSpec\x12\x13\n\x0bspecHeading\x18\x01 \x02(\t\x12(\n\x05items\x18\x02 \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12\x15\n\risTableDriven\x18\x03 \x02(\x08\x12\x38\n\x0epreHookFailure\x18\x04 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x05 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x10\n\x08\x66ileName\x18\x06 \x02(\t\x12\x0c\n\x04tags\x18\x07 \x03(\t\"\x80\x04\n\tProtoItem\x12\x34\n\x08itemType\x18\x01 \x02(\x0e\x32\".gauge.messages.ProtoItem.ItemType\x12\'\n\x04step\x18\x02 \x01(\x0b\x32\x19.gauge.messages.ProtoStep\x12-\n\x07\x63oncept\x18\x03 \x01(\x0b\x32\x1c.gauge.messages.ProtoConcept\x12/\n\x08scenario\x18\x04 \x01(\x0b\x32\x1d.gauge.messages.ProtoScenario\x12\x45\n\x13tableDrivenScenario\x18\x05 \x01(\x0b\x32(.gauge.messages.ProtoTableDrivenScenario\x12-\n\x07\x63omment\x18\x06 \x01(\x0b\x32\x1c.gauge.messages.ProtoComment\x12)\n\x05table\x18\x07 \x01(\x0b\x32\x1a.gauge.messages.ProtoTable\x12\'\n\x04tags\x18\x08 \x01(\x0b\x32\x19.gauge.messages.ProtoTags\"j\n\x08ItemType\x12\x08\n\x04Step\x10\x01\x12\x0b\n\x07\x43omment\x10\x02\x12\x0b\n\x07\x43oncept\x10\x03\x12\x0c\n\x08Scenario\x10\x04\x12\x17\n\x13TableDrivenScenario\x10\x05\x12\t\n\x05Table\x10\x06\x12\x08\n\x04Tags\x10\x07\"\x94\x03\n\rProtoScenario\x12\x17\n\x0fscenarioHeading\x18\x01 \x02(\t\x12\x0e\n\x06\x66\x61iled\x18\x02 \x02(\x08\x12+\n\x08\x63ontexts\x18\x03 \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12\x30\n\rscenarioItems\x18\x04 \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12\x38\n\x0epreHookFailure\x18\x05 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x06 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x0c\n\x04tags\x18\x07 \x03(\t\x12\x15\n\rexecutionTime\x18\x08 \x01(\x03\x12\x0f\n\x07skipped\x18\t \x02(\x08\x12\x12\n\nskipErrors\x18\n \x03(\t\x12\n\n\x02ID\x18\x0b \x01(\t\x12\x30\n\rtearDownSteps\x18\x0c \x03(\x0b\x32\x19.gauge.messages.ProtoItem\"L\n\x18ProtoTableDrivenScenario\x12\x30\n\tscenarios\x18\x01 \x03(\x0b\x32\x1d.gauge.messages.ProtoScenario\"\xa7\x01\n\tProtoStep\x12\x12\n\nactualText\x18\x01 \x02(\t\x12\x12\n\nparsedText\x18\x02 \x02(\t\x12+\n\tfragments\x18\x03 \x03(\x0b\x32\x18.gauge.messages.Fragment\x12\x45\n\x13stepExecutionResult\x18\x04 \x01(\x0b\x32(.gauge.messages.ProtoStepExecutionResult\"\xb2\x01\n\x0cProtoConcept\x12.\n\x0b\x63onceptStep\x18\x01 \x02(\x0b\x32\x19.gauge.messages.ProtoStep\x12(\n\x05steps\x18\x02 \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12H\n\x16\x63onceptExecutionResult\x18\x03 \x01(\x0b\x32(.gauge.messages.ProtoStepExecutionResult\"\x19\n\tProtoTags\x12\x0c\n\x04tags\x18\x01 \x03(\t\"\xac\x01\n\x08\x46ragment\x12;\n\x0c\x66ragmentType\x18\x01 \x02(\x0e\x32%.gauge.messages.Fragment.FragmentType\x12\x0c\n\x04text\x18\x02 \x01(\t\x12,\n\tparameter\x18\x03 \x01(\x0b\x32\x19.gauge.messages.Parameter\"\'\n\x0c\x46ragmentType\x12\x08\n\x04Text\x10\x01\x12\r\n\tParameter\x10\x02\"\xef\x01\n\tParameter\x12>\n\rparameterType\x18\x01 \x02(\x0e\x32\'.gauge.messages.Parameter.ParameterType\x12\r\n\x05value\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12)\n\x05table\x18\x04 \x01(\x0b\x32\x1a.gauge.messages.ProtoTable\"Z\n\rParameterType\x12\n\n\x06Static\x10\x01\x12\x0b\n\x07\x44ynamic\x10\x02\x12\x12\n\x0eSpecial_String\x10\x03\x12\x11\n\rSpecial_Table\x10\x04\x12\t\n\x05Table\x10\x05\"\x1c\n\x0cProtoComment\x12\x0c\n\x04text\x18\x01 \x02(\t\"i\n\nProtoTable\x12.\n\x07headers\x18\x01 \x02(\x0b\x32\x1d.gauge.messages.ProtoTableRow\x12+\n\x04rows\x18\x02 \x03(\x0b\x32\x1d.gauge.messages.ProtoTableRow\"\x1e\n\rProtoTableRow\x12\r\n\x05\x63\x65lls\x18\x01 \x03(\t\"\xf6\x01\n\x18ProtoStepExecutionResult\x12=\n\x0f\x65xecutionResult\x18\x01 \x01(\x0b\x32$.gauge.messages.ProtoExecutionResult\x12\x38\n\x0epreHookFailure\x18\x02 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x03 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x0f\n\x07skipped\x18\x04 \x02(\x08\x12\x15\n\rskippedReason\x18\x05 \x01(\t\"\xa2\x02\n\x14ProtoExecutionResult\x12\x0e\n\x06\x66\x61iled\x18\x01 \x02(\x08\x12\x18\n\x10recoverableError\x18\x02 \x01(\x08\x12\x14\n\x0c\x65rrorMessage\x18\x03 \x01(\t\x12\x12\n\nstackTrace\x18\x04 \x01(\t\x12\x12\n\nscreenShot\x18\x05 \x01(\x0c\x12\x15\n\rexecutionTime\x18\x06 \x02(\x03\x12\x0f\n\x07message\x18\x07 \x03(\t\x12L\n\terrorType\x18\x08 \x01(\x0e\x32..gauge.messages.ProtoExecutionResult.ErrorType:\tASSERTION\",\n\tErrorType\x12\r\n\tASSERTION\x10\x01\x12\x10\n\x0cVERIFICATION\x10\x02\"P\n\x10ProtoHookFailure\x12\x12\n\nstackTrace\x18\x01 \x02(\t\x12\x14\n\x0c\x65rrorMessage\x18\x02 \x02(\t\x12\x12\n\nscreenShot\x18\x03 \x01(\x0c\"\xf9\x02\n\x10ProtoSuiteResult\x12\x34\n\x0bspecResults\x18\x01 \x03(\x0b\x32\x1f.gauge.messages.ProtoSpecResult\x12\x38\n\x0epreHookFailure\x18\x02 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x03 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x0e\n\x06\x66\x61iled\x18\x04 \x02(\x08\x12\x18\n\x10specsFailedCount\x18\x05 \x02(\x05\x12\x15\n\rexecutionTime\x18\x06 \x01(\x03\x12\x13\n\x0bsuccessRate\x18\x07 \x02(\x02\x12\x13\n\x0b\x65nvironment\x18\x08 \x01(\t\x12\x0c\n\x04tags\x18\t \x01(\t\x12\x13\n\x0bprojectName\x18\n \x02(\t\x12\x11\n\ttimestamp\x18\x0b \x02(\t\x12\x19\n\x11specsSkippedCount\x18\x0c \x02(\x05\"\xe6\x01\n\x0fProtoSpecResult\x12,\n\tprotoSpec\x18\x01 \x02(\x0b\x32\x19.gauge.messages.ProtoSpec\x12\x15\n\rscenarioCount\x18\x02 \x02(\x05\x12\x1b\n\x13scenarioFailedCount\x18\x03 \x02(\x05\x12\x0e\n\x06\x66\x61iled\x18\x04 \x02(\x08\x12\x1b\n\x13\x66\x61iledDataTableRows\x18\x05 \x03(\x05\x12\x15\n\rexecutionTime\x18\x06 \x01(\x03\x12\x0f\n\x07skipped\x18\x07 \x02(\x08\x12\x1c\n\x14scenarioSkippedCount\x18\t \x02(\x05\"W\n\x0eProtoStepValue\x12\x11\n\tstepValue\x18\x01 \x02(\t\x12\x1e\n\x16parameterizedStepValue\x18\x02 \x02(\t\x12\x12\n\nparameters\x18\x03 \x03(\t')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -26,7 +26,7 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 _PROTOITEM_ITEMTYPE = _descriptor.EnumDescriptor(
   name='ItemType',
-  full_name='getgauge.messages.ProtoItem.ItemType',
+  full_name='gauge.messages.ProtoItem.ItemType',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -68,7 +68,7 @@ _sym_db.RegisterEnumDescriptor(_PROTOITEM_ITEMTYPE)
 
 _FRAGMENT_FRAGMENTTYPE = _descriptor.EnumDescriptor(
   name='FragmentType',
-  full_name='getgauge.messages.Fragment.FragmentType',
+  full_name='gauge.messages.Fragment.FragmentType',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -90,7 +90,7 @@ _sym_db.RegisterEnumDescriptor(_FRAGMENT_FRAGMENTTYPE)
 
 _PARAMETER_PARAMETERTYPE = _descriptor.EnumDescriptor(
   name='ParameterType',
-  full_name='getgauge.messages.Parameter.ParameterType',
+  full_name='gauge.messages.Parameter.ParameterType',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -124,7 +124,7 @@ _sym_db.RegisterEnumDescriptor(_PARAMETER_PARAMETERTYPE)
 
 _PROTOEXECUTIONRESULT_ERRORTYPE = _descriptor.EnumDescriptor(
   name='ErrorType',
-  full_name='getgauge.messages.ProtoExecutionResult.ErrorType',
+  full_name='gauge.messages.ProtoExecutionResult.ErrorType',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -147,55 +147,55 @@ _sym_db.RegisterEnumDescriptor(_PROTOEXECUTIONRESULT_ERRORTYPE)
 
 _PROTOSPEC = _descriptor.Descriptor(
   name='ProtoSpec',
-  full_name='getgauge.messages.ProtoSpec',
+  full_name='gauge.messages.ProtoSpec',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='specHeading', full_name='getgauge.messages.ProtoSpec.specHeading', index=0,
+      name='specHeading', full_name='gauge.messages.ProtoSpec.specHeading', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='items', full_name='getgauge.messages.ProtoSpec.items', index=1,
+      name='items', full_name='gauge.messages.ProtoSpec.items', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='isTableDriven', full_name='getgauge.messages.ProtoSpec.isTableDriven', index=2,
+      name='isTableDriven', full_name='gauge.messages.ProtoSpec.isTableDriven', index=2,
       number=3, type=8, cpp_type=7, label=2,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='preHookFailure', full_name='getgauge.messages.ProtoSpec.preHookFailure', index=3,
+      name='preHookFailure', full_name='gauge.messages.ProtoSpec.preHookFailure', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='postHookFailure', full_name='getgauge.messages.ProtoSpec.postHookFailure', index=4,
+      name='postHookFailure', full_name='gauge.messages.ProtoSpec.postHookFailure', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='fileName', full_name='getgauge.messages.ProtoSpec.fileName', index=5,
+      name='fileName', full_name='gauge.messages.ProtoSpec.fileName', index=5,
       number=6, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='tags', full_name='getgauge.messages.ProtoSpec.tags', index=6,
+      name='tags', full_name='gauge.messages.ProtoSpec.tags', index=6,
       number=7, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -219,62 +219,62 @@ _PROTOSPEC = _descriptor.Descriptor(
 
 _PROTOITEM = _descriptor.Descriptor(
   name='ProtoItem',
-  full_name='getgauge.messages.ProtoItem',
+  full_name='gauge.messages.ProtoItem',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='itemType', full_name='getgauge.messages.ProtoItem.itemType', index=0,
+      name='itemType', full_name='gauge.messages.ProtoItem.itemType', index=0,
       number=1, type=14, cpp_type=8, label=2,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='step', full_name='getgauge.messages.ProtoItem.step', index=1,
+      name='step', full_name='gauge.messages.ProtoItem.step', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='concept', full_name='getgauge.messages.ProtoItem.concept', index=2,
+      name='concept', full_name='gauge.messages.ProtoItem.concept', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='scenario', full_name='getgauge.messages.ProtoItem.scenario', index=3,
+      name='scenario', full_name='gauge.messages.ProtoItem.scenario', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='tableDrivenScenario', full_name='getgauge.messages.ProtoItem.tableDrivenScenario', index=4,
+      name='tableDrivenScenario', full_name='gauge.messages.ProtoItem.tableDrivenScenario', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='comment', full_name='getgauge.messages.ProtoItem.comment', index=5,
+      name='comment', full_name='gauge.messages.ProtoItem.comment', index=5,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='table', full_name='getgauge.messages.ProtoItem.table', index=6,
+      name='table', full_name='gauge.messages.ProtoItem.table', index=6,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='tags', full_name='getgauge.messages.ProtoItem.tags', index=7,
+      name='tags', full_name='gauge.messages.ProtoItem.tags', index=7,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -299,90 +299,90 @@ _PROTOITEM = _descriptor.Descriptor(
 
 _PROTOSCENARIO = _descriptor.Descriptor(
   name='ProtoScenario',
-  full_name='getgauge.messages.ProtoScenario',
+  full_name='gauge.messages.ProtoScenario',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='scenarioHeading', full_name='getgauge.messages.ProtoScenario.scenarioHeading', index=0,
+      name='scenarioHeading', full_name='gauge.messages.ProtoScenario.scenarioHeading', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='failed', full_name='getgauge.messages.ProtoScenario.failed', index=1,
+      name='failed', full_name='gauge.messages.ProtoScenario.failed', index=1,
       number=2, type=8, cpp_type=7, label=2,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='contexts', full_name='getgauge.messages.ProtoScenario.contexts', index=2,
+      name='contexts', full_name='gauge.messages.ProtoScenario.contexts', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='scenarioItems', full_name='getgauge.messages.ProtoScenario.scenarioItems', index=3,
+      name='scenarioItems', full_name='gauge.messages.ProtoScenario.scenarioItems', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='preHookFailure', full_name='getgauge.messages.ProtoScenario.preHookFailure', index=4,
+      name='preHookFailure', full_name='gauge.messages.ProtoScenario.preHookFailure', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='postHookFailure', full_name='getgauge.messages.ProtoScenario.postHookFailure', index=5,
+      name='postHookFailure', full_name='gauge.messages.ProtoScenario.postHookFailure', index=5,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='tags', full_name='getgauge.messages.ProtoScenario.tags', index=6,
+      name='tags', full_name='gauge.messages.ProtoScenario.tags', index=6,
       number=7, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='executionTime', full_name='getgauge.messages.ProtoScenario.executionTime', index=7,
+      name='executionTime', full_name='gauge.messages.ProtoScenario.executionTime', index=7,
       number=8, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='skipped', full_name='getgauge.messages.ProtoScenario.skipped', index=8,
+      name='skipped', full_name='gauge.messages.ProtoScenario.skipped', index=8,
       number=9, type=8, cpp_type=7, label=2,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='skipErrors', full_name='getgauge.messages.ProtoScenario.skipErrors', index=9,
+      name='skipErrors', full_name='gauge.messages.ProtoScenario.skipErrors', index=9,
       number=10, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='ID', full_name='getgauge.messages.ProtoScenario.ID', index=10,
+      name='ID', full_name='gauge.messages.ProtoScenario.ID', index=10,
       number=11, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='tearDownSteps', full_name='getgauge.messages.ProtoScenario.tearDownSteps', index=11,
+      name='tearDownSteps', full_name='gauge.messages.ProtoScenario.tearDownSteps', index=11,
       number=12, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -406,13 +406,13 @@ _PROTOSCENARIO = _descriptor.Descriptor(
 
 _PROTOTABLEDRIVENSCENARIO = _descriptor.Descriptor(
   name='ProtoTableDrivenScenario',
-  full_name='getgauge.messages.ProtoTableDrivenScenario',
+  full_name='gauge.messages.ProtoTableDrivenScenario',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='scenarios', full_name='getgauge.messages.ProtoTableDrivenScenario.scenarios', index=0,
+      name='scenarios', full_name='gauge.messages.ProtoTableDrivenScenario.scenarios', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -436,34 +436,34 @@ _PROTOTABLEDRIVENSCENARIO = _descriptor.Descriptor(
 
 _PROTOSTEP = _descriptor.Descriptor(
   name='ProtoStep',
-  full_name='getgauge.messages.ProtoStep',
+  full_name='gauge.messages.ProtoStep',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='actualText', full_name='getgauge.messages.ProtoStep.actualText', index=0,
+      name='actualText', full_name='gauge.messages.ProtoStep.actualText', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='parsedText', full_name='getgauge.messages.ProtoStep.parsedText', index=1,
+      name='parsedText', full_name='gauge.messages.ProtoStep.parsedText', index=1,
       number=2, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='fragments', full_name='getgauge.messages.ProtoStep.fragments', index=2,
+      name='fragments', full_name='gauge.messages.ProtoStep.fragments', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='stepExecutionResult', full_name='getgauge.messages.ProtoStep.stepExecutionResult', index=3,
+      name='stepExecutionResult', full_name='gauge.messages.ProtoStep.stepExecutionResult', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -487,27 +487,27 @@ _PROTOSTEP = _descriptor.Descriptor(
 
 _PROTOCONCEPT = _descriptor.Descriptor(
   name='ProtoConcept',
-  full_name='getgauge.messages.ProtoConcept',
+  full_name='gauge.messages.ProtoConcept',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='conceptStep', full_name='getgauge.messages.ProtoConcept.conceptStep', index=0,
+      name='conceptStep', full_name='gauge.messages.ProtoConcept.conceptStep', index=0,
       number=1, type=11, cpp_type=10, label=2,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='steps', full_name='getgauge.messages.ProtoConcept.steps', index=1,
+      name='steps', full_name='gauge.messages.ProtoConcept.steps', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='conceptExecutionResult', full_name='getgauge.messages.ProtoConcept.conceptExecutionResult', index=2,
+      name='conceptExecutionResult', full_name='gauge.messages.ProtoConcept.conceptExecutionResult', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -531,13 +531,13 @@ _PROTOCONCEPT = _descriptor.Descriptor(
 
 _PROTOTAGS = _descriptor.Descriptor(
   name='ProtoTags',
-  full_name='getgauge.messages.ProtoTags',
+  full_name='gauge.messages.ProtoTags',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='tags', full_name='getgauge.messages.ProtoTags.tags', index=0,
+      name='tags', full_name='gauge.messages.ProtoTags.tags', index=0,
       number=1, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -561,27 +561,27 @@ _PROTOTAGS = _descriptor.Descriptor(
 
 _FRAGMENT = _descriptor.Descriptor(
   name='Fragment',
-  full_name='getgauge.messages.Fragment',
+  full_name='gauge.messages.Fragment',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='fragmentType', full_name='getgauge.messages.Fragment.fragmentType', index=0,
+      name='fragmentType', full_name='gauge.messages.Fragment.fragmentType', index=0,
       number=1, type=14, cpp_type=8, label=2,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='text', full_name='getgauge.messages.Fragment.text', index=1,
+      name='text', full_name='gauge.messages.Fragment.text', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='parameter', full_name='getgauge.messages.Fragment.parameter', index=2,
+      name='parameter', full_name='gauge.messages.Fragment.parameter', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -606,34 +606,34 @@ _FRAGMENT = _descriptor.Descriptor(
 
 _PARAMETER = _descriptor.Descriptor(
   name='Parameter',
-  full_name='getgauge.messages.Parameter',
+  full_name='gauge.messages.Parameter',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='parameterType', full_name='getgauge.messages.Parameter.parameterType', index=0,
+      name='parameterType', full_name='gauge.messages.Parameter.parameterType', index=0,
       number=1, type=14, cpp_type=8, label=2,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='value', full_name='getgauge.messages.Parameter.value', index=1,
+      name='value', full_name='gauge.messages.Parameter.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='name', full_name='getgauge.messages.Parameter.name', index=2,
+      name='name', full_name='gauge.messages.Parameter.name', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='table', full_name='getgauge.messages.Parameter.table', index=3,
+      name='table', full_name='gauge.messages.Parameter.table', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -658,13 +658,13 @@ _PARAMETER = _descriptor.Descriptor(
 
 _PROTOCOMMENT = _descriptor.Descriptor(
   name='ProtoComment',
-  full_name='getgauge.messages.ProtoComment',
+  full_name='gauge.messages.ProtoComment',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='text', full_name='getgauge.messages.ProtoComment.text', index=0,
+      name='text', full_name='gauge.messages.ProtoComment.text', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -688,20 +688,20 @@ _PROTOCOMMENT = _descriptor.Descriptor(
 
 _PROTOTABLE = _descriptor.Descriptor(
   name='ProtoTable',
-  full_name='getgauge.messages.ProtoTable',
+  full_name='gauge.messages.ProtoTable',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='headers', full_name='getgauge.messages.ProtoTable.headers', index=0,
+      name='headers', full_name='gauge.messages.ProtoTable.headers', index=0,
       number=1, type=11, cpp_type=10, label=2,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='rows', full_name='getgauge.messages.ProtoTable.rows', index=1,
+      name='rows', full_name='gauge.messages.ProtoTable.rows', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -725,13 +725,13 @@ _PROTOTABLE = _descriptor.Descriptor(
 
 _PROTOTABLEROW = _descriptor.Descriptor(
   name='ProtoTableRow',
-  full_name='getgauge.messages.ProtoTableRow',
+  full_name='gauge.messages.ProtoTableRow',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='cells', full_name='getgauge.messages.ProtoTableRow.cells', index=0,
+      name='cells', full_name='gauge.messages.ProtoTableRow.cells', index=0,
       number=1, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -755,41 +755,41 @@ _PROTOTABLEROW = _descriptor.Descriptor(
 
 _PROTOSTEPEXECUTIONRESULT = _descriptor.Descriptor(
   name='ProtoStepExecutionResult',
-  full_name='getgauge.messages.ProtoStepExecutionResult',
+  full_name='gauge.messages.ProtoStepExecutionResult',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='executionResult', full_name='getgauge.messages.ProtoStepExecutionResult.executionResult', index=0,
+      name='executionResult', full_name='gauge.messages.ProtoStepExecutionResult.executionResult', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='preHookFailure', full_name='getgauge.messages.ProtoStepExecutionResult.preHookFailure', index=1,
+      name='preHookFailure', full_name='gauge.messages.ProtoStepExecutionResult.preHookFailure', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='postHookFailure', full_name='getgauge.messages.ProtoStepExecutionResult.postHookFailure', index=2,
+      name='postHookFailure', full_name='gauge.messages.ProtoStepExecutionResult.postHookFailure', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='skipped', full_name='getgauge.messages.ProtoStepExecutionResult.skipped', index=3,
+      name='skipped', full_name='gauge.messages.ProtoStepExecutionResult.skipped', index=3,
       number=4, type=8, cpp_type=7, label=2,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='skippedReason', full_name='getgauge.messages.ProtoStepExecutionResult.skippedReason', index=4,
+      name='skippedReason', full_name='gauge.messages.ProtoStepExecutionResult.skippedReason', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -813,62 +813,62 @@ _PROTOSTEPEXECUTIONRESULT = _descriptor.Descriptor(
 
 _PROTOEXECUTIONRESULT = _descriptor.Descriptor(
   name='ProtoExecutionResult',
-  full_name='getgauge.messages.ProtoExecutionResult',
+  full_name='gauge.messages.ProtoExecutionResult',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='failed', full_name='getgauge.messages.ProtoExecutionResult.failed', index=0,
+      name='failed', full_name='gauge.messages.ProtoExecutionResult.failed', index=0,
       number=1, type=8, cpp_type=7, label=2,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='recoverableError', full_name='getgauge.messages.ProtoExecutionResult.recoverableError', index=1,
+      name='recoverableError', full_name='gauge.messages.ProtoExecutionResult.recoverableError', index=1,
       number=2, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='errorMessage', full_name='getgauge.messages.ProtoExecutionResult.errorMessage', index=2,
+      name='errorMessage', full_name='gauge.messages.ProtoExecutionResult.errorMessage', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='stackTrace', full_name='getgauge.messages.ProtoExecutionResult.stackTrace', index=3,
+      name='stackTrace', full_name='gauge.messages.ProtoExecutionResult.stackTrace', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='screenShot', full_name='getgauge.messages.ProtoExecutionResult.screenShot', index=4,
+      name='screenShot', full_name='gauge.messages.ProtoExecutionResult.screenShot', index=4,
       number=5, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='executionTime', full_name='getgauge.messages.ProtoExecutionResult.executionTime', index=5,
+      name='executionTime', full_name='gauge.messages.ProtoExecutionResult.executionTime', index=5,
       number=6, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='message', full_name='getgauge.messages.ProtoExecutionResult.message', index=6,
+      name='message', full_name='gauge.messages.ProtoExecutionResult.message', index=6,
       number=7, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='errorType', full_name='getgauge.messages.ProtoExecutionResult.errorType', index=7,
+      name='errorType', full_name='gauge.messages.ProtoExecutionResult.errorType', index=7,
       number=8, type=14, cpp_type=8, label=1,
       has_default_value=True, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
@@ -893,27 +893,27 @@ _PROTOEXECUTIONRESULT = _descriptor.Descriptor(
 
 _PROTOHOOKFAILURE = _descriptor.Descriptor(
   name='ProtoHookFailure',
-  full_name='getgauge.messages.ProtoHookFailure',
+  full_name='gauge.messages.ProtoHookFailure',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='stackTrace', full_name='getgauge.messages.ProtoHookFailure.stackTrace', index=0,
+      name='stackTrace', full_name='gauge.messages.ProtoHookFailure.stackTrace', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='errorMessage', full_name='getgauge.messages.ProtoHookFailure.errorMessage', index=1,
+      name='errorMessage', full_name='gauge.messages.ProtoHookFailure.errorMessage', index=1,
       number=2, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='screenShot', full_name='getgauge.messages.ProtoHookFailure.screenShot', index=2,
+      name='screenShot', full_name='gauge.messages.ProtoHookFailure.screenShot', index=2,
       number=3, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
@@ -937,90 +937,90 @@ _PROTOHOOKFAILURE = _descriptor.Descriptor(
 
 _PROTOSUITERESULT = _descriptor.Descriptor(
   name='ProtoSuiteResult',
-  full_name='getgauge.messages.ProtoSuiteResult',
+  full_name='gauge.messages.ProtoSuiteResult',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='specResults', full_name='getgauge.messages.ProtoSuiteResult.specResults', index=0,
+      name='specResults', full_name='gauge.messages.ProtoSuiteResult.specResults', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='preHookFailure', full_name='getgauge.messages.ProtoSuiteResult.preHookFailure', index=1,
+      name='preHookFailure', full_name='gauge.messages.ProtoSuiteResult.preHookFailure', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='postHookFailure', full_name='getgauge.messages.ProtoSuiteResult.postHookFailure', index=2,
+      name='postHookFailure', full_name='gauge.messages.ProtoSuiteResult.postHookFailure', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='failed', full_name='getgauge.messages.ProtoSuiteResult.failed', index=3,
+      name='failed', full_name='gauge.messages.ProtoSuiteResult.failed', index=3,
       number=4, type=8, cpp_type=7, label=2,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='specsFailedCount', full_name='getgauge.messages.ProtoSuiteResult.specsFailedCount', index=4,
+      name='specsFailedCount', full_name='gauge.messages.ProtoSuiteResult.specsFailedCount', index=4,
       number=5, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='executionTime', full_name='getgauge.messages.ProtoSuiteResult.executionTime', index=5,
+      name='executionTime', full_name='gauge.messages.ProtoSuiteResult.executionTime', index=5,
       number=6, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='successRate', full_name='getgauge.messages.ProtoSuiteResult.successRate', index=6,
+      name='successRate', full_name='gauge.messages.ProtoSuiteResult.successRate', index=6,
       number=7, type=2, cpp_type=6, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='environment', full_name='getgauge.messages.ProtoSuiteResult.environment', index=7,
+      name='environment', full_name='gauge.messages.ProtoSuiteResult.environment', index=7,
       number=8, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='tags', full_name='getgauge.messages.ProtoSuiteResult.tags', index=8,
+      name='tags', full_name='gauge.messages.ProtoSuiteResult.tags', index=8,
       number=9, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='projectName', full_name='getgauge.messages.ProtoSuiteResult.projectName', index=9,
+      name='projectName', full_name='gauge.messages.ProtoSuiteResult.projectName', index=9,
       number=10, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='timestamp', full_name='getgauge.messages.ProtoSuiteResult.timestamp', index=10,
+      name='timestamp', full_name='gauge.messages.ProtoSuiteResult.timestamp', index=10,
       number=11, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='specsSkippedCount', full_name='getgauge.messages.ProtoSuiteResult.specsSkippedCount', index=11,
+      name='specsSkippedCount', full_name='gauge.messages.ProtoSuiteResult.specsSkippedCount', index=11,
       number=12, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -1044,62 +1044,62 @@ _PROTOSUITERESULT = _descriptor.Descriptor(
 
 _PROTOSPECRESULT = _descriptor.Descriptor(
   name='ProtoSpecResult',
-  full_name='getgauge.messages.ProtoSpecResult',
+  full_name='gauge.messages.ProtoSpecResult',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='protoSpec', full_name='getgauge.messages.ProtoSpecResult.protoSpec', index=0,
+      name='protoSpec', full_name='gauge.messages.ProtoSpecResult.protoSpec', index=0,
       number=1, type=11, cpp_type=10, label=2,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='scenarioCount', full_name='getgauge.messages.ProtoSpecResult.scenarioCount', index=1,
+      name='scenarioCount', full_name='gauge.messages.ProtoSpecResult.scenarioCount', index=1,
       number=2, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='scenarioFailedCount', full_name='getgauge.messages.ProtoSpecResult.scenarioFailedCount', index=2,
+      name='scenarioFailedCount', full_name='gauge.messages.ProtoSpecResult.scenarioFailedCount', index=2,
       number=3, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='failed', full_name='getgauge.messages.ProtoSpecResult.failed', index=3,
+      name='failed', full_name='gauge.messages.ProtoSpecResult.failed', index=3,
       number=4, type=8, cpp_type=7, label=2,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='failedDataTableRows', full_name='getgauge.messages.ProtoSpecResult.failedDataTableRows', index=4,
+      name='failedDataTableRows', full_name='gauge.messages.ProtoSpecResult.failedDataTableRows', index=4,
       number=5, type=5, cpp_type=1, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='executionTime', full_name='getgauge.messages.ProtoSpecResult.executionTime', index=5,
+      name='executionTime', full_name='gauge.messages.ProtoSpecResult.executionTime', index=5,
       number=6, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='skipped', full_name='getgauge.messages.ProtoSpecResult.skipped', index=6,
+      name='skipped', full_name='gauge.messages.ProtoSpecResult.skipped', index=6,
       number=7, type=8, cpp_type=7, label=2,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='scenarioSkippedCount', full_name='getgauge.messages.ProtoSpecResult.scenarioSkippedCount', index=7,
+      name='scenarioSkippedCount', full_name='gauge.messages.ProtoSpecResult.scenarioSkippedCount', index=7,
       number=9, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -1123,27 +1123,27 @@ _PROTOSPECRESULT = _descriptor.Descriptor(
 
 _PROTOSTEPVALUE = _descriptor.Descriptor(
   name='ProtoStepValue',
-  full_name='getgauge.messages.ProtoStepValue',
+  full_name='gauge.messages.ProtoStepValue',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='stepValue', full_name='getgauge.messages.ProtoStepValue.stepValue', index=0,
+      name='stepValue', full_name='gauge.messages.ProtoStepValue.stepValue', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='parameterizedStepValue', full_name='getgauge.messages.ProtoStepValue.parameterizedStepValue', index=1,
+      name='parameterizedStepValue', full_name='gauge.messages.ProtoStepValue.parameterizedStepValue', index=1,
       number=2, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='parameters', full_name='getgauge.messages.ProtoStepValue.parameters', index=2,
+      name='parameters', full_name='gauge.messages.ProtoStepValue.parameters', index=2,
       number=3, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -1226,126 +1226,126 @@ DESCRIPTOR.message_types_by_name['ProtoStepValue'] = _PROTOSTEPVALUE
 ProtoSpec = _reflection.GeneratedProtocolMessageType('ProtoSpec', (_message.Message,), dict(
   DESCRIPTOR = _PROTOSPEC,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoSpec)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoSpec)
   ))
 _sym_db.RegisterMessage(ProtoSpec)
 
 ProtoItem = _reflection.GeneratedProtocolMessageType('ProtoItem', (_message.Message,), dict(
   DESCRIPTOR = _PROTOITEM,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoItem)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoItem)
   ))
 _sym_db.RegisterMessage(ProtoItem)
 
 ProtoScenario = _reflection.GeneratedProtocolMessageType('ProtoScenario', (_message.Message,), dict(
   DESCRIPTOR = _PROTOSCENARIO,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoScenario)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoScenario)
   ))
 _sym_db.RegisterMessage(ProtoScenario)
 
 ProtoTableDrivenScenario = _reflection.GeneratedProtocolMessageType('ProtoTableDrivenScenario', (_message.Message,), dict(
   DESCRIPTOR = _PROTOTABLEDRIVENSCENARIO,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoTableDrivenScenario)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoTableDrivenScenario)
   ))
 _sym_db.RegisterMessage(ProtoTableDrivenScenario)
 
 ProtoStep = _reflection.GeneratedProtocolMessageType('ProtoStep', (_message.Message,), dict(
   DESCRIPTOR = _PROTOSTEP,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoStep)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoStep)
   ))
 _sym_db.RegisterMessage(ProtoStep)
 
 ProtoConcept = _reflection.GeneratedProtocolMessageType('ProtoConcept', (_message.Message,), dict(
   DESCRIPTOR = _PROTOCONCEPT,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoConcept)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoConcept)
   ))
 _sym_db.RegisterMessage(ProtoConcept)
 
 ProtoTags = _reflection.GeneratedProtocolMessageType('ProtoTags', (_message.Message,), dict(
   DESCRIPTOR = _PROTOTAGS,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoTags)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoTags)
   ))
 _sym_db.RegisterMessage(ProtoTags)
 
 Fragment = _reflection.GeneratedProtocolMessageType('Fragment', (_message.Message,), dict(
   DESCRIPTOR = _FRAGMENT,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.Fragment)
+  # @@protoc_insertion_point(class_scope:gauge.messages.Fragment)
   ))
 _sym_db.RegisterMessage(Fragment)
 
 Parameter = _reflection.GeneratedProtocolMessageType('Parameter', (_message.Message,), dict(
   DESCRIPTOR = _PARAMETER,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.Parameter)
+  # @@protoc_insertion_point(class_scope:gauge.messages.Parameter)
   ))
 _sym_db.RegisterMessage(Parameter)
 
 ProtoComment = _reflection.GeneratedProtocolMessageType('ProtoComment', (_message.Message,), dict(
   DESCRIPTOR = _PROTOCOMMENT,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoComment)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoComment)
   ))
 _sym_db.RegisterMessage(ProtoComment)
 
 ProtoTable = _reflection.GeneratedProtocolMessageType('ProtoTable', (_message.Message,), dict(
   DESCRIPTOR = _PROTOTABLE,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoTable)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoTable)
   ))
 _sym_db.RegisterMessage(ProtoTable)
 
 ProtoTableRow = _reflection.GeneratedProtocolMessageType('ProtoTableRow', (_message.Message,), dict(
   DESCRIPTOR = _PROTOTABLEROW,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoTableRow)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoTableRow)
   ))
 _sym_db.RegisterMessage(ProtoTableRow)
 
 ProtoStepExecutionResult = _reflection.GeneratedProtocolMessageType('ProtoStepExecutionResult', (_message.Message,), dict(
   DESCRIPTOR = _PROTOSTEPEXECUTIONRESULT,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoStepExecutionResult)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoStepExecutionResult)
   ))
 _sym_db.RegisterMessage(ProtoStepExecutionResult)
 
 ProtoExecutionResult = _reflection.GeneratedProtocolMessageType('ProtoExecutionResult', (_message.Message,), dict(
   DESCRIPTOR = _PROTOEXECUTIONRESULT,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoExecutionResult)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoExecutionResult)
   ))
 _sym_db.RegisterMessage(ProtoExecutionResult)
 
 ProtoHookFailure = _reflection.GeneratedProtocolMessageType('ProtoHookFailure', (_message.Message,), dict(
   DESCRIPTOR = _PROTOHOOKFAILURE,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoHookFailure)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoHookFailure)
   ))
 _sym_db.RegisterMessage(ProtoHookFailure)
 
 ProtoSuiteResult = _reflection.GeneratedProtocolMessageType('ProtoSuiteResult', (_message.Message,), dict(
   DESCRIPTOR = _PROTOSUITERESULT,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoSuiteResult)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoSuiteResult)
   ))
 _sym_db.RegisterMessage(ProtoSuiteResult)
 
 ProtoSpecResult = _reflection.GeneratedProtocolMessageType('ProtoSpecResult', (_message.Message,), dict(
   DESCRIPTOR = _PROTOSPECRESULT,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoSpecResult)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoSpecResult)
   ))
 _sym_db.RegisterMessage(ProtoSpecResult)
 
 ProtoStepValue = _reflection.GeneratedProtocolMessageType('ProtoStepValue', (_message.Message,), dict(
   DESCRIPTOR = _PROTOSTEPVALUE,
   __module__ = 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:getgauge.messages.ProtoStepValue)
+  # @@protoc_insertion_point(class_scope:gauge.messages.ProtoStepValue)
   ))
 _sym_db.RegisterMessage(ProtoStepValue)
 
