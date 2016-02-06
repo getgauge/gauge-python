@@ -7,3 +7,5 @@ logs/
 dist/
 MANIFEST
 gauge.egg-info/
+htmlcov/
+.coverage
