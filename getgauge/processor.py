@@ -1,0 +1,142 @@
+import sys
+
+from connection import read_message, send_message
+from executor import set_response_values, execute_method, run_hook
+from messages.messages_pb2 import Message, StepValidateResponse
+from messages.spec_pb2 import Parameter
+from python import Table, create_execution_context_from, Messages, DataStoreFactory
+from refactor import refactor_step
+from registry import registry
+
+
+def _validate_step(request, response, socket):
+    response.messageType = Message.StepValidateResponse
+    response.stepValidateResponse.isValid = registry.is_step_implemented(request.stepValidateRequest.stepText)
+    if response.stepValidateResponse.isValid is False:
+        response.stepValidateResponse.errorType = StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND
+
+
+def _send_step_name(request, response, socket):
+    response.messageType = Message.StepNameResponse
+    step_name = registry.get_info(request.stepNameRequest.stepValue).step_text
+    response.stepNameResponse.isStepPresent = False
+    if step_name is not None:
+        response.stepNameResponse.isStepPresent = True
+        response.stepNameResponse.stepName.append(step_name)
+    response.stepNameResponse.hasAlias = False
+
+
+def _refactor(request, response, socket):
+    response.messageType = Message.RefactorResponse
+    try:
+        refactor_step(request, response)
+    except Exception as e:
+        response.refactorResponse.success = False
+        response.refactorResponse.error = "Reason: {}".format(e.__str__())
+
+
+def _send_all_step_names(request, response, socket):
+    response.messageType = Message.StepNamesResponse
+    response.stepNamesResponse.steps.extend(registry.all_steps())
+
+
+def _execute_step(request, response, socket):
+    params = []
+    for param in request.executeStepRequest.parameters:
+        params.append(Table(param.table)) if param.parameterType == Parameter.Table else params.append(param.value)
+    set_response_values(request, response)
+    execute_method(params, registry.get_info(request.executeStepRequest.parsedStepText).impl, response)
+
+
+def _execute_before_suite_hook(request, response, socket):
+    execution_info = create_execution_context_from(request.executionStartingRequest.currentExecutionInfo)
+    run_hook(request, response, registry.before_suite(), execution_info)
+
+
+def _execute_after_suite_hook(request, response, socket):
+    execution_info = create_execution_context_from(request.executionEndingRequest.currentExecutionInfo)
+    run_hook(request, response, registry.after_suite(), execution_info)
+
+
+def _execute_before_spec_hook(request, response, socket):
+    execution_info = create_execution_context_from(request.specExecutionStartingRequest.currentExecutionInfo)
+    run_hook(request, response, registry.before_spec(execution_info.specification.tags), execution_info)
+
+
+def _execute_after_spec_hook(request, response, socket):
+    execution_info = create_execution_context_from(request.specExecutionEndingRequest.currentExecutionInfo)
+    run_hook(request, response, registry.after_spec(execution_info.specification.tags), execution_info)
+
+
+def _execute_before_scenario_hook(request, response, socket):
+    execution_info = create_execution_context_from(request.scenarioExecutionStartingRequest.currentExecutionInfo)
+    tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
+    run_hook(request, response, registry.before_scenario(tags), execution_info)
+
+
+def _execute_after_scenario_hook(request, response, socket):
+    execution_info = create_execution_context_from(request.scenarioExecutionEndingRequest.currentExecutionInfo)
+    tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
+    run_hook(request, response, registry.after_scenario(tags), execution_info)
+
+
+def _execute_before_step_hook(request, response, socket):
+    Messages.pending_messages()
+    execution_info = create_execution_context_from(request.stepExecutionStartingRequest.currentExecutionInfo)
+    tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
+    run_hook(request, response, registry.before_step(tags), execution_info)
+
+
+def _execute_after_step_hook(request, response, socket):
+    execution_info = create_execution_context_from(request.stepExecutionEndingRequest.currentExecutionInfo)
+    tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
+    run_hook(request, response, registry.after_step(tags), execution_info)
+    response.executionStatusResponse.executionResult.message.extend(Messages.pending_messages())
+
+
+def _init_scenario_data_store(request, response, socket):
+    DataStoreFactory.get_scenario_data_store().clear()
+    set_response_values(request, response)
+
+
+def _init_spec_data_store(request, response, socket):
+    DataStoreFactory.get_spec_data_store().clear()
+    set_response_values(request, response)
+
+
+def _init_suite_data_store(request, response, socket):
+    DataStoreFactory.get_suite_data_store().clear()
+    set_response_values(request, response)
+
+
+def _kill_runner(request, response, socket):
+    socket.close()
+    sys.exit()
+
+
+processors = {Message.ExecutionStarting: _execute_before_suite_hook,
+              Message.ExecutionEnding: _execute_after_suite_hook,
+              Message.SpecExecutionStarting: _execute_before_spec_hook,
+              Message.SpecExecutionEnding: _execute_after_spec_hook,
+              Message.ScenarioExecutionStarting: _execute_before_scenario_hook,
+              Message.ScenarioExecutionEnding: _execute_after_scenario_hook,
+              Message.StepExecutionStarting: _execute_before_step_hook,
+              Message.StepExecutionEnding: _execute_after_step_hook,
+              Message.ExecuteStep: _execute_step,
+              Message.StepValidateRequest: _validate_step,
+              Message.StepNamesRequest: _send_all_step_names,
+              Message.ScenarioDataStoreInit: _init_scenario_data_store,
+              Message.SpecDataStoreInit: _init_spec_data_store,
+              Message.SuiteDataStoreInit: _init_suite_data_store,
+              Message.StepNameRequest: _send_step_name,
+              Message.RefactorRequest: _refactor,
+              Message.KillProcessRequest: _kill_runner,
+              }
+
+
+def dispatch_messages(socket):
+    while True:
+        request = read_message(socket)
+        response = Message()
+        processors[request.messageType](request, response, socket)
+        send_message(response, request, socket)

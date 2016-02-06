@@ -1,0 +1,9 @@
+.idea/
+__pycache__/
+*.pyc
+.DS_Store
+bin/
+logs/
+dist/
+MANIFEST
+gauge.egg-info/
