@@ -66,13 +66,13 @@ def copy(src, dest):
 
 
 def main():
-    exit_code = call(["python", "-m", "unittest", "discover"])
+    exit_code = call(["coverage", "run", "--source", "getgauge", "-m", "unittest", "discover"])
     if exit_code != 0:
         return
-    if len(sys.argv) > 1:
-        install()
-    else:
+    if len(sys.argv) == 1:
         create_zip()
+    elif sys.argv[1] == '--install':
+        install()
 
 
 main()
