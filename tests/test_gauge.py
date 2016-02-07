@@ -7,6 +7,8 @@ from getgauge.python import step, Messages, DataStore, DataStoreFactory, Table, 
     create_execution_context_from
 from getgauge.registry import registry
 
+registry.clear()
+
 
 class MessagesTests(unittest.TestCase):
     def test_pending_messages(self):
