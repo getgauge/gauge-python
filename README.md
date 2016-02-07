@@ -1,6 +1,5 @@
-# Gauge Python
+# Gauge Python   [![Build Status](https://snap-ci.com/kashishm/gauge-python/branch/master/build_image)](https://snap-ci.com/kashishm/gauge-python/branch/master)
 Python language runner for [Gauge](https://github.com/getgauge/gauge)
-
 Tested on Python2.7
 
 ###Documentation
