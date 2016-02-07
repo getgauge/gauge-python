@@ -21,10 +21,13 @@ def assert_default_vowels(given_vowels):
     assert given_vowels == "".join(vowels)""")
         ProcessorTests.data = ProcessorTests.file.read()
         ProcessorTests.file.close()
-
-    def test_Processor_refactor_request_with_add_param(self):
         registry.add_step_definition("Vowels in English language are <vowels>.", None,
                                      ProcessorTests.path)
+
+    def tearDown(self):
+        registry.clear()
+
+    def test_Processor_refactor_request_with_add_param(self):
         response = Message()
         request = Message()
         request.refactorRequest.oldStepValue.stepValue = "Vowels in English language are {}."
@@ -55,8 +58,6 @@ def assert_default_vowels(given_vowels, bsdfdsf):
         self.assertEqual(expected, actual_data)
 
     def test_Processor_refactor_request_with_remove_param(self):
-        registry.add_step_definition("Vowels in English language are <vowels>.", None,
-                                     ProcessorTests.path)
         response = Message()
         request = Message()
         request.refactorRequest.oldStepValue.stepValue = "Vowels in English language are {}."
@@ -79,8 +80,6 @@ def assert_default_vowels():
         self.assertEqual(expected, actual_data)
 
     def test_Processor_refactor_request(self):
-        registry.add_step_definition("Vowels in English language are <vowels>.", None,
-                                     ProcessorTests.path)
         response = Message()
         request = Message()
         request.refactorRequest.oldStepValue.stepValue = "Vowels in English language are {}."
@@ -108,8 +107,6 @@ def assert_default_vowels(given_vowels):
         self.assertEqual(expected, actual_data)
 
     def test_Processor_refactor_request_with_add_and_remove_param(self):
-        registry.add_step_definition("Vowels in English language are <vowels>.", None,
-                                     ProcessorTests.path)
         response = Message()
         request = Message()
         request.refactorRequest.oldStepValue.stepValue = "Vowels in English language are {}."
