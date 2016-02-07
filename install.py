@@ -68,7 +68,7 @@ def copy(src, dest):
 def main():
     exit_code = call(["coverage", "run", "--source", "getgauge", "-m", "unittest", "discover"])
     if exit_code != 0:
-        return
+        sys.exit(exit_code)
     if len(sys.argv) == 1:
         create_zip()
     elif sys.argv[1] == '--install':
