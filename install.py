@@ -1,5 +1,4 @@
 # /usr/bin/env python
-import errno
 import json
 import os
 import shutil
@@ -25,6 +24,9 @@ def install():
     plugin_zip = create_zip()
     call(["gauge", "--uninstall", "python", "--plugin-version", get_version()])
     exit_code = call(["gauge", "--install", "python", "-f", os.path.join(BIN, plugin_zip)])
+    shutil.rmtree('dist', True)
+    call(["python", "setup.py", "sdist"])
+    print "Install getgauge package using pip: \n\tpip install dist/*"
     sys.exit(exit_code)
 
 
