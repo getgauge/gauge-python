@@ -49,29 +49,7 @@ def _add_exception(e, response):
 
 def take_screenshot(response):
     temp_file = os.path.join(tempfile.gettempdir(), "screenshot.png")
-    _file = open(temp_file, 'w+')
-    call([_find_executable("gauge_screenshot"), temp_file])
+    call(["gauge_screenshot", temp_file])
+    _file = open(temp_file, 'r')
     response.executionStatusResponse.executionResult.screenShot = _file.read()
     _file.close()
-
-
-def _find_executable(executable):
-    path = os.environ['PATH']
-    paths = path.split(os.pathsep)
-    ext_list = ['']
-    if sys.platform == 'win32':
-        path_ext = os.environ['PATHEXT'].lower().split(os.pathsep)
-        (base, ext) = os.path.splitext(executable)
-        if ext.lower() not in path_ext:
-            ext_list = path_ext
-    for ext in ext_list:
-        exec_name = executable + ext
-        if os.path.isfile(exec_name):
-            return exec_name
-        else:
-            for p in paths:
-                f = os.path.join(p, exec_name)
-                if os.path.isfile(f):
-                    return f
-    else:
-        return None
