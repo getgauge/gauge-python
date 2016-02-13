@@ -19,12 +19,22 @@ class RegistryTests(unittest.TestCase):
             parsed_step_text = re.sub('<[^<]+?>', '{}', info['text'])
             self.assertEqual(info['func'], registry.get_info(parsed_step_text).impl)
 
+    def test_Registry_add_step_definition_with_alias(self):
+        registry.add_step_definition(['Say <hello> to <getgauge>.', 'Tell <hello> to <getgauge>.'], 'impl', "")
+
+        info1 = registry.get_info('Say {} to {}.')
+        info2 = registry.get_info('Tell {} to {}.')
+
+        self.assertEqual(info1.has_alias, True)
+        self.assertEqual(info2.has_alias, True)
+
     def test_Registry_get_step_info(self):
         infos = [{'text': "Say <hello> to <getgauge>", 'func': 'func'}, {'text': "Step 1", 'func': 'func1'}]
         for info in infos:
             registry.add_step_definition(info['text'], info['func'], "")
 
         self.assertEqual("Say <hello> to <getgauge>", registry.get_info("Say {} to {}").step_text)
+        self.assertEqual("Say {} to {}", registry.get_info("Say {} to {}").parsed_step_text)
         self.assertEqual("Step 1", registry.get_info("Step 1").step_text)
         self.assertEqual(None, registry.get_info("Step21").step_text)
 

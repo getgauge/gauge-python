@@ -18,12 +18,13 @@ def _validate_step(request, response, socket):
 
 def _send_step_name(request, response, socket):
     response.messageType = Message.StepNameResponse
-    step_name = registry.get_info(request.stepNameRequest.stepValue).step_text
+    info = registry.get_info(request.stepNameRequest.stepValue)
+    step_name = info.step_text
     response.stepNameResponse.isStepPresent = False
     if step_name is not None:
         response.stepNameResponse.isStepPresent = True
         response.stepNameResponse.stepName.append(step_name)
-    response.stepNameResponse.hasAlias = False
+    response.stepNameResponse.hasAlias = info.has_alias
 
 
 def _refactor(request, response, socket):

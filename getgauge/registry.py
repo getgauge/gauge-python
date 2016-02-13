@@ -2,11 +2,12 @@ import re
 
 
 class StepInfo(object):
-    def __init__(self, step_text, parsed_step_text, impl, file_name):
+    def __init__(self, step_text, parsed_step_text, impl, file_name, has_alias=False):
         self.__step_text = step_text
         self.__parsed_step_text = parsed_step_text
         self.__impl = impl
         self.__file_name = file_name
+        self.__has_alias = has_alias
 
     @property
     def step_text(self):
@@ -19,6 +20,10 @@ class StepInfo(object):
     @property
     def impl(self):
         return self.__impl
+
+    @property
+    def has_alias(self):
+        return self.__has_alias
 
     @property
     def file_name(self):
@@ -88,9 +93,13 @@ class Registry(object):
     def add_after_suite(self, func):
         self.__after_suite.append(func)
 
-    def add_step_definition(self, step_text, func, file_name):
-        parsed_step_text = re.sub('<[^<]+?>', '{}', step_text)
-        self.__steps_map[parsed_step_text] = StepInfo(step_text, parsed_step_text, func, file_name)
+    def add_step_definition(self, step_text, func, file_name, has_alias=False):
+        if not isinstance(step_text, list):
+            parsed_step_text = re.sub('<[^<]+?>', '{}', step_text)
+            self.__steps_map[parsed_step_text] = StepInfo(step_text, parsed_step_text, func, file_name, has_alias)
+            return
+        for text in step_text:
+            self.add_step_definition(text, func, file_name, True)
 
     def is_step_implemented(self, step_text):
         return self.__steps_map.get(step_text) is not None
