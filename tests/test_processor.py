@@ -15,6 +15,9 @@ class ProcessorTests(unittest.TestCase):
         DataStoreFactory.get_scenario_data_store().clear()
         registry.clear()
 
+    def tearDown(self):
+        registry.clear()
+
     def test_Processor_kill_request(self):
         with self.assertRaises(SystemExit):
             processors[Message.KillProcessRequest](None, None, socket.socket(socket.AF_INET, socket.SOCK_STREAM))

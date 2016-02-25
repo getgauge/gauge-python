@@ -1,9 +1,8 @@
 import unittest
 
 from getgauge.messages.messages_pb2 import Message
-from getgauge.python import step, Messages, DataStore, DataStoreFactory, Table, Specification, Scenario, Step, \
+from getgauge.python import Messages, DataStore, DataStoreFactory, Table, Specification, Scenario, Step, \
     ExecutionContext, \
-    before_step, after_step, before_scenario, after_scenario, after_suite, before_suite, after_spec, before_spec, \
     create_execution_context_from
 from getgauge.registry import registry
 
@@ -258,87 +257,10 @@ class ExecutionContextTests(unittest.TestCase):
         self.assertEqual(expected_execution_context, context)
 
 
-@step("Step 1")
-def step1():
-    pass
-
-
-@step("Step 2")
-def step1():
-    pass
-
-
-@before_step
-def before_step1():
-    pass
-
-
-@before_step
-def before_step2():
-    pass
-
-
-@after_step
-def after_step1():
-    pass
-
-
-@before_scenario
-def before_scenario1():
-    pass
-
-
-@before_scenario("<haha> and <hehe>")
-def before_scenario2():
-    pass
-
-
-@after_scenario
-def after_scenario1():
-    pass
-
-
-@after_scenario("<haha> and <hehe>")
-def after_scenario2():
-    pass
-
-
-@before_spec
-def before_spec1():
-    pass
-
-
-@before_spec("<haha> and <hehe>")
-def before_spec2():
-    pass
-
-
-@after_spec
-def after_spec1():
-    pass
-
-
-@after_spec("<haha> and <hehe>")
-def after_spec2():
-    pass
-
-
-@before_suite
-def before_suite1():
-    pass
-
-
-@after_suite
-def after_suite1():
-    pass
-
-
-@after_suite
-def after_suite2():
-    pass
-
-
 class DecoratorTests(unittest.TestCase):
+    def setUp(self):
+        import test_data.impl_stub
+
     def test_step_decorator(self):
         steps = registry.all_steps()
         expected = ['Step 1', 'Step 2']
