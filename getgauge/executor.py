@@ -1,6 +1,5 @@
 import inspect
 import os
-import sys
 import tempfile
 import time
 import traceback
@@ -34,7 +33,6 @@ def execute_method(params, func, response):
         func(*params)
     except Exception as e:
         _add_exception(e, response)
-    sys.stdout.flush()
     response.executionStatusResponse.executionResult.executionTime = _current_time() - start
 
 

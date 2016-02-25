@@ -1,2 +1,2 @@
 @echo off
-python start.py %1
+python -u start.py %1
