@@ -7,7 +7,6 @@ def step(step_text):
     def _step(func):
         f_back = sys._getframe().f_back
         registry.add_step_definition(step_text, func, f_back.f_code.co_filename)
-
         return func
 
     return _step
@@ -15,13 +14,11 @@ def step(step_text):
 
 def before_suite(func):
     registry.add_before_suite(func)
-
     return func
 
 
 def after_suite(func):
     registry.add_after_suite(func)
-
     return func
 
 
@@ -47,6 +44,11 @@ def before_step(obj):
 
 def after_step(obj):
     return _define_wrapper(obj, registry.add_after_step)
+
+
+def screenshot(func):
+    registry.add_screenshot_provider(func)
+    return func
 
 
 class Table:

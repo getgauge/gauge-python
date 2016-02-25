@@ -1,10 +1,9 @@
 import inspect
 import os
-import tempfile
 import time
 import traceback
-from subprocess import call
 
+from getgauge.registry import registry
 from messages.messages_pb2 import Message
 from messages.spec_pb2 import ProtoExecutionResult
 
@@ -38,16 +37,8 @@ def execute_method(params, func, response):
 
 def _add_exception(e, response):
     if os.getenv('screenshot_on_failure'):
-        take_screenshot(response)
+        response.executionStatusResponse.executionResult.screenShot = registry.screenshot_provider()()
     response.executionStatusResponse.executionResult.failed = True
     response.executionStatusResponse.executionResult.errorMessage = e.__str__()
     response.executionStatusResponse.executionResult.stackTrace = traceback.format_exc()
     response.executionStatusResponse.executionResult.errorType = ProtoExecutionResult.ASSERTION
-
-
-def take_screenshot(response):
-    temp_file = os.path.join(tempfile.gettempdir(), "screenshot.png")
-    call(["gauge_screenshot", temp_file])
-    _file = open(temp_file, 'r')
-    response.executionStatusResponse.executionResult.screenShot = _file.read()
-    _file.close()
