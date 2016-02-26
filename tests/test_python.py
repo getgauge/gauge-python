@@ -306,6 +306,11 @@ class DecoratorTests(unittest.TestCase):
         expected = ['after_suite1', 'after_suite2']
         self.assertEqual(expected, [func.func_name for func in funcs])
 
+    def test_screenshot_decorator(self):
+        func = registry.screenshot_provider()
+        expected = 'take_screenshot'
+        self.assertEqual(expected, func.func_name)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -44,7 +44,7 @@ def _take_screenshot():
 
 class Registry(object):
     def __init__(self):
-        self.__screenshot_providers = [_take_screenshot, _take_screenshot]
+        self.__screenshot_provider = _take_screenshot
         self.__steps_map = {}
         self.__before_step = []
         self.__after_step = []
@@ -80,7 +80,7 @@ class Registry(object):
         return self.__after_suite
 
     def screenshot_provider(self):
-        return self.__screenshot_providers[0]
+        return self.__screenshot_provider
 
     def all_steps(self):
         return [value.step_text for value in self.__steps_map.values()]
@@ -109,8 +109,8 @@ class Registry(object):
     def add_after_suite(self, func):
         self.__after_suite.append(func)
 
-    def add_screenshot_provider(self, func):
-        self.__screenshot_providers[0] = func
+    def set_screenshot_provider(self, func):
+        self.__screenshot_provider = func
 
     def add_step_definition(self, step_text, func, file_name, has_alias=False):
         if not isinstance(step_text, list):

@@ -1,5 +1,5 @@
 from getgauge.python import before_step, step, after_step, before_scenario, after_scenario, before_spec, after_spec, \
-    before_suite, after_suite
+    before_suite, after_suite, screenshot
 
 
 @step("Step 1")
@@ -80,3 +80,7 @@ def after_suite1():
 @after_suite
 def after_suite2():
     pass
+
+@screenshot
+def take_screenshot():
+    return ""

@@ -47,7 +47,7 @@ def after_step(obj):
 
 
 def screenshot(func):
-    registry.add_screenshot_provider(func)
+    registry.set_screenshot_provider(func)
     return func
 
 
