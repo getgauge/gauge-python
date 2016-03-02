@@ -19,6 +19,7 @@ def load_impls():
     try:
         map(__import__, modules)
     except:
+        print("Exception occurred while loading step implementations, some scenarios might get skipped because of the exception.")
         traceback.print_exc()
 
 
