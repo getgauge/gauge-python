@@ -5,7 +5,7 @@ import shutil
 import sys
 from subprocess import call
 
-CWD = os.getcwd()
+cwd = os.getcwd()
 
 PLUGIN_FILE_TEMPLATE = 'gauge-python-{}'
 
@@ -13,11 +13,11 @@ ZIP = 'zip'
 
 VERSION = 'version'
 
-plugin_json = "python.json"
+PLUGIN_JSON = "python.json"
 
-BIN = os.path.join(CWD, "bin")
+BIN = os.path.join(cwd, "bin")
 
-DEPLOY = os.path.join(CWD, "deploy")
+DEPLOY = os.path.join(cwd, "deploy")
 
 
 def install():
@@ -25,13 +25,16 @@ def install():
     call(["gauge", "--uninstall", "python", "--plugin-version", get_version()])
     exit_code = call(["gauge", "--install", "python", "-f", os.path.join(BIN, plugin_zip)])
     shutil.rmtree('dist', True)
-    call(["python", "setup.py", "sdist"])
+    print "Creating getgauge package."
+    fnull = open(os.devnull, 'w')
+    call(["python", "setup.py", "sdist"], stdout=fnull, stderr=fnull)
+    fnull.close()
     print "Install getgauge package using pip: \n\tpip install dist/*"
     sys.exit(exit_code)
 
 
 def create_zip():
-    wd = CWD
+    wd = cwd
     if os.path.exists(DEPLOY):
         shutil.rmtree(DEPLOY)
     copy_files(wd)
@@ -48,14 +51,14 @@ def create_zip():
 
 
 def get_version():
-    json_data = open(plugin_json).read()
+    json_data = open(PLUGIN_JSON).read()
     data = json.loads(json_data)
     return data[VERSION]
 
 
 def copy_files(wd):
     copy(os.path.join(wd, "step_impl"), os.path.join(DEPLOY, "step_impl"))
-    copy(os.path.join(wd, plugin_json), DEPLOY)
+    copy(os.path.join(wd, PLUGIN_JSON), DEPLOY)
     copy(os.path.join(wd, "start.py"), DEPLOY)
     copy(os.path.join(wd, "start.bat"), DEPLOY)
 
