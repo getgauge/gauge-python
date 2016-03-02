@@ -2,6 +2,7 @@ import os
 import py_compile
 import shutil
 import sys
+import traceback
 from os import path
 
 PROJECT_ROOT_ENV = 'GAUGE_PROJECT_ROOT'
@@ -15,7 +16,10 @@ sys.path.append(impl_dir)
 def load_impls():
     modules = []
     _load_impls_in(modules, impl_dir)
-    map(__import__, modules)
+    try:
+        map(__import__, modules)
+    except:
+        traceback.print_exc()
 
 
 def _load_impls_in(modules, step_impl_dir):
