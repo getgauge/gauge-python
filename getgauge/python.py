@@ -53,7 +53,6 @@ def screenshot(func):
 
 class Table:
     def __init__(self, proto_table):
-        self.__protoTable = proto_table
         self.__headers = proto_table.headers.cells
         self.__rows = proto_table.rows
 
@@ -233,15 +232,15 @@ class DataStoreFactory:
     __suite_data_store = DataStore()
 
     @staticmethod
-    def get_scenario_data_store():
+    def scenario_data_store():
         return DataStoreFactory.__scenario_data_store
 
     @staticmethod
-    def get_spec_data_store():
+    def spec_data_store():
         return DataStoreFactory.__spec_data_store
 
     @staticmethod
-    def get_suite_data_store():
+    def suite_data_store():
         return DataStoreFactory.__suite_data_store
 
 

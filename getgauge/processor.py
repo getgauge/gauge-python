@@ -96,17 +96,17 @@ def _execute_after_step_hook(request, response, socket):
 
 
 def _init_scenario_data_store(request, response, socket):
-    DataStoreFactory.get_scenario_data_store().clear()
+    DataStoreFactory.scenario_data_store().clear()
     set_response_values(request, response)
 
 
 def _init_spec_data_store(request, response, socket):
-    DataStoreFactory.get_spec_data_store().clear()
+    DataStoreFactory.spec_data_store().clear()
     set_response_values(request, response)
 
 
 def _init_suite_data_store(request, response, socket):
-    DataStoreFactory.get_suite_data_store().clear()
+    DataStoreFactory.suite_data_store().clear()
     set_response_values(request, response)
 
 

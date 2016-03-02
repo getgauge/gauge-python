@@ -86,9 +86,9 @@ class DataStoreTests(unittest.TestCase):
 
 class DataStoreFactoryTests(unittest.TestCase):
     def test_data_store_factory(self):
-        scenario_data_store = DataStoreFactory.get_scenario_data_store()
-        spec_data_store = DataStoreFactory.get_spec_data_store()
-        suite_data_store = DataStoreFactory.get_suite_data_store()
+        scenario_data_store = DataStoreFactory.scenario_data_store()
+        spec_data_store = DataStoreFactory.spec_data_store()
+        suite_data_store = DataStoreFactory.suite_data_store()
 
         data_store = DataStore()
 

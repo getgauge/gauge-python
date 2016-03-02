@@ -10,9 +10,9 @@ from getgauge.registry import registry
 
 class ProcessorTests(unittest.TestCase):
     def setUp(self):
-        DataStoreFactory.get_suite_data_store().clear()
-        DataStoreFactory.get_spec_data_store().clear()
-        DataStoreFactory.get_scenario_data_store().clear()
+        DataStoreFactory.suite_data_store().clear()
+        DataStoreFactory.spec_data_store().clear()
+        DataStoreFactory.scenario_data_store().clear()
         registry.clear()
 
     def tearDown(self):
@@ -23,9 +23,9 @@ class ProcessorTests(unittest.TestCase):
             processors[Message.KillProcessRequest](None, None, socket.socket(socket.AF_INET, socket.SOCK_STREAM))
 
     def test_Processor_suite_data_store_init_request(self):
-        DataStoreFactory.get_suite_data_store().put("suite", "value")
+        DataStoreFactory.suite_data_store().put("suite", "value")
 
-        self.assertNotEqual(DataStore(), DataStoreFactory.get_suite_data_store())
+        self.assertNotEqual(DataStore(), DataStoreFactory.suite_data_store())
 
         response = Message()
         processors[Message.SuiteDataStoreInit](None, response, None)
@@ -34,12 +34,12 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual(False, response.executionStatusResponse.executionResult.failed)
         self.assertEqual(0, response.executionStatusResponse.executionResult.executionTime)
 
-        self.assertEqual(DataStore(), DataStoreFactory.get_suite_data_store())
+        self.assertEqual(DataStore(), DataStoreFactory.suite_data_store())
 
     def test_Processor_spec_data_store_init_request(self):
-        DataStoreFactory.get_spec_data_store().put("spec", "value")
+        DataStoreFactory.spec_data_store().put("spec", "value")
 
-        self.assertNotEqual(DataStore(), DataStoreFactory.get_spec_data_store())
+        self.assertNotEqual(DataStore(), DataStoreFactory.spec_data_store())
 
         response = Message()
         processors[Message.SpecDataStoreInit](None, response, None)
@@ -48,12 +48,12 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual(False, response.executionStatusResponse.executionResult.failed)
         self.assertEqual(0, response.executionStatusResponse.executionResult.executionTime)
 
-        self.assertEqual(DataStore(), DataStoreFactory.get_spec_data_store())
+        self.assertEqual(DataStore(), DataStoreFactory.spec_data_store())
 
     def test_Processor_scenario_data_store_init_request(self):
-        DataStoreFactory.get_scenario_data_store().put("scenario", "value")
+        DataStoreFactory.scenario_data_store().put("scenario", "value")
 
-        self.assertNotEqual(DataStore(), DataStoreFactory.get_scenario_data_store())
+        self.assertNotEqual(DataStore(), DataStoreFactory.scenario_data_store())
 
         response = Message()
         processors[Message.ScenarioDataStoreInit](None, response, None)
@@ -62,7 +62,7 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual(False, response.executionStatusResponse.executionResult.failed)
         self.assertEqual(0, response.executionStatusResponse.executionResult.executionTime)
 
-        self.assertEqual(DataStore(), DataStoreFactory.get_scenario_data_store())
+        self.assertEqual(DataStore(), DataStoreFactory.scenario_data_store())
 
     def test_Processor_step_names_request(self):
         registry.add_step_definition("Step <a> with <b>", "func", "")
