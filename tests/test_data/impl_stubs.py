@@ -81,6 +81,7 @@ def after_suite1():
 def after_suite2():
     pass
 
+
 @screenshot
 def take_screenshot():
     return ""

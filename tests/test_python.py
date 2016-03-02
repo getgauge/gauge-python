@@ -281,7 +281,7 @@ class ExecutionContextTests(unittest.TestCase):
 
 class DecoratorTests(unittest.TestCase):
     def setUp(self):
-        import test_data.impl_stub
+        import test_data.impl_stubs
 
     def test_step_decorator(self):
         steps = registry.all_steps()
