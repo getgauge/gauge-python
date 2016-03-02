@@ -136,6 +136,28 @@ class TableTests(unittest.TestCase):
         with self.assertRaises(IndexError):
             table.get_row(5)
 
+    def test_Table_with_index_access(self):
+        headers = ['Product', 'Description']
+        rows = [{'cells': ['Gauge', 'Test automation with ease']},
+                {'cells': ['Mingle', 'Agile project management']},
+                {'cells': ['Snap', 'Hosted continuous integration']},
+                {'cells': ['Gocd', 'Continuous delivery platform']}]
+
+        proto_table = ProtoTable({'headers': {'cells': headers}, 'rows': rows})
+
+        table = Table(proto_table)
+
+        expected_rows = [row['cells'] for row in rows]
+
+        for row in expected_rows:
+            self.assertEqual(row, table[expected_rows.index(row)])
+
+        for row in table:
+            self.assertTrue(expected_rows.__contains__(row))
+
+        with self.assertRaises(IndexError):
+            table.get_row(5)
+
     def test_Table_equality(self):
         headers = ['Product', 'Description']
         rows = [{'cells': ['Gauge', 'Test automation with ease']},

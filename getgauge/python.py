@@ -81,6 +81,12 @@ class Table:
     def __eq__(self, other):
         return self.__str__() == other.__str__()
 
+    def __getitem__(self, i):
+        return self.get_row(i + 1)
+
+    def __iter__(self):
+        return self.rows.__iter__()
+
 
 class ExecutionContext:
     def __init__(self, specification, scenario, step):
