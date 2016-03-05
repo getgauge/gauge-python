@@ -25,11 +25,11 @@ def install():
     call(["gauge", "--uninstall", "python", "--plugin-version", get_version()])
     exit_code = call(["gauge", "--install", "python", "-f", os.path.join(BIN, plugin_zip)])
     shutil.rmtree('dist', True)
-    print "Creating getgauge package."
+    print("Creating getgauge package.")
     fnull = open(os.devnull, 'w')
     call(["python", "setup.py", "sdist"], stdout=fnull, stderr=fnull)
     fnull.close()
-    print "Install getgauge package using pip: \n\tpip install dist/*"
+    print("Install getgauge package using pip: \n\tpip install dist/*")
     sys.exit(exit_code)
 
 

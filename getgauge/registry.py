@@ -62,14 +62,8 @@ class Registry(object):
         setattr(self.__class__, hook, get)
         setattr(self.__class__, 'add_{}'.format(hook), add)
 
-    def screenshot_provider(self):
-        return self.__screenshot_provider
-
     def all_steps(self):
         return [value.step_text for value in self.__steps_map.values()]
-
-    def set_screenshot_provider(self, func):
-        self.__screenshot_provider = func
 
     def add_step_definition(self, step_text, func, file_name, has_alias=False):
         if not isinstance(step_text, list):
@@ -85,6 +79,12 @@ class Registry(object):
     def get_info(self, step_text):
         info = self.__steps_map.get(step_text)
         return info if info is not None else StepInfo(None, None, None, None)
+
+    def set_screenshot_provider(self, func):
+        self.__screenshot_provider = func
+
+    def screenshot_provider(self):
+        return self.__screenshot_provider
 
     def clear(self):
         self.__steps_map = {}
