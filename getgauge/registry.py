@@ -43,13 +43,13 @@ def _take_screenshot():
 
 
 class Registry(object):
+    hooks = ['before_step', 'after_step', 'before_scenario', 'after_scenario', 'before_spec', 'after_spec',
+             'before_suite', 'after_suite']
+
     def __init__(self):
         self.__screenshot_provider = _take_screenshot
         self.__steps_map = {}
-        self.hooks = ['before_step', 'after_step', 'before_scenario', 'after_scenario', 'before_spec', 'after_spec',
-                      'before_suite', 'after_suite']
-        for hook in self.hooks:
-            setattr(self, '__{}'.format(hook), [])
+        for hook in Registry.hooks:
             self.def_hook_methods(hook)
 
     def def_hook_methods(self, hook):
@@ -61,9 +61,7 @@ class Registry(object):
 
         setattr(self.__class__, hook, get)
         setattr(self.__class__, 'add_{}'.format(hook), add)
-
-    def all_steps(self):
-        return [value.step_text for value in self.__steps_map.values()]
+        setattr(self, '__{}'.format(hook), [])
 
     def add_step_definition(self, step_text, func, file_name, has_alias=False):
         if not isinstance(step_text, list):
@@ -72,6 +70,9 @@ class Registry(object):
             return
         for text in step_text:
             self.add_step_definition(text, func, file_name, True)
+
+    def all_steps(self):
+        return [value.step_text for value in self.__steps_map.values()]
 
     def is_step_implemented(self, step_text):
         return self.__steps_map.get(step_text) is not None
@@ -88,7 +89,7 @@ class Registry(object):
 
     def clear(self):
         self.__steps_map = {}
-        for hook in self.hooks:
+        for hook in Registry.hooks:
             setattr(self, '__{}'.format(hook), [])
 
 

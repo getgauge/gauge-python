@@ -1,3 +1,4 @@
+import importlib
 import os
 import py_compile
 import shutil
@@ -16,11 +17,12 @@ sys.path.append(impl_dir)
 def load_impls():
     modules = []
     _load_impls_in(modules, impl_dir)
-    try:
-        map(__import__, modules)
-    except:
-        print("Exception occurred while loading step implementations, some scenarios might get skipped because of the exception.")
-        traceback.print_exc()
+    for module in modules:
+        try:
+            importlib.import_module(module)
+        except:
+            print("Exception occurred while loading step implementations from file: {}.py.".format(module))
+            traceback.print_exc()
 
 
 def _load_impls_in(modules, step_impl_dir):
