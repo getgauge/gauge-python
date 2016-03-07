@@ -15,3 +15,7 @@ Contributions can be of many forms:
 - Open an issue, or participate in an existing one.
 - Write some code, and send us a pull request.
 - Enhance the documentation
+
+### License
+
+The Gauge-Python is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
