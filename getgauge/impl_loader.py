@@ -14,26 +14,23 @@ impl_dir = os.path.join(project_root, STEP_IMPL_DIR)
 sys.path.append(impl_dir)
 
 
-def load_impls():
-    modules = []
-    _load_impls_in(modules, impl_dir)
-    for module in modules:
-        try:
-            importlib.import_module(module)
-        except:
-            print("Exception occurred while loading step implementations from file: {}.py.".format(module))
-            traceback.print_exc()
-
-
-def _load_impls_in(modules, step_impl_dir):
+def load_impls(step_impl_dir=impl_dir):
     for f in os.listdir(step_impl_dir):
         file_path = os.path.join(step_impl_dir, f)
         if f.endswith(".py"):
-            py_compile.compile(file_path)
-            modules.append(os.path.splitext(f)[0])
-        elif path.isdir(step_impl_dir + f):
-            sys.path.append(step_impl_dir + f)
-            _load_impls_in(modules, file_path)
+            import_file(f, file_path)
+        elif path.isdir(file_path):
+            sys.path.append(file_path)
+            load_impls(file_path)
+
+
+def import_file(f, file_path):
+    try:
+        py_compile.compile(file_path)
+        importlib.import_module(os.path.splitext(f)[0])
+    except:
+        print("Exception occurred while loading step implementations from file: {}.".format(f))
+        traceback.print_exc()
 
 
 def copy_impl():
