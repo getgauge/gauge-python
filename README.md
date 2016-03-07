@@ -18,4 +18,4 @@ Contributions can be of many forms:
 
 ### License
 
-The Gauge-Python is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+The Gauge-Python is an open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
