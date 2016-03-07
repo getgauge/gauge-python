@@ -4,9 +4,9 @@ from connection import read_message, send_message
 from executor import set_response_values, execute_method, run_hook
 from messages.messages_pb2 import Message, StepValidateResponse
 from messages.spec_pb2 import Parameter
-from python import Table, create_execution_context_from, Messages, DataStoreFactory
+from python import Table, create_execution_context_from, DataStoreFactory
 from refactor import refactor_step
-from registry import registry
+from registry import registry, _MessagesStore
 
 
 def _validate_step(request, response, socket):
@@ -82,7 +82,7 @@ def _execute_after_scenario_hook(request, response, socket):
 
 
 def _execute_before_step_hook(request, response, socket):
-    Messages.pending_messages()
+    _MessagesStore.clear()
     execution_info = create_execution_context_from(request.stepExecutionStartingRequest.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
     run_hook(request, response, registry.before_step(tags), execution_info)
@@ -92,7 +92,7 @@ def _execute_after_step_hook(request, response, socket):
     execution_info = create_execution_context_from(request.stepExecutionEndingRequest.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
     run_hook(request, response, registry.after_step(tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(Messages.pending_messages())
+    response.executionStatusResponse.executionResult.message.extend(_MessagesStore.pending_messages())
 
 
 def _init_scenario_data_store(request, response, socket):

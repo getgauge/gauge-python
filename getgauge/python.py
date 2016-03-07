@@ -1,6 +1,6 @@
 import sys
 
-from registry import registry
+from registry import registry, _MessagesStore
 
 
 def step(step_text):
@@ -193,17 +193,9 @@ class Step:
 
 
 class Messages:
-    __messages = []
-
-    @staticmethod
-    def pending_messages():
-        messages = Messages.__messages
-        Messages.__messages = []
-        return messages
-
     @staticmethod
     def write_message(message):
-        Messages.__messages.append(message)
+        _MessagesStore.write_message(message)
 
 
 class DataStore:

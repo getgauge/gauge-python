@@ -33,6 +33,24 @@ class StepInfo(object):
         return self.__file_name
 
 
+class _MessagesStore:
+    __messages = []
+
+    @staticmethod
+    def pending_messages():
+        messages = _MessagesStore.__messages
+        _MessagesStore.__messages = []
+        return messages
+
+    @staticmethod
+    def write_message(message):
+        _MessagesStore.__messages.append(message)
+
+    @staticmethod
+    def clear():
+        _MessagesStore.__messages = []
+
+
 def _take_screenshot():
     temp_file = os.path.join(tempfile.gettempdir(), "screenshot.png")
     call(["gauge_screenshot", temp_file])
