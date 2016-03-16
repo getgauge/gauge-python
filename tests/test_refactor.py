@@ -7,22 +7,24 @@ from getgauge.processor import processors
 from getgauge.registry import registry
 
 
-class ProcessorTests(unittest.TestCase):
+class RefactorTests(unittest.TestCase):
     file = None
     data = None
     path = ""
 
     def setUp(self):
-        ProcessorTests.path = os.path.join(tempfile.gettempdir(), "step_impl.py")
-        ProcessorTests.file = open(ProcessorTests.path, 'w+')
-        ProcessorTests.file.write("""@step("Vowels in English language are <vowels>.")
+        RefactorTests.path = os.path.join(tempfile.gettempdir(), "step_impl.py")
+        RefactorTests.file = open(RefactorTests.path, 'w')
+        RefactorTests.file.write("""@step("Vowels in English language are <vowels>.")
 def assert_default_vowels(given_vowels):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)""")
-        ProcessorTests.data = ProcessorTests.file.read()
-        ProcessorTests.file.close()
+        RefactorTests.file.close()
+        RefactorTests.file = open(RefactorTests.path, 'r')
+        RefactorTests.data = RefactorTests.file.read()
+        RefactorTests.file.close()
         registry.add_step_definition("Vowels in English language are <vowels>.", None,
-                                     ProcessorTests.path)
+                                     RefactorTests.path)
 
     def tearDown(self):
         registry.clear()
@@ -49,7 +51,7 @@ def assert_default_vowels(given_vowels):
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
         self.assertEqual(True, response.refactorResponse.success)
-        self.assertEqual([ProcessorTests.path], response.refactorResponse.filesChanged)
+        self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
         expected = """@step("Vowels in English language is <vowels> <bsdfdsf>.")
 def assert_default_vowels(given_vowels, bsdfdsf):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
@@ -71,7 +73,7 @@ def assert_default_vowels(given_vowels, bsdfdsf):
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
         self.assertEqual(True, response.refactorResponse.success)
-        self.assertEqual([ProcessorTests.path], response.refactorResponse.filesChanged)
+        self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
         expected = """@step("Vowels in English language is.")
 def assert_default_vowels():
     Messages.write_message("Given vowels are {0}".format(given_vowels))
@@ -98,7 +100,7 @@ def assert_default_vowels():
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
         self.assertEqual(True, response.refactorResponse.success)
-        self.assertEqual([ProcessorTests.path], response.refactorResponse.filesChanged)
+        self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
         expected = """@step("Vowels in English language is <vowels>.")
 def assert_default_vowels(given_vowels):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
@@ -125,7 +127,7 @@ def assert_default_vowels(given_vowels):
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
         self.assertEqual(True, response.refactorResponse.success)
-        self.assertEqual([ProcessorTests.path], response.refactorResponse.filesChanged)
+        self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
         expected = """@step("Vowels in English language is <bsdfdsf>.")
 def assert_default_vowels(bsdfdsf):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
@@ -134,10 +136,10 @@ def assert_default_vowels(bsdfdsf):
         self.assertEqual(expected, actual_data)
 
     def getActualText(self):
-        _file = open(ProcessorTests.path, 'r+')
+        _file = open(RefactorTests.path, 'r+')
         actual_data = _file.read()
         _file.seek(0)
         _file.truncate()
-        _file.write(ProcessorTests.data)
+        _file.write(RefactorTests.data)
         _file.close()
         return actual_data
