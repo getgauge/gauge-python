@@ -13,7 +13,7 @@ setup(
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.x',
     ],
-    install_requires=['protobuf', 'redBaron'],
+    install_requires=['protobuf==3.0.0b2.post2', 'redBaron'],
 )
