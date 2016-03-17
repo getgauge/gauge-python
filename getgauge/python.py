@@ -1,6 +1,6 @@
 import sys
 
-from registry import registry, _MessagesStore
+from getgauge.registry import registry, _MessagesStore
 
 
 def step(step_text):
@@ -209,7 +209,7 @@ class DataStore:
         self.__data_store[key] = value
 
     def is_present(self, key):
-        return self.__data_store.has_key(key)
+        return key in self.__data_store
 
     def clear(self):
         self.__data_store = {}

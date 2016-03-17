@@ -9,3 +9,4 @@ MANIFEST
 gauge.egg-info/
 htmlcov/
 .coverage
+install.sh

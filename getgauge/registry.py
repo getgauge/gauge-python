@@ -54,7 +54,7 @@ class _MessagesStore:
 def _take_screenshot():
     temp_file = os.path.join(tempfile.gettempdir(), "screenshot.png")
     call(["gauge_screenshot", temp_file])
-    _file = open(temp_file, 'r')
+    _file = open(temp_file, 'r+b')
     data = _file.read()
     _file.close()
     return data

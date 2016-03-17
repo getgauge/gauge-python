@@ -289,57 +289,57 @@ class ExecutionContextTests(unittest.TestCase):
 
 class DecoratorTests(unittest.TestCase):
     def setUp(self):
-        import test_data.impl_stubs
+        import tests.test_data.impl_stubs
 
     def test_step_decorator(self):
         steps = registry.all_steps()
-        expected = ['Step 1', 'Step 2']
-        self.assertEqual(expected, steps)
+        expected = {'Step 1', 'Step 2'}
+        self.assertEqual(expected, set(steps))
 
     def test_before_step_decorator(self):
         funcs = registry.before_step()
         expected = ['before_step1', 'before_step2']
-        self.assertEqual(expected, [func.func_name for func in funcs])
+        self.assertEqual(expected, [func.__name__ for func in funcs])
 
     def test_after_step_decorator(self):
         funcs = registry.after_step()
         expected = ['after_step1']
-        self.assertEqual(expected, [func.func_name for func in funcs])
+        self.assertEqual(expected, [func.__name__ for func in funcs])
 
     def test_before_scenario_decorator(self):
         funcs = registry.before_scenario(['haha', 'hehe'])
         expected = ['before_scenario1', 'before_scenario2']
-        self.assertEqual(expected, [func.func_name for func in funcs])
+        self.assertEqual(expected, [func.__name__ for func in funcs])
 
     def test_after_scenario_decorator(self):
         funcs = registry.after_scenario(['haha', 'hehe'])
         expected = ['after_scenario1', 'after_scenario2']
-        self.assertEqual(expected, [func.func_name for func in funcs])
+        self.assertEqual(expected, [func.__name__ for func in funcs])
 
     def test_before_spec_decorator(self):
         funcs = registry.before_spec(['haha', 'hehe'])
         expected = ['before_spec1', 'before_spec2']
-        self.assertEqual(expected, [func.func_name for func in funcs])
+        self.assertEqual(expected, [func.__name__ for func in funcs])
 
     def test_after_spec_decorator(self):
         funcs = registry.after_spec(['haha', 'hehe'])
         expected = ['after_spec1', 'after_spec2']
-        self.assertEqual(expected, [func.func_name for func in funcs])
+        self.assertEqual(expected, [func.__name__ for func in funcs])
 
     def test_before_suite_decorator(self):
         funcs = registry.before_suite()
         expected = ['before_suite1']
-        self.assertEqual(expected, [func.func_name for func in funcs])
+        self.assertEqual(expected, [func.__name__ for func in funcs])
 
     def test_after_suite_decorator(self):
         funcs = registry.after_suite()
         expected = ['after_suite1', 'after_suite2']
-        self.assertEqual(expected, [func.func_name for func in funcs])
+        self.assertEqual(expected, [func.__name__ for func in funcs])
 
     def test_screenshot_decorator(self):
         func = registry.screenshot_provider()
         expected = 'take_screenshot'
-        self.assertEqual(expected, func.func_name)
+        self.assertEqual(expected, func.__name__)
 
 
 if __name__ == '__main__':

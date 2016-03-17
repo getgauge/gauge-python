@@ -1,12 +1,12 @@
 import sys
 
-from connection import read_message, send_message
-from executor import set_response_values, execute_method, run_hook
-from messages.messages_pb2 import Message, StepValidateResponse
-from messages.spec_pb2 import Parameter
-from python import Table, create_execution_context_from, DataStoreFactory
-from refactor import refactor_step
-from registry import registry, _MessagesStore
+from getgauge.connection import read_message, send_message
+from getgauge.executor import set_response_values, execute_method, run_hook
+from getgauge.messages.messages_pb2 import Message, StepValidateResponse
+from getgauge.messages.spec_pb2 import Parameter
+from getgauge.python import Table, create_execution_context_from, DataStoreFactory
+from getgauge.refactor import refactor_step
+from getgauge.registry import registry, _MessagesStore
 
 
 def _validate_step(request, response, socket):

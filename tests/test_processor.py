@@ -72,7 +72,7 @@ class ProcessorTests(unittest.TestCase):
         processors[Message.StepNamesRequest](None, response, None)
 
         self.assertEqual(Message.StepNamesResponse, response.messageType)
-        self.assertEqual(['Step <a> with <b>', 'Step 4'], response.stepNamesResponse.steps)
+        self.assertEqual({'Step <a> with <b>', 'Step 4'}, set(response.stepNamesResponse.steps))
 
     def test_Processor_step_name_request(self):
         registry.add_step_definition("Step <a> with <b>", "func", "")

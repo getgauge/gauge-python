@@ -4,7 +4,7 @@ vowels = ["a", "e", "i", "o", "u"]
 
 
 def number_of_vowels(word):
-    return len(filter(lambda elem: elem in vowels, list(word)))
+    return len([elem for elem in list(word) if elem in vowels])
 
 
 # --------------------------
