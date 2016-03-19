@@ -36,7 +36,7 @@ def execute_method(params, func, response):
 
 
 def _add_exception(e, response):
-    if os.getenv('screenshot_on_failure'):
+    if os.getenv('screenshot_on_failure') == 'true':
         response.executionStatusResponse.executionResult.screenShot = registry.screenshot_provider()()
     response.executionStatusResponse.executionResult.failed = True
     response.executionStatusResponse.executionResult.errorMessage = e.__str__()
