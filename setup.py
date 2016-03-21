@@ -2,12 +2,12 @@ from distutils.core import setup
 setup(
     name='getgauge',
     packages=['getgauge', 'getgauge/messages'],
-    version='0.0.3',
+    version='0.1.0',
     description='Enables Python support for Gauge',
     author='Kashish Munjal',
     author_email='kashishmunjal64@gmail.com',
     url='https://github.com/kashishm/gauge-python',
-    download_url='https://github.com/kashishm/gauge-python/releases/download/v0.0.3/gauge-python-0.0.3.zip',
+    download_url='https://github.com/kashishm/gauge-python/releases/download/v0.1.0/gauge-python-0.1.0.zip',
     keywords=['testing', 'gauge', 'gauge-python', 'getgauge', 'automation'],
     license='MIT',
     classifiers=[
