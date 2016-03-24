@@ -11,6 +11,7 @@ STEP_IMPL_DIR = "step_impl"
 
 project_root = os.environ[PROJECT_ROOT_ENV]
 impl_dir = os.path.join(project_root, STEP_IMPL_DIR)
+sys.path.append(project_root)
 sys.path.append(impl_dir)
 
 
