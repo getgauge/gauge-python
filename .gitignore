@@ -10,3 +10,5 @@ gauge.egg-info/
 htmlcov/
 .coverage
 install.sh
+docs/build/doctrees
+docs/build/html
