@@ -24,7 +24,7 @@ Installation
        gauge --install python --plugin-version 0.0.1
        pip install getgauge
 
--  Offline installation** Download the plugin from Releases_
+-  Offline installation Download the plugin from Releases_
     .. _Releases: https://github.com/kashishm/gauge-python/releases
 
    ::
@@ -34,12 +34,11 @@ Installation
 
 
 .. note::
-   For Python 3, use ``pip install getgauge>=0.1.0``
-   For Python 2, use ``pip install getguage<=0.0.4``
+   For Python 3, use ``pip install "getgauge>=0.1.0"``. For Python 2, use ``pip install "getgauge<0.1.0"``
 
 
 Verify installation
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 - Run the following command and plugin ``python`` should be listed in the plugin section.
     ::
