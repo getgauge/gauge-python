@@ -50,7 +50,7 @@ Verify installation
 ~~~~~~~~~~~~~~~~~~~
 
 - Run the following command and plugin ``python`` should be listed in the plugin section.
-    ::
+   ::
 
        gauge -v
 
@@ -64,7 +64,7 @@ Verify installation
 
 
 - To verify ``getgauge`` package is installed, run the following command and the output should contain package details.
-    ::
+   ::
 
         pip show getgauge
 

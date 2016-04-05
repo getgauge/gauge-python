@@ -34,7 +34,9 @@ To initialize a project with gauge-python, in an empty directory run:
 
 Execution
 ~~~~~~~~~
+
 To execute a gauge-python project, run the following command in the project:
+
     .. code:: sh
 
         $ gauge specs/
