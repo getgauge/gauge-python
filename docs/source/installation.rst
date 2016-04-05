@@ -8,7 +8,7 @@ Installation
 
    .. code:: sh
 
-       gauge -v
+       $ gauge -v
 
 Online Installation
 ~~~~~~~~~~~~~~~~~~~
@@ -17,15 +17,15 @@ Online Installation
 
    ::
 
-        gauge --install python
-        pip install getgauge
+        $ gauge --install python
+        $ pip install getgauge
 
 -  Installing specific version
 
    ::
 
-       gauge --install python --plugin-version 0.0.1
-       pip install getgauge
+       $ gauge --install python --plugin-version 0.0.1
+       $ pip install getgauge
 
 Offline Installation
 ~~~~~~~~~~~~~~~~~~~~
@@ -37,8 +37,8 @@ Offline Installation
 
    ::
 
-       gauge --install python --file gauge-python-0.0.1.zip
-       pip install getgauge
+       $ gauge --install python --file gauge-python-0.0.1.zip
+       $ pip install getgauge
 
 
 
@@ -55,7 +55,7 @@ Verify installation
 
    ::
 
-       gauge -v
+       $ gauge -v
 
 
        Gauge version: 0.4.0
@@ -70,7 +70,7 @@ Verify installation
 
    ::
 
-        pip show getgauge
+        $ pip show getgauge
 
         ---
         Metadata-Version: 1.1
