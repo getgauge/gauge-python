@@ -4,27 +4,27 @@ Installation
 ------------
 
 
--  **Before installing gauge-python, make sure Gauge v0.3.0 or above is installed**
+-  Before installing gauge-python, make sure Gauge ``v0.3.0`` or above is installed
 
    .. code:: sh
 
        gauge -v
 
--  **Run the following commands to install gauge-python**
+-  Run the following commands to install gauge-python
 
    ::
 
         gauge --install python
         pip install getgauge
 
--  **Installing specific version**
+-  Installing specific version
 
    ::
 
        gauge --install python --plugin-version 0.0.1
        pip install getgauge
 
--  **Offline installation** Download the plugin from Releases_
+-  Offline installation** Download the plugin from Releases_
     .. _Releases: https://github.com/kashishm/gauge-python/releases
 
    ::
@@ -35,15 +35,13 @@ Installation
 
 .. note::
    For Python 3, use ``pip install getgauge>=0.1.0``
-
-   For Python 2, use ``pip install getguage<=0.0.3``
-
-
--  **Verify installation**
+   For Python 2, use ``pip install getguage<=0.0.4``
 
 
+Verify installation
+-------------------
 
-   Run the following command and plugin ``python`` should be listed in the plugin section.
+- Run the following command and plugin ``python`` should be listed in the plugin section.
     ::
 
        gauge -v
@@ -57,7 +55,7 @@ Installation
             python (0.0.1)
 
 
-   To verify ``getgauge`` package is installed, run the following command and the output should contain package details.
+- To verify ``getgauge`` package is installed, run the following command and the output should contain package details.
     ::
 
         pip show getgauge
