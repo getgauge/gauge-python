@@ -5,7 +5,10 @@ Usage
 
 If you are new to Gauge, please consult the `Gauge documentation`_ to know about how Gauge works.
 
-**Initialize:** To initialize a project with gauge-python, in an empty directory run:
+Initialization
+~~~~~~~~~~~~~~
+
+To initialize a project with gauge-python, in an empty directory run:
 
     .. code:: sh
 
@@ -29,8 +32,9 @@ If you are new to Gauge, please consult the `Gauge documentation`_ to know about
             ├── manifest.json
 
 
-**Execute:**
-
+Execution
+~~~~~~~~~
+To execute a gauge-python project, run the following command in the project:
     .. code:: sh
 
         $ gauge specs/
