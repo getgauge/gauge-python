@@ -30,9 +30,11 @@ Online Installation
 Offline Installation
 ~~~~~~~~~~~~~~~~~~~~
 - Download the plugin from Releases_
+
     .. _Releases: https://github.com/kashishm/gauge-python/releases
 
 - Run the following command to install from the downloaded file
+
    ::
 
        gauge --install python --file gauge-python-0.0.1.zip

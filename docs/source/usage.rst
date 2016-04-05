@@ -15,6 +15,7 @@ To initialize a project with gauge-python, in an empty directory run:
         $ gauge --init python
 
     The project structure should look like this:
+
        ::
 
             ├── env
