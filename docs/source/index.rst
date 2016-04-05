@@ -9,6 +9,7 @@ Gauge Python Documentation
    :numbered:
 
    installation
+   usage
 
 
 Indices and tables
