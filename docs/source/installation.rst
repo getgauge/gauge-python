@@ -4,7 +4,7 @@ Installation
 ------------
 
 
--  **Before installing gauge-python, make sure Gauge ``v0.3.0`` or above is installed**
+-  **Before installing gauge-python, make sure Gauge v0.3.0 or above is installed**
 
    .. code:: sh
 
@@ -34,10 +34,14 @@ Installation
 
 
 .. note::
-   For Python 3 use, ``pip install getgauge>=0.1.0`` and for Python 2, use ``pip install getguage<=0.0.3``.
+   For Python 3, use ``pip install getgauge>=0.1.0``
+
+   For Python 2, use ``pip install getguage<=0.0.3``
 
 
 -  **Verify installation**
+
+
 
    Run the following command and plugin ``python`` should be listed in the plugin section.
     ::
@@ -51,6 +55,7 @@ Installation
             -------
             html-report (2.1.1)
             python (0.0.1)
+
 
    To verify ``getgauge`` package is installed, run the following command and the output should contain package details.
     ::
