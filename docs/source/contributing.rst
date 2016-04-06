@@ -10,7 +10,9 @@ If you find any issues or have any feature requests, please file them in the `is
 
 .. _issue tracker: https://github.com/kashishm/gauge-python/issues
 
-If you are filing issues, please provide the version of gauge core, python, gauge-python plugin and getgauge package that you have installed. You can find it by doing:
+
+If you are filing issues, please provide the version of gauge core, python, gauge-python plugin and getgauge package that you have installed. You can find it by running following commands
+
    ::
 
         $ gauge -v
