@@ -37,4 +37,4 @@ Contributions to Gauge-Python are welcome and appreciated. Implement features, f
 
 Please read this document_ to understand the technical details.
 
-.. _document: https://github.com/kashishm/gauge-python/wiki/Technical-Documentation
+.. _document: https://github.com/kashishm/gauge-python/blob/master/README.md
