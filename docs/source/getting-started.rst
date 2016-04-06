@@ -1,7 +1,7 @@
-.. _usage:
+.. _getting-started:
 
-Usage
------
+Getting Started
+---------------
 
 If you are new to Gauge, please consult the `Gauge documentation`_ to know about how Gauge works.
 

@@ -9,7 +9,9 @@ Gauge Python Documentation
    :numbered:
 
    installation
-   usage
+   getting-started
+   features
+   contributing
 
 
 Indices and tables
