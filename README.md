@@ -1,20 +1,49 @@
 # Gauge Python [![Documentation Status](https://readthedocs.org/projects/gauge-python/badge/?version=latest)](http://gauge-python.readthedocs.org/en/latest/?badge=latest) [![Build Status](https://snap-ci.com/kashishm/gauge-python/branch/master/build_image)](https://snap-ci.com/kashishm/gauge-python/branch/master)
 
-Python language runner for [Gauge](https://github.com/getgauge/gauge)
+Python language runner for [Gauge](https://github.com/getgauge/gauge). Read the __[Documentation]((gauge-python.readthedocs.org))__ for more details.
 
-###Documentation
 
-* [User](https://github.com/kashishm/gauge-python/wiki/User-Documentation)
-* [Technical](https://github.com/kashishm/gauge-python/wiki/Technical-Documentation)
+## Build from source
+###Requirements
+* Python
+* Pip
+* Gauge
 
-### How can I contribute
+### Installing package dependencies
+```
+pip install -r requirements.txt
+```
 
-Contributions can be of many forms:
+### Tests
+```
+python install.py --test
+```
 
-- Open an issue, or participate in an existing one.
-- Write some code, and send us a pull request.
-- Enhance the documentation
+### Tests Coverage
+```
+python install.py --test
+coverage report -m
+```
 
+###Installing
+
+````
+python install.py --install
+````
+
+###Creating distributable
+
+````
+python install.py
+````
+This will create a .zip file in bin directory which can then be uploaded to Github releases.
+
+##Uploading to PyPI
+
+```
+python setup.py sdist
+twine upload dist/*
+```
 ### License
 
 The Gauge-Python is an open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
