@@ -12,6 +12,7 @@ Gauge Python Documentation
    getting-started
    features
    contributing
+   faq
 
 
 Indices and tables
