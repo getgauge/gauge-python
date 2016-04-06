@@ -43,3 +43,12 @@ To execute a gauge-python project, run the following command in the project:
         $ gauge specs/
 
     .. _Gauge documentation: http://getgauge.io/documentation/user/current/
+
+
+Examples
+~~~~~~~~
+
+- gauge-example-python_: This project serves as an example for writing Automation using Gauge. It uses selenium and various Gauge/Gauge-Python features. For more details, Check out the repository_.
+
+.. _gauge-example-python: https://github.com/kashishm/gauge-example-python
+.. _repository: https://github.com/kashishm/gauge-example-python
