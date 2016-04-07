@@ -33,7 +33,7 @@ def _refactor(request, response, socket):
         refactor_step(request, response)
     except Exception as e:
         response.refactorResponse.success = False
-        response.refactorResponse.error = "Reason: {}".format(e.__str__())
+        response.refactorResponse.error = 'Reason: {}'.format(e.__str__())
 
 
 def _send_all_step_names(request, response, socket):

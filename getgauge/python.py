@@ -251,7 +251,7 @@ def _wrapper(*args, **kwargs):
 
 
 def _define_wrapper(obj, callback):
-    if hasattr(obj, "__call__"):
+    if hasattr(obj, '__call__'):
         callback(obj, None)
         return obj
 

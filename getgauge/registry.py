@@ -52,8 +52,8 @@ class _MessagesStore:
 
 
 def _take_screenshot():
-    temp_file = os.path.join(tempfile.gettempdir(), "screenshot.png")
-    call(["gauge_screenshot", temp_file])
+    temp_file = os.path.join(tempfile.gettempdir(), 'screenshot.png')
+    call(['gauge_screenshot', temp_file])
     _file = open(temp_file, 'r+b')
     data = _file.read()
     _file.close()
@@ -122,7 +122,7 @@ def _filter_hooks(tags, hooks):
             filtered_hooks.append(hook['func'])
             continue
         for tag in tags:
-            hook_tags = hook_tags.replace("<{}>".format(tag), "True")
+            hook_tags = hook_tags.replace('<{}>'.format(tag), 'True')
         if eval(re.sub('<[^<]+?>', 'False', hook_tags)):
             filtered_hooks.append(hook['func'])
     return filtered_hooks

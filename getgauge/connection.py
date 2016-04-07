@@ -10,7 +10,7 @@ from getgauge.messages.messages_pb2 import Message
 def connect():
     gauge_internal_port = os.environ['GAUGE_INTERNAL_PORT']
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(("localhost", int(gauge_internal_port)))
+    s.connect(('localhost', int(gauge_internal_port)))
     return s
 
 

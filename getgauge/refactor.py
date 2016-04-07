@@ -7,9 +7,9 @@ from getgauge.registry import registry
 
 def _refactor_content(content, info, request):
     red = RedBaron(content)
-    for func in red.find_all("def"):
+    for func in red.find_all('def'):
         for decorator in func.decorators:
-            steps = re.findall(r"['\"](.*?)['\"]", decorator.call.__str__())
+            steps = re.findall(r'[\'"](.*?)[\'"]', decorator.call.__str__())
             if len(steps) > 0 and steps[0] == info.step_text:
                 refactor_impl(decorator, func, request)
     return red.dumps()
@@ -17,7 +17,7 @@ def _refactor_content(content, info, request):
 
 def refactor_impl(decorator, func, request):
     decorator.call = '("' + request.refactorRequest.newStepValue.parameterizedStepValue + '")'
-    params = [""] * len(request.refactorRequest.newStepValue.parameters)
+    params = [''] * len(request.refactorRequest.newStepValue.parameters)
     for index, position in enumerate(request.refactorRequest.paramPositions):
         if position.oldPosition < 0:
             params[position.newPosition] = request.refactorRequest.newStepValue.parameters[index]
