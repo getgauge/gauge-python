@@ -2,12 +2,12 @@
 import sys
 
 from getgauge import connection, processor
-from getgauge.impl_loader import load_impls, copy_impl
+from getgauge.impl_loader import load_impls, copy_skel_files
 
 
 def main():
     if sys.argv[1] == "--init":
-        copy_impl()
+        copy_skel_files()
     else:
         s = connection.connect()
         load_impls()

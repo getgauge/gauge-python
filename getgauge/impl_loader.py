@@ -1,4 +1,5 @@
 import importlib
+import json
 import os
 import py_compile
 import shutil
@@ -12,8 +13,13 @@ STEP_IMPL_DIR = 'step_impl'
 project_root = os.environ[PROJECT_ROOT_ENV]
 impl_dir = os.path.join(project_root, STEP_IMPL_DIR)
 env_dir = os.path.join(project_root, 'env', 'default')
+requirements_file = os.path.join(project_root, 'requirements.txt')
 sys.path.append(project_root)
 sys.path.append(impl_dir)
+PLUGIN_JSON = 'python.json'
+VERSION = 'version'
+PYTHON_PROPERTIES = 'python.properties'
+SKEL = 'skel'
 
 
 def load_impls(step_impl_dir=impl_dir):
@@ -35,11 +41,18 @@ def import_file(f, file_path):
         traceback.print_exc()
 
 
-def copy_impl():
+def copy_skel_files():
     try:
         print('Initialising Gauge Python project')
         print('create  {}'.format(impl_dir))
-        shutil.copytree(os.path.join('skel', STEP_IMPL_DIR), impl_dir)
-        shutil.copy(os.path.join('skel', 'python.properties'), env_dir)
+        shutil.copytree(os.path.join(SKEL, STEP_IMPL_DIR), impl_dir)
+        shutil.copy(os.path.join(SKEL, PYTHON_PROPERTIES), env_dir)
+        open(requirements_file, 'w').write("getgauge==" + get_version())
     except Exception as e:
         print('Skipped copying implementation: {}.'.format(e))
+
+
+def get_version():
+    json_data = open(PLUGIN_JSON).read()
+    data = json.loads(json_data)
+    return data[VERSION]
