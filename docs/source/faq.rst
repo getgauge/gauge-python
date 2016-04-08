@@ -31,3 +31,15 @@ Make sure you have the getgauge package. If you don't have, run the following co
 For more details, refer Installation_ docs.
 
 .. _Installation: ./installation.html
+
+
+Print statements are getting printed at the end of execution
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create ``python.properties`` file in the ``<PROJECT_DIR>/env/default`` directory and add the following line to it.
+
+::
+
+    PYTHONUNBUFFERED = 1
+
+This should fix this issue.
