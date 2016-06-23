@@ -18,7 +18,7 @@ Use the ``@step(<step-text>)`` to implement your steps. For example:
 
         @step("The word <word> has <number> vowels.")
         def hello(a, b):
-            print ("The word {} has {} vowels.".format(a, b))
+            print("The word {} has {} vowels.".format(a, b))
 
 
 Multiple step names
@@ -30,9 +30,43 @@ To implement the same function for multiple step names (aka, step aliases), pass
 
        from getgauge.python import step
 
-       @step(["Create a user <username>", "Create another user <username>"])
-       def hello(a):
-           print ("create {}.".format(a))
+       @step(["Create a user <user name>", "Create another user <user name>"])
+       def hello(user_name):
+           print("create {}.".format(user_name))
+
+Parameters
+^^^^^^^^^^
+Steps can be defined to take values as parameters so that they can be re-used with different parameter values.
+
+String
+""""""
+   ::
+
+       from getgauge.python import step
+
+       @step("Create another user <user name>")
+       def hello(user_name):
+           print("create {}.".format(user_name))
+
+
+Table
+"""""
+   ::
+
+       * Create a product
+           |Title         |Description         |Author        |Price|
+           |--------------|--------------------|--------------|-----|
+           |Go Programming|ISBN: 978-1453636671|John P. Baugh |25.00|
+           |The Way to Go |ISBN: 978-1469769165|Ivo Balbaert  |20.00|
+           |Go In Action  |ISBN: 9781617291784 |Brian Ketelsen|30.00|
+           |Learning Go   |ebook               |Miek Gieben   |0.00 |
+
+
+       @step('Create a product <table>')
+       def create_product(table):
+       for row in table:
+           PageFactory.create_page.create(row[0], row[1], row[2], row[3])
+
 
 Execution Hooks
 ~~~~~~~~~~~~~~~
@@ -63,11 +97,23 @@ Test execution hooks can be used to run arbitrary test code as different levels 
 
        @before_step
        def before_step_hook():
-           print ("after scenario hook")
+           print("after scenario hook")
 
+Execution Context
+^^^^^^^^^^^^^^^^^
+
+To get additional information about the current specification, scenario and step executing, an additional ``context`` parameter can be added to the hooks method.
+
+   ::
+
+       from getgauge.python import before_step, after_scenario
+
+       @before_step
+       def before_step_hook(context):
+           print(context)
 
 Tagged Execution Hooks
-~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^
 
 Execution hooks can be run for specify tags. This will ensure that the hook runs only on scenarios and specifications that have the required tags. The following ``after_scenario`` hook will be run if the scenario has ``hello`` and ``hi``.
 
@@ -75,7 +121,7 @@ Execution hooks can be run for specify tags. This will ensure that the hook runs
 
        @after_scenario("<hello> and <hi>")
        def after_scenario_hook():
-           print ("after scenario hook with tag")
+           print("after scenario hook with tag")
 
 Complex tags expression can alse be used like: ``<hello> and <hi> or not <hey>``.
 
