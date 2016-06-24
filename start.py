@@ -1,8 +1,7 @@
 #! /usr/bin/env python
 import sys
 
-if sys.version_info < (3, 0):
-    raise Exception('Requires python3 or greater')
+assert sys.version_info > (3, 0), 'Getgauge package Requires python3 or greater. Make sure `python --version` outputs 3.x version'
 
 from getgauge import connection, processor
 from getgauge.impl_loader import load_impls, copy_skel_files
