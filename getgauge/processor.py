@@ -11,9 +11,13 @@ from getgauge.registry import registry, _MessagesStore
 
 def _validate_step(request, response, socket):
     response.messageType = Message.StepValidateResponse
-    response.stepValidateResponse.isValid = registry.is_step_implemented(request.stepValidateRequest.stepText)
-    if response.stepValidateResponse.isValid is False:
-        response.stepValidateResponse.errorType = StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND
+    response.stepValidateResponse.isValid = True
+    response.stepValidateResponse.errorType = StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND
+    if registry.is_step_implemented(request.stepValidateRequest.stepText) is False:
+        response.stepValidateResponse.isValid = False
+    elif registry.has_multiple_impls(request.stepValidateRequest.stepText):
+        response.stepValidateResponse.isValid = False
+        response.stepValidateResponse.errorType = StepValidateResponse.DUPLICATE_STEP_IMPLEMENTATION
 
 
 def _send_step_name(request, response, socket):
@@ -30,6 +34,8 @@ def _send_step_name(request, response, socket):
 def _refactor(request, response, socket):
     response.messageType = Message.RefactorResponse
     try:
+        if registry.has_multiple_impls(request.refactorRequest.oldStepValue.stepValue):
+            raise Exception('Multiple Implementation found for `{}`'.format(request.refactorRequest.oldStepValue.parameterizedStepValue))
         refactor_step(request, response)
     except Exception as e:
         response.refactorResponse.success = False

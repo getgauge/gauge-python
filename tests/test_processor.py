@@ -125,7 +125,7 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual(Message.StepValidateResponse, response.messageType)
         self.assertTrue(response.stepValidateResponse.isValid)
 
-    def test_Processor_invalid_step_validate_request(self):
+    def test_Processor_invalid_step_validate_request_when_no_impl_found(self):
         registry.add_step_definition("Step <a> with <b>", "func", "")
         registry.add_step_definition("Step 4", "func1", "")
 
@@ -139,6 +139,21 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual(Message.StepValidateResponse, response.messageType)
         self.assertFalse(response.stepValidateResponse.isValid)
         self.assertEqual(StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND, response.stepValidateResponse.errorType)
+
+    def test_Processor_invalid_step_validate_request_when_duplicate_impl_found(self):
+        registry.add_step_definition("Step <a> with <b>", "func", "")
+        registry.add_step_definition("Step <a> with <b>", "func", "")
+
+        response = Message()
+
+        request = Message()
+        request.stepValidateRequest.stepText = "Step {} with {}"
+
+        processors[Message.StepValidateRequest](request, response, None)
+
+        self.assertEqual(Message.StepValidateResponse, response.messageType)
+        self.assertFalse(response.stepValidateResponse.isValid)
+        self.assertEqual(StepValidateResponse.DUPLICATE_STEP_IMPLEMENTATION, response.stepValidateResponse.errorType)
 
     def test_Processor_execute_step_request(self):
         registry.add_step_definition("Step 4", impl1, "")
@@ -363,6 +378,21 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual(ProtoExecutionResult.ASSERTION, response.executionStatusResponse.executionResult.errorType)
         self.assertEqual("list index out of range", response.executionStatusResponse.executionResult.errorMessage)
         self.assertNotEqual("", response.executionStatusResponse.executionResult.stackTrace)
+
+    def test_Processor_refactor_request_when_multiple_impl_found(self):
+        registry.add_step_definition("Step <a> with <b>", "func", "")
+        registry.add_step_definition("Step <a> with <b>", "func", "")
+        response = Message()
+        request = Message()
+        request.refactorRequest.oldStepValue.stepValue = "Step {} with {}"
+        request.refactorRequest.oldStepValue.parameterizedStepValue = "Step <a> with <b>"
+
+        processors[Message.RefactorRequest](request, response, None)
+
+        self.assertEqual(Message.RefactorResponse, response.messageType)
+        self.assertEqual(False, response.refactorResponse.success)
+        self.assertEqual('Reason: Multiple Implementation found for `Step <a> with <b>`',
+                         response.refactorResponse.error)
 
 
 def impl(a, b):

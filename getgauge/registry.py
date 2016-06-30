@@ -84,20 +84,23 @@ class Registry(object):
     def add_step_definition(self, step_text, func, file_name, has_alias=False):
         if not isinstance(step_text, list):
             parsed_step_text = re.sub('<[^<]+?>', '{}', step_text)
-            self.__steps_map[parsed_step_text] = StepInfo(step_text, parsed_step_text, func, file_name, has_alias)
+            self.__steps_map.setdefault(parsed_step_text, []).append(StepInfo(step_text, parsed_step_text, func, file_name, has_alias))
             return
         for text in step_text:
             self.add_step_definition(text, func, file_name, True)
 
     def all_steps(self):
-        return [value.step_text for value in self.__steps_map.values()]
+        return [value[0].step_text for value in self.__steps_map.values()]
 
     def is_step_implemented(self, step_text):
         return self.__steps_map.get(step_text) is not None
 
+    def has_multiple_impls(self, step_text):
+        return len(self.__steps_map.get(step_text)) > 1
+
     def get_info(self, step_text):
         info = self.__steps_map.get(step_text)
-        return info if info is not None else StepInfo(None, None, None, None)
+        return info[0] if info is not None else StepInfo(None, None, None, None)
 
     def set_screenshot_provider(self, func):
         self.__screenshot_provider = func

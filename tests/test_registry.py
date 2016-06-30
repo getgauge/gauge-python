@@ -1,7 +1,7 @@
 import re
 import unittest
 
-from getgauge.registry import registry, Registry
+from getgauge.registry import Registry
 
 
 class RegistryTests(unittest.TestCase):
@@ -46,6 +46,18 @@ class RegistryTests(unittest.TestCase):
         for info in infos:
             parsed_step_text = re.sub('<[^<]+?>', '{}', info['text'])
             self.assertTrue(registry.is_step_implemented(parsed_step_text))
+
+    def test_Registry_has_multiple_impls(self):
+        infos = [{'text': "Say <hello> to <getgauge>", 'func': 'func'},
+                 {'text': "Say <hello> to <getgauge>", 'func': 'func'},
+                 {'text': "Step 1", 'func': 'func1'}]
+        for info in infos:
+            registry.add_step_definition(info['text'], info['func'], "")
+
+        parsed_step_text = re.sub('<[^<]+?>', '{}', infos[0]['text'])
+
+        self.assertTrue(registry.has_multiple_impls(parsed_step_text))
+        self.assertFalse(registry.has_multiple_impls(infos[2]['text']))
 
     def test_Registry_before_suite(self):
         infos = ['before suite func', 'before suite func1']
