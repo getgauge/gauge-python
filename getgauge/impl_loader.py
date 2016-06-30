@@ -44,12 +44,15 @@ def import_file(f, file_path):
 def copy_skel_files():
     try:
         print('Initialising Gauge Python project')
+        print('create  {}'.format(env_dir))
+        os.makedirs(env_dir)
         print('create  {}'.format(impl_dir))
         shutil.copytree(os.path.join(SKEL, STEP_IMPL_DIR), impl_dir)
+        print('create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
         shutil.copy(os.path.join(SKEL, PYTHON_PROPERTIES), env_dir)
         open(requirements_file, 'w').write("getgauge==" + get_version())
     except Exception as e:
-        print('Skipped copying implementation: {}.'.format(e))
+        print('Cannot copy skel files, Reason: {}.'.format(e))
 
 
 def get_version():
