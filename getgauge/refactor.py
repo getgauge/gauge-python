@@ -27,6 +27,8 @@ def refactor_impl(decorator, func, request):
 
 
 def refactor_step(request, response):
+    if registry.has_multiple_impls(request.refactorRequest.oldStepValue.stepValue):
+        raise Exception('Multiple Implementation found for `{}`'.format(request.refactorRequest.oldStepValue.parameterizedStepValue))
     info = registry.get_info(request.refactorRequest.oldStepValue.stepValue)
     impl_file = open(info.file_name, 'r+')
     content = _refactor_content(impl_file.read(), info, request)

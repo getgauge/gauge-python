@@ -59,6 +59,19 @@ class RegistryTests(unittest.TestCase):
         self.assertTrue(registry.has_multiple_impls(parsed_step_text))
         self.assertFalse(registry.has_multiple_impls(infos[2]['text']))
 
+    def test_Registry_get_multiple_impls(self):
+        infos = [{'text': "Say <hello> to <getgauge>", 'func': 'func', 'line': 1},
+                 {'text': "Say <hello> to <getgauge>", 'func': 'func', 'line': 2},
+                 {'text': "Step 1", 'func': 'func1', 'line': 3}]
+        for info in infos:
+            registry.add_step_definition(info['text'], info['func'], "", info['line'])
+
+        parsed_step_text = re.sub('<[^<]+?>', '{}', infos[0]['text'])
+
+        self.assertTrue(registry.has_multiple_impls(parsed_step_text))
+        self.assertEqual(set([info.line_number for info in registry.get_infos(parsed_step_text)]), {infos[0]['line'], infos[1]['line']})
+        self.assertEqual(set([info.step_text for info in registry.get_infos(parsed_step_text)]), {infos[0]['text'], infos[1]['text']})
+
     def test_Registry_before_suite(self):
         infos = ['before suite func', 'before suite func1']
         for info in infos:

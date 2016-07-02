@@ -1,15 +1,17 @@
 import os
 import re
 import tempfile
+import inspect
 from subprocess import call
 
 
 class StepInfo(object):
-    def __init__(self, step_text, parsed_step_text, impl, file_name, has_alias=False):
+    def __init__(self, step_text, parsed_step_text, impl, file_name, line_number, has_alias=False):
         self.__step_text = step_text
         self.__parsed_step_text = parsed_step_text
         self.__impl = impl
         self.__file_name = file_name
+        self.__line_number = line_number
         self.__has_alias = has_alias
 
     @property
@@ -31,6 +33,10 @@ class StepInfo(object):
     @property
     def file_name(self):
         return self.__file_name
+
+    @property
+    def line_number(self):
+        return self.__line_number
 
 
 class _MessagesStore:
@@ -81,13 +87,13 @@ class Registry(object):
         setattr(self.__class__, 'add_{}'.format(hook), add)
         setattr(self, '__{}'.format(hook), [])
 
-    def add_step_definition(self, step_text, func, file_name, has_alias=False):
+    def add_step_definition(self, step_text, func, file_name, line_number=-1, has_alias=False):
         if not isinstance(step_text, list):
             parsed_step_text = re.sub('<[^<]+?>', '{}', step_text)
-            self.__steps_map.setdefault(parsed_step_text, []).append(StepInfo(step_text, parsed_step_text, func, file_name, has_alias))
+            self.__steps_map.setdefault(parsed_step_text, []).append(StepInfo(step_text, parsed_step_text, func, file_name, line_number, has_alias))
             return
         for text in step_text:
-            self.add_step_definition(text, func, file_name, True)
+            self.add_step_definition(text, func, file_name, line_number, True)
 
     def all_steps(self):
         return [value[0].step_text for value in self.__steps_map.values()]
@@ -100,7 +106,10 @@ class Registry(object):
 
     def get_info(self, step_text):
         info = self.__steps_map.get(step_text)
-        return info[0] if info is not None else StepInfo(None, None, None, None)
+        return info[0] if info is not None else StepInfo(None, None, None, None, None)
+
+    def get_infos(self, step_text):
+        return self.__steps_map.get(step_text)
 
     def set_screenshot_provider(self, func):
         self.__screenshot_provider = func

@@ -2,40 +2,31 @@ import sys
 
 from getgauge.connection import read_message, send_message
 from getgauge.executor import set_response_values, execute_method, run_hook
-from getgauge.messages.messages_pb2 import Message, StepValidateResponse
+from getgauge.messages.messages_pb2 import Message
 from getgauge.messages.spec_pb2 import Parameter
 from getgauge.python import Table, create_execution_context_from, DataStoreFactory
 from getgauge.refactor import refactor_step
 from getgauge.registry import registry, _MessagesStore
+from getgauge.validator import validate_step
 
 
 def _validate_step(request, response, socket):
-    response.messageType = Message.StepValidateResponse
-    response.stepValidateResponse.isValid = True
-    response.stepValidateResponse.errorType = StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND
-    if registry.is_step_implemented(request.stepValidateRequest.stepText) is False:
-        response.stepValidateResponse.isValid = False
-    elif registry.has_multiple_impls(request.stepValidateRequest.stepText):
-        response.stepValidateResponse.isValid = False
-        response.stepValidateResponse.errorType = StepValidateResponse.DUPLICATE_STEP_IMPLEMENTATION
+    validate_step(request, response)
 
 
 def _send_step_name(request, response, socket):
     response.messageType = Message.StepNameResponse
     info = registry.get_info(request.stepNameRequest.stepValue)
-    step_name = info.step_text
     response.stepNameResponse.isStepPresent = False
-    if step_name is not None:
+    if info.step_text is not None:
         response.stepNameResponse.isStepPresent = True
-        response.stepNameResponse.stepName.append(step_name)
+        response.stepNameResponse.stepName.append(info.step_text)
     response.stepNameResponse.hasAlias = info.has_alias
 
 
 def _refactor(request, response, socket):
     response.messageType = Message.RefactorResponse
     try:
-        if registry.has_multiple_impls(request.refactorRequest.oldStepValue.stepValue):
-            raise Exception('Multiple Implementation found for `{}`'.format(request.refactorRequest.oldStepValue.parameterizedStepValue))
         refactor_step(request, response)
     except Exception as e:
         response.refactorResponse.success = False
