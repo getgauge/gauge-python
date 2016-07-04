@@ -1,8 +1,9 @@
 import os
 import re
 import tempfile
-import inspect
 from subprocess import call
+
+from getgauge.api import get_step_value
 
 
 class StepInfo(object):
@@ -89,7 +90,7 @@ class Registry(object):
 
     def add_step_definition(self, step_text, func, file_name, line_number=-1, has_alias=False):
         if not isinstance(step_text, list):
-            parsed_step_text = re.sub('<[^<]+?>', '{}', step_text)
+            parsed_step_text = get_step_value(step_text)
             self.__steps_map.setdefault(parsed_step_text, []).append(StepInfo(step_text, parsed_step_text, func, file_name, line_number, has_alias))
             return
         for text in step_text:

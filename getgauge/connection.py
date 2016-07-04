@@ -4,20 +4,22 @@ import struct
 
 from google.protobuf.internal.encoder import _EncodeVarint
 
-from getgauge.messages.messages_pb2 import Message
-
 
 def connect():
-    gauge_internal_port = os.environ['GAUGE_INTERNAL_PORT']
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('localhost', int(gauge_internal_port)))
+    s.connect(('localhost', int(os.environ['GAUGE_INTERNAL_PORT'])))
     return s
 
 
-def read_message(s):
+def to_api():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect(('localhost', int(os.environ['GAUGE_API_PORT'])))
+    return s
+
+
+def read_message(s, msg):
     len_buf = _decode_varint(s)[0]
     msg_buf = _socket_read_n(s, len_buf)
-    msg = Message()
     msg.ParseFromString(msg_buf)
     return msg
 

@@ -134,7 +134,7 @@ processors = {Message.ExecutionStarting: _execute_before_suite_hook,
 
 def dispatch_messages(socket):
     while True:
-        request = read_message(socket)
+        request = read_message(socket, Message())
         response = Message()
         processors[request.messageType](request, response, socket)
         send_message(response, request, socket)

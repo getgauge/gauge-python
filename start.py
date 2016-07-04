@@ -5,6 +5,7 @@ assert sys.version_info > (3, 0), 'Getgauge package Requires python3 or greater.
 
 from getgauge import connection, processor
 from getgauge.impl_loader import load_impls, copy_skel_files
+from getgauge import api
 
 
 def main():
@@ -12,7 +13,9 @@ def main():
         copy_skel_files()
     else:
         s = connection.connect()
+        api.connect_to_api()
         load_impls()
+        api.close_api()
         processor.dispatch_messages(s)
 
 
