@@ -34,6 +34,20 @@ To implement the same function for multiple step names (aka, step aliases), pass
        def hello(user_name):
            print("create {}.".format(user_name))
 
+Continue on failure
+^^^^^^^^^^^^^^^^^^^
+
+To have a particular step implementation not break execution dure to failure, use the ``@continue_on_failure`` decorator. For example:
+
+   ::
+
+       from getgauge.python import step, continue_on_failure
+
+       @continue_on_failure
+       @step("Create a user <user name>")
+       def hello(user_name):
+           assert 2 == 1
+
 Parameters
 ^^^^^^^^^^
 Steps can be defined to take values as parameters so that they can be re-used with different parameter values.
