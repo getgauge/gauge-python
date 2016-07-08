@@ -13,6 +13,11 @@ def step(step_text):
     return _step
 
 
+def continue_on_failure(func):
+    registry.continue_on_failure(func)
+    return func
+
+
 def before_suite(func):
     registry.add_before_suite(func)
     return func

@@ -10,10 +10,10 @@ from getgauge.registry import registry
 class RefactorTests(unittest.TestCase):
     file = None
     data = None
-    path = ""
+    path = ''
 
     def setUp(self):
-        RefactorTests.path = os.path.join(tempfile.gettempdir(), "step_impl.py")
+        RefactorTests.path = os.path.join(tempfile.gettempdir(), 'step_impl.py')
         RefactorTests.file = open(RefactorTests.path, 'w')
         RefactorTests.file.write("""@step("Vowels in English language are <vowels>.")
 def assert_default_vowels(given_vowels):
@@ -23,7 +23,7 @@ def assert_default_vowels(given_vowels):
         RefactorTests.file = open(RefactorTests.path, 'r')
         RefactorTests.data = RefactorTests.file.read()
         RefactorTests.file.close()
-        registry.add_step_definition("Vowels in English language are <vowels>.", None,
+        registry.add_step_definition('Vowels in English language are <vowels>.', None,
                                      RefactorTests.path)
 
     def tearDown(self):
@@ -32,12 +32,12 @@ def assert_default_vowels(given_vowels):
     def test_Processor_refactor_request_with_add_param(self):
         response = Message()
         request = Message()
-        request.refactorRequest.oldStepValue.stepValue = "Vowels in English language are {}."
-        request.refactorRequest.oldStepValue.parameters.append("vowels")
-        request.refactorRequest.newStepValue.parameterizedStepValue = "Vowels in English language is \
-<vowels> <bsdfdsf>."
-        request.refactorRequest.newStepValue.stepValue = "Vowels in English language is {} {}."
-        request.refactorRequest.newStepValue.parameters.extend(["vowels", "bsdfdsf"])
+        request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
+        request.refactorRequest.oldStepValue.parameters.append('vowels')
+        request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is \
+<vowels> <bsdfdsf>.'
+        request.refactorRequest.newStepValue.stepValue = 'Vowels in English language is {} {}.'
+        request.refactorRequest.newStepValue.parameters.extend(['vowels', 'bsdfdsf'])
         position = ParameterPosition()
         position.oldPosition = 0
         position.newPosition = 0
@@ -62,10 +62,10 @@ def assert_default_vowels(given_vowels, bsdfdsf):
     def test_Processor_refactor_request_with_remove_param(self):
         response = Message()
         request = Message()
-        request.refactorRequest.oldStepValue.stepValue = "Vowels in English language are {}."
-        request.refactorRequest.oldStepValue.parameters.append("vowels")
-        request.refactorRequest.newStepValue.parameterizedStepValue = "Vowels in English language is."
-        request.refactorRequest.newStepValue.stepValue = "Vowels in English language is."
+        request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
+        request.refactorRequest.oldStepValue.parameters.append('vowels')
+        request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is.'
+        request.refactorRequest.newStepValue.stepValue = 'Vowels in English language is.'
 
         processors[Message.RefactorRequest](request, response, None)
 
@@ -84,11 +84,11 @@ def assert_default_vowels():
     def test_Processor_refactor_request(self):
         response = Message()
         request = Message()
-        request.refactorRequest.oldStepValue.stepValue = "Vowels in English language are {}."
-        request.refactorRequest.oldStepValue.parameters.append("vowels")
-        request.refactorRequest.newStepValue.parameterizedStepValue = "Vowels in English language is <vowels>."
-        request.refactorRequest.newStepValue.stepValue = "Vowels in English language is {}."
-        request.refactorRequest.newStepValue.parameters.extend(["vowels"])
+        request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
+        request.refactorRequest.oldStepValue.parameters.append('vowels')
+        request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is <vowels>.'
+        request.refactorRequest.newStepValue.stepValue = 'Vowels in English language is {}.'
+        request.refactorRequest.newStepValue.parameters.extend(['vowels'])
         position = ParameterPosition()
         position.oldPosition = 0
         position.newPosition = 0
@@ -111,11 +111,11 @@ def assert_default_vowels(given_vowels):
     def test_Processor_refactor_request_with_add_and_remove_param(self):
         response = Message()
         request = Message()
-        request.refactorRequest.oldStepValue.stepValue = "Vowels in English language are {}."
-        request.refactorRequest.oldStepValue.parameters.append("vowels")
-        request.refactorRequest.newStepValue.parameterizedStepValue = "Vowels in English language is <bsdfdsf>."
-        request.refactorRequest.newStepValue.stepValue = "Vowels in English language is {}."
-        request.refactorRequest.newStepValue.parameters.extend(["bsdfdsf"])
+        request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
+        request.refactorRequest.oldStepValue.parameters.append('vowels')
+        request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is <bsdfdsf>.'
+        request.refactorRequest.newStepValue.stepValue = 'Vowels in English language is {}.'
+        request.refactorRequest.newStepValue.parameters.extend(['bsdfdsf'])
         param_position = ParameterPosition()
         param_position.oldPosition = -1
         param_position.newPosition = 0

@@ -10,17 +10,23 @@ class RegistryTests(unittest.TestCase):
         registry = Registry()
 
     def test_Registry_add_step_definition(self):
-        infos = [{'text': "Say <hello> to <getgauge>", 'func': 'func'}, {'text': "Step 1", 'func': 'func1'}]
+        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func'}, {'text': 'Step 1', 'func': 'func1'}]
         for info in infos:
-            registry.add_step_definition(info['text'], info['func'], "")
+            registry.add_step_definition(info['text'], info['func'], '')
 
         self.assertEqual([info['text'] for info in infos].sort(), registry.all_steps().sort())
         for info in infos:
             parsed_step_text = re.sub('<[^<]+?>', '{}', info['text'])
             self.assertEqual(info['func'], registry.get_info(parsed_step_text).impl)
 
+    def test_Registry_add_step_definition_with_continue_on_failure(self):
+        registry.add_step_definition('Step 1', 'func', '')
+        registry.continue_on_failure('func')
+
+        self.assertEqual(True, registry.is_continue_on_failure('func'))
+
     def test_Registry_add_step_definition_with_alias(self):
-        registry.add_step_definition(['Say <hello> to <getgauge>.', 'Tell <hello> to <getgauge>.'], 'impl', "")
+        registry.add_step_definition(['Say <hello> to <getgauge>.', 'Tell <hello> to <getgauge>.'], 'impl', '')
 
         info1 = registry.get_info('Say {} to {}.')
         info2 = registry.get_info('Tell {} to {}.')
@@ -29,30 +35,30 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(info2.has_alias, True)
 
     def test_Registry_get_step_info(self):
-        infos = [{'text': "Say <hello> to <getgauge>", 'func': 'func'}, {'text': "Step 1", 'func': 'func1'}]
+        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func'}, {'text': 'Step 1', 'func': 'func1'}]
         for info in infos:
-            registry.add_step_definition(info['text'], info['func'], "")
+            registry.add_step_definition(info['text'], info['func'], '')
 
-        self.assertEqual("Say <hello> to <getgauge>", registry.get_info("Say {} to {}").step_text)
-        self.assertEqual("Say {} to {}", registry.get_info("Say {} to {}").parsed_step_text)
-        self.assertEqual("Step 1", registry.get_info("Step 1").step_text)
-        self.assertEqual(None, registry.get_info("Step21").step_text)
+        self.assertEqual('Say <hello> to <getgauge>', registry.get_info('Say {} to {}').step_text)
+        self.assertEqual('Say {} to {}', registry.get_info('Say {} to {}').parsed_step_text)
+        self.assertEqual('Step 1', registry.get_info('Step 1').step_text)
+        self.assertEqual(None, registry.get_info('Step21').step_text)
 
     def test_Registry_is_step_implemented(self):
-        infos = [{'text': "Say <hello> to <getgauge>", 'func': 'func'}, {'text': "Step 1", 'func': 'func1'}]
+        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func'}, {'text': 'Step 1', 'func': 'func1'}]
         for info in infos:
-            registry.add_step_definition(info['text'], info['func'], "")
+            registry.add_step_definition(info['text'], info['func'], '')
 
         for info in infos:
             parsed_step_text = re.sub('<[^<]+?>', '{}', info['text'])
             self.assertTrue(registry.is_step_implemented(parsed_step_text))
 
     def test_Registry_has_multiple_impls(self):
-        infos = [{'text': "Say <hello> to <getgauge>", 'func': 'func'},
-                 {'text': "Say <hello> to <getgauge>", 'func': 'func'},
-                 {'text': "Step 1", 'func': 'func1'}]
+        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func'},
+                 {'text': 'Say <hello> to <getgauge>', 'func': 'func'},
+                 {'text': 'Step 1', 'func': 'func1'}]
         for info in infos:
-            registry.add_step_definition(info['text'], info['func'], "")
+            registry.add_step_definition(info['text'], info['func'], '')
 
         parsed_step_text = re.sub('<[^<]+?>', '{}', infos[0]['text'])
 
@@ -60,17 +66,19 @@ class RegistryTests(unittest.TestCase):
         self.assertFalse(registry.has_multiple_impls(infos[2]['text']))
 
     def test_Registry_get_multiple_impls(self):
-        infos = [{'text': "Say <hello> to <getgauge>", 'func': 'func', 'line': 1},
-                 {'text': "Say <hello> to <getgauge>", 'func': 'func', 'line': 2},
-                 {'text': "Step 1", 'func': 'func1', 'line': 3}]
+        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func', 'line': 1},
+                 {'text': 'Say <hello> to <getgauge>', 'func': 'func', 'line': 2},
+                 {'text': 'Step 1', 'func': 'func1', 'line': 3}]
         for info in infos:
-            registry.add_step_definition(info['text'], info['func'], "", info['line'])
+            registry.add_step_definition(info['text'], info['func'], '', info['line'])
 
         parsed_step_text = re.sub('<[^<]+?>', '{}', infos[0]['text'])
 
         self.assertTrue(registry.has_multiple_impls(parsed_step_text))
-        self.assertEqual(set([info.line_number for info in registry.get_infos(parsed_step_text)]), {infos[0]['line'], infos[1]['line']})
-        self.assertEqual(set([info.step_text for info in registry.get_infos(parsed_step_text)]), {infos[0]['text'], infos[1]['text']})
+        self.assertEqual(set([info.line_number for info in registry.get_infos(parsed_step_text)]),
+                         {infos[0]['line'], infos[1]['line']})
+        self.assertEqual(set([info.step_text for info in registry.get_infos(parsed_step_text)]),
+                         {infos[0]['text'], infos[1]['text']})
 
     def test_Registry_before_suite(self):
         infos = ['before suite func', 'before suite func1']

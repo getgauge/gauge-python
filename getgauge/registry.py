@@ -74,6 +74,7 @@ class Registry(object):
     def __init__(self):
         self.__screenshot_provider = _take_screenshot
         self.__steps_map = {}
+        self.__continue_on_failures = []
         for hook in Registry.hooks:
             self.def_hook_methods(hook)
 
@@ -118,8 +119,15 @@ class Registry(object):
     def screenshot_provider(self):
         return self.__screenshot_provider
 
+    def continue_on_failure(self, func):
+        self.__continue_on_failures.append(func)
+
+    def is_continue_on_failure(self, func):
+        return func in self.__continue_on_failures
+
     def clear(self):
         self.__steps_map = {}
+        self.__continue_on_failures = []
         for hook in Registry.hooks:
             setattr(self, '__{}'.format(hook), [])
 

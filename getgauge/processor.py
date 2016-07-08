@@ -43,7 +43,8 @@ def _execute_step(request, response, socket):
     for param in request.executeStepRequest.parameters:
         params.append(Table(param.table)) if param.parameterType == Parameter.Table else params.append(param.value)
     set_response_values(request, response)
-    execute_method(params, registry.get_info(request.executeStepRequest.parsedStepText).impl, response)
+    impl = registry.get_info(request.executeStepRequest.parsedStepText).impl
+    execute_method(params, impl, response, registry.is_continue_on_failure(impl))
 
 
 def _execute_before_suite_hook(request, response, socket):

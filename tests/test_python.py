@@ -11,14 +11,14 @@ registry.clear()
 
 class MessagesTests(unittest.TestCase):
     def test_pending_messages(self):
-        messages = ["HAHAHAH", "HAHAHAH1", "HAHAHAH2", "HAHAHAH3"]
+        messages = ['HAHAHAH', 'HAHAHAH1', 'HAHAHAH2', 'HAHAHAH3']
         for message in messages:
             Messages.write_message(message)
         pending_messages = _MessagesStore.pending_messages()
         self.assertEqual(messages, pending_messages)
 
     def test_clear(self):
-        messages = ["HAHAHAH", "HAHAHAH1", "HAHAHAH2", "HAHAHAH3"]
+        messages = ['HAHAHAH', 'HAHAHAH1', 'HAHAHAH2', 'HAHAHAH3']
         for message in messages:
             Messages.write_message(message)
         _MessagesStore.clear()
@@ -26,7 +26,7 @@ class MessagesTests(unittest.TestCase):
         self.assertEqual([], pending_messages)
 
     def test_pending_messages_gives_only_those_messages_which_are_not_reported(self):
-        messages = ["HAHAHAH", "HAHAHAH1", "HAHAHAH2", "HAHAHAH3"]
+        messages = ['HAHAHAH', 'HAHAHAH1', 'HAHAHAH2', 'HAHAHAH3']
         for message in messages:
             Messages.write_message(message)
         pending_messages = _MessagesStore.pending_messages()
@@ -36,7 +36,7 @@ class MessagesTests(unittest.TestCase):
 
         self.assertEqual([], pending_messages)
 
-        messages = ["HAHAHAH", "HAHAHAH1"]
+        messages = ['HAHAHAH', 'HAHAHAH1']
         for message in messages:
             Messages.write_message(message)
 
@@ -81,13 +81,13 @@ class DataStoreTests(unittest.TestCase):
 
         self.assertEqual(store, store1)
 
-        store.put("a", "b")
-        store1.put("a", "b")
+        store.put('a', 'b')
+        store1.put('a', 'b')
 
         self.assertEqual(store, store1)
 
-        store.put("b", "b")
-        store1.put("c", "b")
+        store.put('b', 'b')
+        store1.put('c', 'b')
 
         self.assertNotEqual(store, store1)
 
@@ -183,9 +183,9 @@ class TableTests(unittest.TestCase):
 
 class SpecificationTests(unittest.TestCase):
     def test_Specification(self):
-        name = "NAME"
-        file_name = "FILE_NAME"
-        tags = ["TAGS"]
+        name = 'NAME'
+        file_name = 'FILE_NAME'
+        tags = ['TAGS']
         specification = Specification(name, file_name, False, tags)
 
         self.assertEqual(specification.name, name)
@@ -194,9 +194,9 @@ class SpecificationTests(unittest.TestCase):
         self.assertEqual(specification.tags, tags)
 
     def test_Specification_equality(self):
-        name = "NAME"
-        file_name = "FILE_NAME"
-        tags = ["TAGS"]
+        name = 'NAME'
+        file_name = 'FILE_NAME'
+        tags = ['TAGS']
         specification = Specification(name, file_name, False, tags)
         specification1 = Specification(name, file_name, False, tags)
 
@@ -205,8 +205,8 @@ class SpecificationTests(unittest.TestCase):
 
 class ScenarioTests(unittest.TestCase):
     def test_Scenario(self):
-        name = "NAME3"
-        tags = ["TAGS"]
+        name = 'NAME3'
+        tags = ['TAGS']
         scenario = Scenario(name, False, tags)
 
         self.assertEqual(scenario.name, name)
@@ -214,8 +214,8 @@ class ScenarioTests(unittest.TestCase):
         self.assertEqual(scenario.tags, tags)
 
     def test_Scenario_equality(self):
-        name = "NAME2"
-        tags = ["TAGS"]
+        name = 'NAME2'
+        tags = ['TAGS']
         scenario = Scenario(name, False, tags)
         scenario1 = Scenario(name, False, tags)
 
@@ -224,14 +224,14 @@ class ScenarioTests(unittest.TestCase):
 
 class StepTests(unittest.TestCase):
     def test_Step(self):
-        name = "NAME1"
+        name = 'NAME1'
         step = Step(name, False)
 
         self.assertEqual(step.text, name)
         self.assertEqual(step.is_failing, False)
 
     def test_Step_equality(self):
-        name = "NAME1"
+        name = 'NAME1'
         step = Step(name, False)
         step1 = Step(name, False)
 
@@ -240,9 +240,9 @@ class StepTests(unittest.TestCase):
 
 class ExecutionContextTests(unittest.TestCase):
     def test_ExecutionContextTests(self):
-        name = "NAME"
-        file_name = "FILE_NAME"
-        tags = ["TAGS"]
+        name = 'NAME'
+        file_name = 'FILE_NAME'
+        tags = ['TAGS']
         specification = Specification(name, file_name, False, tags)
         scenario = Scenario(name, False, tags)
         step = Step(name, False)
@@ -253,9 +253,9 @@ class ExecutionContextTests(unittest.TestCase):
         self.assertEqual(step, context.step)
 
     def test_ExecutionContextTests_equality(self):
-        name = "NAME"
-        file_name = "FILE_NAME"
-        tags = ["TAGS"]
+        name = 'NAME'
+        file_name = 'FILE_NAME'
+        tags = ['TAGS']
         specification = Specification(name, file_name, False, tags)
         scenario = Scenario(name, False, tags)
         step = Step(name, False)
@@ -267,7 +267,7 @@ class ExecutionContextTests(unittest.TestCase):
 
     def test_create_execution_context_from(self):
         message = Message()
-        spec_name, spec_file_name, scenario_name, step_name = "SPEC_NAME", "SPEC_FILE_NAME", "SCENARIO_NAME", "STEP_NAME"
+        spec_name, spec_file_name, scenario_name, step_name = 'SPEC_NAME', 'SPEC_FILE_NAME', 'SCENARIO_NAME', 'STEP_NAME'
         message.executionStartingRequest.currentExecutionInfo.currentSpec.name = spec_name
         message.executionStartingRequest.currentExecutionInfo.currentSpec.fileName = spec_file_name
         message.executionStartingRequest.currentExecutionInfo.currentSpec.isFailed = True
@@ -289,12 +289,19 @@ class ExecutionContextTests(unittest.TestCase):
 
 class DecoratorTests(unittest.TestCase):
     def setUp(self):
-        import tests.test_data.impl_stubs
+        from tests.test_data import impl_stubs
 
     def test_step_decorator(self):
         steps = registry.all_steps()
         expected = {'Step 1', 'Step 2'}
         self.assertEqual(expected, set(steps))
+
+    def test_continue_on_failure(self):
+        step1 = registry.get_info('Step 1').impl
+        step2 = registry.get_info('Step 2').impl
+
+        self.assertEqual(registry.is_continue_on_failure(step1), False)
+        self.assertEqual(registry.is_continue_on_failure(step2), True)
 
     def test_before_step_decorator(self):
         funcs = registry.before_step()
