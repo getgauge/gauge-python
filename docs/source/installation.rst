@@ -10,6 +10,10 @@ Installation
 
        $ gauge -v
 
+.. note::
+   ``getgauge`` package only supports ``python3.*``.
+
+
 Online Installation
 ~~~~~~~~~~~~~~~~~~~
 
@@ -40,12 +44,6 @@ Offline Installation
        $ gauge --install python --file gauge-python-0.0.1.zip
        $ pip install getgauge
 
-
-
-.. note::
-   For Python 3, use ``pip install "getgauge>=0.1.0"``
-
-   For Python 2, use ``pip install "getgauge<0.1.0"``
 
 
 Verify installation
