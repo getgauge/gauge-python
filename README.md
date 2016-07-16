@@ -1,4 +1,4 @@
-# Gauge Python [![Documentation Status](https://readthedocs.org/projects/gauge-python/badge/?version=latest)](http://gauge-python.readthedocs.org/en/latest/?badge=latest) [![Build Status](https://snap-ci.com/kashishm/gauge-python/branch/master/build_image)](https://snap-ci.com/kashishm/gauge-python/branch/master)
+# Gauge Python [![Documentation Status](https://readthedocs.org/projects/gauge-python/badge/?version=latest)](http://gauge-python.readthedocs.org/en/latest/?badge=latest) [![Build Status](https://snap-ci.com/kashishm/gauge-python/branch/master/build_image)](https://snap-ci.com/kashishm/gauge-python/branch/master) [![Build Status](https://travis-ci.org/kashishm/gauge-python.svg?branch=master)](https://travis-ci.org/kashishm/gauge-python)
 
 Python language runner for __[Gauge](https://github.com/getgauge/gauge)__. Read the __[Documentation](https://gauge-python.readthedocs.org)__ for more details.
 
