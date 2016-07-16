@@ -25,7 +25,7 @@
     ]
   },
   "gaugeVersionSupport": {
-    "minimum": "0.5.1",
+    "minimum": "0.5.0",
     "maximum": ""
   }
 }
