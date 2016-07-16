@@ -17,6 +17,7 @@ python:
 env:
   global:
     - JAVA_HOME=/usr/lib/jvm/java-8-oracle
+    - TAGS="\!unimplemented"
 
 # command to install dependencies
 install: "pip install -r requirements.txt"
