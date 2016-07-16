@@ -1,5 +1,6 @@
 import re
 
+import sys
 from redbaron import RedBaron
 
 from getgauge.registry import registry
@@ -20,12 +21,16 @@ def refactor_impl(decorator, func, request):
     params = [''] * len(request.refactorRequest.newStepValue.parameters)
     for index, position in enumerate(request.refactorRequest.paramPositions):
         if position.oldPosition < 0:
-            param_name = request.refactorRequest.newStepValue.parameters[index]
-            prefix = "arg{}_".format(position.newPosition)
-            params[position.newPosition] = prefix + "".join([s for s in param_name if s.isidentifier() or s.isalnum()])
+            params[position.newPosition] = get_param_name("arg{}_".format(position.newPosition), request.refactorRequest.newStepValue.parameters[index])
         else:
             params[position.newPosition] = func.arguments[position.oldPosition].__str__()
     func.arguments = ', '.join(params)
+
+
+def get_param_name(prefix, param_name):
+    if sys.version_info < (3, 0):
+        return prefix + "".join([s for s in param_name if re.match(r'^[a-z_][a-z0-9_]*$', s, re.I) is not None])
+    return prefix + "".join([s for s in param_name if s.isidentifier() or s.isalnum()])
 
 
 def refactor_step(request, response):
