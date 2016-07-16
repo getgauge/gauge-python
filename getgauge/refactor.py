@@ -29,7 +29,7 @@ def refactor_impl(decorator, func, request):
 
 def get_param_name(prefix, param_name):
     if sys.version_info < (3, 0):
-        return prefix + "".join([s for s in param_name if re.match(r'^[a-z_][a-z0-9_]*$', s, re.I) is not None])
+        return prefix + "".join([s for s in param_name if re.match(r'^[a-z_][a-z_]*$', s, re.I) is not None or s.isalnum()])
     return prefix + "".join([s for s in param_name if s.isidentifier() or s.isalnum()])
 
 
