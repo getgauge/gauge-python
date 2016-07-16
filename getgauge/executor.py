@@ -26,7 +26,7 @@ def run_hook(request, response, hooks, execution_info):
 
 
 def get_args(execution_info, hook):
-    if sys.version_info < (3, 0):
+    if sys.version_info < (3, 3):
         return [] if len(inspect.getargspec(hook).args) == 0 else [execution_info]
     else:
         return [] if len(inspect.signature(hook).parameters) == 0 else [execution_info]
