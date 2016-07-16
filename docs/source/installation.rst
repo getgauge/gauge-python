@@ -22,14 +22,14 @@ Online Installation
    ::
 
         $ gauge --install python
-        $ pip install getgauge
+        $ [pip / pip3] install getgauge
 
 -  Installing specific version
 
    ::
 
        $ gauge --install python --plugin-version 0.0.1
-       $ pip install getgauge
+       $ [pip / pip3] install getgauge
 
 Offline Installation
 ~~~~~~~~~~~~~~~~~~~~
@@ -42,7 +42,7 @@ Offline Installation
    ::
 
        $ gauge --install python --file gauge-python-0.0.1.zip
-       $ pip install getgauge
+       $ [pip / pip3] install getgauge
 
 
 
@@ -58,10 +58,10 @@ Verify installation
 
        Gauge version: 0.4.0
 
-            Plugins
-            -------
-            html-report (2.1.1)
-            python (0.0.1)
+       Plugins
+       -------
+       html-report (2.1.1)
+       python (0.0.1)
 
 
 - To verify ``getgauge`` package is installed, run the following command and the output should contain package details.
