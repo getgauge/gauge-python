@@ -23,6 +23,7 @@ SKEL = 'skel'
 
 
 def load_impls(step_impl_dir=impl_dir):
+    os.chdir(project_root)
     for f in os.listdir(step_impl_dir):
         file_path = os.path.join(step_impl_dir, f)
         if f.endswith('.py'):
