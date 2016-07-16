@@ -1,5 +1,7 @@
 language: python
 
+sudo: required
+
 python:
   - "2.7"
   - "3.2"
@@ -13,17 +15,15 @@ install: "pip install -r requirements.txt"
 # command to run tests
 script:
   - python install.py
-  - mkdir -p tmp/bin
-  - export GOPATH="$(pwd)/tmp"
-  - export GOBIN="$GOPATH/bin"
-  - export GAUGE_ROOT="$GOPATH"
-  - export PATH="$GOBIN:$PATH"
-  - echo -e "GOPATH=$GOPATH\nGOBIN=$GOBIN\nGAUGE_ROOT=$GAUGE_ROOT\nPATH=$PATH"
-  - sudo yum install --assumeyes golang
-  - go get -d -u -v github.com/getgauge/gauge
-  - go get -v github.com/tools/godep
-  - pushd $GOPATH/src/github.com/getgauge/gauge; godep restore; popd
-  - pushd $GOPATH/src/github.com/getgauge/gauge; go run build/make.go; go run build/make.go --install --prefix $GOPATH; popd
+  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+  - sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-keys 023EDB0B
+  - sudo apt-get -y update > /dev/null
+  - sudo apt-get install -y apt-transport-https
+  - echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+  - echo "deb https://dl.bintray.com/gauge/gauge-deb nightly main" | sudo tee -a /etc/apt/sources.list
+  - sudo apt-get -y update > /dev/null
+  - sudo apt-get install -y mono-complete fsharp gauge > /dev/null
+  - gauge_setup
   - gauge -v
   - python install.py --install
   - export GAUGE_PYTHON_VERSION=$(cd bin; ls gauge-python-*.zip | sed "s/^gauge-python-\([^;]*\).zip/\1/")
