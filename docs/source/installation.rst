@@ -11,7 +11,7 @@ Installation
        $ gauge -v
 
 .. note::
-   ``getgauge`` package only supports ``python3.*``.
+   ``getgauge`` package supports ``python2.7`` and ``python3.*``.
 
 
 Online Installation
