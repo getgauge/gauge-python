@@ -11,4 +11,30 @@ python:
 install: "pip install -r requirements.txt"
 
 # command to run tests
-script: python install.py
+script:
+  - python install.py
+  - mkdir -p tmp/bin
+  - export GOPATH="$(pwd)/tmp"
+  - export GOBIN="$GOPATH/bin"
+  - export GAUGE_ROOT="$GOPATH"
+  - export PATH="$GOBIN:$PATH"
+  - echo -e "GOPATH=$GOPATH\nGOBIN=$GOBIN\nGAUGE_ROOT=$GAUGE_ROOT\nPATH=$PATH"
+  - sudo yum install --assumeyes golang
+  - go get -d -u -v github.com/getgauge/gauge
+  - go get -v github.com/tools/godep
+  - pushd $GOPATH/src/github.com/getgauge/gauge; godep restore; popd
+  - pushd $GOPATH/src/github.com/getgauge/gauge; go run build/make.go; go run build/make.go --install --prefix $GOPATH; popd
+  - gauge -v
+  - python install.py --install
+  - export GAUGE_PYTHON_VERSION=$(cd bin; ls gauge-python-*.zip | sed "s/^gauge-python-\([^;]*\).zip/\1/")
+  - gauge --uninstall python
+  - gauge --install python -f "bin/gauge-python-$GAUGE_PYTHON_VERSION.zip"
+  - pip uninstall -y getgauge | echo
+  - pip install "dist/getgauge-$GAUGE_PYTHON_VERSION.tar.gz"
+  - gauge --install html-report
+  - gauge --install xml-report
+  - gauge --install java
+  - git clone git://github.com/getgauge/gauge-tests --depth 1 --recursive
+  - cd gauge-tests
+  - sh starttests.sh python
+  - cd ../
