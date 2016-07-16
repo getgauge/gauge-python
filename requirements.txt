@@ -1,5 +1,5 @@
 protobuf==3.0.0b2.post2
 redbaron
-coverage
-coverage=3.7.1 ; python_version < '2.7'
+coverage==3.7.1 ; python_version < '3.0'
+coverage>=3.7.1 ; python_version > '3.0'
 twine
