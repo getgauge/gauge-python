@@ -26,9 +26,10 @@ def run_hook(request, response, hooks, execution_info):
 
 
 def get_args(execution_info, hook):
-    if sys.version_info < (3, 0) and len(inspect.getargspec(hook).args) == 0:
-        return []
-    return [] if len(inspect.signature(hook).parameters) == 0 else [execution_info]
+    if sys.version_info < (3, 0):
+        return [] if len(inspect.getargspec(hook).args) == 0 else [execution_info]
+    else:
+        return [] if len(inspect.signature(hook).parameters) == 0 else [execution_info]
 
 
 def execute_method(params, func, response, continue_on_failure=False):
