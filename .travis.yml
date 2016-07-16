@@ -14,6 +14,10 @@ python:
   - "3.4"
   - "3.5"
 
+env:
+  global:
+    - JAVA_HOME=/usr/lib/jvm/java-8-oracle
+
 # command to install dependencies
 install: "pip install -r requirements.txt"
 
@@ -30,7 +34,6 @@ script:
   - export GAUGE_PYTHON_VERSION=$(cd bin; ls gauge-python-*.zip | sed "s/^gauge-python-\([^;]*\).zip/\1/")
   - gauge --uninstall python
   - gauge --install python -f "bin/gauge-python-$GAUGE_PYTHON_VERSION.zip"
-  - pip uninstall -y getgauge | echo
   - pip install "dist/getgauge-$GAUGE_PYTHON_VERSION.tar.gz"
   - gauge --install html-report
   - gauge --install xml-report
