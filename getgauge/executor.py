@@ -1,5 +1,6 @@
 import inspect
 import os
+import sys
 import time
 import traceback
 
@@ -20,10 +21,14 @@ def set_response_values(request, response):
 def run_hook(request, response, hooks, execution_info):
     set_response_values(request, response)
     for hook in hooks:
-        args = [execution_info]
-        if len(inspect.signature(hook).parameters) == 0:
-            args = []
+        args = get_args(execution_info, hook)
         execute_method(args, hook, response)
+
+
+def get_args(execution_info, hook):
+    if sys.version_info < (3, 0) and len(inspect.getargspec(hook).args) == 0:
+        return []
+    return [] if len(inspect.signature(hook).parameters) == 0 else [execution_info]
 
 
 def execute_method(params, func, response, continue_on_failure=False):
