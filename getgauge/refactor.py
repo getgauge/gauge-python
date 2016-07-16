@@ -20,7 +20,9 @@ def refactor_impl(decorator, func, request):
     params = [''] * len(request.refactorRequest.newStepValue.parameters)
     for index, position in enumerate(request.refactorRequest.paramPositions):
         if position.oldPosition < 0:
-            params[position.newPosition] = request.refactorRequest.newStepValue.parameters[index]
+            param_name = request.refactorRequest.newStepValue.parameters[index]
+            prefix = "arg{}_".format(position.newPosition)
+            params[position.newPosition] = prefix + "".join([s for s in param_name if s.isidentifier() or s.isalnum()])
         else:
             params[position.newPosition] = func.arguments[position.oldPosition].__str__()
     func.arguments = ', '.join(params)

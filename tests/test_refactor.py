@@ -53,7 +53,67 @@ def assert_default_vowels(given_vowels):
         self.assertEqual(True, response.refactorResponse.success)
         self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
         expected = """@step("Vowels in English language is <vowels> <bsdfdsf>.")
-def assert_default_vowels(given_vowels, bsdfdsf):
+def assert_default_vowels(given_vowels, arg1_bsdfdsf):
+    Messages.write_message("Given vowels are {0}".format(given_vowels))
+    assert given_vowels == "".join(vowels)
+"""
+        self.assertEqual(expected, actual_data)
+
+    def test_Processor_refactor_request_with_add_param_and_invalid_identifier(self):
+        response = Message()
+        request = Message()
+        request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
+        request.refactorRequest.oldStepValue.parameters.append('vowels')
+        request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is \
+<vowels> <vowels!2_ab%$>.'
+        request.refactorRequest.newStepValue.stepValue = 'Vowels in English language is {} {}.'
+        request.refactorRequest.newStepValue.parameters.extend(['vowels', 'vowels!2_ab%$'])
+        position = ParameterPosition()
+        position.oldPosition = 0
+        position.newPosition = 0
+        param_position = ParameterPosition()
+        param_position.oldPosition = -1
+        param_position.newPosition = 1
+        request.refactorRequest.paramPositions.extend([position, param_position])
+
+        processors[Message.RefactorRequest](request, response, None)
+        actual_data = self.getActualText()
+
+        self.assertEqual(Message.RefactorResponse, response.messageType)
+        self.assertEqual(True, response.refactorResponse.success)
+        self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
+        expected = """@step("Vowels in English language is <vowels> <vowels!2_ab%$>.")
+def assert_default_vowels(given_vowels, arg1_vowels2_ab):
+    Messages.write_message("Given vowels are {0}".format(given_vowels))
+    assert given_vowels == "".join(vowels)
+"""
+        self.assertEqual(expected, actual_data)
+
+    def test_Processor_refactor_request_with_add_param_and_only_invalid_identifier(self):
+        response = Message()
+        request = Message()
+        request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
+        request.refactorRequest.oldStepValue.parameters.append('vowels')
+        request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is \
+<vowels> <!%$>.'
+        request.refactorRequest.newStepValue.stepValue = 'Vowels in English language is {} {}.'
+        request.refactorRequest.newStepValue.parameters.extend(['vowels', '!%$'])
+        position = ParameterPosition()
+        position.oldPosition = 0
+        position.newPosition = 0
+        param_position = ParameterPosition()
+        param_position.oldPosition = -1
+        param_position.newPosition = 1
+        request.refactorRequest.paramPositions.extend([position, param_position])
+
+        processors[Message.RefactorRequest](request, response, None)
+        actual_data = self.getActualText()
+
+        self.assertEqual(Message.RefactorResponse, response.messageType)
+        self.assertEqual(True, response.refactorResponse.success)
+        self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
+        expected = """@step("Vowels in English language is <vowels> <!%$>.")
+def assert_default_vowels(given_vowels, arg1_):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -129,7 +189,7 @@ def assert_default_vowels(given_vowels):
         self.assertEqual(True, response.refactorResponse.success)
         self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
         expected = """@step("Vowels in English language is <bsdfdsf>.")
-def assert_default_vowels(bsdfdsf):
+def assert_default_vowels(arg0_bsdfdsf):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
