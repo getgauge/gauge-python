@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+import platform
 import sys
 
 from getgauge import api
@@ -7,6 +8,7 @@ from getgauge.impl_loader import load_impls, copy_skel_files
 
 
 def main():
+    print("Python: {}".format(platform.python_version()))
     if sys.argv[1] == "--init":
         copy_skel_files()
     else:
