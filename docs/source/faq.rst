@@ -43,3 +43,14 @@ Create ``python.properties`` file in the ``<PROJECT_DIR>/env/default`` directory
     PYTHONUNBUFFERED = 1
 
 This should fix this issue.
+
+Use different version of python while running specs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default the language runner uses ``python`` command to run specs. To change the default behaviour, add ``GAUGE_PYTHON_COMMAND`` property to the ``python.properties`` file in the ``<PROJECT_DIR>/env/default`` directory.
+
+::
+
+    GAUGE_PYTHON_COMMAND = <python_command>
+    GAUGE_PYTHON_COMMAND = python3
+    GAUGE_PYTHON_COMMAND = python2
