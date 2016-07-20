@@ -1,2 +1,3 @@
 @echo off
-python -u start.py %1
+IF "%GAUGE_PYTHON_COMMAND%"=="" (SET GAUGE_PYTHON_COMMAND="python")
+%GAUGE_PYTHON_COMMAND% -u start.py %1

@@ -7,10 +7,10 @@
        "start.bat", "--start"
     ],
     "linux": [
-      "./start.py", "--start"
+      "./start.sh", "--start"
     ],
     "darwin": [
-      "./start.py", "--start"
+      "./start.sh", "--start"
     ]
   },
   "init": {
@@ -18,10 +18,10 @@
        "start.bat", "--init"
     ],
     "linux": [
-      "./start.py", "--init"
+      "./start.sh", "--init"
     ],
     "darwin": [
-      "./start.py", "--init"
+      "./start.sh", "--init"
     ]
   },
   "gaugeVersionSupport": {

@@ -60,6 +60,7 @@ def copy_files(wd):
     copy(os.path.join(wd, 'skel'), os.path.join(DEPLOY, 'skel'))
     copy(os.path.join(wd, PLUGIN_JSON), DEPLOY)
     copy(os.path.join(wd, 'start.py'), DEPLOY)
+    copy(os.path.join(wd, 'start.sh'), DEPLOY)
     copy(os.path.join(wd, 'start.bat'), DEPLOY)
 
 
