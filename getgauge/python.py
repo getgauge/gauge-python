@@ -81,7 +81,16 @@ class Table:
         return [row.cells[index - 1] for row in self.__rows]
 
     def __str__(self):
-        return '{}\n{}'.format(', '.join(self.__headers), '\n'.join([', '.join(x.cells) for x in self.__rows]))
+        table = [""] * (len(self.__rows) + 2)
+        for header in self.__headers:
+            values = [header, ""] + self.get_column_values_with_name(header)
+            m_length = max(map(len, values))
+            values[1] = "-" * m_length
+            values = [value.ljust(m_length) for value in values]
+            for i, value in enumerate(values):
+                table[i] = table[i] or []
+                table[i].append(value)
+        return "\n".join(["|{}|".format("|".join(row)) for row in table])
 
     def __eq__(self, other):
         return self.__str__() == other.__str__()

@@ -180,6 +180,37 @@ class TableTests(unittest.TestCase):
 
         self.assertEqual(table, table1)
 
+    def test_Table__str__(self):
+        headers = ['Word', 'Vowel Count']
+        rows = [{'cells': ['Gauge', '3']},
+                {'cells': ['Mingle', '2']},
+                {'cells': ['Snap', '1']},
+                {'cells': ['GoCD', '1']},
+                {'cells': ['Rhythm', '0']}]
+
+        proto_table = ProtoTable({'headers': {'cells': headers}, 'rows': rows})
+
+        table = Table(proto_table).__str__()
+
+        self.assertEqual(table, """|Word  |Vowel Count|
+|------|-----------|
+|Gauge |3          |
+|Mingle|2          |
+|Snap  |1          |
+|GoCD  |1          |
+|Rhythm|0          |""")
+
+    def test_Table__str__without_rows(self):
+        headers = ['Word', 'Vowel Count']
+        rows = []
+
+        proto_table = ProtoTable({'headers': {'cells': headers}, 'rows': rows})
+
+        table = Table(proto_table).__str__()
+
+        self.assertEqual(table, """|Word|Vowel Count|
+|----|-----------|""")
+
 
 class SpecificationTests(unittest.TestCase):
     def test_Specification(self):
