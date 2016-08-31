@@ -7,7 +7,7 @@ from getgauge.registry import registry, _MessagesStore
 def step(step_text):
     def _step(func):
         f_back = sys._getframe().f_back
-        registry.add_step_definition(step_text, func, f_back.f_code.co_filename, inspect.getsourcelines(func)[1])
+        registry.add_step(step_text, func, f_back.f_code.co_filename, inspect.getsourcelines(func)[1])
         return func
 
     return _step

@@ -323,13 +323,13 @@ class DecoratorTests(unittest.TestCase):
         from tests.test_data import impl_stubs
 
     def test_step_decorator(self):
-        steps = registry.all_steps()
+        steps = registry.steps()
         expected = {'Step 1', 'Step 2'}
         self.assertEqual(expected, set(steps))
 
     def test_continue_on_failure(self):
-        step1 = registry.get_info('Step 1').impl
-        step2 = registry.get_info('Step 2').impl
+        step1 = registry.get_info_for('Step 1').impl
+        step2 = registry.get_info_for('Step 2').impl
 
         self.assertEqual(registry.is_continue_on_failure(step1, RuntimeError()), False)
         self.assertEqual(registry.is_continue_on_failure(step2, RuntimeError()), True)

@@ -5,7 +5,7 @@ from getgauge.registry import registry
 def validate_step(request, response):
     response.messageType = Message.StepValidateResponse
     response.stepValidateResponse.isValid = True
-    if registry.is_step_implemented(request.stepValidateRequest.stepText) is False:
+    if registry.is_implemented(request.stepValidateRequest.stepText) is False:
         response.stepValidateResponse.errorType = StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND
         response.stepValidateResponse.errorMessage = 'Step implementation not found'
         response.stepValidateResponse.isValid = False
@@ -15,4 +15,4 @@ def validate_step(request, response):
         response.stepValidateResponse.errorMessage = 'Multiple implementation found for `{}` ({})'. \
             format(request.stepValidateRequest.stepText, ', '.join(
             ['{}:{}'.format(impl.file_name, impl.line_number) for impl in
-             registry.get_infos(request.stepValidateRequest.stepText)]))
+             registry.get_infos_for(request.stepValidateRequest.stepText)]))

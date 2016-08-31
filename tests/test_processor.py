@@ -65,8 +65,8 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual(DataStore(), DataStoreFactory.scenario_data_store())
 
     def test_Processor_step_names_request(self):
-        registry.add_step_definition('Step <a> with <b>', 'func', '')
-        registry.add_step_definition('Step 4', 'func1', '')
+        registry.add_step('Step <a> with <b>', 'func', '')
+        registry.add_step('Step 4', 'func1', '')
         response = Message()
 
         processors[Message.StepNamesRequest](None, response, None)
@@ -75,8 +75,8 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual({'Step <a> with <b>', 'Step 4'}, set(response.stepNamesResponse.steps))
 
     def test_Processor_step_name_request(self):
-        registry.add_step_definition('Step <a> with <b>', 'func', '')
-        registry.add_step_definition('Step 4', 'func1', '')
+        registry.add_step('Step <a> with <b>', 'func', '')
+        registry.add_step('Step 4', 'func1', '')
         response = Message()
         request = Message()
         request.stepNameRequest.stepValue = 'Step {} with {}'
@@ -112,8 +112,8 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual(False, response.stepNameResponse.hasAlias)
 
     def test_Processor_valid_step_validate_request(self):
-        registry.add_step_definition('Step <a> with <b>', 'func', '')
-        registry.add_step_definition('Step 4', 'func1', '')
+        registry.add_step('Step <a> with <b>', 'func', '')
+        registry.add_step('Step 4', 'func1', '')
 
         response = Message()
 
@@ -126,8 +126,8 @@ class ProcessorTests(unittest.TestCase):
         self.assertTrue(response.stepValidateResponse.isValid)
 
     def test_Processor_invalid_step_validate_request_when_no_impl_found(self):
-        registry.add_step_definition('Step <a> with <b>', 'func', '')
-        registry.add_step_definition('Step 4', 'func1', '')
+        registry.add_step('Step <a> with <b>', 'func', '')
+        registry.add_step('Step 4', 'func1', '')
 
         response = Message()
 
@@ -141,8 +141,8 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual(StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND, response.stepValidateResponse.errorType)
 
     def test_Processor_invalid_step_validate_request_when_duplicate_impl_found(self):
-        registry.add_step_definition('Step <a> with <b>', 'func', '')
-        registry.add_step_definition('Step <a> with <b>', 'func', '')
+        registry.add_step('Step <a> with <b>', 'func', '')
+        registry.add_step('Step <a> with <b>', 'func', '')
 
         response = Message()
 
@@ -156,7 +156,7 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual(StepValidateResponse.DUPLICATE_STEP_IMPLEMENTATION, response.stepValidateResponse.errorType)
 
     def test_Processor_execute_step_request(self):
-        registry.add_step_definition('Step 4', impl1, '')
+        registry.add_step('Step 4', impl1, '')
 
         response = Message()
 
@@ -171,8 +171,8 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual('', response.executionStatusResponse.executionResult.stackTrace)
 
     def test_Processor_execute_step_request_with_param(self):
-        registry.add_step_definition('Step <a> with <b>', impl, '')
-        registry.add_step_definition('Step 4', 'func1', '')
+        registry.add_step('Step <a> with <b>', impl, '')
+        registry.add_step('Step 4', 'func1', '')
 
         response = Message()
 
@@ -205,7 +205,7 @@ class ProcessorTests(unittest.TestCase):
         self.assertEqual(False, response.executionStatusResponse.executionResult.recoverableError)
 
     def test_Processor_failed_execute_step_request_with_continue_on_failure(self):
-        registry.add_step_definition('Step 4', failing_impl, '')
+        registry.add_step('Step 4', failing_impl, '')
         registry.continue_on_failure(failing_impl, [IndexError])
 
         response = Message()
@@ -399,8 +399,8 @@ class ProcessorTests(unittest.TestCase):
         self.assertNotEqual('', response.executionStatusResponse.executionResult.stackTrace)
 
     def test_Processor_refactor_request_when_multiple_impl_found(self):
-        registry.add_step_definition('Step <a> with <b>', 'func', '')
-        registry.add_step_definition('Step <a> with <b>', 'func', '')
+        registry.add_step('Step <a> with <b>', 'func', '')
+        registry.add_step('Step <a> with <b>', 'func', '')
         response = Message()
         request = Message()
         request.refactorRequest.oldStepValue.stepValue = 'Step {} with {}'

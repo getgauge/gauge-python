@@ -16,7 +16,7 @@ def _validate_step(request, response, socket):
 
 def _send_step_name(request, response, socket):
     response.messageType = Message.StepNameResponse
-    info = registry.get_info(request.stepNameRequest.stepValue)
+    info = registry.get_info_for(request.stepNameRequest.stepValue)
     response.stepNameResponse.isStepPresent = False
     if info.step_text is not None:
         response.stepNameResponse.isStepPresent = True
@@ -35,7 +35,7 @@ def _refactor(request, response, socket):
 
 def _send_all_step_names(request, response, socket):
     response.messageType = Message.StepNamesResponse
-    response.stepNamesResponse.steps.extend(registry.all_steps())
+    response.stepNamesResponse.steps.extend(registry.steps())
 
 
 def _execute_step(request, response, socket):
@@ -43,7 +43,7 @@ def _execute_step(request, response, socket):
     for param in request.executeStepRequest.parameters:
         params.append(Table(param.table)) if param.parameterType in [Parameter.Table, Parameter.Special_Table] else params.append(param.value)
     set_response_values(request, response)
-    impl = registry.get_info(request.executeStepRequest.parsedStepText).impl
+    impl = registry.get_info_for(request.executeStepRequest.parsedStepText).impl
     execute_method(params, impl, response, registry.is_continue_on_failure)
 
 

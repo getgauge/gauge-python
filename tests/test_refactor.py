@@ -23,8 +23,8 @@ def assert_default_vowels(given_vowels):
         RefactorTests.file = open(RefactorTests.path, 'r')
         RefactorTests.data = RefactorTests.file.read()
         RefactorTests.file.close()
-        registry.add_step_definition('Vowels in English language are <vowels>.', None,
-                                     RefactorTests.path)
+        registry.add_step('Vowels in English language are <vowels>.', None,
+                          RefactorTests.path)
 
     def tearDown(self):
         registry.clear()

@@ -8,12 +8,8 @@ from getgauge.api import get_step_value
 
 class StepInfo(object):
     def __init__(self, step_text, parsed_step_text, impl, file_name, line_number, has_alias=False):
-        self.__step_text = step_text
-        self.__parsed_step_text = parsed_step_text
-        self.__impl = impl
-        self.__file_name = file_name
-        self.__line_number = line_number
-        self.__has_alias = has_alias
+        self.__step_text, self.__parsed_step_text, self.__impl = step_text, parsed_step_text, impl
+        self.__file_name, self.__line_number, self.__has_alias = file_name, line_number, has_alias
 
     @property
     def step_text(self):
@@ -58,27 +54,16 @@ class _MessagesStore:
         _MessagesStore.__messages = []
 
 
-def _take_screenshot():
-    temp_file = os.path.join(tempfile.gettempdir(), 'screenshot.png')
-    call(['gauge_screenshot', temp_file])
-    _file = open(temp_file, 'r+b')
-    data = _file.read()
-    _file.close()
-    return data
-
-
 class Registry(object):
     hooks = ['before_step', 'after_step', 'before_scenario', 'after_scenario', 'before_spec', 'after_spec',
              'before_suite', 'after_suite']
 
     def __init__(self):
-        self.__screenshot_provider = _take_screenshot
-        self.__steps_map = {}
-        self.__continue_on_failures = {}
+        self.__screenshot_provider, self.__steps_map, self.__continue_on_failures = _take_screenshot, {}, {}
         for hook in Registry.hooks:
-            self.def_hook_methods(hook)
+            self.__def_hook(hook)
 
-    def def_hook_methods(self, hook):
+    def __def_hook(self, hook):
         def get(self, tags=None):
             return _filter_hooks(tags, getattr(self, '__{}'.format(hook)))
 
@@ -89,28 +74,29 @@ class Registry(object):
         setattr(self.__class__, 'add_{}'.format(hook), add)
         setattr(self, '__{}'.format(hook), [])
 
-    def add_step_definition(self, step_text, func, file_name, line_number=-1, has_alias=False):
+    def add_step(self, step_text, func, file_name, line_number=-1, has_alias=False):
         if not isinstance(step_text, list):
             parsed_step_text = get_step_value(step_text)
-            self.__steps_map.setdefault(parsed_step_text, []).append(StepInfo(step_text, parsed_step_text, func, file_name, line_number, has_alias))
+            info = StepInfo(step_text, parsed_step_text, func, file_name, line_number, has_alias)
+            self.__steps_map.setdefault(parsed_step_text, []).append(info)
             return
         for text in step_text:
-            self.add_step_definition(text, func, file_name, line_number, True)
+            self.add_step(text, func, file_name, line_number, True)
 
-    def all_steps(self):
+    def steps(self):
         return [value[0].step_text for value in self.__steps_map.values()]
 
-    def is_step_implemented(self, step_text):
+    def is_implemented(self, step_text):
         return self.__steps_map.get(step_text) is not None
 
     def has_multiple_impls(self, step_text):
         return len(self.__steps_map.get(step_text)) > 1
 
-    def get_info(self, step_text):
+    def get_info_for(self, step_text):
         info = self.__steps_map.get(step_text)
         return info[0] if info is not None else StepInfo(None, None, None, None, None)
 
-    def get_infos(self, step_text):
+    def get_infos_for(self, step_text):
         return self.__steps_map.get(step_text)
 
     def set_screenshot_provider(self, func):
@@ -130,13 +116,9 @@ class Registry(object):
         return False
 
     def clear(self):
-        self.__steps_map = {}
-        self.__continue_on_failures = {}
+        self.__steps_map, self.__continue_on_failures = {}, {}
         for hook in Registry.hooks:
             setattr(self, '__{}'.format(hook), [])
-
-
-registry = Registry()
 
 
 def _filter_hooks(tags, hooks):
@@ -151,3 +133,15 @@ def _filter_hooks(tags, hooks):
         if eval(re.sub('<[^<]+?>', 'False', hook_tags)):
             filtered_hooks.append(hook['func'])
     return filtered_hooks
+
+
+def _take_screenshot():
+    temp_file = os.path.join(tempfile.gettempdir(), 'screenshot.png')
+    call(['gauge_screenshot', temp_file])
+    _file = open(temp_file, 'r+b')
+    data = _file.read()
+    _file.close()
+    return data
+
+
+registry = Registry()
