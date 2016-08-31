@@ -12,6 +12,9 @@ from getgauge.registry import registry
 def _current_time(): return int(round(time.time() * 1000))
 
 
+def _false(func, exception): return False
+
+
 def set_response_values(request, response):
     response.messageType = Message.ExecutionStatusResponse
     response.executionStatusResponse.executionResult.failed = False
@@ -32,12 +35,12 @@ def get_args(execution_info, hook):
         return [] if len(inspect.signature(hook).parameters) == 0 else [execution_info]
 
 
-def execute_method(params, func, response, continue_on_failure=False):
+def execute_method(params, func, response, is_continue_on_failure=_false):
     start = _current_time()
     try:
         func(*params)
     except Exception as e:
-        _add_exception(e, response, continue_on_failure)
+        _add_exception(e, response, is_continue_on_failure(func, e))
     response.executionStatusResponse.executionResult.executionTime = _current_time() - start
 
 

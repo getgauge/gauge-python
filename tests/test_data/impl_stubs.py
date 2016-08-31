@@ -7,7 +7,7 @@ def step1():
     pass
 
 
-@continue_on_failure
+@continue_on_failure([RuntimeError])
 @step("Step 2")
 def step2():
     pass

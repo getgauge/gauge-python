@@ -13,9 +13,8 @@ def step(step_text):
     return _step
 
 
-def continue_on_failure(func):
-    registry.continue_on_failure(func)
-    return func
+def continue_on_failure(obj):
+    return _define_wrapper(obj, registry.continue_on_failure)
 
 
 def before_suite(func):

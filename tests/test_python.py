@@ -331,8 +331,8 @@ class DecoratorTests(unittest.TestCase):
         step1 = registry.get_info('Step 1').impl
         step2 = registry.get_info('Step 2').impl
 
-        self.assertEqual(registry.is_continue_on_failure(step1), False)
-        self.assertEqual(registry.is_continue_on_failure(step2), True)
+        self.assertEqual(registry.is_continue_on_failure(step1, RuntimeError()), False)
+        self.assertEqual(registry.is_continue_on_failure(step2, RuntimeError()), True)
 
     def test_before_step_decorator(self):
         funcs = registry.before_step()

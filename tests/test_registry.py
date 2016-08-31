@@ -21,9 +21,21 @@ class RegistryTests(unittest.TestCase):
 
     def test_Registry_add_step_definition_with_continue_on_failure(self):
         registry.add_step_definition('Step 1', 'func', '')
-        registry.continue_on_failure('func')
+        registry.continue_on_failure('func', [RuntimeError])
 
-        self.assertEqual(True, registry.is_continue_on_failure('func'))
+        self.assertEqual(True, registry.is_continue_on_failure('func', RuntimeError()))
+
+    def test_Registry_add_step_definition_with_continue_on_failure_for_different_exceptions(self):
+        registry.add_step_definition('Step 1', 'func', '')
+        registry.continue_on_failure('func', [RuntimeError])
+
+        self.assertEqual(False, registry.is_continue_on_failure('func', IndexError()))
+
+    def test_Registry_add_step_definition_with_parent_class_continue_on_failure(self):
+        registry.add_step_definition('Step 1', 'func', '')
+        registry.continue_on_failure('func', [Exception])
+
+        self.assertEqual(True, registry.is_continue_on_failure('func', RuntimeError()))
 
     def test_Registry_add_step_definition_with_alias(self):
         registry.add_step_definition(['Say <hello> to <getgauge>.', 'Tell <hello> to <getgauge>.'], 'impl', '')

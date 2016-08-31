@@ -206,7 +206,7 @@ class ProcessorTests(unittest.TestCase):
 
     def test_Processor_failed_execute_step_request_with_continue_on_failure(self):
         registry.add_step_definition('Step 4', failing_impl, '')
-        registry.continue_on_failure(failing_impl)
+        registry.continue_on_failure(failing_impl, [IndexError])
 
         response = Message()
 
