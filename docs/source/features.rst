@@ -37,13 +37,26 @@ To implement the same function for multiple step names (aka, step aliases), pass
 Continue on failure
 ^^^^^^^^^^^^^^^^^^^
 
-To have a particular step implementation not break execution dure to failure, use the ``@continue_on_failure`` decorator. For example:
+To have a particular step implementation not break execution due to failure, use the ``continue_on_failure`` decorator.
+
+In the following example, the execution will continue if the error is an assertion error or its subclass otherwise it will halt the scenario execution.
 
    ::
 
        from getgauge.python import step, continue_on_failure
 
        @continue_on_failure
+       @step("Create a user <user name>")
+       def hello(user_name):
+           assert 2 == 1
+
+The list of errors can be provided as a parameter to ``continue_on_failure`` decorator. It will continue the execution if the error is in the given list or the subclass of any errors mentioned. For example:
+
+   ::
+
+       from getgauge.python import step, continue_on_failure
+
+       @continue_on_failure([AssertionError, RuntimeError])
        @step("Create a user <user name>")
        def hello(user_name):
            assert 2 == 1
