@@ -138,6 +138,8 @@ def _filter_hooks(tags, hooks):
 def _take_screenshot():
     temp_file = os.path.join(tempfile.gettempdir(), 'screenshot.png')
     call(['gauge_screenshot', temp_file])
+    if not os.path.exists(temp_file):
+        return str.encode("")
     _file = open(temp_file, 'r+b')
     data = _file.read()
     _file.close()
