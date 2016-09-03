@@ -54,3 +54,8 @@ By default the language runner uses ``python`` command to run specs. To change t
     GAUGE_PYTHON_COMMAND = <python_command>
     GAUGE_PYTHON_COMMAND = python3
     GAUGE_PYTHON_COMMAND = python2
+
+ImportError: No module named step_impl.<file_name>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This error happens on older versions of Python(2.7, 3.2). Create ``step_impl/__init__.py`` to fix this.
