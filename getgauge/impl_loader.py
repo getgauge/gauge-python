@@ -8,8 +8,9 @@ import traceback
 from os import path
 
 PROJECT_ROOT_ENV = 'GAUGE_PROJECT_ROOT'
-STEP_IMPL_DIR = 'step_impl'
+STEP_IMPL_DIR_ENV = 'STEP_IMPL_DIR'
 
+STEP_IMPL_DIR = os.getenv(STEP_IMPL_DIR_ENV) or 'step_impl'
 project_root = os.path.abspath(os.environ[PROJECT_ROOT_ENV])
 impl_dir = os.path.join(project_root, STEP_IMPL_DIR)
 env_dir = os.path.join(project_root, 'env', 'default')
@@ -23,6 +24,14 @@ SKEL = 'skel'
 
 def load_impls(step_impl_dir=impl_dir):
     os.chdir(project_root)
+    if not os.path.isdir(step_impl_dir):
+        print('Cannot import step implementations. Error: directory {} does not exist.'.format(step_impl_dir))
+        print('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
+        return
+    import_impl(step_impl_dir)
+
+
+def import_impl(step_impl_dir):
     for f in os.listdir(step_impl_dir):
         file_path = os.path.join(step_impl_dir, f)
         if f.endswith('.py'):
