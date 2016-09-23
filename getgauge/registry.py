@@ -3,6 +3,8 @@ import re
 import tempfile
 from subprocess import call
 
+from colorama import Fore
+
 from getgauge.api import get_step_value
 
 
@@ -139,7 +141,7 @@ def _take_screenshot():
     temp_file = os.path.join(tempfile.gettempdir(), 'screenshot.png')
     call(['gauge_screenshot', temp_file])
     if not os.path.exists(temp_file):
-        print("Failed to take screenshot using gauge_screenshot.")
+        print(Fore.RED + "Failed to take screenshot using gauge_screenshot.")
         return str.encode("")
     _file = open(temp_file, 'r+b')
     data = _file.read()

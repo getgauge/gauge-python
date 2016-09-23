@@ -1,4 +1,5 @@
 from distutils.core import setup
+
 setup(
     name='getgauge',
     packages=['getgauge', 'getgauge/messages'],
@@ -21,5 +22,5 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
-    install_requires=['protobuf==3.0.0b2.post2', 'redBaron'],
+    install_requires=['protobuf==3.0.0b2.post2', 'redBaron', 'colorama'],
 )

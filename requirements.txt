@@ -1,3 +1,4 @@
+colorama
 protobuf==3.0.0b2.post2
 redbaron
 coverage==3.7.1 ; python_version == '3.2'

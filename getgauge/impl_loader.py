@@ -7,6 +7,8 @@ import sys
 import traceback
 from os import path
 
+from colorama import Fore
+
 PROJECT_ROOT_ENV = 'GAUGE_PROJECT_ROOT'
 STEP_IMPL_DIR_ENV = 'STEP_IMPL_DIR'
 
@@ -25,8 +27,8 @@ SKEL = 'skel'
 def load_impls(step_impl_dir=impl_dir):
     os.chdir(project_root)
     if not os.path.isdir(step_impl_dir):
-        print('Cannot import step implementations. Error: directory {} does not exist.'.format(step_impl_dir))
-        print('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
+        print(Fore.RED + 'Cannot import step implementations. Error: directory {} does not exist.'.format(step_impl_dir))
+        print(Fore.RED + 'Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
         return
     import_impl(step_impl_dir)
 
@@ -46,22 +48,23 @@ def import_file(file_path):
         py_compile.compile(file_path)
         importlib.import_module(os.path.splitext(rel_path.replace(os.path.sep, '.'))[0])
     except:
-        print('Exception occurred while loading step implementations from file: {}.'.format(rel_path))
-        traceback.print_exc()
+        print(Fore.RED + 'Exception occurred while loading step implementations from file: {}.'.format(rel_path))
+        print(Fore.RED + traceback.format_exc())
 
 
 def copy_skel_files():
     try:
         print('Initialising Gauge Python project')
-        print('create  {}'.format(env_dir))
+        print(Fore.GREEN + 'create  {}'.format(env_dir))
         os.makedirs(env_dir)
-        print('create  {}'.format(impl_dir))
+        print(Fore.GREEN + 'create  {}'.format(impl_dir))
         shutil.copytree(os.path.join(SKEL, STEP_IMPL_DIR), impl_dir)
-        print('create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
+        print(Fore.GREEN + 'create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
         shutil.copy(os.path.join(SKEL, PYTHON_PROPERTIES), env_dir)
         open(requirements_file, 'w').write('getgauge==' + get_version())
-    except Exception as e:
-        print('Cannot copy skel files, Reason: {}.'.format(e))
+    except:
+        print(Fore.RED + 'Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
+        sys.exit(1)
 
 
 def get_version():
