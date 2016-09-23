@@ -1,27 +1,33 @@
 {
   "id": "python",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Python support for gauge",
   "run": {
     "windows": [
-       "start.bat", "--start"
+      "start.bat",
+      "--start"
     ],
     "linux": [
-      "./start.sh", "--start"
+      "./start.sh",
+      "--start"
     ],
     "darwin": [
-      "./start.sh", "--start"
+      "./start.sh",
+      "--start"
     ]
   },
   "init": {
     "windows": [
-       "start.bat", "--init"
+      "start.bat",
+      "--init"
     ],
     "linux": [
-      "./start.sh", "--init"
+      "./start.sh",
+      "--init"
     ],
     "darwin": [
-      "./start.sh", "--init"
+      "./start.sh",
+      "--init"
     ]
   },
   "gaugeVersionSupport": {
