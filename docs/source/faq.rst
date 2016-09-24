@@ -33,16 +33,18 @@ For more details, refer Installation_ docs.
 .. _Installation: ./installation.html
 
 
-Print statements are getting printed at the end of execution
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Change/Rename default step implementation(``step_impl``) directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Create ``python.properties`` file in the ``<PROJECT_DIR>/env/default`` directory and add the following line to it.
 
 ::
 
-    PYTHONUNBUFFERED = 1
+    STEP_IMPL_DIR = PATH_TO_STEP_IMPLEMENTATION_DIR
 
-This should fix this issue.
+.. note::
+   The path specified in ``STEP_IMPL_DIR`` property should be relative to project root.
+
 
 Use different version of python while running specs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
