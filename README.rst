@@ -11,6 +11,13 @@ Examples
 
 * `Gauge-Python Selenium Example`_
 
+Issues
+------
+
+If you find any issues or have any feature requests, please file them in the `issue tracker`_.
+
+.. _issue tracker: https://github.com/kashishm/gauge-python/issues
+
 License
 -------
 
