@@ -8,6 +8,7 @@ import traceback
 from os import path
 
 from colorama import Fore
+from colorama import Style
 
 PROJECT_ROOT_ENV = 'GAUGE_PROJECT_ROOT'
 STEP_IMPL_DIR_ENV = 'STEP_IMPL_DIR'
@@ -54,7 +55,7 @@ def import_file(file_path):
 
 def copy_skel_files():
     try:
-        print('Initialising Gauge Python project')
+        print(Style.BRIGHT + 'Initialising Gauge Python project')
         print(Fore.GREEN + 'create  {}'.format(env_dir))
         os.makedirs(env_dir)
         print(Fore.GREEN + 'create  {}'.format(impl_dir))
