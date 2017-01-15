@@ -40,8 +40,8 @@ def _send_all_step_names(request, response, socket):
 
 def _execute_step(request, response, socket):
     params = []
-    for param in request.executeStepRequest.parameters:
-        params.append(Table(param.table)) if param.parameterType in [Parameter.Table, Parameter.Special_Table] else params.append(param.value)
+    for p in request.executeStepRequest.parameters:
+        params.append(Table(p.table) if p.parameterType in [Parameter.Table, Parameter.Special_Table] else p.value)
     set_response_values(request, response)
     impl = registry.get_info_for(request.executeStepRequest.parsedStepText).impl
     execute_method(params, impl, response, registry.is_continue_on_failure)
