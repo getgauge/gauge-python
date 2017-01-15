@@ -1,7 +1,7 @@
-Gauge Python |Documentation Status| |Snap Build Status| |Travis Build Status|
-=============================================================================
+Gauge Python |Documentation Status| |Snap Build Status| |Travis Build Status| |Codacy Project Status|
+=====================================================================================================
 
-Python language runner for `Gauge`_. 
+Python language runner for `Gauge`_.
 
 * `Documentation`_
 * `Contributing to Gauge-Python`_
@@ -37,3 +37,5 @@ The Gauge-Python is an open-sourced software licensed under the `MIT license`_.
    :target: https://snap-ci.com/kashishm/gauge-python/branch/master
 .. |Travis Build Status| image:: https://travis-ci.org/kashishm/gauge-python.svg?branch=master
    :target: https://travis-ci.org/kashishm/gauge-python
+.. |Codacy Project Status| image:: https://api.codacy.com/project/badge/Grade/2b96566538d1445685f9ad7792456b97
+   :target: https://www.codacy.com/app/kashishmunjal64/gauge-python?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kashishm/gauge-python&amp;utm_campaign=Badge_Grade
