@@ -1,16 +1,16 @@
-Gauge Python |Documentation Status| |Snap Build Status| |Travis Build Status| |Codacy Project Status|
+Gauge Python |Documentation Status| |Codacy Project Status| |Snap Build Status| |Travis Build Status|
 =====================================================================================================
 
 Python language runner for `Gauge`_.
 
 * `Documentation`_
-* `Contributing to Gauge-Python`_
+* `Contributing`_
 
 Examples
 --------
 
-* `Selenium Example`_
-* `Selenium and REST API Example`_
+* `Selenium`_
+* `Selenium and REST API`_
 
 Issues
 ------
@@ -26,10 +26,10 @@ The Gauge-Python is an open-sourced software licensed under the `MIT license`_.
 
 .. _Gauge: https://github.com/getgauge/gauge
 .. _Documentation: https://gauge-python.readthedocs.org
-.. _Contributing to Gauge-Python: https://gauge-python.readthedocs.io/en/latest/contributing.html
+.. _Contributing: https://gauge-python.readthedocs.io/en/latest/contributing.html
 .. _MIT license: http://opensource.org/licenses/MIT
-.. _Selenium Example: https://github.com/kashishm/gauge-example-python
-.. _Selenium and REST API Example: https://angbaird.com/2016/11/09/selenium-and-rest-api-testing-with-gauge/
+.. _Selenium: https://github.com/kashishm/gauge-example-python
+.. _Selenium and REST API: https://angbaird.com/2016/11/09/selenium-and-rest-api-testing-with-gauge/
 
 .. |Documentation Status| image:: https://readthedocs.org/projects/gauge-python/badge/?version=latest
    :target: http://gauge-python.readthedocs.org/en/latest/?badge=latest
