@@ -22,5 +22,5 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
-    install_requires=['protobuf==3.0.0b2.post2', 'redBaron', 'colorama'],
+    install_requires=['protobuf==3.2.0rc2', 'redBaron', 'colorama'],
 )

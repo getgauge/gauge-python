@@ -1,5 +1,5 @@
 colorama
-protobuf==3.0.0b2.post2
+protobuf==3.2.0rc2
 redbaron
 coverage==3.7.1 ; python_version == '3.2'
 coverage>=3.7.1 ; python_version != '3.2'
