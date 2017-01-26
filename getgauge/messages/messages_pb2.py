@@ -7,6 +7,7 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
+from google.protobuf import descriptor_pb2
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -18,8 +19,8 @@ import getgauge.messages.spec_pb2 as spec__pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='messages.proto',
   package='gauge.messages',
-  syntax='proto2',
-  serialized_pb=_b('\n\x0emessages.proto\x12\x0egauge.messages\x1a\nspec.proto\"\x14\n\x12KillProcessRequest\"X\n\x17\x45xecutionStatusResponse\x12=\n\x0f\x65xecutionResult\x18\x01 \x02(\x0b\x32$.gauge.messages.ProtoExecutionResult\"W\n\x18\x45xecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"U\n\x16\x45xecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"[\n\x1cSpecExecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"Y\n\x1aSpecExecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"_\n ScenarioExecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"]\n\x1eScenarioExecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"[\n\x1cStepExecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"Y\n\x1aStepExecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"\xb8\x01\n\rExecutionInfo\x12-\n\x0b\x63urrentSpec\x18\x01 \x01(\x0b\x32\x18.gauge.messages.SpecInfo\x12\x35\n\x0f\x63urrentScenario\x18\x02 \x01(\x0b\x32\x1c.gauge.messages.ScenarioInfo\x12-\n\x0b\x63urrentStep\x18\x03 \x01(\x0b\x32\x18.gauge.messages.StepInfo\x12\x12\n\nstacktrace\x18\x04 \x01(\t\"J\n\x08SpecInfo\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\x10\n\x08\x66ileName\x18\x02 \x02(\t\x12\x10\n\x08isFailed\x18\x03 \x02(\x08\x12\x0c\n\x04tags\x18\x04 \x03(\t\"<\n\x0cScenarioInfo\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\x10\n\x08isFailed\x18\x02 \x02(\x08\x12\x0c\n\x04tags\x18\x03 \x03(\t\"N\n\x08StepInfo\x12\x30\n\x04step\x18\x01 \x02(\x0b\x32\".gauge.messages.ExecuteStepRequest\x12\x10\n\x08isFailed\x18\x02 \x02(\x08\"\x8c\x01\n\x12\x45xecuteStepRequest\x12\x16\n\x0e\x61\x63tualStepText\x18\x01 \x02(\t\x12\x16\n\x0eparsedStepText\x18\x02 \x02(\t\x12\x17\n\x0fscenarioFailing\x18\x03 \x01(\x08\x12-\n\nparameters\x18\x04 \x03(\x0b\x32\x19.gauge.messages.Parameter\"C\n\x13StepValidateRequest\x12\x10\n\x08stepText\x18\x01 \x02(\t\x12\x1a\n\x12numberOfParameters\x18\x02 \x02(\x05\"\xd3\x01\n\x14StepValidateResponse\x12\x0f\n\x07isValid\x18\x01 \x02(\x08\x12\x14\n\x0c\x65rrorMessage\x18\x02 \x01(\t\x12\x41\n\terrorType\x18\x03 \x01(\x0e\x32..gauge.messages.StepValidateResponse.ErrorType\"Q\n\tErrorType\x12!\n\x1dSTEP_IMPLEMENTATION_NOT_FOUND\x10\x00\x12!\n\x1d\x44UPLICATE_STEP_IMPLEMENTATION\x10\x01\"M\n\x14SuiteExecutionResult\x12\x35\n\x0bsuiteResult\x18\x01 \x02(\x0b\x32 .gauge.messages.ProtoSuiteResult\"\x12\n\x10StepNamesRequest\"\"\n\x11StepNamesResponse\x12\r\n\x05steps\x18\x01 \x03(\t\"\x1e\n\x1cScenarioDataStoreInitRequest\"\x1a\n\x18SpecDataStoreInitRequest\"\x1b\n\x19SuiteDataStoreInitRequest\"=\n\x11ParameterPosition\x12\x13\n\x0boldPosition\x18\x01 \x02(\x05\x12\x13\n\x0bnewPosition\x18\x02 \x02(\x05\"\xb8\x01\n\x0fRefactorRequest\x12\x34\n\x0coldStepValue\x18\x01 \x02(\x0b\x32\x1e.gauge.messages.ProtoStepValue\x12\x34\n\x0cnewStepValue\x18\x02 \x02(\x0b\x32\x1e.gauge.messages.ProtoStepValue\x12\x39\n\x0eparamPositions\x18\x03 \x03(\x0b\x32!.gauge.messages.ParameterPosition\"H\n\x10RefactorResponse\x12\x0f\n\x07success\x18\x01 \x02(\x08\x12\r\n\x05\x65rror\x18\x02 \x01(\t\x12\x14\n\x0c\x66ilesChanged\x18\x03 \x03(\t\"$\n\x0fStepNameRequest\x12\x11\n\tstepValue\x18\x01 \x02(\t\"M\n\x10StepNameResponse\x12\x15\n\risStepPresent\x18\x01 \x02(\x08\x12\x10\n\x08stepName\x18\x02 \x03(\t\x12\x10\n\x08hasAlias\x18\x03 \x02(\x08\"-\n\x1aUnsupportedMessageResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"\xfe\x12\n\x07Message\x12\x38\n\x0bmessageType\x18\x01 \x02(\x0e\x32#.gauge.messages.Message.MessageType\x12\x11\n\tmessageId\x18\x02 \x02(\x03\x12J\n\x18\x65xecutionStartingRequest\x18\x03 \x01(\x0b\x32(.gauge.messages.ExecutionStartingRequest\x12R\n\x1cspecExecutionStartingRequest\x18\x04 \x01(\x0b\x32,.gauge.messages.SpecExecutionStartingRequest\x12N\n\x1aspecExecutionEndingRequest\x18\x05 \x01(\x0b\x32*.gauge.messages.SpecExecutionEndingRequest\x12Z\n scenarioExecutionStartingRequest\x18\x06 \x01(\x0b\x32\x30.gauge.messages.ScenarioExecutionStartingRequest\x12V\n\x1escenarioExecutionEndingRequest\x18\x07 \x01(\x0b\x32..gauge.messages.ScenarioExecutionEndingRequest\x12R\n\x1cstepExecutionStartingRequest\x18\x08 \x01(\x0b\x32,.gauge.messages.StepExecutionStartingRequest\x12N\n\x1astepExecutionEndingRequest\x18\t \x01(\x0b\x32*.gauge.messages.StepExecutionEndingRequest\x12>\n\x12\x65xecuteStepRequest\x18\n \x01(\x0b\x32\".gauge.messages.ExecuteStepRequest\x12\x46\n\x16\x65xecutionEndingRequest\x18\x0b \x01(\x0b\x32&.gauge.messages.ExecutionEndingRequest\x12@\n\x13stepValidateRequest\x18\x0c \x01(\x0b\x32#.gauge.messages.StepValidateRequest\x12\x42\n\x14stepValidateResponse\x18\r \x01(\x0b\x32$.gauge.messages.StepValidateResponse\x12H\n\x17\x65xecutionStatusResponse\x18\x0e \x01(\x0b\x32\'.gauge.messages.ExecutionStatusResponse\x12:\n\x10stepNamesRequest\x18\x0f \x01(\x0b\x32 .gauge.messages.StepNamesRequest\x12<\n\x11stepNamesResponse\x18\x10 \x01(\x0b\x32!.gauge.messages.StepNamesResponse\x12\x42\n\x14suiteExecutionResult\x18\x11 \x01(\x0b\x32$.gauge.messages.SuiteExecutionResult\x12>\n\x12killProcessRequest\x18\x12 \x01(\x0b\x32\".gauge.messages.KillProcessRequest\x12R\n\x1cscenarioDataStoreInitRequest\x18\x13 \x01(\x0b\x32,.gauge.messages.ScenarioDataStoreInitRequest\x12J\n\x18specDataStoreInitRequest\x18\x14 \x01(\x0b\x32(.gauge.messages.SpecDataStoreInitRequest\x12L\n\x19suiteDataStoreInitRequest\x18\x15 \x01(\x0b\x32).gauge.messages.SuiteDataStoreInitRequest\x12\x38\n\x0fstepNameRequest\x18\x16 \x01(\x0b\x32\x1f.gauge.messages.StepNameRequest\x12:\n\x10stepNameResponse\x18\x17 \x01(\x0b\x32 .gauge.messages.StepNameResponse\x12\x38\n\x0frefactorRequest\x18\x18 \x01(\x0b\x32\x1f.gauge.messages.RefactorRequest\x12:\n\x10refactorResponse\x18\x19 \x01(\x0b\x32 .gauge.messages.RefactorResponse\x12N\n\x1aunsupportedMessageResponse\x18\x1a \x01(\x0b\x32*.gauge.messages.UnsupportedMessageResponse\"\xdd\x04\n\x0bMessageType\x12\x15\n\x11\x45xecutionStarting\x10\x00\x12\x19\n\x15SpecExecutionStarting\x10\x01\x12\x17\n\x13SpecExecutionEnding\x10\x02\x12\x1d\n\x19ScenarioExecutionStarting\x10\x03\x12\x1b\n\x17ScenarioExecutionEnding\x10\x04\x12\x19\n\x15StepExecutionStarting\x10\x05\x12\x17\n\x13StepExecutionEnding\x10\x06\x12\x0f\n\x0b\x45xecuteStep\x10\x07\x12\x13\n\x0f\x45xecutionEnding\x10\x08\x12\x17\n\x13StepValidateRequest\x10\t\x12\x18\n\x14StepValidateResponse\x10\n\x12\x1b\n\x17\x45xecutionStatusResponse\x10\x0b\x12\x14\n\x10StepNamesRequest\x10\x0c\x12\x15\n\x11StepNamesResponse\x10\r\x12\x16\n\x12KillProcessRequest\x10\x0e\x12\x18\n\x14SuiteExecutionResult\x10\x0f\x12\x19\n\x15ScenarioDataStoreInit\x10\x10\x12\x15\n\x11SpecDataStoreInit\x10\x11\x12\x16\n\x12SuiteDataStoreInit\x10\x12\x12\x13\n\x0fStepNameRequest\x10\x13\x12\x14\n\x10StepNameResponse\x10\x14\x12\x13\n\x0fRefactorRequest\x10\x15\x12\x14\n\x10RefactorResponse\x10\x16\x12\x1e\n\x1aUnsupportedMessageResponse\x10\x17')
+  syntax='proto3',
+  serialized_pb=_b('\n\x0emessages.proto\x12\x0egauge.messages\x1a\nspec.proto\"\x14\n\x12KillProcessRequest\"X\n\x17\x45xecutionStatusResponse\x12=\n\x0f\x65xecutionResult\x18\x01 \x01(\x0b\x32$.gauge.messages.ProtoExecutionResult\"W\n\x18\x45xecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"U\n\x16\x45xecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"[\n\x1cSpecExecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"Y\n\x1aSpecExecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"_\n ScenarioExecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"]\n\x1eScenarioExecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"[\n\x1cStepExecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"Y\n\x1aStepExecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"\xb8\x01\n\rExecutionInfo\x12-\n\x0b\x63urrentSpec\x18\x01 \x01(\x0b\x32\x18.gauge.messages.SpecInfo\x12\x35\n\x0f\x63urrentScenario\x18\x02 \x01(\x0b\x32\x1c.gauge.messages.ScenarioInfo\x12-\n\x0b\x63urrentStep\x18\x03 \x01(\x0b\x32\x18.gauge.messages.StepInfo\x12\x12\n\nstacktrace\x18\x04 \x01(\t\"J\n\x08SpecInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08\x66ileName\x18\x02 \x01(\t\x12\x10\n\x08isFailed\x18\x03 \x01(\x08\x12\x0c\n\x04tags\x18\x04 \x03(\t\"<\n\x0cScenarioInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08isFailed\x18\x02 \x01(\x08\x12\x0c\n\x04tags\x18\x03 \x03(\t\"N\n\x08StepInfo\x12\x30\n\x04step\x18\x01 \x01(\x0b\x32\".gauge.messages.ExecuteStepRequest\x12\x10\n\x08isFailed\x18\x02 \x01(\x08\"\x8c\x01\n\x12\x45xecuteStepRequest\x12\x16\n\x0e\x61\x63tualStepText\x18\x01 \x01(\t\x12\x16\n\x0eparsedStepText\x18\x02 \x01(\t\x12\x17\n\x0fscenarioFailing\x18\x03 \x01(\x08\x12-\n\nparameters\x18\x04 \x03(\x0b\x32\x19.gauge.messages.Parameter\"C\n\x13StepValidateRequest\x12\x10\n\x08stepText\x18\x01 \x01(\t\x12\x1a\n\x12numberOfParameters\x18\x02 \x01(\x05\"\xd3\x01\n\x14StepValidateResponse\x12\x0f\n\x07isValid\x18\x01 \x01(\x08\x12\x14\n\x0c\x65rrorMessage\x18\x02 \x01(\t\x12\x41\n\terrorType\x18\x03 \x01(\x0e\x32..gauge.messages.StepValidateResponse.ErrorType\"Q\n\tErrorType\x12!\n\x1dSTEP_IMPLEMENTATION_NOT_FOUND\x10\x00\x12!\n\x1d\x44UPLICATE_STEP_IMPLEMENTATION\x10\x01\"M\n\x14SuiteExecutionResult\x12\x35\n\x0bsuiteResult\x18\x01 \x01(\x0b\x32 .gauge.messages.ProtoSuiteResult\"\x12\n\x10StepNamesRequest\"\"\n\x11StepNamesResponse\x12\r\n\x05steps\x18\x01 \x03(\t\"\x1e\n\x1cScenarioDataStoreInitRequest\"\x1a\n\x18SpecDataStoreInitRequest\"\x1b\n\x19SuiteDataStoreInitRequest\"=\n\x11ParameterPosition\x12\x13\n\x0boldPosition\x18\x01 \x01(\x05\x12\x13\n\x0bnewPosition\x18\x02 \x01(\x05\"\xb8\x01\n\x0fRefactorRequest\x12\x34\n\x0coldStepValue\x18\x01 \x01(\x0b\x32\x1e.gauge.messages.ProtoStepValue\x12\x34\n\x0cnewStepValue\x18\x02 \x01(\x0b\x32\x1e.gauge.messages.ProtoStepValue\x12\x39\n\x0eparamPositions\x18\x03 \x03(\x0b\x32!.gauge.messages.ParameterPosition\"H\n\x10RefactorResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\r\n\x05\x65rror\x18\x02 \x01(\t\x12\x14\n\x0c\x66ilesChanged\x18\x03 \x03(\t\"$\n\x0fStepNameRequest\x12\x11\n\tstepValue\x18\x01 \x01(\t\"M\n\x10StepNameResponse\x12\x15\n\risStepPresent\x18\x01 \x01(\x08\x12\x10\n\x08stepName\x18\x02 \x03(\t\x12\x10\n\x08hasAlias\x18\x03 \x01(\x08\"-\n\x1aUnsupportedMessageResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"\xfe\x12\n\x07Message\x12\x38\n\x0bmessageType\x18\x01 \x01(\x0e\x32#.gauge.messages.Message.MessageType\x12\x11\n\tmessageId\x18\x02 \x01(\x03\x12J\n\x18\x65xecutionStartingRequest\x18\x03 \x01(\x0b\x32(.gauge.messages.ExecutionStartingRequest\x12R\n\x1cspecExecutionStartingRequest\x18\x04 \x01(\x0b\x32,.gauge.messages.SpecExecutionStartingRequest\x12N\n\x1aspecExecutionEndingRequest\x18\x05 \x01(\x0b\x32*.gauge.messages.SpecExecutionEndingRequest\x12Z\n scenarioExecutionStartingRequest\x18\x06 \x01(\x0b\x32\x30.gauge.messages.ScenarioExecutionStartingRequest\x12V\n\x1escenarioExecutionEndingRequest\x18\x07 \x01(\x0b\x32..gauge.messages.ScenarioExecutionEndingRequest\x12R\n\x1cstepExecutionStartingRequest\x18\x08 \x01(\x0b\x32,.gauge.messages.StepExecutionStartingRequest\x12N\n\x1astepExecutionEndingRequest\x18\t \x01(\x0b\x32*.gauge.messages.StepExecutionEndingRequest\x12>\n\x12\x65xecuteStepRequest\x18\n \x01(\x0b\x32\".gauge.messages.ExecuteStepRequest\x12\x46\n\x16\x65xecutionEndingRequest\x18\x0b \x01(\x0b\x32&.gauge.messages.ExecutionEndingRequest\x12@\n\x13stepValidateRequest\x18\x0c \x01(\x0b\x32#.gauge.messages.StepValidateRequest\x12\x42\n\x14stepValidateResponse\x18\r \x01(\x0b\x32$.gauge.messages.StepValidateResponse\x12H\n\x17\x65xecutionStatusResponse\x18\x0e \x01(\x0b\x32\'.gauge.messages.ExecutionStatusResponse\x12:\n\x10stepNamesRequest\x18\x0f \x01(\x0b\x32 .gauge.messages.StepNamesRequest\x12<\n\x11stepNamesResponse\x18\x10 \x01(\x0b\x32!.gauge.messages.StepNamesResponse\x12\x42\n\x14suiteExecutionResult\x18\x11 \x01(\x0b\x32$.gauge.messages.SuiteExecutionResult\x12>\n\x12killProcessRequest\x18\x12 \x01(\x0b\x32\".gauge.messages.KillProcessRequest\x12R\n\x1cscenarioDataStoreInitRequest\x18\x13 \x01(\x0b\x32,.gauge.messages.ScenarioDataStoreInitRequest\x12J\n\x18specDataStoreInitRequest\x18\x14 \x01(\x0b\x32(.gauge.messages.SpecDataStoreInitRequest\x12L\n\x19suiteDataStoreInitRequest\x18\x15 \x01(\x0b\x32).gauge.messages.SuiteDataStoreInitRequest\x12\x38\n\x0fstepNameRequest\x18\x16 \x01(\x0b\x32\x1f.gauge.messages.StepNameRequest\x12:\n\x10stepNameResponse\x18\x17 \x01(\x0b\x32 .gauge.messages.StepNameResponse\x12\x38\n\x0frefactorRequest\x18\x18 \x01(\x0b\x32\x1f.gauge.messages.RefactorRequest\x12:\n\x10refactorResponse\x18\x19 \x01(\x0b\x32 .gauge.messages.RefactorResponse\x12N\n\x1aunsupportedMessageResponse\x18\x1a \x01(\x0b\x32*.gauge.messages.UnsupportedMessageResponse\"\xdd\x04\n\x0bMessageType\x12\x15\n\x11\x45xecutionStarting\x10\x00\x12\x19\n\x15SpecExecutionStarting\x10\x01\x12\x17\n\x13SpecExecutionEnding\x10\x02\x12\x1d\n\x19ScenarioExecutionStarting\x10\x03\x12\x1b\n\x17ScenarioExecutionEnding\x10\x04\x12\x19\n\x15StepExecutionStarting\x10\x05\x12\x17\n\x13StepExecutionEnding\x10\x06\x12\x0f\n\x0b\x45xecuteStep\x10\x07\x12\x13\n\x0f\x45xecutionEnding\x10\x08\x12\x17\n\x13StepValidateRequest\x10\t\x12\x18\n\x14StepValidateResponse\x10\n\x12\x1b\n\x17\x45xecutionStatusResponse\x10\x0b\x12\x14\n\x10StepNamesRequest\x10\x0c\x12\x15\n\x11StepNamesResponse\x10\r\x12\x16\n\x12KillProcessRequest\x10\x0e\x12\x18\n\x14SuiteExecutionResult\x10\x0f\x12\x19\n\x15ScenarioDataStoreInit\x10\x10\x12\x15\n\x11SpecDataStoreInit\x10\x11\x12\x16\n\x12SuiteDataStoreInit\x10\x12\x12\x13\n\x0fStepNameRequest\x10\x13\x12\x14\n\x10StepNameResponse\x10\x14\x12\x13\n\x0fRefactorRequest\x10\x15\x12\x14\n\x10RefactorResponse\x10\x16\x12\x1e\n\x1aUnsupportedMessageResponse\x10\x17\x42\x11\xaa\x02\x0eGauge.Messagesb\x06proto3')
   ,
   dependencies=[spec__pb2.DESCRIPTOR,])
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -174,7 +175,7 @@ _KILLPROCESSREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -192,7 +193,7 @@ _EXECUTIONSTATUSRESPONSE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='executionResult', full_name='gauge.messages.ExecutionStatusResponse.executionResult', index=0,
-      number=1, type=11, cpp_type=10, label=2,
+      number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -205,7 +206,7 @@ _EXECUTIONSTATUSRESPONSE = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -236,7 +237,7 @@ _EXECUTIONSTARTINGREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -267,7 +268,7 @@ _EXECUTIONENDINGREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -298,7 +299,7 @@ _SPECEXECUTIONSTARTINGREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -329,7 +330,7 @@ _SPECEXECUTIONENDINGREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -360,7 +361,7 @@ _SCENARIOEXECUTIONSTARTINGREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -391,7 +392,7 @@ _SCENARIOEXECUTIONENDINGREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -422,7 +423,7 @@ _STEPEXECUTIONSTARTINGREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -453,7 +454,7 @@ _STEPEXECUTIONENDINGREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -505,7 +506,7 @@ _EXECUTIONINFO = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -523,21 +524,21 @@ _SPECINFO = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='name', full_name='gauge.messages.SpecInfo.name', index=0,
-      number=1, type=9, cpp_type=9, label=2,
+      number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
       name='fileName', full_name='gauge.messages.SpecInfo.fileName', index=1,
-      number=2, type=9, cpp_type=9, label=2,
+      number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
       name='isFailed', full_name='gauge.messages.SpecInfo.isFailed', index=2,
-      number=3, type=8, cpp_type=7, label=2,
+      number=3, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -557,7 +558,7 @@ _SPECINFO = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -575,14 +576,14 @@ _SCENARIOINFO = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='name', full_name='gauge.messages.ScenarioInfo.name', index=0,
-      number=1, type=9, cpp_type=9, label=2,
+      number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
       name='isFailed', full_name='gauge.messages.ScenarioInfo.isFailed', index=1,
-      number=2, type=8, cpp_type=7, label=2,
+      number=2, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -602,7 +603,7 @@ _SCENARIOINFO = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -620,14 +621,14 @@ _STEPINFO = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='step', full_name='gauge.messages.StepInfo.step', index=0,
-      number=1, type=11, cpp_type=10, label=2,
+      number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
       name='isFailed', full_name='gauge.messages.StepInfo.isFailed', index=1,
-      number=2, type=8, cpp_type=7, label=2,
+      number=2, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -640,7 +641,7 @@ _STEPINFO = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -658,14 +659,14 @@ _EXECUTESTEPREQUEST = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='actualStepText', full_name='gauge.messages.ExecuteStepRequest.actualStepText', index=0,
-      number=1, type=9, cpp_type=9, label=2,
+      number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
       name='parsedStepText', full_name='gauge.messages.ExecuteStepRequest.parsedStepText', index=1,
-      number=2, type=9, cpp_type=9, label=2,
+      number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -692,7 +693,7 @@ _EXECUTESTEPREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -710,14 +711,14 @@ _STEPVALIDATEREQUEST = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='stepText', full_name='gauge.messages.StepValidateRequest.stepText', index=0,
-      number=1, type=9, cpp_type=9, label=2,
+      number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
       name='numberOfParameters', full_name='gauge.messages.StepValidateRequest.numberOfParameters', index=1,
-      number=2, type=5, cpp_type=1, label=2,
+      number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -730,7 +731,7 @@ _STEPVALIDATEREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -748,7 +749,7 @@ _STEPVALIDATERESPONSE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='isValid', full_name='gauge.messages.StepValidateResponse.isValid', index=0,
-      number=1, type=8, cpp_type=7, label=2,
+      number=1, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -776,7 +777,7 @@ _STEPVALIDATERESPONSE = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -794,7 +795,7 @@ _SUITEEXECUTIONRESULT = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='suiteResult', full_name='gauge.messages.SuiteExecutionResult.suiteResult', index=0,
-      number=1, type=11, cpp_type=10, label=2,
+      number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -807,7 +808,7 @@ _SUITEEXECUTIONRESULT = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -831,7 +832,7 @@ _STEPNAMESREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -862,7 +863,7 @@ _STEPNAMESRESPONSE = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -886,7 +887,7 @@ _SCENARIODATASTOREINITREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -910,7 +911,7 @@ _SPECDATASTOREINITREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -934,7 +935,7 @@ _SUITEDATASTOREINITREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -952,14 +953,14 @@ _PARAMETERPOSITION = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='oldPosition', full_name='gauge.messages.ParameterPosition.oldPosition', index=0,
-      number=1, type=5, cpp_type=1, label=2,
+      number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
       name='newPosition', full_name='gauge.messages.ParameterPosition.newPosition', index=1,
-      number=2, type=5, cpp_type=1, label=2,
+      number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -972,7 +973,7 @@ _PARAMETERPOSITION = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -990,14 +991,14 @@ _REFACTORREQUEST = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='oldStepValue', full_name='gauge.messages.RefactorRequest.oldStepValue', index=0,
-      number=1, type=11, cpp_type=10, label=2,
+      number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
       name='newStepValue', full_name='gauge.messages.RefactorRequest.newStepValue', index=1,
-      number=2, type=11, cpp_type=10, label=2,
+      number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1017,7 +1018,7 @@ _REFACTORREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -1035,7 +1036,7 @@ _REFACTORRESPONSE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='success', full_name='gauge.messages.RefactorResponse.success', index=0,
-      number=1, type=8, cpp_type=7, label=2,
+      number=1, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1062,7 +1063,7 @@ _REFACTORRESPONSE = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -1080,7 +1081,7 @@ _STEPNAMEREQUEST = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='stepValue', full_name='gauge.messages.StepNameRequest.stepValue', index=0,
-      number=1, type=9, cpp_type=9, label=2,
+      number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1093,7 +1094,7 @@ _STEPNAMEREQUEST = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -1111,7 +1112,7 @@ _STEPNAMERESPONSE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='isStepPresent', full_name='gauge.messages.StepNameResponse.isStepPresent', index=0,
-      number=1, type=8, cpp_type=7, label=2,
+      number=1, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1125,7 +1126,7 @@ _STEPNAMERESPONSE = _descriptor.Descriptor(
       options=None),
     _descriptor.FieldDescriptor(
       name='hasAlias', full_name='gauge.messages.StepNameResponse.hasAlias', index=2,
-      number=3, type=8, cpp_type=7, label=2,
+      number=3, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1138,7 +1139,7 @@ _STEPNAMERESPONSE = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -1169,7 +1170,7 @@ _UNSUPPORTEDMESSAGERESPONSE = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -1187,14 +1188,14 @@ _MESSAGE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='messageType', full_name='gauge.messages.Message.messageType', index=0,
-      number=1, type=14, cpp_type=8, label=2,
+      number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
       name='messageId', full_name='gauge.messages.Message.messageId', index=1,
-      number=2, type=3, cpp_type=2, label=2,
+      number=2, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1376,7 +1377,7 @@ _MESSAGE = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
+  syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
@@ -1672,4 +1673,6 @@ Message = _reflection.GeneratedProtocolMessageType('Message', (_message.Message,
 _sym_db.RegisterMessage(Message)
 
 
+DESCRIPTOR.has_options = True
+DESCRIPTOR._options = _descriptor._ParseOptions(descriptor_pb2.FileOptions(), _b('\252\002\016Gauge.Messages'))
 # @@protoc_insertion_point(module_scope)
