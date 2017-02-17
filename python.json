@@ -1,6 +1,6 @@
 {
   "id": "python",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "Python support for gauge",
   "run": {
     "windows": [
@@ -31,7 +31,7 @@
     ]
   },
   "gaugeVersionSupport": {
-    "minimum": "0.7.1",
+    "minimum": "0.8.0",
     "maximum": ""
   }
 }
