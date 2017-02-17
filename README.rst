@@ -1,5 +1,5 @@
-Gauge Python |Snap Build Status| |Travis Build Status| |Codacy Project Status| |Documentation Status| |MIT licensed|
-====================================================================================================================
+Gauge Python |Travis Build Status| |Codacy Project Status| |Documentation Status| |MIT licensed|
+================================================================================================
 
 Python language runner for `Gauge`_.
 
@@ -33,8 +33,6 @@ The Gauge-Python is an open-sourced software licensed under the `MIT license`_.
 
 .. |Documentation Status| image:: https://readthedocs.org/projects/gauge-python/badge/?version=latest
    :target: http://gauge-python.readthedocs.org/en/latest/?badge=latest
-.. |Snap Build Status| image:: https://snap-ci.com/kashishm/gauge-python/branch/master/build_image
-   :target: https://snap-ci.com/kashishm/gauge-python/branch/master
 .. |Travis Build Status| image:: https://travis-ci.org/kashishm/gauge-python.svg?branch=master
    :target: https://travis-ci.org/kashishm/gauge-python
 .. |Codacy Project Status| image:: https://api.codacy.com/project/badge/Grade/2b96566538d1445685f9ad7792456b97
