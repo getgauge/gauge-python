@@ -27,7 +27,7 @@ script:
   - python install.py
   - sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-keys 023EDB0B
   - echo "deb https://dl.bintray.com/gauge/gauge-deb nightly main" | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get -y update > /dev/null
+  - sudo apt-get -y update > /dev/null | echo "Updated"
   - sudo apt-get install -y gauge
   - gauge_setup
   - gauge -v
