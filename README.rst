@@ -1,5 +1,7 @@
-Gauge Python |Travis Build Status| |Codacy Project Status| |Documentation Status| |MIT licensed|
-================================================================================================
+Gauge Python
+============
+
+|Travis Build Status| |Codacy Project Status| |Documentation Status| |MIT licensed|
 
 Python language runner for `Gauge`_.
 

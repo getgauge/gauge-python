@@ -29,7 +29,6 @@ script:
   - echo "deb https://dl.bintray.com/gauge/gauge-deb nightly main" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get -y update > /dev/null | echo "Updated"
   - sudo apt-get install -y gauge
-  - gauge_setup
   - gauge -v
   - python install.py --install
   - export GAUGE_PYTHON_VERSION=$(cd bin; ls gauge-python-*.zip | sed "s/^gauge-python-\([^;]*\).zip/\1/")
