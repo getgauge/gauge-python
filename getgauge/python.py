@@ -43,11 +43,11 @@ def after_spec(obj=None):
     return _define_wrapper(obj, registry.add_after_spec)
 
 
-def before_step(obj):
+def before_step(obj=None):
     return _define_wrapper(obj, registry.add_before_step)
 
 
-def after_step(obj):
+def after_step(obj=None):
     return _define_wrapper(obj, registry.add_after_step)
 
 
