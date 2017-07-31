@@ -22,8 +22,8 @@ DEPLOY = os.path.join(cwd, 'deploy')
 
 def install():
     plugin_zip = create_zip()
-    call(['gauge', '--uninstall', 'python', '--plugin-version', get_version()])
-    exit_code = call(['gauge', '--install', 'python', '-f', os.path.join(BIN, plugin_zip)])
+    call(['gauge', 'uninstall', 'python', '-v', get_version()])
+    exit_code = call(['gauge', 'install', 'python', '-f', os.path.join(BIN, plugin_zip)])
     shutil.rmtree('dist', True)
     print('Creating getgauge package.')
     fnull = open(os.devnull, 'w')
