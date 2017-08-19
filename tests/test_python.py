@@ -1,15 +1,15 @@
-import unittest
+from unittest import TestCase, main
 
 from getgauge.messages.messages_pb2 import Message
-from getgauge.python import Messages, DataStore, DataStoreFactory, Table, Specification, Scenario, Step, \
-    ExecutionContext, \
-    create_execution_context_from
 from getgauge.registry import registry, _MessagesStore
+from getgauge.python import (Messages, DataStore, DataStoreFactory, Table,
+                             Specification, Scenario, Step, ExecutionContext,
+                             create_execution_context_from)
 
 registry.clear()
 
 
-class MessagesTests(unittest.TestCase):
+class MessagesTests(TestCase):
     def test_pending_messages(self):
         messages = ['HAHAHAH', 'HAHAHAH1', 'HAHAHAH2', 'HAHAHAH3']
         for message in messages:
@@ -45,10 +45,14 @@ class MessagesTests(unittest.TestCase):
         self.assertEqual(messages, pending_messages)
 
 
-class DataStoreTests(unittest.TestCase):
+class DataStoreTests(TestCase):
     def test_data_store(self):
         store = DataStore()
-        values = {'key': 'HAHAHAH', 'key1': 'HAHAHAH1', 'key2': 'HAHAHAH2', 'key3': 'HAHAHAH3'}
+        values = {'key': 'HAHAHAH',
+                  'key1': 'HAHAHAH1',
+                  'key2': 'HAHAHAH2',
+                  'key3': 'HAHAHAH3'}
+
         for value in values:
             store.put(value, value)
 
@@ -60,7 +64,11 @@ class DataStoreTests(unittest.TestCase):
 
     def test_data_store_clear(self):
         store = DataStore()
-        values = {'key': 'HAHAHAH', 'key1': 'HAHAHAH1', 'key2': 'HAHAHAH2', 'key3': 'HAHAHAH3'}
+        values = {'key': 'HAHAHAH',
+                  'key1': 'HAHAHAH1',
+                  'key2': 'HAHAHAH2',
+                  'key3': 'HAHAHAH3'}
+
         for value in values:
             store.put(value, value)
 
@@ -92,7 +100,7 @@ class DataStoreTests(unittest.TestCase):
         self.assertNotEqual(store, store1)
 
 
-class DataStoreFactoryTests(unittest.TestCase):
+class DataStoreFactoryTests(TestCase):
     def test_data_store_factory(self):
         scenario_data_store = DataStoreFactory.scenario_data_store()
         spec_data_store = DataStoreFactory.spec_data_store()
@@ -116,7 +124,7 @@ class ProtoRow:
         self.cells = cells
 
 
-class TableTests(unittest.TestCase):
+class TableTests(TestCase):
     def test_Table(self):
         headers = ['Product', 'Description']
         rows = [{'cells': ['Gauge', 'Test automation with ease']},
@@ -134,10 +142,15 @@ class TableTests(unittest.TestCase):
 
         self.assertEqual(headers, table.headers)
         self.assertEqual(expected_rows, table.rows)
-        self.assertEqual(expected_column_1, table.get_column_values_with_index(1))
-        self.assertEqual(expected_column_2, table.get_column_values_with_index(2))
-        self.assertEqual(expected_column_1, table.get_column_values_with_name(headers[0]))
-        self.assertEqual(expected_column_2, table.get_column_values_with_name(headers[1]))
+        self.assertEqual(expected_column_1,
+                         table.get_column_values_with_index(1))
+        self.assertEqual(expected_column_2,
+                         table.get_column_values_with_index(2))
+        self.assertEqual(expected_column_1,
+                         table.get_column_values_with_name(headers[0]))
+        self.assertEqual(expected_column_2,
+                         table.get_column_values_with_name(headers[1]))
+
         for row in expected_rows:
             self.assertEqual(row, table.get_row(expected_rows.index(row) + 1))
 
@@ -212,7 +225,7 @@ class TableTests(unittest.TestCase):
 |----|-----------|""")
 
 
-class SpecificationTests(unittest.TestCase):
+class SpecificationTests(TestCase):
     def test_Specification(self):
         name = 'NAME'
         file_name = 'FILE_NAME'
@@ -234,7 +247,7 @@ class SpecificationTests(unittest.TestCase):
         self.assertEqual(specification, specification1)
 
 
-class ScenarioTests(unittest.TestCase):
+class ScenarioTests(TestCase):
     def test_Scenario(self):
         name = 'NAME3'
         tags = ['TAGS']
@@ -253,7 +266,7 @@ class ScenarioTests(unittest.TestCase):
         self.assertEqual(scenario, scenario1)
 
 
-class StepTests(unittest.TestCase):
+class StepTests(TestCase):
     def test_Step(self):
         name = 'NAME1'
         step = Step(name, False)
@@ -269,7 +282,7 @@ class StepTests(unittest.TestCase):
         self.assertEqual(step, step1)
 
 
-class ExecutionContextTests(unittest.TestCase):
+class ExecutionContextTests(TestCase):
     def test_ExecutionContextTests(self):
         name = 'NAME'
         file_name = 'FILE_NAME'
@@ -298,14 +311,25 @@ class ExecutionContextTests(unittest.TestCase):
 
     def test_create_execution_context_from(self):
         message = Message()
-        spec_name, spec_file_name, scenario_name, step_name = 'SPEC_NAME', 'SPEC_FILE_NAME', 'SCENARIO_NAME', 'STEP_NAME'
-        message.executionStartingRequest.currentExecutionInfo.currentSpec.name = spec_name
-        message.executionStartingRequest.currentExecutionInfo.currentSpec.fileName = spec_file_name
-        message.executionStartingRequest.currentExecutionInfo.currentSpec.isFailed = True
-        message.executionStartingRequest.currentExecutionInfo.currentScenario.name = scenario_name
-        message.executionStartingRequest.currentExecutionInfo.currentScenario.isFailed = False
-        message.executionStartingRequest.currentExecutionInfo.currentStep.step.actualStepText = step_name
-        message.executionStartingRequest.currentExecutionInfo.currentStep.isFailed = True
+        spec_name = 'SPEC_NAME'
+        spec_file_name = 'SPEC_FILE_NAME'
+        scenario_name = 'SCENARIO_NAME'
+        step_name = 'STEP_NAME'
+
+        message.executionStartingRequest.\
+            currentExecutionInfo.currentSpec.name = spec_name
+        message.executionStartingRequest.\
+            currentExecutionInfo.currentSpec.fileName = spec_file_name
+        message.executionStartingRequest.\
+            currentExecutionInfo.currentSpec.isFailed = True
+        message.executionStartingRequest.\
+            currentExecutionInfo.currentScenario.name = scenario_name
+        message.executionStartingRequest.\
+            currentExecutionInfo.currentScenario.isFailed = False
+        message.executionStartingRequest.\
+            currentExecutionInfo.currentStep.step.actualStepText = step_name
+        message.executionStartingRequest.\
+            currentExecutionInfo.currentStep.isFailed = True
 
         specification = Specification(spec_name, spec_file_name, True, [])
         scenario = Scenario(scenario_name, False, [])
@@ -318,7 +342,7 @@ class ExecutionContextTests(unittest.TestCase):
         self.assertEqual(expected_execution_context, context)
 
 
-class DecoratorTests(unittest.TestCase):
+class DecoratorTests(TestCase):
     def setUp(self):
         from tests.test_data import impl_stubs
         impl_stubs.step1()
@@ -332,8 +356,10 @@ class DecoratorTests(unittest.TestCase):
         step1 = registry.get_info_for('Step 1').impl
         step2 = registry.get_info_for('Step 2').impl
 
-        self.assertEqual(registry.is_continue_on_failure(step1, RuntimeError()), False)
-        self.assertEqual(registry.is_continue_on_failure(step2, RuntimeError()), True)
+        self.assertEqual(
+            registry.is_continue_on_failure(step1, RuntimeError()), False)
+        self.assertEqual(
+            registry.is_continue_on_failure(step2, RuntimeError()), True)
 
     def test_before_step_decorator(self):
         funcs = registry.before_step()
@@ -382,4 +408,4 @@ class DecoratorTests(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    main()

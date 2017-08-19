@@ -1,5 +1,5 @@
-import socket
-import unittest
+from socket import socket, AF_INET, SOCK_STREAM
+from unittest import TestCase, main
 
 from getgauge.messages.messages_pb2 import Message, StepValidateResponse
 from getgauge.messages.spec_pb2 import ProtoExecutionResult, Parameter
@@ -8,7 +8,7 @@ from getgauge.python import DataStoreFactory, DataStore
 from getgauge.registry import registry
 
 
-class ProcessorTests(unittest.TestCase):
+class ProcessorTests(TestCase):
     def setUp(self):
         DataStoreFactory.suite_data_store().clear()
         DataStoreFactory.spec_data_store().clear()
@@ -20,7 +20,10 @@ class ProcessorTests(unittest.TestCase):
 
     def test_Processor_kill_request(self):
         with self.assertRaises(SystemExit):
-            processors[Message.KillProcessRequest](None, None, socket.socket(socket.AF_INET, socket.SOCK_STREAM))
+            processors[Message.KillProcessRequest](None,
+                                                   None,
+                                                   socket(AF_INET,
+                                                          SOCK_STREAM))
 
     def test_Processor_suite_data_store_init_request(self):
         DataStoreFactory.suite_data_store().put('suite', 'value')
@@ -31,8 +34,11 @@ class ProcessorTests(unittest.TestCase):
         processors[Message.SuiteDataStoreInit](None, response, None)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(False, response.executionStatusResponse.executionResult.failed)
-        self.assertEqual(0, response.executionStatusResponse.executionResult.executionTime)
+        self.assertEqual(False,
+                         response.executionStatusResponse.executionResult.failed)
+
+        self.assertEqual(0,
+                         response.executionStatusResponse.executionResult.executionTime)
 
         self.assertEqual(DataStore(), DataStoreFactory.suite_data_store())
 
@@ -431,4 +437,4 @@ def failing_impl():
 
 
 if __name__ == '__main__':
-    unittest.main()
+    main()

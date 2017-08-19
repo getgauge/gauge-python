@@ -10,32 +10,42 @@ class RegistryTests(unittest.TestCase):
         registry = Registry()
 
     def test_Registry_add_step_definition(self):
-        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func'}, {'text': 'Step 1', 'func': 'func1'}]
+        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func'},
+                 {'text': 'Step 1', 'func': 'func1'}]
+
         for info in infos:
             registry.add_step(info['text'], info['func'], '')
 
-        self.assertEqual([info['text'] for info in infos].sort(), registry.steps().sort())
+        self.assertEqual([info['text'] for info in infos].sort(),
+                         registry.steps().sort())
+
         for info in infos:
             parsed_step_text = re.sub('<[^<]+?>', '{}', info['text'])
-            self.assertEqual(info['func'], registry.get_info_for(parsed_step_text).impl)
+            self.assertEqual(info['func'],
+                             registry.get_info_for(parsed_step_text).impl)
 
     def test_Registry_add_step_definition_with_continue_on_failure(self):
         registry.add_step('Step 1', 'func', '')
         registry.continue_on_failure('func', [RuntimeError])
 
-        self.assertEqual(True, registry.is_continue_on_failure('func', RuntimeError()))
+        self.assertEqual(True,
+                         registry.is_continue_on_failure('func',
+                                                         RuntimeError()))
 
     def test_Registry_add_step_definition_with_continue_on_failure_for_different_exceptions(self):
         registry.add_step('Step 1', 'func', '')
         registry.continue_on_failure('func', [RuntimeError])
 
-        self.assertEqual(False, registry.is_continue_on_failure('func', IndexError()))
+        self.assertEqual(False,
+                         registry.is_continue_on_failure('func', IndexError()))
 
     def test_Registry_add_step_definition_with_parent_class_continue_on_failure(self):
         registry.add_step('Step 1', 'func', '')
         registry.continue_on_failure('func', [Exception])
 
-        self.assertEqual(True, registry.is_continue_on_failure('func', RuntimeError()))
+        self.assertEqual(True,
+                         registry.is_continue_on_failure('func',
+                                                         RuntimeError()))
 
     def test_Registry_add_step_definition_with_alias(self):
         registry.add_step(['Say <hello> to <getgauge>.', 'Tell <hello> to <getgauge>.'], 'impl', '')
@@ -47,17 +57,26 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(info2.has_alias, True)
 
     def test_Registry_get_step_info(self):
-        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func'}, {'text': 'Step 1', 'func': 'func1'}]
+        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func'},
+                 {'text': 'Step 1', 'func': 'func1'}]
+
         for info in infos:
             registry.add_step(info['text'], info['func'], '')
 
-        self.assertEqual('Say <hello> to <getgauge>', registry.get_info_for('Say {} to {}').step_text)
-        self.assertEqual('Say {} to {}', registry.get_info_for('Say {} to {}').parsed_step_text)
+        self.assertEqual('Say <hello> to <getgauge>',
+                         registry.get_info_for('Say {} to {}').step_text)
+
+        self.assertEqual('Say {} to {}',
+                         registry.get_info_for('Say {} to {}').parsed_step_text)
+
         self.assertEqual('Step 1', registry.get_info_for('Step 1').step_text)
+
         self.assertEqual(None, registry.get_info_for('Step21').step_text)
 
     def test_Registry_is_step_implemented(self):
-        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func'}, {'text': 'Step 1', 'func': 'func1'}]
+        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func'},
+                 {'text': 'Step 1', 'func': 'func1'}]
+
         for info in infos:
             registry.add_step(info['text'], info['func'], '')
 
@@ -78,19 +97,27 @@ class RegistryTests(unittest.TestCase):
         self.assertFalse(registry.has_multiple_impls(infos[2]['text']))
 
     def test_Registry_get_multiple_impls(self):
-        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func', 'line': 1},
-                 {'text': 'Say <hello> to <getgauge>', 'func': 'func', 'line': 2},
+        infos = [{'text': 'Say <hello> to <getgauge>',
+                  'func': 'func', 'line': 1},
+                 {'text': 'Say <hello> to <getgauge>',
+                  'func': 'func', 'line': 2},
                  {'text': 'Step 1', 'func': 'func1', 'line': 3}]
+
         for info in infos:
             registry.add_step(info['text'], info['func'], '', info['line'])
 
         parsed_step_text = re.sub('<[^<]+?>', '{}', infos[0]['text'])
 
         self.assertTrue(registry.has_multiple_impls(parsed_step_text))
-        self.assertEqual(set([info.line_number for info in registry.get_infos_for(parsed_step_text)]),
-                         {infos[0]['line'], infos[1]['line']})
-        self.assertEqual(set([info.step_text for info in registry.get_infos_for(parsed_step_text)]),
-                         {infos[0]['text'], infos[1]['text']})
+        self.assertEqual(
+            set([info.line_number
+                 for info in registry.get_infos_for(parsed_step_text)]),
+            {infos[0]['line'], infos[1]['line']})
+
+        self.assertEqual(
+            set([info.step_text
+                for info in registry.get_infos_for(parsed_step_text)]),
+            {infos[0]['text'], infos[1]['text']})
 
     def test_Registry_before_suite(self):
         infos = ['before suite func', 'before suite func1']
@@ -122,30 +149,47 @@ class RegistryTests(unittest.TestCase):
 
     def test_Registry_before_spec_with_tags(self):
         info1 = {'tags': None, 'func': 'before spec func'}
-        info2 = {'tags': '<A> and <b> and not <c>', 'func': 'before spec func1'}
-        info3 = {'tags': '<A> and (<b> or not <c>)', 'func': 'before spec func2'}
+        info2 = {'tags': '<A> and <b> and not <c>',
+                 'func': 'before spec func1'}
+        info3 = {'tags': '<A> and (<b> or not <c>)',
+                 'func': 'before spec func2'}
         infos = [info1, info2, info3]
+
         for info in infos:
             registry.add_before_spec(info['func'], info['tags'])
 
         self.assertEqual([info1['func']], registry.before_spec([]))
-        self.assertEqual([x['func'] for x in infos], registry.before_spec(['A', 'b']))
-        self.assertEqual([info1['func'], info3['func']], registry.before_spec(['A', 'b', 'c']))
-        self.assertEqual([info1['func'], info3['func']], registry.before_spec(['A']))
+        self.assertEqual([x['func'] for x in infos],
+                         registry.before_spec(['A', 'b']))
+
+        self.assertEqual([info1['func'], info3['func']],
+                         registry.before_spec(['A', 'b', 'c']))
+
+        self.assertEqual([info1['func'], info3['func']],
+                         registry.before_spec(['A']))
+
         self.assertEqual([info1['func']], registry.before_spec(['A', 'c']))
 
     def test_Registry_after_spec_with_tags(self):
         info1 = {'tags': None, 'func': 'after spec func'}
         info2 = {'tags': '<A> and <b> and not <c>', 'func': 'after spec func1'}
-        info3 = {'tags': '<A> and (<b> or not <c>)', 'func': 'after spec func2'}
+        info3 = {'tags': '<A> and (<b> or not <c>)',
+                 'func': 'after spec func2'}
         infos = [info1, info2, info3]
+
         for info in infos:
             registry.add_after_spec(info['func'], info['tags'])
 
         self.assertEqual([info1['func']], registry.after_spec([]))
-        self.assertEqual([x['func'] for x in infos], registry.after_spec(['A', 'b']))
-        self.assertEqual([info1['func'], info3['func']], registry.after_spec(['A', 'b', 'c']))
-        self.assertEqual([info1['func'], info3['func']], registry.after_spec(['A']))
+        self.assertEqual([x['func'] for x in infos],
+                         registry.after_spec(['A', 'b']))
+
+        self.assertEqual([info1['func'], info3['func']],
+                         registry.after_spec(['A', 'b', 'c']))
+
+        self.assertEqual([info1['func'], info3['func']],
+                         registry.after_spec(['A']))
+
         self.assertEqual([info1['func']], registry.after_spec(['A', 'c']))
 
     def test_Registry_before_scenario(self):
@@ -164,31 +208,51 @@ class RegistryTests(unittest.TestCase):
 
     def test_Registry_before_scenario_with_tags(self):
         info1 = {'tags': None, 'func': 'before scenario func'}
-        info2 = {'tags': '<A> and <b> and not <c>', 'func': 'before scenario func1'}
-        info3 = {'tags': '<A> and (<b> or not <c>)', 'func': 'before scenario func2'}
+        info2 = {'tags': '<A> and <b> and not <c>',
+                 'func': 'before scenario func1'}
+        info3 = {'tags': '<A> and (<b> or not <c>)',
+                 'func': 'before scenario func2'}
         infos = [info1, info2, info3]
+
         for info in infos:
             registry.add_before_scenario(info['func'], info['tags'])
 
-        self.assertEqual([info1['func']], registry.before_scenario([]))
-        self.assertEqual([x['func'] for x in infos], registry.before_scenario(['A', 'b']))
-        self.assertEqual([info1['func'], info3['func']], registry.before_scenario(['A', 'b', 'c']))
-        self.assertEqual([info1['func'], info3['func']], registry.before_scenario(['A']))
+        self.assertEqual([info1['func']],
+                         registry.before_scenario([]))
+
+        self.assertEqual([x['func'] for x in infos],
+                         registry.before_scenario(['A', 'b']))
+
+        self.assertEqual([info1['func'], info3['func']],
+                         registry.before_scenario(['A', 'b', 'c']))
+
+        self.assertEqual([info1['func'], info3['func']],
+                         registry.before_scenario(['A']))
+
         self.assertEqual([info1['func']], registry.before_scenario(['A', 'c']))
 
     def test_Registry_after_scenario_with_tags(self):
         info1 = {'tags': None, 'func': 'after scenario func'}
-        info2 = {'tags': '<A> and <b> and not <c>', 'func': 'after scenario func1'}
-        info3 = {'tags': '<A> and (<b> or not <c>)', 'func': 'after scenario func2'}
+        info2 = {'tags': '<A> and <b> and not <c>',
+                 'func': 'after scenario func1'}
+        info3 = {'tags': '<A> and (<b> or not <c>)',
+                 'func': 'after scenario func2'}
         infos = [info1, info2, info3]
+
         for info in infos:
             registry.add_after_scenario(info['func'], info['tags'])
 
         self.assertEqual([info1['func']], registry.after_scenario([]))
-        self.assertEqual([x['func'] for x in infos], registry.after_scenario(['A', 'b']))
-        self.assertEqual([info1['func'], info3['func']], registry.after_scenario(['A', 'b', 'c']))
-        self.assertEqual([info1['func'], info3['func']], registry.after_scenario(['A']))
-        self.assertEqual([info1['func']], registry.after_scenario(['A', 'c']))
+        self.assertEqual([x['func'] for x in infos],
+                         registry.after_scenario(['A', 'b']))
+
+        self.assertEqual([info1['func'], info3['func']],
+                         registry.after_scenario(['A', 'b', 'c']))
+
+        self.assertEqual([info1['func'], info3['func']],
+                         registry.after_scenario(['A']))
+
+        sself.assertEqual([info1['func']], registry.after_scenario(['A', 'c']))
 
     def test_Registry_before_step(self):
         infos = ['before step func', 'before step func1']
@@ -206,30 +270,47 @@ class RegistryTests(unittest.TestCase):
 
     def test_Registry_before_step_with_tags(self):
         info1 = {'tags': None, 'func': 'before step func'}
-        info2 = {'tags': '<A> and <b> and not <c>', 'func': 'before step func1'}
-        info3 = {'tags': '<A> and (<b> or not <c>)', 'func': 'before step func2'}
+        info2 = {'tags': '<A> and <b> and not <c>',
+                 'func': 'before step func1'}
+        info3 = {'tags': '<A> and (<b> or not <c>)',
+                 'func': 'before step func2'}
         infos = [info1, info2, info3]
+
         for info in infos:
             registry.add_before_step(info['func'], info['tags'])
 
         self.assertEqual([info1['func']], registry.before_step([]))
-        self.assertEqual([x['func'] for x in infos], registry.before_step(['A', 'b']))
-        self.assertEqual([info1['func'], info3['func']], registry.before_step(['A', 'b', 'c']))
-        self.assertEqual([info1['func'], info3['func']], registry.before_step(['A']))
+        self.assertEqual([x['func'] for x in infos],
+                         registry.before_step(['A', 'b']))
+
+        self.assertEqual([info1['func'], info3['func']],
+                         registry.before_step(['A', 'b', 'c']))
+
+        self.assertEqual([info1['func'], info3['func']],
+                         registry.before_step(['A']))
+
         self.assertEqual([info1['func']], registry.before_step(['A', 'c']))
 
     def test_Registry_after_step_with_tags(self):
         info1 = {'tags': None, 'func': 'after step func'}
-        info2 = {'tags': '<A> and <b> and not <c>', 'func': 'after step func1'}
-        info3 = {'tags': '<A> and (<b> or not <c>)', 'func': 'after step func2'}
+        info2 = {'tags': '<A> and <b> and not <c>',
+                 'func': 'after step func1'}
+        info3 = {'tags': '<A> and (<b> or not <c>)',
+                 'func': 'after step func2'}
         infos = [info1, info2, info3]
+
         for info in infos:
             registry.add_after_step(info['func'], info['tags'])
 
         self.assertEqual([info1['func']], registry.after_step([]))
-        self.assertEqual([x['func'] for x in infos], registry.after_step(['A', 'b']))
-        self.assertEqual([info1['func'], info3['func']], registry.after_step(['A', 'b', 'c']))
-        self.assertEqual([info1['func'], info3['func']], registry.after_step(['A']))
+        self.assertEqual([x['func'] for x in infos],
+                         registry.after_step(['A', 'b']))
+
+        self.assertEqual([info1['func'], info3['func']],
+                         registry.after_step(['A', 'b', 'c']))
+
+        self.assertEqual([info1['func'], info3['func']],
+                         registry.after_step(['A']))
         self.assertEqual([info1['func']], registry.after_step(['A', 'c']))
 
     def tearDown(self):

@@ -50,8 +50,13 @@ def assert_default_vowels(given_vowels):
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True, response.refactorResponse.success, response.refactorResponse.error)
-        self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
+        self.assertEqual(True,
+                         response.refactorResponse.success,
+                         response.refactorResponse.error)
+
+        self.assertEqual([RefactorTests.path],
+                         response.refactorResponse.filesChanged)
+
         expected = """@step("Vowels in English language is <vowels> <bsdfdsf>.")
 def assert_default_vowels(given_vowels, arg1_bsdfdsf):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
@@ -80,8 +85,13 @@ def assert_default_vowels(given_vowels, arg1_bsdfdsf):
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True, response.refactorResponse.success, response.refactorResponse.error)
-        self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
+        self.assertEqual(True,
+                         response.refactorResponse.success,
+                         response.refactorResponse.error)
+
+        self.assertEqual([RefactorTests.path],
+                         response.refactorResponse.filesChanged)
+
         expected = """@step("Vowels in English language is <vowels> <vowels!2_ab%$>.")
 def assert_default_vowels(given_vowels, arg1_vowels2_ab):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
@@ -110,8 +120,13 @@ def assert_default_vowels(given_vowels, arg1_vowels2_ab):
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True, response.refactorResponse.success, response.refactorResponse.error)
-        self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
+        self.assertEqual(True,
+                         response.refactorResponse.success,
+                         response.refactorResponse.error)
+
+        self.assertEqual([RefactorTests.path],
+                         response.refactorResponse.filesChanged)
+
         expected = """@step("Vowels in English language is <vowels> <!%$>.")
 def assert_default_vowels(given_vowels, arg1_):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
@@ -132,8 +147,13 @@ def assert_default_vowels(given_vowels, arg1_):
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True, response.refactorResponse.success, response.refactorResponse.error)
-        self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
+        self.assertEqual(True,
+                         response.refactorResponse.success,
+                         response.refactorResponse.error)
+
+        self.assertEqual([RefactorTests.path],
+                         response.refactorResponse.filesChanged)
+
         expected = """@step("Vowels in English language is.")
 def assert_default_vowels():
     Messages.write_message("Given vowels are {0}".format(given_vowels))
@@ -159,8 +179,13 @@ def assert_default_vowels():
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True, response.refactorResponse.success, response.refactorResponse.error)
-        self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
+        self.assertEqual(True,
+                         response.refactorResponse.success,
+                         response.refactorResponse.error)
+
+        self.assertEqual([RefactorTests.path],
+                         response.refactorResponse.filesChanged)
+
         expected = """@step("Vowels in English language is <vowels>.")
 def assert_default_vowels(given_vowels):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
@@ -186,8 +211,13 @@ def assert_default_vowels(given_vowels):
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True, response.refactorResponse.success, response.refactorResponse.error)
-        self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
+        self.assertEqual(True,
+                         response.refactorResponse.success,
+                         response.refactorResponse.error)
+
+        self.assertEqual([RefactorTests.path],
+                         response.refactorResponse.filesChanged)
+
         expected = """@step("Vowels in English language is <bsdfdsf>.")
 def assert_default_vowels(arg0_bsdfdsf):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
