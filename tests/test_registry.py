@@ -252,7 +252,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual([info1['func'], info3['func']],
                          registry.after_scenario(['A']))
 
-        sself.assertEqual([info1['func']], registry.after_scenario(['A', 'c']))
+        self.assertEqual([info1['func']], registry.after_scenario(['A', 'c']))
 
     def test_Registry_before_step(self):
         infos = ['before step func', 'before step func1']
