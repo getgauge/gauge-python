@@ -20,10 +20,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='api.proto',
   package='gauge.messages',
   syntax='proto3',
-  serialized_pb=_b('\n\tapi.proto\x12\x0egauge.messages\x1a\nspec.proto\"\x17\n\x15GetProjectRootRequest\"-\n\x16GetProjectRootResponse\x12\x13\n\x0bprojectRoot\x18\x01 \x01(\t\"\x1c\n\x1aGetInstallationRootRequest\"7\n\x1bGetInstallationRootResponse\x12\x18\n\x10installationRoot\x18\x01 \x01(\t\"\x14\n\x12GetAllStepsRequest\"G\n\x13GetAllStepsResponse\x12\x30\n\x08\x61llSteps\x18\x01 \x03(\x0b\x32\x1e.gauge.messages.ProtoStepValue\"\x1d\n\x0cSpecsRequest\x12\r\n\x05specs\x18\x01 \x03(\t\"\xad\x01\n\rSpecsResponse\x12\x39\n\x07\x64\x65tails\x18\x01 \x03(\x0b\x32(.gauge.messages.SpecsResponse.SpecDetail\x1a\x61\n\nSpecDetail\x12\'\n\x04spec\x18\x01 \x01(\x0b\x32\x19.gauge.messages.ProtoSpec\x12*\n\x0bparseErrors\x18\x02 \x03(\x0b\x32\x15.gauge.messages.Error\">\n\x05\x45rror\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x12\n\nlineNumber\x18\x02 \x01(\x05\x12\x0f\n\x07message\x18\x03 \x01(\t\"\x17\n\x15GetAllConceptsRequest\"G\n\x16GetAllConceptsResponse\x12-\n\x08\x63oncepts\x18\x01 \x03(\x0b\x32\x1b.gauge.messages.ConceptInfo\"f\n\x0b\x43onceptInfo\x12\x31\n\tstepValue\x18\x01 \x01(\x0b\x32\x1e.gauge.messages.ProtoStepValue\x12\x10\n\x08\x66ilepath\x18\x02 \x01(\t\x12\x12\n\nlineNumber\x18\x03 \x01(\x05\"?\n\x13GetStepValueRequest\x12\x10\n\x08stepText\x18\x01 \x01(\t\x12\x16\n\x0ehasInlineTable\x18\x02 \x01(\x08\"I\n\x14GetStepValueResponse\x12\x31\n\tstepValue\x18\x01 \x01(\x0b\x32\x1e.gauge.messages.ProtoStepValue\"3\n\x1fGetLanguagePluginLibPathRequest\x12\x10\n\x08language\x18\x01 \x01(\t\"0\n GetLanguagePluginLibPathResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x1e\n\rErrorResponse\x12\r\n\x05\x65rror\x18\x01 \x01(\t\"=\n\x19PerformRefactoringRequest\x12\x0f\n\x07oldStep\x18\x01 \x01(\t\x12\x0f\n\x07newStep\x18\x02 \x01(\t\"S\n\x1aPerformRefactoringResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0e\n\x06\x65rrors\x18\x02 \x03(\t\x12\x14\n\x0c\x66ilesChanged\x18\x03 \x03(\t\")\n\x19\x45xtractConceptInfoRequest\x12\x0c\n\x04text\x18\x01 \x01(\t\"\xd1\x01\n\x15\x45xtractConceptRequest\x12)\n\x0b\x63onceptName\x18\x01 \x01(\x0b\x32\x14.gauge.messages.step\x12#\n\x05steps\x18\x02 \x03(\x0b\x32\x14.gauge.messages.step\x12\x1b\n\x13\x63hangeAcrossProject\x18\x03 \x01(\x08\x12\x17\n\x0f\x63onceptFileName\x18\x04 \x01(\t\x12\x32\n\x10selectedTextInfo\x18\x05 \x01(\x0b\x32\x18.gauge.messages.textInfo\"G\n\x08textInfo\x12\x10\n\x08\x66ileName\x18\x01 \x01(\t\x12\x16\n\x0estartingLineNo\x18\x02 \x01(\x05\x12\x11\n\tendLineNo\x18\x03 \x01(\x05\";\n\x04step\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05table\x18\x02 \x01(\t\x12\x16\n\x0eparamTableName\x18\x03 \x01(\t\"P\n\x16\x45xtractConceptResponse\x12\x11\n\tisSuccess\x18\x01 \x01(\x08\x12\r\n\x05\x65rror\x18\x02 \x01(\t\x12\x14\n\x0c\x66ilesChanged\x18\x03 \x03(\t\"#\n\x12\x46ormatSpecsRequest\x12\r\n\x05specs\x18\x01 \x03(\t\"7\n\x13\x46ormatSpecsResponse\x12\x0e\n\x06\x65rrors\x18\x01 \x03(\t\x12\x10\n\x08warnings\x18\x02 \x03(\t\"\x1f\n\x1dUnsupportedApiMessageResponse\"\xa9\x11\n\nAPIMessage\x12>\n\x0bmessageType\x18\x01 \x01(\x0e\x32).gauge.messages.APIMessage.APIMessageType\x12\x11\n\tmessageId\x18\x02 \x01(\x03\x12\x41\n\x12projectRootRequest\x18\x03 \x01(\x0b\x32%.gauge.messages.GetProjectRootRequest\x12\x43\n\x13projectRootResponse\x18\x04 \x01(\x0b\x32&.gauge.messages.GetProjectRootResponse\x12K\n\x17installationRootRequest\x18\x05 \x01(\x0b\x32*.gauge.messages.GetInstallationRootRequest\x12M\n\x18installationRootResponse\x18\x06 \x01(\x0b\x32+.gauge.messages.GetInstallationRootResponse\x12;\n\x0f\x61llStepsRequest\x18\x07 \x01(\x0b\x32\".gauge.messages.GetAllStepsRequest\x12=\n\x10\x61llStepsResponse\x18\x08 \x01(\x0b\x32#.gauge.messages.GetAllStepsResponse\x12\x32\n\x0cspecsRequest\x18\t \x01(\x0b\x32\x1c.gauge.messages.SpecsRequest\x12\x34\n\rspecsResponse\x18\n \x01(\x0b\x32\x1d.gauge.messages.SpecsResponse\x12=\n\x10stepValueRequest\x18\x0b \x01(\x0b\x32#.gauge.messages.GetStepValueRequest\x12?\n\x11stepValueResponse\x18\x0c \x01(\x0b\x32$.gauge.messages.GetStepValueResponse\x12G\n\x0elibPathRequest\x18\r \x01(\x0b\x32/.gauge.messages.GetLanguagePluginLibPathRequest\x12I\n\x0flibPathResponse\x18\x0e \x01(\x0b\x32\x30.gauge.messages.GetLanguagePluginLibPathResponse\x12,\n\x05\x65rror\x18\x0f \x01(\x0b\x32\x1d.gauge.messages.ErrorResponse\x12\x41\n\x12\x61llConceptsRequest\x18\x10 \x01(\x0b\x32%.gauge.messages.GetAllConceptsRequest\x12\x43\n\x13\x61llConceptsResponse\x18\x11 \x01(\x0b\x32&.gauge.messages.GetAllConceptsResponse\x12L\n\x19performRefactoringRequest\x18\x12 \x01(\x0b\x32).gauge.messages.PerformRefactoringRequest\x12N\n\x1aperformRefactoringResponse\x18\x13 \x01(\x0b\x32*.gauge.messages.PerformRefactoringResponse\x12\x44\n\x15\x65xtractConceptRequest\x18\x14 \x01(\x0b\x32%.gauge.messages.ExtractConceptRequest\x12\x46\n\x16\x65xtractConceptResponse\x18\x15 \x01(\x0b\x32&.gauge.messages.ExtractConceptResponse\x12>\n\x12\x66ormatSpecsRequest\x18\x16 \x01(\x0b\x32\".gauge.messages.FormatSpecsRequest\x12@\n\x13\x66ormatSpecsResponse\x18\x17 \x01(\x0b\x32#.gauge.messages.FormatSpecsResponse\x12T\n\x1dunsupportedApiMessageResponse\x18\x18 \x01(\x0b\x32-.gauge.messages.UnsupportedApiMessageResponse\"\xef\x04\n\x0e\x41PIMessageType\x12\x19\n\x15GetProjectRootRequest\x10\x00\x12\x1a\n\x16GetProjectRootResponse\x10\x01\x12\x1e\n\x1aGetInstallationRootRequest\x10\x02\x12\x1f\n\x1bGetInstallationRootResponse\x10\x03\x12\x16\n\x12GetAllStepsRequest\x10\x04\x12\x16\n\x12GetAllStepResponse\x10\x05\x12\x10\n\x0cSpecsRequest\x10\x06\x12\x11\n\rSpecsResponse\x10\x07\x12\x17\n\x13GetStepValueRequest\x10\x08\x12\x18\n\x14GetStepValueResponse\x10\t\x12#\n\x1fGetLanguagePluginLibPathRequest\x10\n\x12$\n GetLanguagePluginLibPathResponse\x10\x0b\x12\x11\n\rErrorResponse\x10\x0c\x12\x19\n\x15GetAllConceptsRequest\x10\r\x12\x1a\n\x16GetAllConceptsResponse\x10\x0e\x12\x1d\n\x19PerformRefactoringRequest\x10\x0f\x12\x1e\n\x1aPerformRefactoringResponse\x10\x10\x12\x19\n\x15\x45xtractConceptRequest\x10\x11\x12\x1a\n\x16\x45xtractConceptResponse\x10\x12\x12\x16\n\x12\x46ormatSpecsRequest\x10\x13\x12\x17\n\x13\x46ormatSpecsResponse\x10\x14\x12!\n\x1dUnsupportedApiMessageResponse\x10\x15\x42\x11\xaa\x02\x0eGauge.Messagesb\x06proto3')
+  serialized_pb=_b('\n\tapi.proto\x12\x0egauge.messages\x1a\nspec.proto\"\x17\n\x15GetProjectRootRequest\"-\n\x16GetProjectRootResponse\x12\x13\n\x0bprojectRoot\x18\x01 \x01(\t\"\x1c\n\x1aGetInstallationRootRequest\"7\n\x1bGetInstallationRootResponse\x12\x18\n\x10installationRoot\x18\x01 \x01(\t\"\x14\n\x12GetAllStepsRequest\"G\n\x13GetAllStepsResponse\x12\x30\n\x08\x61llSteps\x18\x01 \x03(\x0b\x32\x1e.gauge.messages.ProtoStepValue\"\x1d\n\x0cSpecsRequest\x12\r\n\x05specs\x18\x01 \x03(\t\"\xad\x01\n\rSpecsResponse\x12\x39\n\x07\x64\x65tails\x18\x01 \x03(\x0b\x32(.gauge.messages.SpecsResponse.SpecDetail\x1a\x61\n\nSpecDetail\x12\'\n\x04spec\x18\x01 \x01(\x0b\x32\x19.gauge.messages.ProtoSpec\x12*\n\x0bparseErrors\x18\x02 \x03(\x0b\x32\x15.gauge.messages.Error\"\x17\n\x15GetAllConceptsRequest\"G\n\x16GetAllConceptsResponse\x12-\n\x08\x63oncepts\x18\x01 \x03(\x0b\x32\x1b.gauge.messages.ConceptInfo\"f\n\x0b\x43onceptInfo\x12\x31\n\tstepValue\x18\x01 \x01(\x0b\x32\x1e.gauge.messages.ProtoStepValue\x12\x10\n\x08\x66ilepath\x18\x02 \x01(\t\x12\x12\n\nlineNumber\x18\x03 \x01(\x05\"?\n\x13GetStepValueRequest\x12\x10\n\x08stepText\x18\x01 \x01(\t\x12\x16\n\x0ehasInlineTable\x18\x02 \x01(\x08\"I\n\x14GetStepValueResponse\x12\x31\n\tstepValue\x18\x01 \x01(\x0b\x32\x1e.gauge.messages.ProtoStepValue\"3\n\x1fGetLanguagePluginLibPathRequest\x12\x10\n\x08language\x18\x01 \x01(\t\"0\n GetLanguagePluginLibPathResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x1e\n\rErrorResponse\x12\r\n\x05\x65rror\x18\x01 \x01(\t\"=\n\x19PerformRefactoringRequest\x12\x0f\n\x07oldStep\x18\x01 \x01(\t\x12\x0f\n\x07newStep\x18\x02 \x01(\t\"S\n\x1aPerformRefactoringResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0e\n\x06\x65rrors\x18\x02 \x03(\t\x12\x14\n\x0c\x66ilesChanged\x18\x03 \x03(\t\"\xd1\x01\n\x15\x45xtractConceptRequest\x12)\n\x0b\x63onceptName\x18\x01 \x01(\x0b\x32\x14.gauge.messages.step\x12#\n\x05steps\x18\x02 \x03(\x0b\x32\x14.gauge.messages.step\x12\x1b\n\x13\x63hangeAcrossProject\x18\x03 \x01(\x08\x12\x17\n\x0f\x63onceptFileName\x18\x04 \x01(\t\x12\x32\n\x10selectedTextInfo\x18\x05 \x01(\x0b\x32\x18.gauge.messages.textInfo\"G\n\x08textInfo\x12\x10\n\x08\x66ileName\x18\x01 \x01(\t\x12\x16\n\x0estartingLineNo\x18\x02 \x01(\x05\x12\x11\n\tendLineNo\x18\x03 \x01(\x05\";\n\x04step\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05table\x18\x02 \x01(\t\x12\x16\n\x0eparamTableName\x18\x03 \x01(\t\"P\n\x16\x45xtractConceptResponse\x12\x11\n\tisSuccess\x18\x01 \x01(\x08\x12\r\n\x05\x65rror\x18\x02 \x01(\t\x12\x14\n\x0c\x66ilesChanged\x18\x03 \x03(\t\"#\n\x12\x46ormatSpecsRequest\x12\r\n\x05specs\x18\x01 \x03(\t\"7\n\x13\x46ormatSpecsResponse\x12\x0e\n\x06\x65rrors\x18\x01 \x03(\t\x12\x10\n\x08warnings\x18\x02 \x03(\t\"\x1f\n\x1dUnsupportedApiMessageResponse\"\xa9\x11\n\nAPIMessage\x12>\n\x0bmessageType\x18\x01 \x01(\x0e\x32).gauge.messages.APIMessage.APIMessageType\x12\x11\n\tmessageId\x18\x02 \x01(\x03\x12\x41\n\x12projectRootRequest\x18\x03 \x01(\x0b\x32%.gauge.messages.GetProjectRootRequest\x12\x43\n\x13projectRootResponse\x18\x04 \x01(\x0b\x32&.gauge.messages.GetProjectRootResponse\x12K\n\x17installationRootRequest\x18\x05 \x01(\x0b\x32*.gauge.messages.GetInstallationRootRequest\x12M\n\x18installationRootResponse\x18\x06 \x01(\x0b\x32+.gauge.messages.GetInstallationRootResponse\x12;\n\x0f\x61llStepsRequest\x18\x07 \x01(\x0b\x32\".gauge.messages.GetAllStepsRequest\x12=\n\x10\x61llStepsResponse\x18\x08 \x01(\x0b\x32#.gauge.messages.GetAllStepsResponse\x12\x32\n\x0cspecsRequest\x18\t \x01(\x0b\x32\x1c.gauge.messages.SpecsRequest\x12\x34\n\rspecsResponse\x18\n \x01(\x0b\x32\x1d.gauge.messages.SpecsResponse\x12=\n\x10stepValueRequest\x18\x0b \x01(\x0b\x32#.gauge.messages.GetStepValueRequest\x12?\n\x11stepValueResponse\x18\x0c \x01(\x0b\x32$.gauge.messages.GetStepValueResponse\x12G\n\x0elibPathRequest\x18\r \x01(\x0b\x32/.gauge.messages.GetLanguagePluginLibPathRequest\x12I\n\x0flibPathResponse\x18\x0e \x01(\x0b\x32\x30.gauge.messages.GetLanguagePluginLibPathResponse\x12,\n\x05\x65rror\x18\x0f \x01(\x0b\x32\x1d.gauge.messages.ErrorResponse\x12\x41\n\x12\x61llConceptsRequest\x18\x10 \x01(\x0b\x32%.gauge.messages.GetAllConceptsRequest\x12\x43\n\x13\x61llConceptsResponse\x18\x11 \x01(\x0b\x32&.gauge.messages.GetAllConceptsResponse\x12L\n\x19performRefactoringRequest\x18\x12 \x01(\x0b\x32).gauge.messages.PerformRefactoringRequest\x12N\n\x1aperformRefactoringResponse\x18\x13 \x01(\x0b\x32*.gauge.messages.PerformRefactoringResponse\x12\x44\n\x15\x65xtractConceptRequest\x18\x14 \x01(\x0b\x32%.gauge.messages.ExtractConceptRequest\x12\x46\n\x16\x65xtractConceptResponse\x18\x15 \x01(\x0b\x32&.gauge.messages.ExtractConceptResponse\x12>\n\x12\x66ormatSpecsRequest\x18\x16 \x01(\x0b\x32\".gauge.messages.FormatSpecsRequest\x12@\n\x13\x66ormatSpecsResponse\x18\x17 \x01(\x0b\x32#.gauge.messages.FormatSpecsResponse\x12T\n\x1dunsupportedApiMessageResponse\x18\x18 \x01(\x0b\x32-.gauge.messages.UnsupportedApiMessageResponse\"\xef\x04\n\x0e\x41PIMessageType\x12\x19\n\x15GetProjectRootRequest\x10\x00\x12\x1a\n\x16GetProjectRootResponse\x10\x01\x12\x1e\n\x1aGetInstallationRootRequest\x10\x02\x12\x1f\n\x1bGetInstallationRootResponse\x10\x03\x12\x16\n\x12GetAllStepsRequest\x10\x04\x12\x16\n\x12GetAllStepResponse\x10\x05\x12\x10\n\x0cSpecsRequest\x10\x06\x12\x11\n\rSpecsResponse\x10\x07\x12\x17\n\x13GetStepValueRequest\x10\x08\x12\x18\n\x14GetStepValueResponse\x10\t\x12#\n\x1fGetLanguagePluginLibPathRequest\x10\n\x12$\n GetLanguagePluginLibPathResponse\x10\x0b\x12\x11\n\rErrorResponse\x10\x0c\x12\x19\n\x15GetAllConceptsRequest\x10\r\x12\x1a\n\x16GetAllConceptsResponse\x10\x0e\x12\x1d\n\x19PerformRefactoringRequest\x10\x0f\x12\x1e\n\x1aPerformRefactoringResponse\x10\x10\x12\x19\n\x15\x45xtractConceptRequest\x10\x11\x12\x1a\n\x16\x45xtractConceptResponse\x10\x12\x12\x16\n\x12\x46ormatSpecsRequest\x10\x13\x12\x17\n\x13\x46ormatSpecsResponse\x10\x14\x12!\n\x1dUnsupportedApiMessageResponse\x10\x15\x42\x11\xaa\x02\x0eGauge.Messagesb\x06proto3')
   ,
   dependencies=[spec__pb2.DESCRIPTOR,])
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 
 
@@ -124,8 +123,8 @@ _APIMESSAGE_APIMESSAGETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=3384,
-  serialized_end=4007,
+  serialized_start=3277,
+  serialized_end=3900,
 )
 _sym_db.RegisterEnumDescriptor(_APIMESSAGE_APIMESSAGETYPE)
 
@@ -394,51 +393,6 @@ _SPECSRESPONSE = _descriptor.Descriptor(
 )
 
 
-_ERROR = _descriptor.Descriptor(
-  name='Error',
-  full_name='gauge.messages.Error',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='filename', full_name='gauge.messages.Error.filename', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='lineNumber', full_name='gauge.messages.Error.lineNumber', index=1,
-      number=2, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='message', full_name='gauge.messages.Error.message', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=502,
-  serialized_end=564,
-)
-
-
 _GETALLCONCEPTSREQUEST = _descriptor.Descriptor(
   name='GetAllConceptsRequest',
   full_name='gauge.messages.GetAllConceptsRequest',
@@ -458,8 +412,8 @@ _GETALLCONCEPTSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=566,
-  serialized_end=589,
+  serialized_start=502,
+  serialized_end=525,
 )
 
 
@@ -489,8 +443,8 @@ _GETALLCONCEPTSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=591,
-  serialized_end=662,
+  serialized_start=527,
+  serialized_end=598,
 )
 
 
@@ -534,8 +488,8 @@ _CONCEPTINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=664,
-  serialized_end=766,
+  serialized_start=600,
+  serialized_end=702,
 )
 
 
@@ -572,8 +526,8 @@ _GETSTEPVALUEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=768,
-  serialized_end=831,
+  serialized_start=704,
+  serialized_end=767,
 )
 
 
@@ -603,8 +557,8 @@ _GETSTEPVALUERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=833,
-  serialized_end=906,
+  serialized_start=769,
+  serialized_end=842,
 )
 
 
@@ -634,8 +588,8 @@ _GETLANGUAGEPLUGINLIBPATHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=908,
-  serialized_end=959,
+  serialized_start=844,
+  serialized_end=895,
 )
 
 
@@ -665,8 +619,8 @@ _GETLANGUAGEPLUGINLIBPATHRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=961,
-  serialized_end=1009,
+  serialized_start=897,
+  serialized_end=945,
 )
 
 
@@ -696,8 +650,8 @@ _ERRORRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1011,
-  serialized_end=1041,
+  serialized_start=947,
+  serialized_end=977,
 )
 
 
@@ -734,8 +688,8 @@ _PERFORMREFACTORINGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1043,
-  serialized_end=1104,
+  serialized_start=979,
+  serialized_end=1040,
 )
 
 
@@ -779,39 +733,8 @@ _PERFORMREFACTORINGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1106,
-  serialized_end=1189,
-)
-
-
-_EXTRACTCONCEPTINFOREQUEST = _descriptor.Descriptor(
-  name='ExtractConceptInfoRequest',
-  full_name='gauge.messages.ExtractConceptInfoRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='text', full_name='gauge.messages.ExtractConceptInfoRequest.text', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1191,
-  serialized_end=1232,
+  serialized_start=1042,
+  serialized_end=1125,
 )
 
 
@@ -869,8 +792,8 @@ _EXTRACTCONCEPTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1235,
-  serialized_end=1444,
+  serialized_start=1128,
+  serialized_end=1337,
 )
 
 
@@ -914,8 +837,8 @@ _TEXTINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1446,
-  serialized_end=1517,
+  serialized_start=1339,
+  serialized_end=1410,
 )
 
 
@@ -959,8 +882,8 @@ _STEP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1519,
-  serialized_end=1578,
+  serialized_start=1412,
+  serialized_end=1471,
 )
 
 
@@ -1004,8 +927,8 @@ _EXTRACTCONCEPTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1580,
-  serialized_end=1660,
+  serialized_start=1473,
+  serialized_end=1553,
 )
 
 
@@ -1035,8 +958,8 @@ _FORMATSPECSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1662,
-  serialized_end=1697,
+  serialized_start=1555,
+  serialized_end=1590,
 )
 
 
@@ -1073,8 +996,8 @@ _FORMATSPECSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1699,
-  serialized_end=1754,
+  serialized_start=1592,
+  serialized_end=1647,
 )
 
 
@@ -1097,8 +1020,8 @@ _UNSUPPORTEDAPIMESSAGERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1756,
-  serialized_end=1787,
+  serialized_start=1649,
+  serialized_end=1680,
 )
 
 
@@ -1290,13 +1213,13 @@ _APIMESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1790,
-  serialized_end=4007,
+  serialized_start=1683,
+  serialized_end=3900,
 )
 
 _GETALLSTEPSRESPONSE.fields_by_name['allSteps'].message_type = spec__pb2._PROTOSTEPVALUE
 _SPECSRESPONSE_SPECDETAIL.fields_by_name['spec'].message_type = spec__pb2._PROTOSPEC
-_SPECSRESPONSE_SPECDETAIL.fields_by_name['parseErrors'].message_type = _ERROR
+_SPECSRESPONSE_SPECDETAIL.fields_by_name['parseErrors'].message_type = spec__pb2._ERROR
 _SPECSRESPONSE_SPECDETAIL.containing_type = _SPECSRESPONSE
 _SPECSRESPONSE.fields_by_name['details'].message_type = _SPECSRESPONSE_SPECDETAIL
 _GETALLCONCEPTSRESPONSE.fields_by_name['concepts'].message_type = _CONCEPTINFO
@@ -1337,7 +1260,6 @@ DESCRIPTOR.message_types_by_name['GetAllStepsRequest'] = _GETALLSTEPSREQUEST
 DESCRIPTOR.message_types_by_name['GetAllStepsResponse'] = _GETALLSTEPSRESPONSE
 DESCRIPTOR.message_types_by_name['SpecsRequest'] = _SPECSREQUEST
 DESCRIPTOR.message_types_by_name['SpecsResponse'] = _SPECSRESPONSE
-DESCRIPTOR.message_types_by_name['Error'] = _ERROR
 DESCRIPTOR.message_types_by_name['GetAllConceptsRequest'] = _GETALLCONCEPTSREQUEST
 DESCRIPTOR.message_types_by_name['GetAllConceptsResponse'] = _GETALLCONCEPTSRESPONSE
 DESCRIPTOR.message_types_by_name['ConceptInfo'] = _CONCEPTINFO
@@ -1348,7 +1270,6 @@ DESCRIPTOR.message_types_by_name['GetLanguagePluginLibPathResponse'] = _GETLANGU
 DESCRIPTOR.message_types_by_name['ErrorResponse'] = _ERRORRESPONSE
 DESCRIPTOR.message_types_by_name['PerformRefactoringRequest'] = _PERFORMREFACTORINGREQUEST
 DESCRIPTOR.message_types_by_name['PerformRefactoringResponse'] = _PERFORMREFACTORINGRESPONSE
-DESCRIPTOR.message_types_by_name['ExtractConceptInfoRequest'] = _EXTRACTCONCEPTINFOREQUEST
 DESCRIPTOR.message_types_by_name['ExtractConceptRequest'] = _EXTRACTCONCEPTREQUEST
 DESCRIPTOR.message_types_by_name['textInfo'] = _TEXTINFO
 DESCRIPTOR.message_types_by_name['step'] = _STEP
@@ -1357,6 +1278,7 @@ DESCRIPTOR.message_types_by_name['FormatSpecsRequest'] = _FORMATSPECSREQUEST
 DESCRIPTOR.message_types_by_name['FormatSpecsResponse'] = _FORMATSPECSRESPONSE
 DESCRIPTOR.message_types_by_name['UnsupportedApiMessageResponse'] = _UNSUPPORTEDAPIMESSAGERESPONSE
 DESCRIPTOR.message_types_by_name['APIMessage'] = _APIMESSAGE
+_sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 GetProjectRootRequest = _reflection.GeneratedProtocolMessageType('GetProjectRootRequest', (_message.Message,), dict(
   DESCRIPTOR = _GETPROJECTROOTREQUEST,
@@ -1421,13 +1343,6 @@ SpecsResponse = _reflection.GeneratedProtocolMessageType('SpecsResponse', (_mess
   ))
 _sym_db.RegisterMessage(SpecsResponse)
 _sym_db.RegisterMessage(SpecsResponse.SpecDetail)
-
-Error = _reflection.GeneratedProtocolMessageType('Error', (_message.Message,), dict(
-  DESCRIPTOR = _ERROR,
-  __module__ = 'api_pb2'
-  # @@protoc_insertion_point(class_scope:gauge.messages.Error)
-  ))
-_sym_db.RegisterMessage(Error)
 
 GetAllConceptsRequest = _reflection.GeneratedProtocolMessageType('GetAllConceptsRequest', (_message.Message,), dict(
   DESCRIPTOR = _GETALLCONCEPTSREQUEST,
@@ -1498,13 +1413,6 @@ PerformRefactoringResponse = _reflection.GeneratedProtocolMessageType('PerformRe
   # @@protoc_insertion_point(class_scope:gauge.messages.PerformRefactoringResponse)
   ))
 _sym_db.RegisterMessage(PerformRefactoringResponse)
-
-ExtractConceptInfoRequest = _reflection.GeneratedProtocolMessageType('ExtractConceptInfoRequest', (_message.Message,), dict(
-  DESCRIPTOR = _EXTRACTCONCEPTINFOREQUEST,
-  __module__ = 'api_pb2'
-  # @@protoc_insertion_point(class_scope:gauge.messages.ExtractConceptInfoRequest)
-  ))
-_sym_db.RegisterMessage(ExtractConceptInfoRequest)
 
 ExtractConceptRequest = _reflection.GeneratedProtocolMessageType('ExtractConceptRequest', (_message.Message,), dict(
   DESCRIPTOR = _EXTRACTCONCEPTREQUEST,
