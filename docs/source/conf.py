@@ -39,7 +39,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Gauge Python'
-copyright = u'2016, Kashish Munjal'
+copyright = u'2017, Kashish Munjal'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -218,7 +218,7 @@ man_pages = [
 epub_title = u'Gauge Pyhton'
 epub_author = u'Kashish Munjal'
 epub_publisher = u'Kashish Munjal'
-epub_copyright = u'2016, Kashish Munjal'
+epub_copyright = u'2017, Kashish Munjal'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.
