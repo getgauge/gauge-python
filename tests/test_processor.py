@@ -133,12 +133,15 @@ class ProcessorTests(unittest.TestCase):
 
         request = Message()
         request.stepValidateRequest.stepText = 'Step2'
+        request.stepValidateRequest.stepValue.stepValue = 'Step2'
 
         processors[Message.StepValidateRequest](request, response, None)
 
         self.assertEqual(Message.StepValidateResponse, response.messageType)
         self.assertFalse(response.stepValidateResponse.isValid)
         self.assertEqual(StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND, response.stepValidateResponse.errorType)
+        self.assertTrue(
+            '@step("")\ndef step2():\n    print("your code here...")' in response.stepValidateResponse.suggestion)
 
     def test_Processor_invalid_step_validate_request_when_duplicate_impl_found(self):
         registry.add_step('Step <a> with <b>', 'func', '')
