@@ -38,7 +38,7 @@ def impl_suggestion(step_value):
 
 @step("{}")
 def {}({}):
-    print("your code here...")
+    assert False, "Add implementation code"
 """.format(step_value.parameterizedStepValue,
            name if is_valid(name, 'def {}(): return ''') else random_word(),
            format_params(step_value.parameters)) + Style.RESET_ALL
