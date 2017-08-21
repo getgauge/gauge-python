@@ -1,3 +1,4 @@
+import inspect
 import random
 import re
 import string
@@ -21,10 +22,14 @@ def validate_step(request, response):
     elif registry.has_multiple_impls(request.stepValidateRequest.stepText):
         response.stepValidateResponse.isValid = False
         response.stepValidateResponse.errorType = StepValidateResponse.DUPLICATE_STEP_IMPLEMENTATION
-        response.stepValidateResponse.errorMessage = 'Multiple implementation found for `{}` ({})'. \
-            format(request.stepValidateRequest.stepText, ', '.join(
-            ['{}:{}'.format(impl.file_name, impl.line_number) for impl in
-             registry.get_infos_for(request.stepValidateRequest.stepText)]))
+        response.stepValidateResponse.suggestion = duplicate_impl_suggestion(request)
+
+
+def duplicate_impl_suggestion(request):
+    return '\n\n' + '\n'.join(
+        [(Fore.YELLOW + '{}:{}\n' + Style.RESET_ALL + Style.DIM + '{}' + Style.RESET_ALL).format(
+            impl.file_name, impl.line_number, inspect.getsource(impl.impl)) for
+         impl in registry.get_infos_for(request.stepValidateRequest.stepText)])
 
 
 def impl_suggestion(step_value):

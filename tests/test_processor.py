@@ -144,8 +144,8 @@ class ProcessorTests(unittest.TestCase):
             '@step("")\ndef step2():\n    print("your code here...")' in response.stepValidateResponse.suggestion)
 
     def test_Processor_invalid_step_validate_request_when_duplicate_impl_found(self):
-        registry.add_step('Step <a> with <b>', 'func', '')
-        registry.add_step('Step <a> with <b>', 'func', '')
+        registry.add_step('Step <a> with <b>', impl, '')
+        registry.add_step('Step <a> with <b>', impl, '')
 
         response = Message()
 
