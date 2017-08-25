@@ -26,17 +26,16 @@ def validate_step(request, response):
 
 
 def duplicate_impl_suggestion(request):
-    return '\n\n' + '\n'.join(
+    text = request.stepValidateRequest.stepText.replace('{}', '<arg>')
+    return "Multiple implementations found for `{}`\n".format(text) + '\n'.join(
         [(Fore.YELLOW + '{}:{}\n' + Style.RESET_ALL + Style.DIM + '{}' + Style.RESET_ALL).format(
-            impl.file_name, impl.line_number, inspect.getsource(impl.impl)) for
+            impl.file_name, impl.line_number, format_impl(inspect.getsource(impl.impl))) for
          impl in registry.get_infos_for(request.stepValidateRequest.stepText)])
 
 
 def impl_suggestion(step_value):
     name = re.sub('\s*\{\}\s*', ' ', step_value.stepValue).strip().replace(' ', '_').lower()
-    return Fore.YELLOW + """
-
-@step("{}")
+    return Fore.YELLOW + """@step("{}")
 def {}({}):
     assert False, "Add implementation code"
 """.format(step_value.parameterizedStepValue,
@@ -46,6 +45,11 @@ def {}({}):
 
 def format_params(params):
     return ', '.join([p if is_valid(p, '{} = None') else 'arg' + str(i + 1) for i, p in enumerate(params)])
+
+
+def format_impl(impl):
+    lines = [l for l in impl.split('\n') if l.strip().startswith('def') or l.strip().startswith('@')]
+    return '\n'.join(lines) + '\n   ...\n'
 
 
 def is_valid(name, template):
