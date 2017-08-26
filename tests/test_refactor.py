@@ -53,7 +53,7 @@ def assert_default_vowels(given_vowels):
         self.assertEqual(True, response.refactorResponse.success, response.refactorResponse.error)
         self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
         expected = """@step("Vowels in English language is <vowels> <bsdfdsf>.")
-def assert_default_vowels(given_vowels, arg1_bsdfdsf):
+def assert_default_vowels(given_vowels, bsdfdsf):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -83,7 +83,7 @@ def assert_default_vowels(given_vowels, arg1_bsdfdsf):
         self.assertEqual(True, response.refactorResponse.success, response.refactorResponse.error)
         self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
         expected = """@step("Vowels in English language is <vowels> <vowels!2_ab%$>.")
-def assert_default_vowels(given_vowels, arg1_vowels2_ab):
+def assert_default_vowels(given_vowels, arg1):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -113,7 +113,7 @@ def assert_default_vowels(given_vowels, arg1_vowels2_ab):
         self.assertEqual(True, response.refactorResponse.success, response.refactorResponse.error)
         self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
         expected = """@step("Vowels in English language is <vowels> <!%$>.")
-def assert_default_vowels(given_vowels, arg1_):
+def assert_default_vowels(given_vowels, arg1):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -189,7 +189,7 @@ def assert_default_vowels(given_vowels):
         self.assertEqual(True, response.refactorResponse.success, response.refactorResponse.error)
         self.assertEqual([RefactorTests.path], response.refactorResponse.filesChanged)
         expected = """@step("Vowels in English language is <bsdfdsf>.")
-def assert_default_vowels(arg0_bsdfdsf):
+def assert_default_vowels(bsdfdsf):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """

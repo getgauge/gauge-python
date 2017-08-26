@@ -1,8 +1,8 @@
+import ast
 import inspect
 import random
 import re
 import string
-from ast import parse
 
 from colorama import Fore
 from colorama import Style
@@ -18,47 +18,47 @@ def validate_step(request, response):
         response.stepValidateResponse.errorType = StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND
         response.stepValidateResponse.errorMessage = 'Step implementation not found'
         response.stepValidateResponse.isValid = False
-        response.stepValidateResponse.suggestion = impl_suggestion(request.stepValidateRequest.stepValue)
+        response.stepValidateResponse.suggestion = _impl_suggestion(request.stepValidateRequest.stepValue)
     elif registry.has_multiple_impls(request.stepValidateRequest.stepText):
         response.stepValidateResponse.isValid = False
         response.stepValidateResponse.errorType = StepValidateResponse.DUPLICATE_STEP_IMPLEMENTATION
-        response.stepValidateResponse.suggestion = duplicate_impl_suggestion(request)
+        response.stepValidateResponse.suggestion = _duplicate_impl_suggestion(request)
 
 
-def duplicate_impl_suggestion(request):
+def _duplicate_impl_suggestion(request):
     text = request.stepValidateRequest.stepText.replace('{}', '<arg>')
     return "Multiple implementations found for `{}`\n".format(text) + '\n'.join(
         [(Fore.YELLOW + '{}:{}\n' + Style.RESET_ALL + Style.DIM + '{}' + Style.RESET_ALL).format(
-            impl.file_name, impl.line_number, format_impl(inspect.getsource(impl.impl))) for
-         impl in registry.get_infos_for(request.stepValidateRequest.stepText)])
+            impl.file_name, impl.line_number, _format_impl(inspect.getsource(impl.impl))) for
+            impl in registry.get_infos_for(request.stepValidateRequest.stepText)])
 
 
-def impl_suggestion(step_value):
+def _impl_suggestion(step_value):
     name = re.sub('\s*\{\}\s*', ' ', step_value.stepValue).strip().replace(' ', '_').lower()
     return Fore.YELLOW + """@step("{}")
 def {}({}):
     assert False, "Add implementation code"
 """.format(step_value.parameterizedStepValue,
-           name if is_valid(name, 'def {}(): return ''') else random_word(),
-           format_params(step_value.parameters)) + Style.RESET_ALL
+           name if _is_valid(name, 'def {}(): return ''') else _random_word(),
+           _format_params(step_value.parameters)) + Style.RESET_ALL
 
 
-def format_params(params):
-    return ', '.join([p if is_valid(p, '{} = None') else 'arg' + str(i + 1) for i, p in enumerate(params)])
+def _format_params(params):
+    return ', '.join([p if _is_valid(p) else 'arg' + str(i + 1) for i, p in enumerate(params)])
 
 
-def format_impl(impl):
+def _format_impl(impl):
     lines = [l for l in impl.split('\n') if l.strip().startswith('def') or l.strip().startswith('@')]
     return '\n'.join(lines) + '\n   ...\n'
 
 
-def is_valid(name, template):
+def _is_valid(name, template='{} = None'):
     try:
-        parse(template.format(name))
+        ast.parse(template.format(name))
         return True
     except:
         return False
 
 
-def random_word(length=6):
-    return ''.join(random.choice(string.ascii_lowercase) for i in range(length))
+def _random_word(length=6):
+    return ''.join(random.choice(string.ascii_lowercase) for _ in range(length))

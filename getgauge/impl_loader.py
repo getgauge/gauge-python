@@ -28,29 +28,10 @@ SKEL = 'skel'
 def load_impls(step_impl_dir=impl_dir):
     os.chdir(project_root)
     if not os.path.isdir(step_impl_dir):
-        print(Fore.RED + 'Cannot import step implementations. Error: directory {} does not exist.'.format(step_impl_dir))
+        print(Fore.RED + 'Cannot import step implementations. Error: {} does not exist.'.format(step_impl_dir))
         print(Fore.RED + 'Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
         return
-    import_impl(step_impl_dir)
-
-
-def import_impl(step_impl_dir):
-    for f in os.listdir(step_impl_dir):
-        file_path = os.path.join(step_impl_dir, f)
-        if f.endswith('.py'):
-            import_file(file_path)
-        elif path.isdir(file_path):
-            load_impls(file_path)
-
-
-def import_file(file_path):
-    rel_path = os.path.normpath(file_path.replace(project_root + os.path.sep, ''))
-    try:
-        py_compile.compile(file_path)
-        importlib.import_module(os.path.splitext(rel_path.replace(os.path.sep, '.'))[0])
-    except:
-        print(Fore.RED + 'Exception occurred while loading step implementations from file: {}.'.format(rel_path))
-        print(Fore.RED + traceback.format_exc())
+    _import_impl(step_impl_dir)
 
 
 def copy_skel_files():
@@ -62,13 +43,32 @@ def copy_skel_files():
         shutil.copytree(os.path.join(SKEL, STEP_IMPL_DIR), impl_dir)
         print(Fore.GREEN + 'create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
         shutil.copy(os.path.join(SKEL, PYTHON_PROPERTIES), env_dir)
-        open(requirements_file, 'w').write('getgauge==' + get_version())
+        open(requirements_file, 'w').write('getgauge==' + _get_version())
     except:
         print(Fore.RED + 'Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
         sys.exit(1)
 
 
-def get_version():
+def _import_impl(step_impl_dir):
+    for f in os.listdir(step_impl_dir):
+        file_path = os.path.join(step_impl_dir, f)
+        if f.endswith('.py'):
+            _import_file(file_path)
+        elif path.isdir(file_path):
+            load_impls(file_path)
+
+
+def _import_file(file_path):
+    rel_path = os.path.normpath(file_path.replace(project_root + os.path.sep, ''))
+    try:
+        py_compile.compile(file_path)
+        importlib.import_module(os.path.splitext(rel_path.replace(os.path.sep, '.'))[0])
+    except:
+        print(Fore.RED + 'Exception occurred while loading step implementations from file: {}.'.format(rel_path))
+        print(Fore.RED + traceback.format_exc())
+
+
+def _get_version():
     json_data = open(PLUGIN_JSON).read()
     data = json.loads(json_data)
     return data[VERSION]
