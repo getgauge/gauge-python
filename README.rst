@@ -1,18 +1,16 @@
-Gauge Python
-============
-
+.. image:: https://user-images.githubusercontent.com/5915802/29747597-21bd1200-8b1d-11e7-9796-3a6c6a26f032.png
 |Travis Build Status| |Codacy Project Status| |Documentation Status| |MIT licensed|
 
 Python language runner for `Gauge`_.
 
-* `Documentation`_
-* `Contributing`_
-
-Examples
---------
-
-* `Selenium`_
-* `Selenium and REST API`_
++------------------+------------------+------------------+-----------------+
+|   `User Docs`_   |  `Setup Guide`_  |   `Examples`_    | `Contributing`_ |
++==================+==================+==================+=================+
+|      |i1|\       |      |i2|\       |      |i3|\       |      |i4|\      |
+|                  |                  |                  |                 |
+| Learn more about | Getting started  | Some Gauge Python| How can you     |
+| Gauge Python.    | for dev setup.   | examples.        | contribute?     |
++------------------+------------------+------------------+-----------------+
 
 Issues
 ------
@@ -26,13 +24,21 @@ License
 
 The Gauge-Python is an open-sourced software licensed under the `MIT license`_.
 
-.. _Gauge: https://github.com/getgauge/gauge
-.. _Documentation: https://gauge-python.readthedocs.org
+.. _User Docs: https://gauge-python.readthedocs.io
+.. _Setup Guide: https://github.com/kashishm/gauge-python/wiki/Technical-Documentation
+.. _Examples: https://gauge-python.readthedocs.io/en/latest/getting-started.html#examples
 .. _Contributing: https://gauge-python.readthedocs.io/en/latest/contributing.html
+.. _Gauge: https://github.com/getgauge/gauge
 .. _MIT license: http://opensource.org/licenses/MIT
-.. _Selenium: https://github.com/kashishm/gauge-example-python
-.. _Selenium and REST API: https://angbaird.com/2016/11/09/selenium-and-rest-api-testing-with-gauge/
 
+.. |i1| image:: https://d3i6fms1cm1j0i.cloudfront.net/github/images/techdocs.png
+   :target: https://gauge-python.readthedocs.io
+.. |i2| image:: https://d3i6fms1cm1j0i.cloudfront.net/github/images/setup.png
+   :target: https://github.com/kashishm/gauge-python/wiki/Technical-Documentation
+.. |i3| image:: https://d3i6fms1cm1j0i.cloudfront.net/github/images/roadmap.png
+   :target: https://gauge-python.readthedocs.io/en/latest/getting-started.html#examples
+.. |i4| image:: https://d3i6fms1cm1j0i.cloudfront.net/github/images/contributing.png
+   :target: https://gauge-python.readthedocs.io/en/latest/contributing.html
 .. |Documentation Status| image:: https://readthedocs.org/projects/gauge-python/badge/?version=latest
    :target: http://gauge-python.readthedocs.org/en/latest/?badge=latest
 .. |Travis Build Status| image:: https://travis-ci.org/kashishm/gauge-python.svg?branch=master

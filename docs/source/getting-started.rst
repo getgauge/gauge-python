@@ -50,5 +50,9 @@ Examples
 
 - gauge-example-python_: This project serves as an example for writing automation using Gauge. It uses selenium and various Gauge/Gauge-Python features. For more details, Check out the repository_.
 
+- `Selenium and REST API`_: This project_ shows an example of how to setup Gauge, Gauge Python and Magento to test REST API.
+
 .. _gauge-example-python: https://github.com/kashishm/gauge-example-python
 .. _repository: https://github.com/kashishm/gauge-example-python
+.. _Selenium and REST API: https://angbaird.com/2016/11/09/selenium-and-rest-api-testing-with-gauge/
+.. _project: https://github.com/angb/gauge-magento-test
