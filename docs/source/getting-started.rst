@@ -48,11 +48,13 @@ To execute a gauge-python project, run the following command in the project:
 Examples
 ~~~~~~~~
 
-- gauge-example-python_: This project serves as an example for writing automation using Gauge. It uses selenium and various Gauge/Gauge-Python features. For more details, Check out the repository_.
-
-- `Selenium and REST API`_: This project_ shows an example of how to setup Gauge, Gauge Python and Magento to test REST API.
+- **Selenium**: This project serves as an example for writing automation using Gauge. It uses selenium and various Gauge/Gauge-Python features. For more details, Check out the gauge-example-python_ repository.
 
 .. _gauge-example-python: https://github.com/kashishm/gauge-example-python
-.. _repository: https://github.com/kashishm/gauge-example-python
+
+- **Selenium and REST API**: This project shows an example of how to setup Gauge, Gauge Python and Magento_ to test REST API. For more details, Check out the blog_ or gauge-magento-test_ repository.
+
 .. _Selenium and REST API: https://angbaird.com/2016/11/09/selenium-and-rest-api-testing-with-gauge/
-.. _project: https://github.com/angb/gauge-magento-test
+.. _gauge-magento-test: https://github.com/angb/gauge-magento-test
+.. _blog: https://angbaird.com/2016/11/09/selenium-and-rest-api-testing-with-gauge/
+.. _Magento: https://magento.com/
