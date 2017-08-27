@@ -1,4 +1,5 @@
 .. image:: https://user-images.githubusercontent.com/5915802/29747597-21bd1200-8b1d-11e7-9796-3a6c6a26f032.png
+
 |Travis Build Status| |Codacy Project Status| |Documentation Status| |MIT licensed|
 
 Python language runner for `Gauge`_.
@@ -8,8 +9,9 @@ Python language runner for `Gauge`_.
 +==================+==================+==================+=================+
 |      |i1|\       |      |i2|\       |      |i3|\       |      |i4|\      |
 |                  |                  |                  |                 |
-| Learn more about | Getting started  | Some Gauge Python| How can you     |
-| Gauge Python.    | for dev setup.   | examples.        | contribute?     |
+| Learn more about | Development setup| Some Gauge Python| Contribution    |
+| Gauge Python.    | guide for Gauge  | example projects.| guide for Gauge |
+|                  | Python.          |                  | Python?         |
 +------------------+------------------+------------------+-----------------+
 
 Issues
