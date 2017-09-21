@@ -1,5 +1,7 @@
-from getgauge.python import before_step, step, after_step, before_scenario, after_scenario, before_spec, after_spec, \
-    before_suite, after_suite, screenshot, continue_on_failure
+from getgauge.python import (before_step, step, after_step, before_scenario,
+                             after_scenario, before_spec, after_spec,
+                             before_suite, after_suite, screenshot,
+                             continue_on_failure)
 
 
 @step("Step 1")
