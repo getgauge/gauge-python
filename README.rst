@@ -27,7 +27,7 @@ License
 The Gauge-Python is an open-sourced software licensed under the `MIT license`_.
 
 .. _User Docs: https://gauge-python.readthedocs.io
-.. _Setup Guide: https://github.com/kashishm/gauge-python/wiki/Technical-Documentation
+.. _Setup Guide: https://gauge-python.readthedocs.io/en/latest/contributing.html#development-guide
 .. _Examples: https://gauge-python.readthedocs.io/en/latest/getting-started.html#examples
 .. _Contributing: https://gauge-python.readthedocs.io/en/latest/contributing.html
 .. _Gauge: https://github.com/getgauge/gauge

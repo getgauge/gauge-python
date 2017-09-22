@@ -35,6 +35,59 @@ Pull Requests
 ~~~~~~~~~~~~~
 Contributions to Gauge-Python are welcome and appreciated. Implement features, fix bugs and send us pull requests.
 
-Please read this document_ to understand the technical details.
+Development Guide
+^^^^^^^^^^^^^^^^^
 
-.. _document: https://github.com/kashishm/gauge-python/wiki/Technical-Documentation
+Requirements
+""""""""""""
+
+-  Python
+-  Pip
+-  Gauge
+
+Installing package dependencies
+"""""""""""""""""""""""""""""""
+
+::
+
+    pip install -r requirements.txt
+
+Tests
+"""""
+
+::
+
+    python install.py --test
+
+Tests Coverage
+""""""""""""""
+
+::
+
+    python install.py --test
+    coverage report -m
+
+Installing
+""""""""""
+
+::
+
+    python install.py --install
+
+Creating distributable
+""""""""""""""""""""""
+
+::
+
+    python install.py
+
+This will create a .zip file in bin directory which can then be uploaded
+to Github releases.
+
+Uploading to PyPI
+"""""""""""""""""
+
+::
+
+    python setup.py sdist
+    twine upload dist/*
