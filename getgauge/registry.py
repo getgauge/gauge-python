@@ -139,7 +139,10 @@ def _filter_hooks(tags, hooks):
 
 def _take_screenshot():
     temp_file = os.path.join(tempfile.gettempdir(), 'screenshot.png')
-    call(['gauge_screenshot', temp_file])
+    try:
+        call(['gauge_screenshot', temp_file])
+    except:
+        pass
     if not os.path.exists(temp_file):
         print(Fore.RED + "Failed to take screenshot using gauge_screenshot.")
         return str.encode("")

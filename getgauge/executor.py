@@ -48,7 +48,10 @@ def _add_exception(e, response, continue_on_failure):
     if os.getenv('screenshot_on_failure') == 'true':
         response.executionStatusResponse.executionResult.screenShot = registry.screenshot_provider()()
     response.executionStatusResponse.executionResult.failed = True
-    response.executionStatusResponse.executionResult.errorMessage = e.__str__()
+    message = e.__str__()
+    if not message:
+        message = "Exception occurred"
+    response.executionStatusResponse.executionResult.errorMessage = message
     response.executionStatusResponse.executionResult.stackTrace = traceback.format_exc()
     response.executionStatusResponse.executionResult.errorType = ProtoExecutionResult.ASSERTION
     if continue_on_failure:
