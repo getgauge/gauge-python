@@ -7,13 +7,13 @@ from google.protobuf.internal.encoder import _EncodeVarint
 
 def connect():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('localhost', int(os.environ['GAUGE_INTERNAL_PORT'])))
+    s.connect(('127.0.0.1', int(os.environ['GAUGE_INTERNAL_PORT'])))
     return s
 
 
 def to_api():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('localhost', int(os.environ['GAUGE_API_PORT'])))
+    s.connect(('127.0.0.1', int(os.environ['GAUGE_API_PORT'])))
     return s
 
 
