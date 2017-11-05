@@ -32,12 +32,12 @@ script:
   - gauge -v
   - python install.py --install
   - export GAUGE_PYTHON_VERSION=$(cd bin; ls gauge-python-*.zip | sed "s/^gauge-python-\([^;]*\).zip/\1/")
-  - gauge --uninstall python
-  - gauge --install python -f "bin/gauge-python-$GAUGE_PYTHON_VERSION.zip"
+  - gauge uninstall python
+  - gauge install python -f "bin/gauge-python-$GAUGE_PYTHON_VERSION.zip"
   - pip install "dist/getgauge-$GAUGE_PYTHON_VERSION.tar.gz"
-  - gauge --install html-report
-  - gauge --install xml-report
-  - gauge --install java
+  - gauge install html-report
+  - gauge install xml-report
+  - gauge install java
   - git clone git://github.com/getgauge/gauge-tests --depth 1 --recursive
   - cd gauge-tests
   - sh starttests.sh python
