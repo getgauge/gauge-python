@@ -1,4 +1,5 @@
 import os
+import sys
 import re
 import tempfile
 from subprocess import call
@@ -141,15 +142,14 @@ def _take_screenshot():
     temp_file = os.path.join(tempfile.gettempdir(), 'screenshot.png')
     try:
         call(['gauge_screenshot', temp_file])
+        _file = open(temp_file, 'r+b')
+        data = _file.read()
+        _file.close()
+        return data
+    except Exception as err:
+        print(Fore.RED + "\nFailed to take screenshot using gauge_screenshot.\n{0}".format(err))
     except:
-        pass
-    if not os.path.exists(temp_file):
-        print(Fore.RED + "Failed to take screenshot using gauge_screenshot.")
-        return str.encode("")
-    _file = open(temp_file, 'r+b')
-    data = _file.read()
-    _file.close()
-    return data
-
+        print(Fore.RED + "\nFailed to take screenshot using gauge_screenshot.\n{0}".format(sys.exc_info()[0]))
+    return str.encode("")
 
 registry = Registry()
