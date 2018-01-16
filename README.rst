@@ -19,7 +19,7 @@ Issues
 
 If you find any issues or have any feature requests, please file them in the `issue tracker`_.
 
-.. _issue tracker: https://github.com/kashishm/gauge-python/issues
+.. _issue tracker: https://github.com/getgauge/gauge-python/issues
 
 License
 -------
@@ -36,16 +36,16 @@ The Gauge-Python is an open-sourced software licensed under the `MIT license`_.
 .. |i1| image:: https://d3i6fms1cm1j0i.cloudfront.net/github/images/techdocs.png
    :target: https://gauge-python.readthedocs.io
 .. |i2| image:: https://d3i6fms1cm1j0i.cloudfront.net/github/images/setup.png
-   :target: https://github.com/kashishm/gauge-python/wiki/Technical-Documentation
+   :target: https://gauge-python.readthedocs.io/en/latest/contributing.html#development-guide
 .. |i3| image:: https://d3i6fms1cm1j0i.cloudfront.net/github/images/roadmap.png
    :target: https://gauge-python.readthedocs.io/en/latest/getting-started.html#examples
 .. |i4| image:: https://d3i6fms1cm1j0i.cloudfront.net/github/images/contributing.png
    :target: https://gauge-python.readthedocs.io/en/latest/contributing.html
 .. |Documentation Status| image:: https://readthedocs.org/projects/gauge-python/badge/?version=latest
    :target: http://gauge-python.readthedocs.org/en/latest/?badge=latest
-.. |Travis Build Status| image:: https://travis-ci.org/kashishm/gauge-python.svg?branch=master
-   :target: https://travis-ci.org/kashishm/gauge-python
+.. |Travis Build Status| .. image:: https://travis-ci.org/getgauge/gauge-python.svg?branch=master
+   :target: https://travis-ci.org/getgauge/gauge-python
 .. |Codacy Project Status| image:: https://api.codacy.com/project/badge/Grade/2b96566538d1445685f9ad7792456b97
-   :target: https://www.codacy.com/app/kashishmunjal64/gauge-python?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kashishm/gauge-python&amp;utm_campaign=Badge_Grade
+   :target: https://www.codacy.com/app/kashishmunjal/gauge-python?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=getgauge/gauge-python&amp;utm_campaign=Badge_Grade
 .. |MIT licensed| image:: https://img.shields.io/badge/license-MIT-blue.svg
-   :target: https://github.com/kashishm/gauge-python/blob/master/LICENSE.txt
+   :target: https://github.com/getgauge/gauge-python/blob/master/LICENSE.txt

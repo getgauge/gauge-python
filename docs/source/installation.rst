@@ -35,7 +35,7 @@ Offline Installation
 ~~~~~~~~~~~~~~~~~~~~
 - Download the plugin from Releases_
 
-    .. _Releases: https://github.com/kashishm/gauge-python/releases
+    .. _Releases: https://github.com/getgauge/gauge-python/releases
 
 - Run the following command to install from the downloaded file
 
@@ -75,7 +75,7 @@ Verify installation
         Name: getgauge
         Version: 0.0.1
         Summary: Enables Python support for Gauge
-        Home-page: https://github.com/kashishm/gauge-python
+        Home-page: https://github.com/getgauge/gauge-python
         Author: Kashish Munjal
         Author-email: kashishmunjal64@gmail.com
         License: MIT
