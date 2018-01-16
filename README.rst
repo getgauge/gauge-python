@@ -43,7 +43,7 @@ The Gauge-Python is an open-sourced software licensed under the `MIT license`_.
    :target: https://gauge-python.readthedocs.io/en/latest/contributing.html
 .. |Documentation Status| image:: https://readthedocs.org/projects/gauge-python/badge/?version=latest
    :target: http://gauge-python.readthedocs.org/en/latest/?badge=latest
-.. |Travis Build Status| .. image:: https://travis-ci.org/getgauge/gauge-python.svg?branch=master
+.. |Travis Build Status| image:: https://travis-ci.org/getgauge/gauge-python.svg?branch=master
    :target: https://travis-ci.org/getgauge/gauge-python
 .. |Codacy Project Status| image:: https://api.codacy.com/project/badge/Grade/2b96566538d1445685f9ad7792456b97
    :target: https://www.codacy.com/app/kashishmunjal/gauge-python?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=getgauge/gauge-python&amp;utm_campaign=Badge_Grade
