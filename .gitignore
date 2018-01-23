@@ -13,3 +13,4 @@ install.sh
 docs/build/doctrees
 docs/build/html
 .vscode/
+venv/
