@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='spec.proto',
   package='gauge.messages',
   syntax='proto3',
-  serialized_pb=_b('\n\nspec.proto\x12\x0egauge.messages\"\xf8\x01\n\tProtoSpec\x12\x13\n\x0bspecHeading\x18\x01 \x01(\t\x12(\n\x05items\x18\x02 \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12\x15\n\risTableDriven\x18\x03 \x01(\x08\x12\x39\n\x0fpreHookFailures\x18\x04 \x03(\x0b\x32 .gauge.messages.ProtoHookFailure\x12:\n\x10postHookFailures\x18\x05 \x03(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x10\n\x08\x66ileName\x18\x06 \x01(\t\x12\x0c\n\x04tags\x18\x07 \x03(\t\"\x80\x04\n\tProtoItem\x12\x34\n\x08itemType\x18\x01 \x01(\x0e\x32\".gauge.messages.ProtoItem.ItemType\x12\'\n\x04step\x18\x02 \x01(\x0b\x32\x19.gauge.messages.ProtoStep\x12-\n\x07\x63oncept\x18\x03 \x01(\x0b\x32\x1c.gauge.messages.ProtoConcept\x12/\n\x08scenario\x18\x04 \x01(\x0b\x32\x1d.gauge.messages.ProtoScenario\x12\x45\n\x13tableDrivenScenario\x18\x05 \x01(\x0b\x32(.gauge.messages.ProtoTableDrivenScenario\x12-\n\x07\x63omment\x18\x06 \x01(\x0b\x32\x1c.gauge.messages.ProtoComment\x12)\n\x05table\x18\x07 \x01(\x0b\x32\x1a.gauge.messages.ProtoTable\x12\'\n\x04tags\x18\x08 \x01(\x0b\x32\x19.gauge.messages.ProtoTags\"j\n\x08ItemType\x12\x08\n\x04Step\x10\x00\x12\x0b\n\x07\x43omment\x10\x01\x12\x0b\n\x07\x43oncept\x10\x02\x12\x0c\n\x08Scenario\x10\x03\x12\x17\n\x13TableDrivenScenario\x10\x04\x12\t\n\x05Table\x10\x05\x12\x08\n\x04Tags\x10\x06\"\xfa\x03\n\rProtoScenario\x12\x17\n\x0fscenarioHeading\x18\x01 \x01(\t\x12\x12\n\x06\x66\x61iled\x18\x02 \x01(\x08\x42\x02\x18\x01\x12+\n\x08\x63ontexts\x18\x03 \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12\x30\n\rscenarioItems\x18\x04 \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12\x38\n\x0epreHookFailure\x18\x05 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x06 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x0c\n\x04tags\x18\x07 \x03(\t\x12\x15\n\rexecutionTime\x18\x08 \x01(\x03\x12\x13\n\x07skipped\x18\t \x01(\x08\x42\x02\x18\x01\x12\x12\n\nskipErrors\x18\n \x03(\t\x12\n\n\x02ID\x18\x0b \x01(\t\x12\x30\n\rtearDownSteps\x18\x0c \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12\"\n\x04span\x18\r \x01(\x0b\x32\x14.gauge.messages.Span\x12\x38\n\x0f\x65xecutionStatus\x18\x0e \x01(\x0e\x32\x1f.gauge.messages.ExecutionStatus\"\"\n\x04Span\x12\r\n\x05start\x18\x01 \x01(\x03\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x03\"b\n\x18ProtoTableDrivenScenario\x12/\n\x08scenario\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ProtoScenario\x12\x15\n\rtableRowIndex\x18\x02 \x01(\x05\"\xa7\x01\n\tProtoStep\x12\x12\n\nactualText\x18\x01 \x01(\t\x12\x12\n\nparsedText\x18\x02 \x01(\t\x12+\n\tfragments\x18\x03 \x03(\x0b\x32\x18.gauge.messages.Fragment\x12\x45\n\x13stepExecutionResult\x18\x04 \x01(\x0b\x32(.gauge.messages.ProtoStepExecutionResult\"\xb2\x01\n\x0cProtoConcept\x12.\n\x0b\x63onceptStep\x18\x01 \x01(\x0b\x32\x19.gauge.messages.ProtoStep\x12(\n\x05steps\x18\x02 \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12H\n\x16\x63onceptExecutionResult\x18\x03 \x01(\x0b\x32(.gauge.messages.ProtoStepExecutionResult\"\x19\n\tProtoTags\x12\x0c\n\x04tags\x18\x01 \x03(\t\"\xac\x01\n\x08\x46ragment\x12;\n\x0c\x66ragmentType\x18\x01 \x01(\x0e\x32%.gauge.messages.Fragment.FragmentType\x12\x0c\n\x04text\x18\x02 \x01(\t\x12,\n\tparameter\x18\x03 \x01(\x0b\x32\x19.gauge.messages.Parameter\"\'\n\x0c\x46ragmentType\x12\x08\n\x04Text\x10\x00\x12\r\n\tParameter\x10\x01\"\xef\x01\n\tParameter\x12>\n\rparameterType\x18\x01 \x01(\x0e\x32\'.gauge.messages.Parameter.ParameterType\x12\r\n\x05value\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12)\n\x05table\x18\x04 \x01(\x0b\x32\x1a.gauge.messages.ProtoTable\"Z\n\rParameterType\x12\n\n\x06Static\x10\x00\x12\x0b\n\x07\x44ynamic\x10\x01\x12\x12\n\x0eSpecial_String\x10\x02\x12\x11\n\rSpecial_Table\x10\x03\x12\t\n\x05Table\x10\x04\"\x1c\n\x0cProtoComment\x12\x0c\n\x04text\x18\x01 \x01(\t\"i\n\nProtoTable\x12.\n\x07headers\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ProtoTableRow\x12+\n\x04rows\x18\x02 \x03(\x0b\x32\x1d.gauge.messages.ProtoTableRow\"\x1e\n\rProtoTableRow\x12\r\n\x05\x63\x65lls\x18\x01 \x03(\t\"\xf6\x01\n\x18ProtoStepExecutionResult\x12=\n\x0f\x65xecutionResult\x18\x01 \x01(\x0b\x32$.gauge.messages.ProtoExecutionResult\x12\x38\n\x0epreHookFailure\x18\x02 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x03 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x0f\n\x07skipped\x18\x04 \x01(\x08\x12\x15\n\rskippedReason\x18\x05 \x01(\t\"\x97\x02\n\x14ProtoExecutionResult\x12\x0e\n\x06\x66\x61iled\x18\x01 \x01(\x08\x12\x18\n\x10recoverableError\x18\x02 \x01(\x08\x12\x14\n\x0c\x65rrorMessage\x18\x03 \x01(\t\x12\x12\n\nstackTrace\x18\x04 \x01(\t\x12\x12\n\nscreenShot\x18\x05 \x01(\x0c\x12\x15\n\rexecutionTime\x18\x06 \x01(\x03\x12\x0f\n\x07message\x18\x07 \x03(\t\x12\x41\n\terrorType\x18\x08 \x01(\x0e\x32..gauge.messages.ProtoExecutionResult.ErrorType\",\n\tErrorType\x12\r\n\tASSERTION\x10\x00\x12\x10\n\x0cVERIFICATION\x10\x01\"g\n\x10ProtoHookFailure\x12\x12\n\nstackTrace\x18\x01 \x01(\t\x12\x14\n\x0c\x65rrorMessage\x18\x02 \x01(\t\x12\x12\n\nscreenShot\x18\x03 \x01(\x0c\x12\x15\n\rtableRowIndex\x18\x04 \x01(\x05\"\xf9\x02\n\x10ProtoSuiteResult\x12\x34\n\x0bspecResults\x18\x01 \x03(\x0b\x32\x1f.gauge.messages.ProtoSpecResult\x12\x38\n\x0epreHookFailure\x18\x02 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x03 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x0e\n\x06\x66\x61iled\x18\x04 \x01(\x08\x12\x18\n\x10specsFailedCount\x18\x05 \x01(\x05\x12\x15\n\rexecutionTime\x18\x06 \x01(\x03\x12\x13\n\x0bsuccessRate\x18\x07 \x01(\x02\x12\x13\n\x0b\x65nvironment\x18\x08 \x01(\t\x12\x0c\n\x04tags\x18\t \x01(\t\x12\x13\n\x0bprojectName\x18\n \x01(\t\x12\x11\n\ttimestamp\x18\x0b \x01(\t\x12\x19\n\x11specsSkippedCount\x18\x0c \x01(\x05\"\xab\x02\n\x0fProtoSpecResult\x12,\n\tprotoSpec\x18\x01 \x01(\x0b\x32\x19.gauge.messages.ProtoSpec\x12\x15\n\rscenarioCount\x18\x02 \x01(\x05\x12\x1b\n\x13scenarioFailedCount\x18\x03 \x01(\x05\x12\x0e\n\x06\x66\x61iled\x18\x04 \x01(\x08\x12\x1b\n\x13\x66\x61iledDataTableRows\x18\x05 \x03(\x05\x12\x15\n\rexecutionTime\x18\x06 \x01(\x03\x12\x0f\n\x07skipped\x18\x07 \x01(\x08\x12\x1c\n\x14scenarioSkippedCount\x18\x08 \x01(\x05\x12\x1c\n\x14skippedDataTableRows\x18\t \x03(\x05\x12%\n\x06\x65rrors\x18\n \x03(\x0b\x32\x15.gauge.messages.Error\"\xa1\x01\n\x05\x45rror\x12-\n\x04type\x18\x01 \x01(\x0e\x32\x1f.gauge.messages.Error.ErrorType\x12\x10\n\x08\x66ilename\x18\x02 \x01(\t\x12\x12\n\nlineNumber\x18\x03 \x01(\x05\x12\x0f\n\x07message\x18\x04 \x01(\t\"2\n\tErrorType\x12\x0f\n\x0bPARSE_ERROR\x10\x00\x12\x14\n\x10VALIDATION_ERROR\x10\x01\"W\n\x0eProtoStepValue\x12\x11\n\tstepValue\x18\x01 \x01(\t\x12\x1e\n\x16parameterizedStepValue\x18\x02 \x01(\t\x12\x12\n\nparameters\x18\x03 \x03(\t*G\n\x0f\x45xecutionStatus\x12\x0f\n\x0bNOTEXECUTED\x10\x00\x12\n\n\x06PASSED\x10\x01\x12\n\n\x06\x46\x41ILED\x10\x02\x12\x0b\n\x07SKIPPED\x10\x03\x42\x11\xaa\x02\x0eGauge.Messagesb\x06proto3')
+  serialized_pb=_b('\n\nspec.proto\x12\x0egauge.messages\"\xab\x02\n\tProtoSpec\x12\x13\n\x0bspecHeading\x18\x01 \x01(\t\x12(\n\x05items\x18\x02 \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12\x15\n\risTableDriven\x18\x03 \x01(\x08\x12\x39\n\x0fpreHookFailures\x18\x04 \x03(\x0b\x32 .gauge.messages.ProtoHookFailure\x12:\n\x10postHookFailures\x18\x05 \x03(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x10\n\x08\x66ileName\x18\x06 \x01(\t\x12\x0c\n\x04tags\x18\x07 \x03(\t\x12\x17\n\x0fpreHookMessages\x18\x08 \x03(\t\x12\x18\n\x10postHookMessages\x18\t \x03(\t\"\x80\x04\n\tProtoItem\x12\x34\n\x08itemType\x18\x01 \x01(\x0e\x32\".gauge.messages.ProtoItem.ItemType\x12\'\n\x04step\x18\x02 \x01(\x0b\x32\x19.gauge.messages.ProtoStep\x12-\n\x07\x63oncept\x18\x03 \x01(\x0b\x32\x1c.gauge.messages.ProtoConcept\x12/\n\x08scenario\x18\x04 \x01(\x0b\x32\x1d.gauge.messages.ProtoScenario\x12\x45\n\x13tableDrivenScenario\x18\x05 \x01(\x0b\x32(.gauge.messages.ProtoTableDrivenScenario\x12-\n\x07\x63omment\x18\x06 \x01(\x0b\x32\x1c.gauge.messages.ProtoComment\x12)\n\x05table\x18\x07 \x01(\x0b\x32\x1a.gauge.messages.ProtoTable\x12\'\n\x04tags\x18\x08 \x01(\x0b\x32\x19.gauge.messages.ProtoTags\"j\n\x08ItemType\x12\x08\n\x04Step\x10\x00\x12\x0b\n\x07\x43omment\x10\x01\x12\x0b\n\x07\x43oncept\x10\x02\x12\x0c\n\x08Scenario\x10\x03\x12\x17\n\x13TableDrivenScenario\x10\x04\x12\t\n\x05Table\x10\x05\x12\x08\n\x04Tags\x10\x06\"\xad\x04\n\rProtoScenario\x12\x17\n\x0fscenarioHeading\x18\x01 \x01(\t\x12\x12\n\x06\x66\x61iled\x18\x02 \x01(\x08\x42\x02\x18\x01\x12+\n\x08\x63ontexts\x18\x03 \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12\x30\n\rscenarioItems\x18\x04 \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12\x38\n\x0epreHookFailure\x18\x05 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x06 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x0c\n\x04tags\x18\x07 \x03(\t\x12\x15\n\rexecutionTime\x18\x08 \x01(\x03\x12\x13\n\x07skipped\x18\t \x01(\x08\x42\x02\x18\x01\x12\x12\n\nskipErrors\x18\n \x03(\t\x12\n\n\x02ID\x18\x0b \x01(\t\x12\x30\n\rtearDownSteps\x18\x0c \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12\"\n\x04span\x18\r \x01(\x0b\x32\x14.gauge.messages.Span\x12\x38\n\x0f\x65xecutionStatus\x18\x0e \x01(\x0e\x32\x1f.gauge.messages.ExecutionStatus\x12\x17\n\x0fpreHookMessages\x18\x0f \x03(\t\x12\x18\n\x10postHookMessages\x18\x10 \x03(\t\"F\n\x04Span\x12\r\n\x05start\x18\x01 \x01(\x03\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x03\x12\x11\n\tstartChar\x18\x03 \x01(\x03\x12\x0f\n\x07\x65ndChar\x18\x04 \x01(\x03\"b\n\x18ProtoTableDrivenScenario\x12/\n\x08scenario\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ProtoScenario\x12\x15\n\rtableRowIndex\x18\x02 \x01(\x05\"\xda\x01\n\tProtoStep\x12\x12\n\nactualText\x18\x01 \x01(\t\x12\x12\n\nparsedText\x18\x02 \x01(\t\x12+\n\tfragments\x18\x03 \x03(\x0b\x32\x18.gauge.messages.Fragment\x12\x45\n\x13stepExecutionResult\x18\x04 \x01(\x0b\x32(.gauge.messages.ProtoStepExecutionResult\x12\x17\n\x0fpreHookMessages\x18\x05 \x03(\t\x12\x18\n\x10postHookMessages\x18\x06 \x03(\t\"\xb2\x01\n\x0cProtoConcept\x12.\n\x0b\x63onceptStep\x18\x01 \x01(\x0b\x32\x19.gauge.messages.ProtoStep\x12(\n\x05steps\x18\x02 \x03(\x0b\x32\x19.gauge.messages.ProtoItem\x12H\n\x16\x63onceptExecutionResult\x18\x03 \x01(\x0b\x32(.gauge.messages.ProtoStepExecutionResult\"\x19\n\tProtoTags\x12\x0c\n\x04tags\x18\x01 \x03(\t\"\xac\x01\n\x08\x46ragment\x12;\n\x0c\x66ragmentType\x18\x01 \x01(\x0e\x32%.gauge.messages.Fragment.FragmentType\x12\x0c\n\x04text\x18\x02 \x01(\t\x12,\n\tparameter\x18\x03 \x01(\x0b\x32\x19.gauge.messages.Parameter\"\'\n\x0c\x46ragmentType\x12\x08\n\x04Text\x10\x00\x12\r\n\tParameter\x10\x01\"\xef\x01\n\tParameter\x12>\n\rparameterType\x18\x01 \x01(\x0e\x32\'.gauge.messages.Parameter.ParameterType\x12\r\n\x05value\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12)\n\x05table\x18\x04 \x01(\x0b\x32\x1a.gauge.messages.ProtoTable\"Z\n\rParameterType\x12\n\n\x06Static\x10\x00\x12\x0b\n\x07\x44ynamic\x10\x01\x12\x12\n\x0eSpecial_String\x10\x02\x12\x11\n\rSpecial_Table\x10\x03\x12\t\n\x05Table\x10\x04\"\x1c\n\x0cProtoComment\x12\x0c\n\x04text\x18\x01 \x01(\t\"i\n\nProtoTable\x12.\n\x07headers\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ProtoTableRow\x12+\n\x04rows\x18\x02 \x03(\x0b\x32\x1d.gauge.messages.ProtoTableRow\"\x1e\n\rProtoTableRow\x12\r\n\x05\x63\x65lls\x18\x01 \x03(\t\"\xf6\x01\n\x18ProtoStepExecutionResult\x12=\n\x0f\x65xecutionResult\x18\x01 \x01(\x0b\x32$.gauge.messages.ProtoExecutionResult\x12\x38\n\x0epreHookFailure\x18\x02 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x03 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x0f\n\x07skipped\x18\x04 \x01(\x08\x12\x15\n\rskippedReason\x18\x05 \x01(\t\"\x97\x02\n\x14ProtoExecutionResult\x12\x0e\n\x06\x66\x61iled\x18\x01 \x01(\x08\x12\x18\n\x10recoverableError\x18\x02 \x01(\x08\x12\x14\n\x0c\x65rrorMessage\x18\x03 \x01(\t\x12\x12\n\nstackTrace\x18\x04 \x01(\t\x12\x12\n\nscreenShot\x18\x05 \x01(\x0c\x12\x15\n\rexecutionTime\x18\x06 \x01(\x03\x12\x0f\n\x07message\x18\x07 \x03(\t\x12\x41\n\terrorType\x18\x08 \x01(\x0e\x32..gauge.messages.ProtoExecutionResult.ErrorType\",\n\tErrorType\x12\r\n\tASSERTION\x10\x00\x12\x10\n\x0cVERIFICATION\x10\x01\"g\n\x10ProtoHookFailure\x12\x12\n\nstackTrace\x18\x01 \x01(\t\x12\x14\n\x0c\x65rrorMessage\x18\x02 \x01(\t\x12\x12\n\nscreenShot\x18\x03 \x01(\x0c\x12\x15\n\rtableRowIndex\x18\x04 \x01(\x05\"\xac\x03\n\x10ProtoSuiteResult\x12\x34\n\x0bspecResults\x18\x01 \x03(\x0b\x32\x1f.gauge.messages.ProtoSpecResult\x12\x38\n\x0epreHookFailure\x18\x02 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x39\n\x0fpostHookFailure\x18\x03 \x01(\x0b\x32 .gauge.messages.ProtoHookFailure\x12\x0e\n\x06\x66\x61iled\x18\x04 \x01(\x08\x12\x18\n\x10specsFailedCount\x18\x05 \x01(\x05\x12\x15\n\rexecutionTime\x18\x06 \x01(\x03\x12\x13\n\x0bsuccessRate\x18\x07 \x01(\x02\x12\x13\n\x0b\x65nvironment\x18\x08 \x01(\t\x12\x0c\n\x04tags\x18\t \x01(\t\x12\x13\n\x0bprojectName\x18\n \x01(\t\x12\x11\n\ttimestamp\x18\x0b \x01(\t\x12\x19\n\x11specsSkippedCount\x18\x0c \x01(\x05\x12\x17\n\x0fpreHookMessages\x18\r \x03(\t\x12\x18\n\x10postHookMessages\x18\x0e \x03(\t\"\xab\x02\n\x0fProtoSpecResult\x12,\n\tprotoSpec\x18\x01 \x01(\x0b\x32\x19.gauge.messages.ProtoSpec\x12\x15\n\rscenarioCount\x18\x02 \x01(\x05\x12\x1b\n\x13scenarioFailedCount\x18\x03 \x01(\x05\x12\x0e\n\x06\x66\x61iled\x18\x04 \x01(\x08\x12\x1b\n\x13\x66\x61iledDataTableRows\x18\x05 \x03(\x05\x12\x15\n\rexecutionTime\x18\x06 \x01(\x03\x12\x0f\n\x07skipped\x18\x07 \x01(\x08\x12\x1c\n\x14scenarioSkippedCount\x18\x08 \x01(\x05\x12\x1c\n\x14skippedDataTableRows\x18\t \x03(\x05\x12%\n\x06\x65rrors\x18\n \x03(\x0b\x32\x15.gauge.messages.Error\"\xa1\x01\n\x05\x45rror\x12-\n\x04type\x18\x01 \x01(\x0e\x32\x1f.gauge.messages.Error.ErrorType\x12\x10\n\x08\x66ilename\x18\x02 \x01(\t\x12\x12\n\nlineNumber\x18\x03 \x01(\x05\x12\x0f\n\x07message\x18\x04 \x01(\t\"2\n\tErrorType\x12\x0f\n\x0bPARSE_ERROR\x10\x00\x12\x14\n\x10VALIDATION_ERROR\x10\x01\"W\n\x0eProtoStepValue\x12\x11\n\tstepValue\x18\x01 \x01(\t\x12\x1e\n\x16parameterizedStepValue\x18\x02 \x01(\t\x12\x12\n\nparameters\x18\x03 \x03(\t*G\n\x0f\x45xecutionStatus\x12\x0f\n\x0bNOTEXECUTED\x10\x00\x12\n\n\x06PASSED\x10\x01\x12\n\n\x06\x46\x41ILED\x10\x02\x12\x0b\n\x07SKIPPED\x10\x03\x42\x11\xaa\x02\x0eGauge.Messagesb\x06proto3')
 )
 
 _EXECUTIONSTATUS = _descriptor.EnumDescriptor(
@@ -48,8 +48,8 @@ _EXECUTIONSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=3976,
-  serialized_end=4047,
+  serialized_start=4216,
+  serialized_end=4287,
 )
 _sym_db.RegisterEnumDescriptor(_EXECUTIONSTATUS)
 
@@ -97,8 +97,8 @@ _PROTOITEM_ITEMTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=688,
-  serialized_end=794,
+  serialized_start=739,
+  serialized_end=845,
 )
 _sym_db.RegisterEnumDescriptor(_PROTOITEM_ITEMTYPE)
 
@@ -119,8 +119,8 @@ _FRAGMENT_FRAGMENTTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1953,
-  serialized_end=1992,
+  serialized_start=2142,
+  serialized_end=2181,
 )
 _sym_db.RegisterEnumDescriptor(_FRAGMENT_FRAGMENTTYPE)
 
@@ -153,8 +153,8 @@ _PARAMETER_PARAMETERTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2144,
-  serialized_end=2234,
+  serialized_start=2333,
+  serialized_end=2423,
 )
 _sym_db.RegisterEnumDescriptor(_PARAMETER_PARAMETERTYPE)
 
@@ -175,8 +175,8 @@ _PROTOEXECUTIONRESULT_ERRORTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2890,
-  serialized_end=2934,
+  serialized_start=3079,
+  serialized_end=3123,
 )
 _sym_db.RegisterEnumDescriptor(_PROTOEXECUTIONRESULT_ERRORTYPE)
 
@@ -197,8 +197,8 @@ _ERROR_ERRORTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=3835,
-  serialized_end=3885,
+  serialized_start=4075,
+  serialized_end=4125,
 )
 _sym_db.RegisterEnumDescriptor(_ERROR_ERRORTYPE)
 
@@ -259,6 +259,20 @@ _PROTOSPEC = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='preHookMessages', full_name='gauge.messages.ProtoSpec.preHookMessages', index=7,
+      number=8, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='postHookMessages', full_name='gauge.messages.ProtoSpec.postHookMessages', index=8,
+      number=9, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -272,7 +286,7 @@ _PROTOSPEC = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=31,
-  serialized_end=279,
+  serialized_end=330,
 )
 
 
@@ -352,8 +366,8 @@ _PROTOITEM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=282,
-  serialized_end=794,
+  serialized_start=333,
+  serialized_end=845,
 )
 
 
@@ -462,6 +476,20 @@ _PROTOSCENARIO = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='preHookMessages', full_name='gauge.messages.ProtoScenario.preHookMessages', index=14,
+      number=15, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='postHookMessages', full_name='gauge.messages.ProtoScenario.postHookMessages', index=15,
+      number=16, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -474,8 +502,8 @@ _PROTOSCENARIO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=797,
-  serialized_end=1303,
+  serialized_start=848,
+  serialized_end=1405,
 )
 
 
@@ -500,6 +528,20 @@ _SPAN = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='startChar', full_name='gauge.messages.Span.startChar', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='endChar', full_name='gauge.messages.Span.endChar', index=3,
+      number=4, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -512,8 +554,8 @@ _SPAN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1305,
-  serialized_end=1339,
+  serialized_start=1407,
+  serialized_end=1477,
 )
 
 
@@ -550,8 +592,8 @@ _PROTOTABLEDRIVENSCENARIO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1341,
-  serialized_end=1439,
+  serialized_start=1479,
+  serialized_end=1577,
 )
 
 
@@ -590,6 +632,20 @@ _PROTOSTEP = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='preHookMessages', full_name='gauge.messages.ProtoStep.preHookMessages', index=4,
+      number=5, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='postHookMessages', full_name='gauge.messages.ProtoStep.postHookMessages', index=5,
+      number=6, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -602,8 +658,8 @@ _PROTOSTEP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1442,
-  serialized_end=1609,
+  serialized_start=1580,
+  serialized_end=1798,
 )
 
 
@@ -647,8 +703,8 @@ _PROTOCONCEPT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1612,
-  serialized_end=1790,
+  serialized_start=1801,
+  serialized_end=1979,
 )
 
 
@@ -678,8 +734,8 @@ _PROTOTAGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1792,
-  serialized_end=1817,
+  serialized_start=1981,
+  serialized_end=2006,
 )
 
 
@@ -724,8 +780,8 @@ _FRAGMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1820,
-  serialized_end=1992,
+  serialized_start=2009,
+  serialized_end=2181,
 )
 
 
@@ -777,8 +833,8 @@ _PARAMETER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1995,
-  serialized_end=2234,
+  serialized_start=2184,
+  serialized_end=2423,
 )
 
 
@@ -808,8 +864,8 @@ _PROTOCOMMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2236,
-  serialized_end=2264,
+  serialized_start=2425,
+  serialized_end=2453,
 )
 
 
@@ -846,8 +902,8 @@ _PROTOTABLE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2266,
-  serialized_end=2371,
+  serialized_start=2455,
+  serialized_end=2560,
 )
 
 
@@ -877,8 +933,8 @@ _PROTOTABLEROW = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2373,
-  serialized_end=2403,
+  serialized_start=2562,
+  serialized_end=2592,
 )
 
 
@@ -936,8 +992,8 @@ _PROTOSTEPEXECUTIONRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2406,
-  serialized_end=2652,
+  serialized_start=2595,
+  serialized_end=2841,
 )
 
 
@@ -1017,8 +1073,8 @@ _PROTOEXECUTIONRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2655,
-  serialized_end=2934,
+  serialized_start=2844,
+  serialized_end=3123,
 )
 
 
@@ -1069,8 +1125,8 @@ _PROTOHOOKFAILURE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2936,
-  serialized_end=3039,
+  serialized_start=3125,
+  serialized_end=3228,
 )
 
 
@@ -1165,6 +1221,20 @@ _PROTOSUITERESULT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='preHookMessages', full_name='gauge.messages.ProtoSuiteResult.preHookMessages', index=12,
+      number=13, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='postHookMessages', full_name='gauge.messages.ProtoSuiteResult.postHookMessages', index=13,
+      number=14, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1177,8 +1247,8 @@ _PROTOSUITERESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3042,
-  serialized_end=3419,
+  serialized_start=3231,
+  serialized_end=3659,
 )
 
 
@@ -1271,8 +1341,8 @@ _PROTOSPECRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3422,
-  serialized_end=3721,
+  serialized_start=3662,
+  serialized_end=3961,
 )
 
 
@@ -1324,8 +1394,8 @@ _ERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3724,
-  serialized_end=3885,
+  serialized_start=3964,
+  serialized_end=4125,
 )
 
 
@@ -1369,8 +1439,8 @@ _PROTOSTEPVALUE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3887,
-  serialized_end=3974,
+  serialized_start=4127,
+  serialized_end=4214,
 )
 
 _PROTOSPEC.fields_by_name['items'].message_type = _PROTOITEM

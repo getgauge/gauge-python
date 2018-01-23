@@ -13,14 +13,14 @@ from google.protobuf import descriptor_pb2
 _sym_db = _symbol_database.Default()
 
 
-import getgauge.messages.spec_pb2 as spec__pb2
+import spec_pb2 as spec__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='messages.proto',
   package='gauge.messages',
   syntax='proto3',
-  serialized_pb=_b('\n\x0emessages.proto\x12\x0egauge.messages\x1a\nspec.proto\"\x14\n\x12KillProcessRequest\"X\n\x17\x45xecutionStatusResponse\x12=\n\x0f\x65xecutionResult\x18\x01 \x01(\x0b\x32$.gauge.messages.ProtoExecutionResult\"W\n\x18\x45xecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"U\n\x16\x45xecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"[\n\x1cSpecExecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"Y\n\x1aSpecExecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"_\n ScenarioExecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"]\n\x1eScenarioExecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"[\n\x1cStepExecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"Y\n\x1aStepExecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"\xb8\x01\n\rExecutionInfo\x12-\n\x0b\x63urrentSpec\x18\x01 \x01(\x0b\x32\x18.gauge.messages.SpecInfo\x12\x35\n\x0f\x63urrentScenario\x18\x02 \x01(\x0b\x32\x1c.gauge.messages.ScenarioInfo\x12-\n\x0b\x63urrentStep\x18\x03 \x01(\x0b\x32\x18.gauge.messages.StepInfo\x12\x12\n\nstacktrace\x18\x04 \x01(\t\"J\n\x08SpecInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08\x66ileName\x18\x02 \x01(\t\x12\x10\n\x08isFailed\x18\x03 \x01(\x08\x12\x0c\n\x04tags\x18\x04 \x03(\t\"<\n\x0cScenarioInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08isFailed\x18\x02 \x01(\x08\x12\x0c\n\x04tags\x18\x03 \x03(\t\"b\n\x08StepInfo\x12\x30\n\x04step\x18\x01 \x01(\x0b\x32\".gauge.messages.ExecuteStepRequest\x12\x10\n\x08isFailed\x18\x02 \x01(\x08\x12\x12\n\nstackTrace\x18\x03 \x01(\t\"\x8c\x01\n\x12\x45xecuteStepRequest\x12\x16\n\x0e\x61\x63tualStepText\x18\x01 \x01(\t\x12\x16\n\x0eparsedStepText\x18\x02 \x01(\t\x12\x17\n\x0fscenarioFailing\x18\x03 \x01(\x08\x12-\n\nparameters\x18\x04 \x03(\x0b\x32\x19.gauge.messages.Parameter\"v\n\x13StepValidateRequest\x12\x10\n\x08stepText\x18\x01 \x01(\t\x12\x1a\n\x12numberOfParameters\x18\x02 \x01(\x05\x12\x31\n\tstepValue\x18\x03 \x01(\x0b\x32\x1e.gauge.messages.ProtoStepValue\"\xe7\x01\n\x14StepValidateResponse\x12\x0f\n\x07isValid\x18\x01 \x01(\x08\x12\x14\n\x0c\x65rrorMessage\x18\x02 \x01(\t\x12\x41\n\terrorType\x18\x03 \x01(\x0e\x32..gauge.messages.StepValidateResponse.ErrorType\x12\x12\n\nsuggestion\x18\x04 \x01(\t\"Q\n\tErrorType\x12!\n\x1dSTEP_IMPLEMENTATION_NOT_FOUND\x10\x00\x12!\n\x1d\x44UPLICATE_STEP_IMPLEMENTATION\x10\x01\"M\n\x14SuiteExecutionResult\x12\x35\n\x0bsuiteResult\x18\x01 \x01(\x0b\x32 .gauge.messages.ProtoSuiteResult\"\x12\n\x10StepNamesRequest\"\"\n\x11StepNamesResponse\x12\r\n\x05steps\x18\x01 \x03(\t\"\x1e\n\x1cScenarioDataStoreInitRequest\"\x1a\n\x18SpecDataStoreInitRequest\"\x1b\n\x19SuiteDataStoreInitRequest\"=\n\x11ParameterPosition\x12\x13\n\x0boldPosition\x18\x01 \x01(\x05\x12\x13\n\x0bnewPosition\x18\x02 \x01(\x05\"\xb8\x01\n\x0fRefactorRequest\x12\x34\n\x0coldStepValue\x18\x01 \x01(\x0b\x32\x1e.gauge.messages.ProtoStepValue\x12\x34\n\x0cnewStepValue\x18\x02 \x01(\x0b\x32\x1e.gauge.messages.ProtoStepValue\x12\x39\n\x0eparamPositions\x18\x03 \x03(\x0b\x32!.gauge.messages.ParameterPosition\"H\n\x10RefactorResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\r\n\x05\x65rror\x18\x02 \x01(\t\x12\x14\n\x0c\x66ilesChanged\x18\x03 \x03(\t\"$\n\x0fStepNameRequest\x12\x11\n\tstepValue\x18\x01 \x01(\t\"M\n\x10StepNameResponse\x12\x15\n\risStepPresent\x18\x01 \x01(\x08\x12\x10\n\x08stepName\x18\x02 \x03(\t\x12\x10\n\x08hasAlias\x18\x03 \x01(\x08\"-\n\x1aUnsupportedMessageResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"\xfe\x12\n\x07Message\x12\x38\n\x0bmessageType\x18\x01 \x01(\x0e\x32#.gauge.messages.Message.MessageType\x12\x11\n\tmessageId\x18\x02 \x01(\x03\x12J\n\x18\x65xecutionStartingRequest\x18\x03 \x01(\x0b\x32(.gauge.messages.ExecutionStartingRequest\x12R\n\x1cspecExecutionStartingRequest\x18\x04 \x01(\x0b\x32,.gauge.messages.SpecExecutionStartingRequest\x12N\n\x1aspecExecutionEndingRequest\x18\x05 \x01(\x0b\x32*.gauge.messages.SpecExecutionEndingRequest\x12Z\n scenarioExecutionStartingRequest\x18\x06 \x01(\x0b\x32\x30.gauge.messages.ScenarioExecutionStartingRequest\x12V\n\x1escenarioExecutionEndingRequest\x18\x07 \x01(\x0b\x32..gauge.messages.ScenarioExecutionEndingRequest\x12R\n\x1cstepExecutionStartingRequest\x18\x08 \x01(\x0b\x32,.gauge.messages.StepExecutionStartingRequest\x12N\n\x1astepExecutionEndingRequest\x18\t \x01(\x0b\x32*.gauge.messages.StepExecutionEndingRequest\x12>\n\x12\x65xecuteStepRequest\x18\n \x01(\x0b\x32\".gauge.messages.ExecuteStepRequest\x12\x46\n\x16\x65xecutionEndingRequest\x18\x0b \x01(\x0b\x32&.gauge.messages.ExecutionEndingRequest\x12@\n\x13stepValidateRequest\x18\x0c \x01(\x0b\x32#.gauge.messages.StepValidateRequest\x12\x42\n\x14stepValidateResponse\x18\r \x01(\x0b\x32$.gauge.messages.StepValidateResponse\x12H\n\x17\x65xecutionStatusResponse\x18\x0e \x01(\x0b\x32\'.gauge.messages.ExecutionStatusResponse\x12:\n\x10stepNamesRequest\x18\x0f \x01(\x0b\x32 .gauge.messages.StepNamesRequest\x12<\n\x11stepNamesResponse\x18\x10 \x01(\x0b\x32!.gauge.messages.StepNamesResponse\x12\x42\n\x14suiteExecutionResult\x18\x11 \x01(\x0b\x32$.gauge.messages.SuiteExecutionResult\x12>\n\x12killProcessRequest\x18\x12 \x01(\x0b\x32\".gauge.messages.KillProcessRequest\x12R\n\x1cscenarioDataStoreInitRequest\x18\x13 \x01(\x0b\x32,.gauge.messages.ScenarioDataStoreInitRequest\x12J\n\x18specDataStoreInitRequest\x18\x14 \x01(\x0b\x32(.gauge.messages.SpecDataStoreInitRequest\x12L\n\x19suiteDataStoreInitRequest\x18\x15 \x01(\x0b\x32).gauge.messages.SuiteDataStoreInitRequest\x12\x38\n\x0fstepNameRequest\x18\x16 \x01(\x0b\x32\x1f.gauge.messages.StepNameRequest\x12:\n\x10stepNameResponse\x18\x17 \x01(\x0b\x32 .gauge.messages.StepNameResponse\x12\x38\n\x0frefactorRequest\x18\x18 \x01(\x0b\x32\x1f.gauge.messages.RefactorRequest\x12:\n\x10refactorResponse\x18\x19 \x01(\x0b\x32 .gauge.messages.RefactorResponse\x12N\n\x1aunsupportedMessageResponse\x18\x1a \x01(\x0b\x32*.gauge.messages.UnsupportedMessageResponse\"\xdd\x04\n\x0bMessageType\x12\x15\n\x11\x45xecutionStarting\x10\x00\x12\x19\n\x15SpecExecutionStarting\x10\x01\x12\x17\n\x13SpecExecutionEnding\x10\x02\x12\x1d\n\x19ScenarioExecutionStarting\x10\x03\x12\x1b\n\x17ScenarioExecutionEnding\x10\x04\x12\x19\n\x15StepExecutionStarting\x10\x05\x12\x17\n\x13StepExecutionEnding\x10\x06\x12\x0f\n\x0b\x45xecuteStep\x10\x07\x12\x13\n\x0f\x45xecutionEnding\x10\x08\x12\x17\n\x13StepValidateRequest\x10\t\x12\x18\n\x14StepValidateResponse\x10\n\x12\x1b\n\x17\x45xecutionStatusResponse\x10\x0b\x12\x14\n\x10StepNamesRequest\x10\x0c\x12\x15\n\x11StepNamesResponse\x10\r\x12\x16\n\x12KillProcessRequest\x10\x0e\x12\x18\n\x14SuiteExecutionResult\x10\x0f\x12\x19\n\x15ScenarioDataStoreInit\x10\x10\x12\x15\n\x11SpecDataStoreInit\x10\x11\x12\x16\n\x12SuiteDataStoreInit\x10\x12\x12\x13\n\x0fStepNameRequest\x10\x13\x12\x14\n\x10StepNameResponse\x10\x14\x12\x13\n\x0fRefactorRequest\x10\x15\x12\x14\n\x10RefactorResponse\x10\x16\x12\x1e\n\x1aUnsupportedMessageResponse\x10\x17\x42\x11\xaa\x02\x0eGauge.Messagesb\x06proto3')
+  serialized_pb=_b('\n\x0emessages.proto\x12\x0egauge.messages\x1a\nspec.proto\"\x14\n\x12KillProcessRequest\"X\n\x17\x45xecutionStatusResponse\x12=\n\x0f\x65xecutionResult\x18\x01 \x01(\x0b\x32$.gauge.messages.ProtoExecutionResult\"W\n\x18\x45xecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"U\n\x16\x45xecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"[\n\x1cSpecExecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"Y\n\x1aSpecExecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"_\n ScenarioExecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"]\n\x1eScenarioExecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"[\n\x1cStepExecutionStartingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"Y\n\x1aStepExecutionEndingRequest\x12;\n\x14\x63urrentExecutionInfo\x18\x01 \x01(\x0b\x32\x1d.gauge.messages.ExecutionInfo\"\xb8\x01\n\rExecutionInfo\x12-\n\x0b\x63urrentSpec\x18\x01 \x01(\x0b\x32\x18.gauge.messages.SpecInfo\x12\x35\n\x0f\x63urrentScenario\x18\x02 \x01(\x0b\x32\x1c.gauge.messages.ScenarioInfo\x12-\n\x0b\x63urrentStep\x18\x03 \x01(\x0b\x32\x18.gauge.messages.StepInfo\x12\x12\n\nstacktrace\x18\x04 \x01(\t\"J\n\x08SpecInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08\x66ileName\x18\x02 \x01(\t\x12\x10\n\x08isFailed\x18\x03 \x01(\x08\x12\x0c\n\x04tags\x18\x04 \x03(\t\"<\n\x0cScenarioInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08isFailed\x18\x02 \x01(\x08\x12\x0c\n\x04tags\x18\x03 \x03(\t\"x\n\x08StepInfo\x12\x30\n\x04step\x18\x01 \x01(\x0b\x32\".gauge.messages.ExecuteStepRequest\x12\x10\n\x08isFailed\x18\x02 \x01(\x08\x12\x12\n\nstackTrace\x18\x03 \x01(\t\x12\x14\n\x0c\x65rrorMessage\x18\x04 \x01(\t\"\x8c\x01\n\x12\x45xecuteStepRequest\x12\x16\n\x0e\x61\x63tualStepText\x18\x01 \x01(\t\x12\x16\n\x0eparsedStepText\x18\x02 \x01(\t\x12\x17\n\x0fscenarioFailing\x18\x03 \x01(\x08\x12-\n\nparameters\x18\x04 \x03(\x0b\x32\x19.gauge.messages.Parameter\"v\n\x13StepValidateRequest\x12\x10\n\x08stepText\x18\x01 \x01(\t\x12\x1a\n\x12numberOfParameters\x18\x02 \x01(\x05\x12\x31\n\tstepValue\x18\x03 \x01(\x0b\x32\x1e.gauge.messages.ProtoStepValue\"\xe7\x01\n\x14StepValidateResponse\x12\x0f\n\x07isValid\x18\x01 \x01(\x08\x12\x14\n\x0c\x65rrorMessage\x18\x02 \x01(\t\x12\x41\n\terrorType\x18\x03 \x01(\x0e\x32..gauge.messages.StepValidateResponse.ErrorType\x12\x12\n\nsuggestion\x18\x04 \x01(\t\"Q\n\tErrorType\x12!\n\x1dSTEP_IMPLEMENTATION_NOT_FOUND\x10\x00\x12!\n\x1d\x44UPLICATE_STEP_IMPLEMENTATION\x10\x01\"M\n\x14SuiteExecutionResult\x12\x35\n\x0bsuiteResult\x18\x01 \x01(\x0b\x32 .gauge.messages.ProtoSuiteResult\"\x12\n\x10StepNamesRequest\"\"\n\x11StepNamesResponse\x12\r\n\x05steps\x18\x01 \x03(\t\"\x1e\n\x1cScenarioDataStoreInitRequest\"\x1a\n\x18SpecDataStoreInitRequest\"\x1b\n\x19SuiteDataStoreInitRequest\"=\n\x11ParameterPosition\x12\x13\n\x0boldPosition\x18\x01 \x01(\x05\x12\x13\n\x0bnewPosition\x18\x02 \x01(\x05\"\xcd\x01\n\x0fRefactorRequest\x12\x34\n\x0coldStepValue\x18\x01 \x01(\x0b\x32\x1e.gauge.messages.ProtoStepValue\x12\x34\n\x0cnewStepValue\x18\x02 \x01(\x0b\x32\x1e.gauge.messages.ProtoStepValue\x12\x39\n\x0eparamPositions\x18\x03 \x03(\x0b\x32!.gauge.messages.ParameterPosition\x12\x13\n\x0bsaveChanges\x18\x04 \x01(\x08\"4\n\x0b\x46ileChanges\x12\x10\n\x08\x66ileName\x18\x01 \x01(\t\x12\x13\n\x0b\x66ileContent\x18\x02 \x01(\t\"z\n\x10RefactorResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\r\n\x05\x65rror\x18\x02 \x01(\t\x12\x14\n\x0c\x66ilesChanged\x18\x03 \x03(\t\x12\x30\n\x0b\x66ileChanges\x18\x04 \x03(\x0b\x32\x1b.gauge.messages.FileChanges\"$\n\x0fStepNameRequest\x12\x11\n\tstepValue\x18\x01 \x01(\t\"\x83\x01\n\x10StepNameResponse\x12\x15\n\risStepPresent\x18\x01 \x01(\x08\x12\x10\n\x08stepName\x18\x02 \x03(\t\x12\x10\n\x08hasAlias\x18\x03 \x01(\x08\x12\x10\n\x08\x66ileName\x18\x04 \x01(\t\x12\"\n\x04span\x18\x05 \x01(\x0b\x32\x14.gauge.messages.Span\"-\n\x1aUnsupportedMessageResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"G\n\x10\x43\x61\x63heFileRequest\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\t\x12\x10\n\x08\x66ilePath\x18\x02 \x01(\t\x12\x10\n\x08isClosed\x18\x03 \x01(\x08\"(\n\x14StepPositionsRequest\x12\x10\n\x08\x66ilePath\x18\x01 \x01(\t\"\xb8\x01\n\x15StepPositionsResponse\x12I\n\rstepPositions\x18\x01 \x03(\x0b\x32\x32.gauge.messages.StepPositionsResponse.StepPosition\x12\r\n\x05\x65rror\x18\x02 \x01(\t\x1a\x45\n\x0cStepPosition\x12\x11\n\tstepValue\x18\x01 \x01(\t\x12\"\n\x04span\x18\x02 \x01(\x0b\x32\x14.gauge.messages.Span\"\x8f\x15\n\x07Message\x12\x38\n\x0bmessageType\x18\x01 \x01(\x0e\x32#.gauge.messages.Message.MessageType\x12\x11\n\tmessageId\x18\x02 \x01(\x03\x12J\n\x18\x65xecutionStartingRequest\x18\x03 \x01(\x0b\x32(.gauge.messages.ExecutionStartingRequest\x12R\n\x1cspecExecutionStartingRequest\x18\x04 \x01(\x0b\x32,.gauge.messages.SpecExecutionStartingRequest\x12N\n\x1aspecExecutionEndingRequest\x18\x05 \x01(\x0b\x32*.gauge.messages.SpecExecutionEndingRequest\x12Z\n scenarioExecutionStartingRequest\x18\x06 \x01(\x0b\x32\x30.gauge.messages.ScenarioExecutionStartingRequest\x12V\n\x1escenarioExecutionEndingRequest\x18\x07 \x01(\x0b\x32..gauge.messages.ScenarioExecutionEndingRequest\x12R\n\x1cstepExecutionStartingRequest\x18\x08 \x01(\x0b\x32,.gauge.messages.StepExecutionStartingRequest\x12N\n\x1astepExecutionEndingRequest\x18\t \x01(\x0b\x32*.gauge.messages.StepExecutionEndingRequest\x12>\n\x12\x65xecuteStepRequest\x18\n \x01(\x0b\x32\".gauge.messages.ExecuteStepRequest\x12\x46\n\x16\x65xecutionEndingRequest\x18\x0b \x01(\x0b\x32&.gauge.messages.ExecutionEndingRequest\x12@\n\x13stepValidateRequest\x18\x0c \x01(\x0b\x32#.gauge.messages.StepValidateRequest\x12\x42\n\x14stepValidateResponse\x18\r \x01(\x0b\x32$.gauge.messages.StepValidateResponse\x12H\n\x17\x65xecutionStatusResponse\x18\x0e \x01(\x0b\x32\'.gauge.messages.ExecutionStatusResponse\x12:\n\x10stepNamesRequest\x18\x0f \x01(\x0b\x32 .gauge.messages.StepNamesRequest\x12<\n\x11stepNamesResponse\x18\x10 \x01(\x0b\x32!.gauge.messages.StepNamesResponse\x12\x42\n\x14suiteExecutionResult\x18\x11 \x01(\x0b\x32$.gauge.messages.SuiteExecutionResult\x12>\n\x12killProcessRequest\x18\x12 \x01(\x0b\x32\".gauge.messages.KillProcessRequest\x12R\n\x1cscenarioDataStoreInitRequest\x18\x13 \x01(\x0b\x32,.gauge.messages.ScenarioDataStoreInitRequest\x12J\n\x18specDataStoreInitRequest\x18\x14 \x01(\x0b\x32(.gauge.messages.SpecDataStoreInitRequest\x12L\n\x19suiteDataStoreInitRequest\x18\x15 \x01(\x0b\x32).gauge.messages.SuiteDataStoreInitRequest\x12\x38\n\x0fstepNameRequest\x18\x16 \x01(\x0b\x32\x1f.gauge.messages.StepNameRequest\x12:\n\x10stepNameResponse\x18\x17 \x01(\x0b\x32 .gauge.messages.StepNameResponse\x12\x38\n\x0frefactorRequest\x18\x18 \x01(\x0b\x32\x1f.gauge.messages.RefactorRequest\x12:\n\x10refactorResponse\x18\x19 \x01(\x0b\x32 .gauge.messages.RefactorResponse\x12N\n\x1aunsupportedMessageResponse\x18\x1a \x01(\x0b\x32*.gauge.messages.UnsupportedMessageResponse\x12:\n\x10\x63\x61\x63heFileRequest\x18\x1b \x01(\x0b\x32 .gauge.messages.CacheFileRequest\x12\x42\n\x14stepPositionsRequest\x18\x1c \x01(\x0b\x32$.gauge.messages.StepPositionsRequest\x12\x44\n\x15stepPositionsResponse\x18\x1d \x01(\x0b\x32%.gauge.messages.StepPositionsResponse\"\xa8\x05\n\x0bMessageType\x12\x15\n\x11\x45xecutionStarting\x10\x00\x12\x19\n\x15SpecExecutionStarting\x10\x01\x12\x17\n\x13SpecExecutionEnding\x10\x02\x12\x1d\n\x19ScenarioExecutionStarting\x10\x03\x12\x1b\n\x17ScenarioExecutionEnding\x10\x04\x12\x19\n\x15StepExecutionStarting\x10\x05\x12\x17\n\x13StepExecutionEnding\x10\x06\x12\x0f\n\x0b\x45xecuteStep\x10\x07\x12\x13\n\x0f\x45xecutionEnding\x10\x08\x12\x17\n\x13StepValidateRequest\x10\t\x12\x18\n\x14StepValidateResponse\x10\n\x12\x1b\n\x17\x45xecutionStatusResponse\x10\x0b\x12\x14\n\x10StepNamesRequest\x10\x0c\x12\x15\n\x11StepNamesResponse\x10\r\x12\x16\n\x12KillProcessRequest\x10\x0e\x12\x18\n\x14SuiteExecutionResult\x10\x0f\x12\x19\n\x15ScenarioDataStoreInit\x10\x10\x12\x15\n\x11SpecDataStoreInit\x10\x11\x12\x16\n\x12SuiteDataStoreInit\x10\x12\x12\x13\n\x0fStepNameRequest\x10\x13\x12\x14\n\x10StepNameResponse\x10\x14\x12\x13\n\x0fRefactorRequest\x10\x15\x12\x14\n\x10RefactorResponse\x10\x16\x12\x1e\n\x1aUnsupportedMessageResponse\x10\x17\x12\x14\n\x10\x43\x61\x63heFileRequest\x10\x18\x12\x18\n\x14StepPositionsRequest\x10\x19\x12\x19\n\x15StepPositionsResponse\x10\x1a\x42\x11\xaa\x02\x0eGauge.Messagesb\x06proto3')
   ,
   dependencies=[spec__pb2.DESCRIPTOR,])
 
@@ -43,8 +43,8 @@ _STEPVALIDATERESPONSE_ERRORTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1733,
-  serialized_end=1814,
+  serialized_start=1755,
+  serialized_end=1836,
 )
 _sym_db.RegisterEnumDescriptor(_STEPVALIDATERESPONSE_ERRORTYPE)
 
@@ -150,11 +150,23 @@ _MESSAGE_MESSAGETYPE = _descriptor.EnumDescriptor(
       name='UnsupportedMessageResponse', index=23, number=23,
       options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CacheFileRequest', index=24, number=24,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='StepPositionsRequest', index=25, number=25,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='StepPositionsResponse', index=26, number=26,
+      options=None,
+      type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=4354,
-  serialized_end=4959,
+  serialized_start=5056,
+  serialized_end=5736,
 )
 _sym_db.RegisterEnumDescriptor(_MESSAGE_MESSAGETYPE)
 
@@ -639,6 +651,13 @@ _STEPINFO = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='errorMessage', full_name='gauge.messages.StepInfo.errorMessage', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -652,7 +671,7 @@ _STEPINFO = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=1219,
-  serialized_end=1317,
+  serialized_end=1339,
 )
 
 
@@ -703,8 +722,8 @@ _EXECUTESTEPREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1320,
-  serialized_end=1460,
+  serialized_start=1342,
+  serialized_end=1482,
 )
 
 
@@ -748,8 +767,8 @@ _STEPVALIDATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1462,
-  serialized_end=1580,
+  serialized_start=1484,
+  serialized_end=1602,
 )
 
 
@@ -801,8 +820,8 @@ _STEPVALIDATERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1583,
-  serialized_end=1814,
+  serialized_start=1605,
+  serialized_end=1836,
 )
 
 
@@ -832,8 +851,8 @@ _SUITEEXECUTIONRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1816,
-  serialized_end=1893,
+  serialized_start=1838,
+  serialized_end=1915,
 )
 
 
@@ -856,8 +875,8 @@ _STEPNAMESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1895,
-  serialized_end=1913,
+  serialized_start=1917,
+  serialized_end=1935,
 )
 
 
@@ -887,8 +906,8 @@ _STEPNAMESRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1915,
-  serialized_end=1949,
+  serialized_start=1937,
+  serialized_end=1971,
 )
 
 
@@ -911,8 +930,8 @@ _SCENARIODATASTOREINITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1951,
-  serialized_end=1981,
+  serialized_start=1973,
+  serialized_end=2003,
 )
 
 
@@ -935,8 +954,8 @@ _SPECDATASTOREINITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1983,
-  serialized_end=2009,
+  serialized_start=2005,
+  serialized_end=2031,
 )
 
 
@@ -959,8 +978,8 @@ _SUITEDATASTOREINITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2011,
-  serialized_end=2038,
+  serialized_start=2033,
+  serialized_end=2060,
 )
 
 
@@ -997,8 +1016,8 @@ _PARAMETERPOSITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2040,
-  serialized_end=2101,
+  serialized_start=2062,
+  serialized_end=2123,
 )
 
 
@@ -1030,6 +1049,13 @@ _REFACTORREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='saveChanges', full_name='gauge.messages.RefactorRequest.saveChanges', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1042,8 +1068,46 @@ _REFACTORREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2104,
-  serialized_end=2288,
+  serialized_start=2126,
+  serialized_end=2331,
+)
+
+
+_FILECHANGES = _descriptor.Descriptor(
+  name='FileChanges',
+  full_name='gauge.messages.FileChanges',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='fileName', full_name='gauge.messages.FileChanges.fileName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='fileContent', full_name='gauge.messages.FileChanges.fileContent', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2333,
+  serialized_end=2385,
 )
 
 
@@ -1075,6 +1139,13 @@ _REFACTORRESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='fileChanges', full_name='gauge.messages.RefactorResponse.fileChanges', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1087,8 +1158,8 @@ _REFACTORRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2290,
-  serialized_end=2362,
+  serialized_start=2387,
+  serialized_end=2509,
 )
 
 
@@ -1118,8 +1189,8 @@ _STEPNAMEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2364,
-  serialized_end=2400,
+  serialized_start=2511,
+  serialized_end=2547,
 )
 
 
@@ -1151,6 +1222,20 @@ _STEPNAMERESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='fileName', full_name='gauge.messages.StepNameResponse.fileName', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='span', full_name='gauge.messages.StepNameResponse.span', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1163,8 +1248,8 @@ _STEPNAMERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2402,
-  serialized_end=2479,
+  serialized_start=2550,
+  serialized_end=2681,
 )
 
 
@@ -1194,8 +1279,159 @@ _UNSUPPORTEDMESSAGERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2481,
-  serialized_end=2526,
+  serialized_start=2683,
+  serialized_end=2728,
+)
+
+
+_CACHEFILEREQUEST = _descriptor.Descriptor(
+  name='CacheFileRequest',
+  full_name='gauge.messages.CacheFileRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='content', full_name='gauge.messages.CacheFileRequest.content', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='filePath', full_name='gauge.messages.CacheFileRequest.filePath', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='isClosed', full_name='gauge.messages.CacheFileRequest.isClosed', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2730,
+  serialized_end=2801,
+)
+
+
+_STEPPOSITIONSREQUEST = _descriptor.Descriptor(
+  name='StepPositionsRequest',
+  full_name='gauge.messages.StepPositionsRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='filePath', full_name='gauge.messages.StepPositionsRequest.filePath', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2803,
+  serialized_end=2843,
+)
+
+
+_STEPPOSITIONSRESPONSE_STEPPOSITION = _descriptor.Descriptor(
+  name='StepPosition',
+  full_name='gauge.messages.StepPositionsResponse.StepPosition',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='stepValue', full_name='gauge.messages.StepPositionsResponse.StepPosition.stepValue', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='span', full_name='gauge.messages.StepPositionsResponse.StepPosition.span', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2961,
+  serialized_end=3030,
+)
+
+_STEPPOSITIONSRESPONSE = _descriptor.Descriptor(
+  name='StepPositionsResponse',
+  full_name='gauge.messages.StepPositionsResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='stepPositions', full_name='gauge.messages.StepPositionsResponse.stepPositions', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='error', full_name='gauge.messages.StepPositionsResponse.error', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[_STEPPOSITIONSRESPONSE_STEPPOSITION, ],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2846,
+  serialized_end=3030,
 )
 
 
@@ -1388,6 +1624,27 @@ _MESSAGE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='cacheFileRequest', full_name='gauge.messages.Message.cacheFileRequest', index=26,
+      number=27, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='stepPositionsRequest', full_name='gauge.messages.Message.stepPositionsRequest', index=27,
+      number=28, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='stepPositionsResponse', full_name='gauge.messages.Message.stepPositionsResponse', index=28,
+      number=29, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1401,8 +1658,8 @@ _MESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2529,
-  serialized_end=4959,
+  serialized_start=3033,
+  serialized_end=5736,
 )
 
 _EXECUTIONSTATUSRESPONSE.fields_by_name['executionResult'].message_type = spec__pb2._PROTOEXECUTIONRESULT
@@ -1426,6 +1683,11 @@ _SUITEEXECUTIONRESULT.fields_by_name['suiteResult'].message_type = spec__pb2._PR
 _REFACTORREQUEST.fields_by_name['oldStepValue'].message_type = spec__pb2._PROTOSTEPVALUE
 _REFACTORREQUEST.fields_by_name['newStepValue'].message_type = spec__pb2._PROTOSTEPVALUE
 _REFACTORREQUEST.fields_by_name['paramPositions'].message_type = _PARAMETERPOSITION
+_REFACTORRESPONSE.fields_by_name['fileChanges'].message_type = _FILECHANGES
+_STEPNAMERESPONSE.fields_by_name['span'].message_type = spec__pb2._SPAN
+_STEPPOSITIONSRESPONSE_STEPPOSITION.fields_by_name['span'].message_type = spec__pb2._SPAN
+_STEPPOSITIONSRESPONSE_STEPPOSITION.containing_type = _STEPPOSITIONSRESPONSE
+_STEPPOSITIONSRESPONSE.fields_by_name['stepPositions'].message_type = _STEPPOSITIONSRESPONSE_STEPPOSITION
 _MESSAGE.fields_by_name['messageType'].enum_type = _MESSAGE_MESSAGETYPE
 _MESSAGE.fields_by_name['executionStartingRequest'].message_type = _EXECUTIONSTARTINGREQUEST
 _MESSAGE.fields_by_name['specExecutionStartingRequest'].message_type = _SPECEXECUTIONSTARTINGREQUEST
@@ -1451,6 +1713,9 @@ _MESSAGE.fields_by_name['stepNameResponse'].message_type = _STEPNAMERESPONSE
 _MESSAGE.fields_by_name['refactorRequest'].message_type = _REFACTORREQUEST
 _MESSAGE.fields_by_name['refactorResponse'].message_type = _REFACTORRESPONSE
 _MESSAGE.fields_by_name['unsupportedMessageResponse'].message_type = _UNSUPPORTEDMESSAGERESPONSE
+_MESSAGE.fields_by_name['cacheFileRequest'].message_type = _CACHEFILEREQUEST
+_MESSAGE.fields_by_name['stepPositionsRequest'].message_type = _STEPPOSITIONSREQUEST
+_MESSAGE.fields_by_name['stepPositionsResponse'].message_type = _STEPPOSITIONSRESPONSE
 _MESSAGE_MESSAGETYPE.containing_type = _MESSAGE
 DESCRIPTOR.message_types_by_name['KillProcessRequest'] = _KILLPROCESSREQUEST
 DESCRIPTOR.message_types_by_name['ExecutionStatusResponse'] = _EXECUTIONSTATUSRESPONSE
@@ -1477,10 +1742,14 @@ DESCRIPTOR.message_types_by_name['SpecDataStoreInitRequest'] = _SPECDATASTOREINI
 DESCRIPTOR.message_types_by_name['SuiteDataStoreInitRequest'] = _SUITEDATASTOREINITREQUEST
 DESCRIPTOR.message_types_by_name['ParameterPosition'] = _PARAMETERPOSITION
 DESCRIPTOR.message_types_by_name['RefactorRequest'] = _REFACTORREQUEST
+DESCRIPTOR.message_types_by_name['FileChanges'] = _FILECHANGES
 DESCRIPTOR.message_types_by_name['RefactorResponse'] = _REFACTORRESPONSE
 DESCRIPTOR.message_types_by_name['StepNameRequest'] = _STEPNAMEREQUEST
 DESCRIPTOR.message_types_by_name['StepNameResponse'] = _STEPNAMERESPONSE
 DESCRIPTOR.message_types_by_name['UnsupportedMessageResponse'] = _UNSUPPORTEDMESSAGERESPONSE
+DESCRIPTOR.message_types_by_name['CacheFileRequest'] = _CACHEFILEREQUEST
+DESCRIPTOR.message_types_by_name['StepPositionsRequest'] = _STEPPOSITIONSREQUEST
+DESCRIPTOR.message_types_by_name['StepPositionsResponse'] = _STEPPOSITIONSRESPONSE
 DESCRIPTOR.message_types_by_name['Message'] = _MESSAGE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -1659,6 +1928,13 @@ RefactorRequest = _reflection.GeneratedProtocolMessageType('RefactorRequest', (_
   ))
 _sym_db.RegisterMessage(RefactorRequest)
 
+FileChanges = _reflection.GeneratedProtocolMessageType('FileChanges', (_message.Message,), dict(
+  DESCRIPTOR = _FILECHANGES,
+  __module__ = 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:gauge.messages.FileChanges)
+  ))
+_sym_db.RegisterMessage(FileChanges)
+
 RefactorResponse = _reflection.GeneratedProtocolMessageType('RefactorResponse', (_message.Message,), dict(
   DESCRIPTOR = _REFACTORRESPONSE,
   __module__ = 'messages_pb2'
@@ -1686,6 +1962,35 @@ UnsupportedMessageResponse = _reflection.GeneratedProtocolMessageType('Unsupport
   # @@protoc_insertion_point(class_scope:gauge.messages.UnsupportedMessageResponse)
   ))
 _sym_db.RegisterMessage(UnsupportedMessageResponse)
+
+CacheFileRequest = _reflection.GeneratedProtocolMessageType('CacheFileRequest', (_message.Message,), dict(
+  DESCRIPTOR = _CACHEFILEREQUEST,
+  __module__ = 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:gauge.messages.CacheFileRequest)
+  ))
+_sym_db.RegisterMessage(CacheFileRequest)
+
+StepPositionsRequest = _reflection.GeneratedProtocolMessageType('StepPositionsRequest', (_message.Message,), dict(
+  DESCRIPTOR = _STEPPOSITIONSREQUEST,
+  __module__ = 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:gauge.messages.StepPositionsRequest)
+  ))
+_sym_db.RegisterMessage(StepPositionsRequest)
+
+StepPositionsResponse = _reflection.GeneratedProtocolMessageType('StepPositionsResponse', (_message.Message,), dict(
+
+  StepPosition = _reflection.GeneratedProtocolMessageType('StepPosition', (_message.Message,), dict(
+    DESCRIPTOR = _STEPPOSITIONSRESPONSE_STEPPOSITION,
+    __module__ = 'messages_pb2'
+    # @@protoc_insertion_point(class_scope:gauge.messages.StepPositionsResponse.StepPosition)
+    ))
+  ,
+  DESCRIPTOR = _STEPPOSITIONSRESPONSE,
+  __module__ = 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:gauge.messages.StepPositionsResponse)
+  ))
+_sym_db.RegisterMessage(StepPositionsResponse)
+_sym_db.RegisterMessage(StepPositionsResponse.StepPosition)
 
 Message = _reflection.GeneratedProtocolMessageType('Message', (_message.Message,), dict(
   DESCRIPTOR = _MESSAGE,
