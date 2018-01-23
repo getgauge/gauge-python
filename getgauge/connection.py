@@ -11,12 +11,6 @@ def connect():
     return s
 
 
-def to_api():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('127.0.0.1', int(os.environ['GAUGE_API_PORT'])))
-    return s
-
-
 def read_message(s, msg):
     len_buf = _decode_varint(s)[0]
     msg_buf = _socket_read_n(s, len_buf)

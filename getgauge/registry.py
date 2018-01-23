@@ -6,8 +6,6 @@ from subprocess import call
 
 from colorama import Fore
 
-from getgauge.api import get_step_value
-
 
 class StepInfo(object):
     def __init__(self, step_text, parsed_step_text, impl, file_name, line_number, has_alias=False):
@@ -79,7 +77,7 @@ class Registry(object):
 
     def add_step(self, step_text, func, file_name, line_number=-1, has_alias=False):
         if not isinstance(step_text, list):
-            parsed_step_text = get_step_value(step_text)
+            parsed_step_text = _get_step_value(step_text)
             info = StepInfo(step_text, parsed_step_text, func, file_name, line_number, has_alias)
             self.__steps_map.setdefault(parsed_step_text, []).append(info)
             return
@@ -138,6 +136,10 @@ def _filter_hooks(tags, hooks):
     return filtered_hooks
 
 
+def _get_step_value(step_text):
+    return re.sub('<[^<]+?>', '{}', step_text)
+
+
 def _take_screenshot():
     temp_file = os.path.join(tempfile.gettempdir(), 'screenshot.png')
     try:
@@ -151,5 +153,6 @@ def _take_screenshot():
     except:
         print(Fore.RED + "\nFailed to take screenshot using gauge_screenshot.\n{0}".format(sys.exc_info()[0]))
     return str.encode("")
+
 
 registry = Registry()
