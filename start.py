@@ -4,7 +4,9 @@ import sys
 from colorama import Style, init
 
 from getgauge import connection, processor
-from getgauge.impl_loader import load_impls, copy_skel_files
+from getgauge.impl_loader import copy_skel_files
+from getgauge.util import get_step_impl_dir
+from getgauge.static_loader import load_files
 
 
 def main():
@@ -14,7 +16,7 @@ def main():
         copy_skel_files()
     else:
         s = connection.connect()
-        load_impls()
+        load_files(get_step_impl_dir())
         processor.dispatch_messages(s)
 
 

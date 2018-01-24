@@ -236,7 +236,7 @@ class ProcessorTests(TestCase):
         registry.add_before_suite(impl2)
         response = Message()
         request = Message()
-        processors[Message.ExecutionStarting](request, response, None)
+        processors[Message.ExecutionStarting](request, response, None, False)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
         self.assertEqual(False, response.executionStatusResponse.executionResult.failed)
@@ -315,7 +315,7 @@ class ProcessorTests(TestCase):
         registry.add_before_suite(failing_impl)
         response = Message()
         request = Message()
-        processors[Message.ExecutionStarting](request, response, None)
+        processors[Message.ExecutionStarting](request, response, None, False)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
         self.assertEqual(True, response.executionStatusResponse.executionResult.failed)

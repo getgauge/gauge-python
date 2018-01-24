@@ -1,6 +1,5 @@
 import importlib
 import json
-import os
 import py_compile
 import shutil
 import sys
@@ -10,12 +9,10 @@ from os import path
 from colorama import Fore
 from colorama import Style
 
-PROJECT_ROOT_ENV = 'GAUGE_PROJECT_ROOT'
-STEP_IMPL_DIR_ENV = 'STEP_IMPL_DIR'
+from getgauge.util import *
 
-STEP_IMPL_DIR = os.getenv(STEP_IMPL_DIR_ENV) or 'step_impl'
-project_root = os.path.abspath(os.environ[PROJECT_ROOT_ENV])
-impl_dir = os.path.join(project_root, STEP_IMPL_DIR)
+project_root = get_project_root()
+impl_dir = get_step_impl_dir()
 env_dir = os.path.join(project_root, 'env', 'default')
 requirements_file = os.path.join(project_root, 'requirements.txt')
 sys.path.append(project_root)
@@ -40,7 +37,7 @@ def copy_skel_files():
         print(Fore.GREEN + 'create  {}'.format(env_dir))
         os.makedirs(env_dir)
         print(Fore.GREEN + 'create  {}'.format(impl_dir))
-        shutil.copytree(os.path.join(SKEL, STEP_IMPL_DIR), impl_dir)
+        shutil.copytree(os.path.join(SKEL, STEP_IMPL_DIR_NAME), impl_dir)
         print(Fore.GREEN + 'create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
         shutil.copy(os.path.join(SKEL, PYTHON_PROPERTIES), env_dir)
         open(requirements_file, 'w').write('getgauge==' + _get_version())

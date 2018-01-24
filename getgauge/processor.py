@@ -2,11 +2,13 @@ import sys
 
 from getgauge.connection import read_message, send_message
 from getgauge.executor import set_response_values, execute_method, run_hook
+from getgauge.impl_loader import load_impls
 from getgauge.messages.messages_pb2 import Message
 from getgauge.messages.spec_pb2 import Parameter
 from getgauge.python import Table, create_execution_context_from, DataStoreFactory
 from getgauge.refactor import refactor_step
 from getgauge.registry import registry, _MessagesStore
+from getgauge.util import get_step_impl_dir
 from getgauge.validator import validate_step
 
 
@@ -47,7 +49,10 @@ def _execute_step(request, response, socket):
     execute_method(params, impl, response, registry.is_continue_on_failure)
 
 
-def _execute_before_suite_hook(request, response, socket):
+def _execute_before_suite_hook(request, response, socket, clear=True):
+    if clear:
+        registry.clear()
+        load_impls(get_step_impl_dir())
     execution_info = create_execution_context_from(request.executionStartingRequest.currentExecutionInfo)
     run_hook(request, response, registry.before_suite(), execution_info)
 
