@@ -1,5 +1,4 @@
 import ast
-import inspect
 import random
 import re
 import string
@@ -29,8 +28,8 @@ def _duplicate_impl_suggestion(request):
     text = request.stepValidateRequest.stepText.replace('{}', '<arg>')
     return "Multiple implementations found for `{}`\n".format(text) + '\n'.join(
         [(Fore.YELLOW + '{}:{}\n' + Style.RESET_ALL + Style.DIM + '{}' + Style.RESET_ALL).format(
-            impl.file_name, impl.line_number, _format_impl(inspect.getsource(impl.impl))) for
-            impl in registry.get_infos_for(request.stepValidateRequest.stepText)])
+            info.file_name, info.line_number, _format_impl(info.impl.__str__())) for
+            info in registry.get_infos_for(request.stepValidateRequest.stepText)])
 
 
 def _impl_suggestion(step_value):
