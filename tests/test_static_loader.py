@@ -21,9 +21,30 @@ class StaticLoaderTests(unittest.TestCase):
 
         """
         load_file(content, "foo.py")
+
         self.assertTrue(registry.is_implemented("print hello"))
         self.assertTrue(registry.is_implemented("print {}."))
         self.assertEqual(len(registry.steps()), 2)
+
+    def test_loader_populates_registry_only_with_steps_from_given_file_content(self):
+        content = """
+        @step("print hello")
+        def print():
+            print("hello")
+
+
+        @hello("some other decorator")
+        @step("print <hello>.")
+        def print_word(word):
+            print(word)
+
+        """
+        load_file(content, "foo.py")
+
+        self.assertTrue(registry.is_implemented("print hello"))
+        self.assertTrue(registry.is_implemented("print {}."))
+        self.assertFalse(registry.is_implemented("some other decorator"))
+
 
     def test_loader_populates_registry_with_duplicate_steps(self):
         content = """
@@ -48,6 +69,7 @@ class StaticLoaderTests(unittest.TestCase):
 
         """
         load_file(content, "foo.py")
+
         self.assertFalse(registry.is_implemented("print hello"))
 
     def test_loader_populates_registry_for_with_aliases(self):
@@ -58,6 +80,7 @@ class StaticLoaderTests(unittest.TestCase):
 
         """
         load_file(content, "foo.py")
+
         self.assertTrue(registry.is_implemented("say hello"))
         self.assertTrue(registry.get_info_for("say hello").has_alias)
 

@@ -13,8 +13,9 @@ def load_file(content, file_name):
         red = RedBaron(content)
         for func in red.find_all('def'):
             for decorator in func.decorators:
-                steps = re.findall(r'[\'"](.*?)[\'"]', decorator.call.__str__())
-                add_steps(file_name, func, steps)
+                if decorator.value.__str__() == 'step':
+                    steps = re.findall(r'[\'"](.*?)[\'"]', decorator.call.__str__())
+                    add_steps(file_name, func, steps)
     except BaronError:
         pass
 
