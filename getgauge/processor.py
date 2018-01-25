@@ -23,6 +23,11 @@ def _send_step_name(request, response, socket):
     if info.step_text is not None:
         response.stepNameResponse.isStepPresent = True
         response.stepNameResponse.stepName.append(info.step_text)
+        response.stepNameResponse.fileName = info.file_name
+        response.stepNameResponse.span.start = info.span['start']
+        response.stepNameResponse.span.startChar = info.span['startChar']
+        response.stepNameResponse.span.end = info.span['end']
+        response.stepNameResponse.span.endChar = info.span['endChar']
     response.stepNameResponse.hasAlias = info.has_alias
 
 
@@ -113,6 +118,14 @@ def _init_suite_data_store(request, response, socket):
     set_response_values(request, response)
 
 
+def _cache_file(request, response, socket):
+    pass
+
+
+def _step_positions(request, response, socket):
+    pass
+
+
 def _kill_runner(request, response, socket):
     socket.close()
     sys.exit()
@@ -134,6 +147,8 @@ processors = {Message.ExecutionStarting: _execute_before_suite_hook,
               Message.SuiteDataStoreInit: _init_suite_data_store,
               Message.StepNameRequest: _send_step_name,
               Message.RefactorRequest: _refactor,
+              Message.CacheFileRequest: _cache_file,
+              Message.StepPositionsRequest: _step_positions,
               Message.KillProcessRequest: _kill_runner,
               }
 

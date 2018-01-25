@@ -8,9 +8,9 @@ from colorama import Fore
 
 
 class StepInfo(object):
-    def __init__(self, step_text, parsed_step_text, impl, file_name, line_number, has_alias=False):
+    def __init__(self, step_text, parsed_step_text, impl, file_name, span, has_alias=False):
         self.__step_text, self.__parsed_step_text, self.__impl = step_text, parsed_step_text, impl
-        self.__file_name, self.__line_number, self.__has_alias = file_name, line_number, has_alias
+        self.__file_name, self.__span, self.__has_alias = file_name, span, has_alias
 
     @property
     def step_text(self):
@@ -33,8 +33,8 @@ class StepInfo(object):
         return self.__file_name
 
     @property
-    def line_number(self):
-        return self.__line_number
+    def span(self):
+        return self.__span
 
 
 class _MessagesStore:
@@ -75,14 +75,14 @@ class Registry(object):
         setattr(self.__class__, 'add_{}'.format(hook), add)
         setattr(self, '__{}'.format(hook), [])
 
-    def add_step(self, step_text, func, file_name, line_number=-1, has_alias=False):
+    def add_step(self, step_text, func, file_name, span=None, has_alias=False):
         if not isinstance(step_text, list):
             parsed_step_text = _get_step_value(step_text)
-            info = StepInfo(step_text, parsed_step_text, func, file_name, line_number, has_alias)
+            info = StepInfo(step_text, parsed_step_text, func, file_name, span, has_alias)
             self.__steps_map.setdefault(parsed_step_text, []).append(info)
             return
         for text in step_text:
-            self.add_step(text, func, file_name, line_number, True)
+            self.add_step(text, func, file_name, span, True)
 
     def steps(self):
         return [value[0].step_text for value in self.__steps_map.values()]
