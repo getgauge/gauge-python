@@ -5,8 +5,8 @@ from colorama import Style, init
 
 from getgauge import connection, processor
 from getgauge.impl_loader import copy_skel_files
-from getgauge.util import get_step_impl_dir
 from getgauge.static_loader import load_files
+from getgauge.util import get_step_impl_dir
 
 
 def main():
