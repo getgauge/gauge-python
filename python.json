@@ -31,8 +31,8 @@
     ]
   },
   "gaugeVersionSupport": {
-    "minimum": "0.8.0",
+    "minimum": "0.9.8",
     "maximum": ""
   },
-  "lspLangId" : "python"
+  "lspLangId": "python"
 }

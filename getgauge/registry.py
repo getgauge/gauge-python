@@ -1,6 +1,6 @@
 import os
-import sys
 import re
+import sys
 import tempfile
 from subprocess import call
 
@@ -115,6 +115,12 @@ class Registry(object):
                 if issubclass(type(exception), e):
                     return True
         return False
+
+    def get_step_positions(self, file_name):
+        positions = []
+        for step, infos in self.__steps_map.items():
+            positions = positions + [{'stepValue': step, 'span': i.span} for i in infos if i.file_name == file_name]
+        return positions
 
     def clear(self):
         self.__steps_map, self.__continue_on_failures = {}, {}

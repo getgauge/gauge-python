@@ -116,7 +116,7 @@ class RegistryTests(unittest.TestCase):
 
         self.assertEqual(
             set([info.step_text
-                for info in registry.get_infos_for(parsed_step_text)]),
+                 for info in registry.get_infos_for(parsed_step_text)]),
             {infos[0]['text'], infos[1]['text']})
 
     def test_Registry_before_suite(self):
@@ -312,6 +312,22 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual([info1['func'], info3['func']],
                          registry.after_step(['A']))
         self.assertEqual([info1['func']], registry.after_step(['A', 'c']))
+
+    def test_Registry__step_positions_of_a_given_file(self):
+        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func', 'file_name': 'foo.py', 'span': {'start': 1}},
+                 {'text': 'Step 1', 'func': 'func1', 'file_name': 'bar.py', 'span': {'start': 3}}]
+
+        for info in infos:
+            registry.add_step(info['text'], info['func'], info['file_name'], info['span'])
+
+        positions = registry.get_step_positions('foo.py')
+
+        self.assertIn({'stepValue': 'Say {} to {}', 'span': {'start': 1}}, positions)
+        self.assertNotIn({'stepValue': 'Step 1', 'span': {'start': 3}}, positions)
+
+        positions = registry.get_step_positions('bar.py')
+
+        self.assertIn({'stepValue': 'Step 1', 'span': {'start': 3}}, positions)
 
     def tearDown(self):
         global registry

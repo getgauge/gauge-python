@@ -1,14 +1,14 @@
 import re
-
 from os import path
-from redbaron import RedBaron
+
 from baron.utils import BaronError
+from redbaron import RedBaron
 
-from getgauge.util import *
 from getgauge.registry import registry
+from getgauge.util import *
 
 
-def load_file(content, file_name):
+def load_steps(content, file_name):
     try:
         red = RedBaron(content)
         for func in red.find_all('def'):
@@ -38,7 +38,7 @@ def load_files(step_impl_dir):
         file_path = os.path.join(step_impl_dir, f)
         if f.endswith('.py'):
             impl_file = open(file_path, 'r+')
-            load_file(impl_file.read(), file_path)
+            load_steps(impl_file.read(), file_path)
             impl_file.close()
         elif path.isdir(file_path):
             load_files(file_path)

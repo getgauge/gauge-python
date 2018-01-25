@@ -422,6 +422,25 @@ class ProcessorTests(TestCase):
         self.assertEqual('Reason: Multiple Implementation found for `Step <a> with <b>`',
                          response.refactorResponse.error)
 
+    def test_Processor_step_position_request(self):
+        registry.add_step('Step <a> with <b>', 'func', 'foo.py',
+                          {'start': 0, 'startChar': 0, 'end': 3, 'endChar': 10})
+        registry.add_step('Step 1', 'func', 'foo.py', {'start': 4, 'startChar': 0, 'end': 7, 'endChar': 10})
+
+        response = Message()
+        request = Message()
+        request.stepPositionsRequest.filePath = 'foo.py'
+
+        processors[Message.StepPositionsRequest](request, response, None)
+
+        self.assertEqual(Message.StepPositionsResponse, response.messageType)
+        self.assertEqual('', response.refactorResponse.error)
+
+        steps = [(p.stepValue, p.span.start) for p in response.stepPositionsResponse.stepPositions]
+
+        self.assertIn(('Step {} with {}', 0), steps)
+        self.assertIn(('Step 1', 4), steps)
+
 
 def impl(a, b):
     pass

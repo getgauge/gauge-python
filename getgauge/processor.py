@@ -3,8 +3,8 @@ import sys
 from getgauge.connection import read_message, send_message
 from getgauge.executor import set_response_values, execute_method, run_hook
 from getgauge.impl_loader import load_impls
-from getgauge.messages.messages_pb2 import Message
-from getgauge.messages.spec_pb2 import Parameter
+from getgauge.messages.messages_pb2 import Message, StepPositionsResponse
+from getgauge.messages.spec_pb2 import Parameter, Span
 from getgauge.python import Table, create_execution_context_from, DataStoreFactory
 from getgauge.refactor import refactor_step
 from getgauge.registry import registry, _MessagesStore
@@ -123,7 +123,10 @@ def _cache_file(request, response, socket):
 
 
 def _step_positions(request, response, socket):
-    pass
+    positions = registry.get_step_positions(request.stepPositionsRequest.filePath)
+    create_pos = lambda p: StepPositionsResponse.StepPosition(**{'stepValue': p['stepValue'], 'span': Span(**p['span'])})
+    response.messageType = Message.StepPositionsResponse
+    response.stepPositionsResponse.stepPositions.extend([create_pos(x) for x in positions])
 
 
 def _kill_runner(request, response, socket):

@@ -1,7 +1,7 @@
 import unittest
 
 from getgauge.registry import registry
-from getgauge.static_loader import load_file
+from getgauge.static_loader import load_steps
 
 
 class StaticLoaderTests(unittest.TestCase):
@@ -20,7 +20,7 @@ class StaticLoaderTests(unittest.TestCase):
             print(word)
 
         """
-        load_file(content, "foo.py")
+        load_steps(content, "foo.py")
 
         self.assertTrue(registry.is_implemented("print hello"))
         self.assertTrue(registry.is_implemented("print {}."))
@@ -39,12 +39,11 @@ class StaticLoaderTests(unittest.TestCase):
             print(word)
 
         """
-        load_file(content, "foo.py")
+        load_steps(content, "foo.py")
 
         self.assertTrue(registry.is_implemented("print hello"))
         self.assertTrue(registry.is_implemented("print {}."))
         self.assertFalse(registry.is_implemented("some other decorator"))
-
 
     def test_loader_populates_registry_with_duplicate_steps(self):
         content = """
@@ -58,7 +57,7 @@ class StaticLoaderTests(unittest.TestCase):
             print("hello")
 
         """
-        load_file(content, "foo.py")
+        load_steps(content, "foo.py")
         self.assertTrue(registry.has_multiple_impls("print hello"))
 
     def test_loader_does_not_populate_registry_for_content_having_parse_error(self):
@@ -68,7 +67,7 @@ class StaticLoaderTests(unittest.TestCase):
             print(.__str_())
 
         """
-        load_file(content, "foo.py")
+        load_steps(content, "foo.py")
 
         self.assertFalse(registry.is_implemented("print hello"))
 
@@ -79,7 +78,7 @@ class StaticLoaderTests(unittest.TestCase):
             print("hello")
 
         """
-        load_file(content, "foo.py")
+        load_steps(content, "foo.py")
 
         self.assertTrue(registry.is_implemented("say hello"))
         self.assertTrue(registry.get_info_for("say hello").has_alias)
