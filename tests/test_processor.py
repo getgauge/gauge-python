@@ -81,8 +81,8 @@ class ProcessorTests(TestCase):
         self.assertEqual({'Step <a> with <b>', 'Step 4'}, set(response.stepNamesResponse.steps))
 
     def test_Processor_step_name_request(self):
-        registry.add_step('Step <a> with <b>', 'func', '')
-        registry.add_step('Step 4', 'func1', '')
+        registry.add_step('Step <a> with <b>', 'func', '', {'start': 1, 'startChar': 0, 'end': 3, 'endChar': 10})
+        registry.add_step('Step 4', 'func1', '', {'start': 5, 'startChar': 0, 'end': 6, 'endChar': 10})
         response = Message()
         request = Message()
         request.stepNameRequest.stepValue = 'Step {} with {}'
@@ -150,8 +150,8 @@ class ProcessorTests(TestCase):
                         response.stepValidateResponse.suggestion)
 
     def test_Processor_invalid_step_validate_request_when_duplicate_impl_found(self):
-        registry.add_step('Step <a> with <b>', impl, '')
-        registry.add_step('Step <a> with <b>', impl, '')
+        registry.add_step('Step <a> with <b>', impl, '', {'start': 0})
+        registry.add_step('Step <a> with <b>', impl, '', {'start': 2})
 
         response = Message()
 

@@ -28,7 +28,7 @@ def _duplicate_impl_suggestion(request):
     text = request.stepValidateRequest.stepText.replace('{}', '<arg>')
     return "Multiple implementations found for `{}`\n".format(text) + '\n'.join(
         [(Fore.YELLOW + '{}:{}\n' + Style.RESET_ALL + Style.DIM + '{}' + Style.RESET_ALL).format(
-            info.file_name, info.line_number, _format_impl(info.impl.__str__())) for
+            info.file_name, info.span['start'], _format_impl(info.impl.__str__())) for
             info in registry.get_infos_for(request.stepValidateRequest.stepText)])
 
 

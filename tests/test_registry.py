@@ -104,13 +104,13 @@ class RegistryTests(unittest.TestCase):
                  {'text': 'Step 1', 'func': 'func1', 'line': 3}]
 
         for info in infos:
-            registry.add_step(info['text'], info['func'], '', info['line'])
+            registry.add_step(info['text'], info['func'], '', {'start': info['line']})
 
         parsed_step_text = re.sub('<[^<]+?>', '{}', infos[0]['text'])
 
         self.assertTrue(registry.has_multiple_impls(parsed_step_text))
         self.assertEqual(
-            set([info.line_number
+            set([info.span['start']
                  for info in registry.get_infos_for(parsed_step_text)]),
             {infos[0]['line'], infos[1]['line']})
 

@@ -20,11 +20,17 @@ def load_file(content, file_name):
         pass
 
 
+def _create_span(func):
+    start = func.absolute_bounding_box.top_left
+    end = func.absolute_bounding_box.bottom_right
+    return {"start": start.line, "startChar": start.column, "end": end.line, "endChar": end.column}
+
+
 def add_steps(file_name, func, steps):
     if len(steps) > 1:
-        registry.add_step(steps, func, file_name, func.absolute_bounding_box.top_left.line)
+        registry.add_step(steps, func, file_name, _create_span(func))
     elif len(steps) == 1:
-        registry.add_step(steps[0], func, file_name, func.absolute_bounding_box.top_left.line)
+        registry.add_step(steps[0], func, file_name, _create_span(func))
 
 
 def load_files(step_impl_dir):
