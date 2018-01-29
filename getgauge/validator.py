@@ -34,12 +34,12 @@ def _duplicate_impl_suggestion(request):
 
 def _impl_suggestion(step_value):
     name = re.sub('\s*\{\}\s*', ' ', step_value.stepValue).strip().replace(' ', '_').lower()
-    return Fore.YELLOW + """@step("{}")
+    return """@step("{}")
 def {}({}):
     assert False, "Add implementation code"
 """.format(step_value.parameterizedStepValue,
            name if _is_valid(name, 'def {}(): return ''') else _random_word(),
-           _format_params(step_value.parameters)) + Style.RESET_ALL
+           _format_params(step_value.parameters))
 
 
 def _format_params(params):
