@@ -124,7 +124,7 @@ class Registry(object):
 
     def remove_steps(self, file_name):
         for step, infos in self.__steps_map.items():
-            filtered_info = filter(lambda i: i.file_name != file_name, infos)
+            filtered_info = [i for i in infos if i.file_name != file_name]
             if len(filtered_info) > 0:
                 self.__steps_map[step] = filtered_info
             else:
