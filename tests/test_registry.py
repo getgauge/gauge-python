@@ -329,6 +329,32 @@ class RegistryTests(unittest.TestCase):
 
         self.assertIn({'stepValue': 'Step 1', 'span': {'start': 3}}, positions)
 
+    def test_Registry_remove_steps_of_a_given_file(self):
+        infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func', 'file_name': 'foo.py'},
+                 {'text': 'Step 1', 'func': 'func1', 'file_name': 'bar.py'}]
+
+        for info in infos:
+            registry.add_step(info['text'], info['func'], info['file_name'])
+
+        registry.remove_steps('foo.py')
+
+        self.assertFalse(registry.is_implemented('Say {} to {}'))
+        self.assertTrue(registry.is_implemented('Step 1'))
+
+    def test_Registry_remove_steps_of_a_given_file_with_duplicate_implementations(self):
+        infos = [{'text': 'Step 1', 'func': 'func', 'file_name': 'foo.py'},
+                 {'text': 'Step 1', 'func': 'func1', 'file_name': 'bar.py'}]
+
+        for info in infos:
+            registry.add_step(info['text'], info['func'], info['file_name'])
+
+        self.assertTrue(registry.has_multiple_impls('Step 1'))
+
+        registry.remove_steps('foo.py')
+
+        self.assertTrue(registry.is_implemented('Step 1'))
+        self.assertFalse(registry.has_multiple_impls('Step 1'))
+
     def tearDown(self):
         global registry
         registry = Registry()

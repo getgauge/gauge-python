@@ -1,7 +1,7 @@
 import unittest
 
 from getgauge.registry import registry
-from getgauge.static_loader import load_steps
+from getgauge.static_loader import load_steps, reload_steps
 
 
 class StaticLoaderTests(unittest.TestCase):
@@ -83,8 +83,31 @@ class StaticLoaderTests(unittest.TestCase):
         self.assertTrue(registry.is_implemented("say hello"))
         self.assertTrue(registry.get_info_for("say hello").has_alias)
 
-    def tearDown(self):
-        registry.clear()
+    def test_loader_reload_registry_for_given_content(self):
+        content = """
+            @step("print hello")
+            def print():
+                print("hello")
+            """
+
+        load_steps(content, "foo.py")
+
+        self.assertTrue(registry.is_implemented("print hello"))
+
+        content = """
+                @step("print world")
+                def print():
+                    print("hello")
+                """
+
+        reload_steps(content, 'foo.py')
+
+        self.assertFalse(registry.is_implemented("print hello"))
+        self.assertTrue(registry.is_implemented("print world"))
+
+
+def tearDown(self):
+    registry.clear()
 
 
 if __name__ == '__main__':

@@ -20,6 +20,11 @@ def load_steps(content, file_name):
         pass
 
 
+def reload_steps(content, file_name):
+    registry.remove_steps(file_name)
+    load_steps(content, file_name)
+
+
 def _create_span(func):
     start = func.absolute_bounding_box.top_left
     end = func.absolute_bounding_box.bottom_right

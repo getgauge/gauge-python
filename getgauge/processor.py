@@ -1,5 +1,7 @@
 import sys
 
+from os import path
+
 from getgauge.connection import read_message, send_message
 from getgauge.executor import set_response_values, execute_method, run_hook
 from getgauge.impl_loader import load_impls
@@ -10,6 +12,7 @@ from getgauge.refactor import refactor_step
 from getgauge.registry import registry, _MessagesStore
 from getgauge.util import get_step_impl_dir
 from getgauge.validator import validate_step
+from getgauge.static_loader import reload_steps
 
 
 def _validate_step(request, response, socket):
@@ -118,13 +121,26 @@ def _init_suite_data_store(request, response, socket):
     set_response_values(request, response)
 
 
+def _load_from_disk(file_path):
+    if path.isfile(file_path):
+        f = open(file_path, 'r+')
+        reload_steps(f.read(), file_path)
+        f.close()
+    else:
+        registry.remove_steps(file_path)
+
+
 def _cache_file(request, response, socket):
-    pass
+    if not request.cacheFileRequest.isClosed:
+        reload_steps(request.cacheFileRequest.content, request.cacheFileRequest.filePath)
+    else:
+        _load_from_disk(request.cacheFileRequest.filePath)
 
 
 def _step_positions(request, response, socket):
     positions = registry.get_step_positions(request.stepPositionsRequest.filePath)
-    create_pos = lambda p: StepPositionsResponse.StepPosition(**{'stepValue': p['stepValue'], 'span': Span(**p['span'])})
+    create_pos = lambda p: StepPositionsResponse.StepPosition(
+        **{'stepValue': p['stepValue'], 'span': Span(**p['span'])})
     response.messageType = Message.StepPositionsResponse
     response.stepPositionsResponse.stepPositions.extend([create_pos(x) for x in positions])
 
@@ -161,4 +177,5 @@ def dispatch_messages(socket):
         request = read_message(socket, Message())
         response = Message()
         processors[request.messageType](request, response, socket)
-        send_message(response, request, socket)
+        if request.messageType != Message.CacheFileRequest:
+            send_message(response, request, socket)
