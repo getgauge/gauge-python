@@ -122,6 +122,15 @@ class Registry(object):
             positions = positions + [{'stepValue': step, 'span': i.span} for i in infos if i.file_name == file_name]
         return positions
 
+    def remove_steps(self, file_name):
+        new_map = {}
+        for step, infos in self.__steps_map.items():
+            filtered_info = [i for i in infos if i.file_name != file_name]
+            if len(filtered_info) > 0:
+                new_map[step] = filtered_info
+        self.__steps_map = new_map
+
+
     def clear(self):
         self.__steps_map, self.__continue_on_failures = {}, {}
         for hook in Registry.hooks:
