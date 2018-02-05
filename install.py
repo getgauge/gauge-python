@@ -72,7 +72,7 @@ def copy(src, dest):
 
 
 def main():
-    exit_code = call(['coverage', 'run', '--source', 'getgauge', '-m', 'unittest', 'discover'])
+    exit_code = call(['python', '-m', 'coverage', 'run', '--source', 'getgauge', '-m', 'unittest', 'discover'])
     if exit_code != 0:
         sys.exit(exit_code)
     if len(sys.argv) == 1:
