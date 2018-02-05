@@ -52,16 +52,6 @@ Installing package dependencies
 
     pip install -r requirements.txt
 
-or
-
-::
-
-    pip install -r requirements.txt --user
-
-to install dependencies user wide.
-
-
-
 Tests
 """""
 
@@ -76,17 +66,6 @@ Tests Coverage
 
     python install.py --test
     coverage report -m
-
-or
-
-::
-
-    python install.py --test
-    python -m coverage report -m
-
-if dependencies are install user wide.
-
-
 
 Installing
 """"""""""
@@ -112,12 +91,3 @@ Uploading to PyPI
 
     python setup.py sdist
     twine upload dist/*
-
-or
-
-::
-
-    python setup.py sdist
-    python -m twine upload dist/*
-
-if dependencies are install user wide.
