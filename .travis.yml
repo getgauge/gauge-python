@@ -24,13 +24,13 @@ install: "pip install -r requirements.txt"
 
 # command to run tests
 script:
-  - python install.py
+  - python install.py --test
   - sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-keys 023EDB0B
   - echo "deb https://dl.bintray.com/gauge/gauge-deb nightly main" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get -y update > /dev/null | echo "Updated"
   - sudo apt-get install -y gauge
   - gauge -v
-  - python install.py --install
+  - python build.py --dist
   - export GAUGE_PYTHON_VERSION=$(cd bin; ls gauge-python-*.zip | sed "s/^gauge-python-\([^;]*\).zip/\1/")
   - gauge uninstall python
   - gauge install python -f "bin/gauge-python-$GAUGE_PYTHON_VERSION.zip"
