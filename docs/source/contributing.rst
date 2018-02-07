@@ -57,14 +57,14 @@ Tests
 
 ::
 
-    python install.py --test
+    python build.py --test
 
 Tests Coverage
 """"""""""""""
 
 ::
 
-    python install.py --test
+    python build.py --test
     coverage report -m
 
 Installing
@@ -72,17 +72,17 @@ Installing
 
 ::
 
-    python install.py --install
+    python build.py --install
 
 Creating distributable
 """"""""""""""""""""""
 
 ::
 
-    python install.py
+    python build.py --dist
 
-This will create a .zip file in bin directory which can then be uploaded
-to Github releases.
+This will create a .zip file in bin directory and a .tar.gz file in dist directory.
+The zip file can be uploaded to Github release and the .tar.gz file can be uploaded to PyPi
 
 Uploading to PyPI
 """""""""""""""""
@@ -90,4 +90,13 @@ Uploading to PyPI
 ::
 
     python setup.py sdist
-    twine upload dist/*
+    twine upload dist/FILE_NAME
+
+Creating Nightly distributable
+""""""""""""""""""""""
+
+::
+
+    NIGHTLY=true python build.py --dist
+
+This will create the .zip nightly file and a .dev.DATE.tar.gz(PyPi pre release package) file.

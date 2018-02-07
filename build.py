@@ -5,6 +5,8 @@ import shutil
 import sys
 from subprocess import call
 
+from datetime import date
+
 cwd = os.getcwd()
 
 PLUGIN_FILE_TEMPLATE = 'gauge-python-{}'
@@ -24,13 +26,30 @@ def install():
     plugin_zip = create_zip()
     call(['gauge', 'uninstall', 'python', '-v', get_version()])
     exit_code = call(['gauge', 'install', 'python', '-f', os.path.join(BIN, plugin_zip)])
+    generate_package()
+    print('Install getgauge package using pip: \n\tpip install dist/*')
+    sys.exit(exit_code)
+
+
+def create_setup_file():
+    tmpl = open("setup.tmpl", "r")
+    setup = open("setup.py", "w+")
+    if bool(os.getenv("NIGHTLY")):
+        v = "{}.dev.{}".format(get_version(), str(date.today()).replace("-", ""))
+    else:
+        v = get_version()
+    setup.write(tmpl.read().format(v))
+    setup.close()
+    tmpl.close()
+
+
+def generate_package():
     shutil.rmtree('dist', True)
     print('Creating getgauge package.')
+    create_setup_file()
     fnull = open(os.devnull, 'w')
     call(['python', 'setup.py', 'sdist'], stdout=fnull, stderr=fnull)
     fnull.close()
-    print('Install getgauge package using pip: \n\tpip install dist/*')
-    sys.exit(exit_code)
 
 
 def create_zip():
@@ -38,7 +57,11 @@ def create_zip():
     if os.path.exists(DEPLOY):
         shutil.rmtree(DEPLOY)
     copy_files(wd)
-    output_file = PLUGIN_FILE_TEMPLATE.format(get_version())
+    if bool(os.getenv("NIGHTLY")):
+        version = "{}.nightly-{}".format(get_version(), str(date.today()))
+    else:
+        version = get_version()
+    output_file = PLUGIN_FILE_TEMPLATE.format(version)
     shutil.make_archive(output_file, ZIP, DEPLOY)
     shutil.rmtree(DEPLOY)
     if os.path.exists(BIN):
@@ -71,14 +94,28 @@ def copy(src, dest):
         shutil.copy(src, dest)
 
 
+usage = """
+Usage: python install.py --[option]
+
+Options:
+    --test    :     runs unit tests.
+    --install :     installs python plugin and generates the pip package
+    --dist    :     create zip and pip package (for nighties set NIGHTLY env true.)  
+"""
+
+
 def main():
-    exit_code = call(['coverage', 'run', '--source', 'getgauge', '-m', 'unittest', 'discover'])
-    if exit_code != 0:
-        sys.exit(exit_code)
-    if len(sys.argv) == 1:
-        create_zip()
-    elif sys.argv[1] == '--install':
-        install()
+    if len(sys.argv) < 2:
+        print(usage)
+    else:
+        exit_code = call(['coverage', 'run', '--source', 'getgauge', '-m', 'unittest', 'discover'])
+        if exit_code != 0:
+            sys.exit(exit_code)
+        elif sys.argv[1] == '--install':
+            install()
+        elif sys.argv[1] == '--dist':
+            create_zip()
+            generate_package()
 
 
 main()

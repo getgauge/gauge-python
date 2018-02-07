@@ -14,3 +14,4 @@ docs/build/doctrees
 docs/build/html
 .vscode/
 venv/
+setup.py
