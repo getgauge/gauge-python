@@ -24,7 +24,7 @@ install: "pip install -r requirements.txt"
 
 # command to run tests
 script:
-  - python install.py --test
+  - python build.py --test
   - sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-keys 023EDB0B
   - echo "deb https://dl.bintray.com/gauge/gauge-deb nightly main" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get -y update > /dev/null | echo "Updated"

@@ -57,11 +57,7 @@ def create_zip():
     if os.path.exists(DEPLOY):
         shutil.rmtree(DEPLOY)
     copy_files(wd)
-    if bool(os.getenv("NIGHTLY")):
-        version = "{}.nightly-{}".format(get_version(), str(date.today()))
-    else:
-        version = get_version()
-    output_file = PLUGIN_FILE_TEMPLATE.format(version)
+    output_file = PLUGIN_FILE_TEMPLATE.format(get_version())
     shutil.make_archive(output_file, ZIP, DEPLOY)
     shutil.rmtree(DEPLOY)
     if os.path.exists(BIN):
