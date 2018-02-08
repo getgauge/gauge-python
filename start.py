@@ -2,7 +2,7 @@ import platform
 import sys
 
 from colorama import Style, init
-
+from os import path
 from getgauge import connection, processor
 from getgauge.impl_loader import copy_skel_files
 from getgauge.static_loader import load_files
@@ -16,7 +16,11 @@ def main():
         copy_skel_files()
     else:
         s = connection.connect()
-        load_files(get_step_impl_dir())
+        dir = get_step_impl_dir()
+        if path.exists(dir):
+            load_files(dir)
+        else:
+            print('can not load implementations from {}. {} does not exist.'.format(dir, dir))
         processor.dispatch_messages(s)
 
 
