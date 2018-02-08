@@ -17,7 +17,7 @@ def load_steps(content, file_name):
                     steps = re.findall(r'[\'"](.*?)[\'"]', decorator.call.__str__())
                     add_steps(file_name, func, steps)
     except BaronError as e:
-        print(e.message[:-640])
+        print(e.args[0][:-640])
 
 
 
