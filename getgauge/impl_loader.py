@@ -6,9 +6,6 @@ import sys
 import traceback
 from os import path
 
-from colorama import Fore
-from colorama import Style
-
 from getgauge.util import *
 
 project_root = get_project_root()
@@ -25,24 +22,24 @@ SKEL = 'skel'
 def load_impls(step_impl_dir=impl_dir):
     os.chdir(project_root)
     if not os.path.isdir(step_impl_dir):
-        print(Fore.RED + 'Cannot import step implementations. Error: {} does not exist.'.format(step_impl_dir))
-        print(Fore.RED + 'Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
+        print('Cannot import step implementations. Error: {} does not exist.'.format(step_impl_dir))
+        print('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
         return
     _import_impl(step_impl_dir)
 
 
 def copy_skel_files():
     try:
-        print(Style.BRIGHT + 'Initialising Gauge Python project')
-        print(Fore.GREEN + 'create  {}'.format(env_dir))
+        print('Initialising Gauge Python project')
+        print('create  {}'.format(env_dir))
         os.makedirs(env_dir)
-        print(Fore.GREEN + 'create  {}'.format(impl_dir))
+        print('create  {}'.format(impl_dir))
         shutil.copytree(os.path.join(SKEL, STEP_IMPL_DIR_NAME), impl_dir)
-        print(Fore.GREEN + 'create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
+        print('create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
         shutil.copy(os.path.join(SKEL, PYTHON_PROPERTIES), env_dir)
         open(requirements_file, 'w').write('getgauge==' + _get_version())
     except:
-        print(Fore.RED + 'Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
+        print('Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
         sys.exit(1)
 
 
@@ -61,8 +58,8 @@ def _import_file(file_path):
         py_compile.compile(file_path)
         importlib.import_module(os.path.splitext(rel_path.replace(os.path.sep, '.'))[0])
     except:
-        print(Fore.RED + 'Exception occurred while loading step implementations from file: {}.'.format(rel_path))
-        print(Fore.RED + traceback.format_exc())
+        print('Exception occurred while loading step implementations from file: {}.'.format(rel_path))
+        print(traceback.format_exc())
 
 
 def _get_version():

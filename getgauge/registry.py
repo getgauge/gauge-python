@@ -4,8 +4,6 @@ import sys
 import tempfile
 from subprocess import call
 
-from colorama import Fore
-
 
 class StepInfo(object):
     def __init__(self, step_text, parsed_step_text, impl, file_name, span, has_alias=False):
@@ -130,7 +128,6 @@ class Registry(object):
                 new_map[step] = filtered_info
         self.__steps_map = new_map
 
-
     def clear(self):
         self.__steps_map, self.__continue_on_failures = {}, {}
         for hook in Registry.hooks:
@@ -164,9 +161,9 @@ def _take_screenshot():
         _file.close()
         return data
     except Exception as err:
-        print(Fore.RED + "\nFailed to take screenshot using gauge_screenshot.\n{0}".format(err))
+        print("\nFailed to take screenshot using gauge_screenshot.\n{0}".format(err))
     except:
-        print(Fore.RED + "\nFailed to take screenshot using gauge_screenshot.\n{0}".format(sys.exc_info()[0]))
+        print("\nFailed to take screenshot using gauge_screenshot.\n{0}".format(sys.exc_info()[0]))
     return str.encode("")
 
 

@@ -3,9 +3,6 @@ import random
 import re
 import string
 
-from colorama import Fore
-from colorama import Style
-
 from getgauge.messages.messages_pb2 import Message, StepValidateResponse
 from getgauge.registry import registry
 
@@ -27,9 +24,8 @@ def validate_step(request, response):
 def _duplicate_impl_suggestion(request):
     text = request.stepValidateRequest.stepText.replace('{}', '<arg>')
     return "Multiple implementations found for `{}`\n".format(text) + '\n'.join(
-        [(Fore.YELLOW + '{}:{}\n' + Style.RESET_ALL + Style.DIM + '{}' + Style.RESET_ALL).format(
-            info.file_name, info.span['start'], _format_impl(info.impl.__str__())) for
-            info in registry.get_infos_for(request.stepValidateRequest.stepText)])
+        ['{}:{}\n''{}'.format(info.file_name, info.span['start'], _format_impl(info.impl.__str__())) for info in
+         registry.get_infos_for(request.stepValidateRequest.stepText)])
 
 
 def _impl_suggestion(step_value):
