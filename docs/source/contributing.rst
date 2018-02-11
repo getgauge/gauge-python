@@ -89,7 +89,6 @@ Uploading to PyPI
 
 ::
 
-    python setup.py sdist
     twine upload dist/FILE_NAME
 
 Creating Nightly distributable

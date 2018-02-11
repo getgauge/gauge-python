@@ -105,6 +105,22 @@ class ProcessorTests(TestCase):
         self.assertEqual(True, response.stepNameResponse.isStepPresent)
         self.assertEqual(False, response.stepNameResponse.hasAlias)
 
+    def test_Processor_step_name_request_with_aliases(self):
+        registry.add_step(['Step 1', 'Step 2', 'Step 3'], 'func1', '',
+                          {'start': 5, 'startChar': 0, 'end': 6, 'endChar': 10})
+        print(registry.is_implemented("Step 2"))
+        response = Message()
+        request = Message()
+        request.stepNameRequest.stepValue = 'Step 1'
+
+        processors[Message.StepNameRequest](request, response, None)
+        self.assertEqual(Message.StepNameResponse, response.messageType)
+        self.assertTrue('Step 1' in response.stepNameResponse.stepName)
+        self.assertTrue('Step 2' in response.stepNameResponse.stepName)
+        self.assertTrue('Step 3' in response.stepNameResponse.stepName)
+        self.assertEqual(True, response.stepNameResponse.isStepPresent)
+        self.assertEqual(True, response.stepNameResponse.hasAlias)
+
     def test_Processor_step_name_request_with_unimplemented_step(self):
         response = Message()
         request = Message()

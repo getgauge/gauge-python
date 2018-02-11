@@ -25,7 +25,11 @@ def _send_step_name(request, response, socket):
     response.stepNameResponse.isStepPresent = False
     if info.step_text is not None:
         response.stepNameResponse.isStepPresent = True
-        response.stepNameResponse.stepName.append(info.step_text)
+        if info.has_alias:
+            for alias in info.aliases:
+                response.stepNameResponse.stepName.append(alias)
+        else:
+            response.stepNameResponse.stepName.append(info.step_text)
         response.stepNameResponse.fileName = info.file_name
         response.stepNameResponse.span.start = info.span['start']
         response.stepNameResponse.span.startChar = info.span['startChar']

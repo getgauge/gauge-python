@@ -6,9 +6,12 @@ from subprocess import call
 
 
 class StepInfo(object):
-    def __init__(self, step_text, parsed_step_text, impl, file_name, span, has_alias=False):
+    def __init__(self, step_text, parsed_step_text, impl, file_name, span, has_alias=False, aliases=None):
+        if aliases is None:
+            aliases = []
         self.__step_text, self.__parsed_step_text, self.__impl = step_text, parsed_step_text, impl
         self.__file_name, self.__span, self.__has_alias = file_name, span, has_alias
+        self.__aliases = aliases
 
     @property
     def step_text(self):
@@ -25,6 +28,10 @@ class StepInfo(object):
     @property
     def has_alias(self):
         return self.__has_alias
+
+    @property
+    def aliases(self):
+        return self.__aliases
 
     @property
     def file_name(self):
@@ -73,14 +80,14 @@ class Registry(object):
         setattr(self.__class__, 'add_{}'.format(hook), add)
         setattr(self, '__{}'.format(hook), [])
 
-    def add_step(self, step_text, func, file_name, span=None, has_alias=False):
+    def add_step(self, step_text, func, file_name, span=None, has_alias=False, aliases=None):
         if not isinstance(step_text, list):
             parsed_step_text = _get_step_value(step_text)
-            info = StepInfo(step_text, parsed_step_text, func, file_name, span, has_alias)
+            info = StepInfo(step_text, parsed_step_text, func, file_name, span, has_alias, aliases)
             self.__steps_map.setdefault(parsed_step_text, []).append(info)
             return
         for text in step_text:
-            self.add_step(text, func, file_name, span, True)
+            self.add_step(text, func, file_name, span, True, step_text)
 
     def steps(self):
         return [value[0].step_text for value in self.__steps_map.values()]
