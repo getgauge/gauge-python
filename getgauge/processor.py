@@ -10,7 +10,7 @@ from getgauge.messages.spec_pb2 import Parameter, Span
 from getgauge.python import Table, create_execution_context_from, DataStoreFactory
 from getgauge.refactor import refactor_step
 from getgauge.registry import registry, _MessagesStore
-from getgauge.util import get_step_impl_dir
+from getgauge.util import get_step_impl_dir, list_impl_files, read_file_contents
 from getgauge.validator import validate_step
 from getgauge.static_loader import reload_steps
 
@@ -153,6 +153,22 @@ def _kill_runner(request, response, socket):
     socket.close()
     sys.exit()
 
+def _get_impl_file_list(request, response, socket):
+    response.messageType = Message.ImplementationFileListResponse
+    files = []
+    list_impl_files(files)
+    response.implementationFileListResponse.implementationFilePaths.extend(files)
+
+def _get_stub_impl_content(request, response, socket):
+    response.messageType = Message.FileChanges
+    fileName = request.stubImplementationCodeRequest.implementationFilePath
+    codes = request.stubImplementationCodeRequest.codes
+    response.fileChanges.fileName = fileName
+    codeConcat = "\n".join(codes)
+    existingFileContent = read_file_contents(fileName)
+    if (len(existingFileContent) > 0):
+        codeConcat = existingFileContent + "\n" + codeConcat
+    response.fileChanges.fileContent = codeConcat
 
 processors = {Message.ExecutionStarting: _execute_before_suite_hook,
               Message.ExecutionEnding: _execute_after_suite_hook,
@@ -173,6 +189,8 @@ processors = {Message.ExecutionStarting: _execute_before_suite_hook,
               Message.CacheFileRequest: _cache_file,
               Message.StepPositionsRequest: _step_positions,
               Message.KillProcessRequest: _kill_runner,
+              Message.ImplementationFileListRequest: _get_impl_file_list,
+              Message.StubImplementationCodeRequest: _get_stub_impl_content,
               }
 
 
