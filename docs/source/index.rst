@@ -2,7 +2,7 @@
 Gauge Python Documentation
 **************************
 
-:Author: `Kashish Munjal <https://github.com/kashishm>`_
+:Author: `Gauge Team <https://github.com/getgauge>`_
 :License: `MIT license <http://opensource.org/licenses/MIT>`_
 
 .. toctree::
