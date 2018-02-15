@@ -99,8 +99,9 @@ Nightly Installation
 
 - Example
    ::
-      $ gauge install python -f gauge-python-0.2.4.nightly.2018-02-08.zip
-      $ [pip / pip3] install --pre getgauge==getgauge.0.2.4.dev.20180208
+
+       $ gauge install python -f gauge-python-0.2.4.nightly.2018-02-08.zip
+       $ [pip / pip3] install --pre getgauge==getgauge.0.2.4.dev.20180208
 
 Verify Nightly installation
 ~~~~~~~~~~~~~~~~~~~
