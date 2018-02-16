@@ -12,10 +12,12 @@ def refactor_step(request, response):
     info = registry.get_info_for(request.refactorRequest.oldStepValue.stepValue)
     impl_file = open(info.file_name, 'r+')
     content = _refactor_content(impl_file.read(), info, request)
-    impl_file.seek(0)
-    impl_file.truncate()
-    impl_file.write(content)
+    if request.refactorRequest.saveChanges:
+        impl_file.seek(0)
+        impl_file.truncate()
+        impl_file.write(content)
     impl_file.close()
+    response.refactorResponse.fileChanges.add(**{'fileName': info.file_name, 'fileContent': content})
     response.refactorResponse.success = True
     response.refactorResponse.filesChanged.append(info.file_name)
 
