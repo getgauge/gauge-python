@@ -153,22 +153,24 @@ def _kill_runner(request, response, socket):
     socket.close()
     sys.exit()
 
+
 def _get_impl_file_list(request, response, socket):
     response.messageType = Message.ImplementationFileListResponse
-    files = []
-    list_impl_files(files)
+    files = list_impl_files()
     response.implementationFileListResponse.implementationFilePaths.extend(files)
+
 
 def _get_stub_impl_content(request, response, socket):
     response.messageType = Message.FileChanges
-    fileName = request.stubImplementationCodeRequest.implementationFilePath
+    file_name = request.stubImplementationCodeRequest.implementationFilePath
     codes = request.stubImplementationCodeRequest.codes
-    response.fileChanges.fileName = fileName
-    codeConcat = "\n".join(codes)
-    existingFileContent = read_file_contents(fileName)
-    if (len(existingFileContent) > 0):
-        codeConcat = existingFileContent + "\n" + codeConcat
-    response.fileChanges.fileContent = codeConcat
+    response.fileChanges.fileName = file_name
+    code_concat = "\n".join(codes)
+    existing_file_content = read_file_contents(file_name)
+    if len(existing_file_content) > 0:
+        code_concat = existing_file_content + "\n" + code_concat
+    response.fileChanges.fileContent = code_concat
+
 
 processors = {Message.ExecutionStarting: _execute_before_suite_hook,
               Message.ExecutionEnding: _execute_after_suite_hook,
