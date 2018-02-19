@@ -32,6 +32,7 @@ def assert_default_vowels(given_vowels):
     def test_Processor_refactor_request_with_add_param(self):
         response = Message()
         request = Message()
+        request.refactorRequest.saveChanges = True
         request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
         request.refactorRequest.oldStepValue.parameters.append('vowels')
         request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is \
@@ -67,6 +68,7 @@ def assert_default_vowels(given_vowels, bsdfdsf):
     def test_Processor_refactor_request_with_add_param_and_invalid_identifier(self):
         response = Message()
         request = Message()
+        request.refactorRequest.saveChanges = True
         request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
         request.refactorRequest.oldStepValue.parameters.append('vowels')
         request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is \
@@ -102,6 +104,7 @@ def assert_default_vowels(given_vowels, arg1):
     def test_Processor_refactor_request_with_add_param_and_only_invalid_identifier(self):
         response = Message()
         request = Message()
+        request.refactorRequest.saveChanges = True
         request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
         request.refactorRequest.oldStepValue.parameters.append('vowels')
         request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is \
@@ -137,6 +140,7 @@ def assert_default_vowels(given_vowels, arg1):
     def test_Processor_refactor_request_with_remove_param(self):
         response = Message()
         request = Message()
+        request.refactorRequest.saveChanges = True
         request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
         request.refactorRequest.oldStepValue.parameters.append('vowels')
         request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is.'
@@ -164,6 +168,7 @@ def assert_default_vowels():
     def test_Processor_refactor_request(self):
         response = Message()
         request = Message()
+        request.refactorRequest.saveChanges = True
         request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
         request.refactorRequest.oldStepValue.parameters.append('vowels')
         request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is <vowels>.'
@@ -196,6 +201,7 @@ def assert_default_vowels(given_vowels):
     def test_Processor_refactor_request_with_add_and_remove_param(self):
         response = Message()
         request = Message()
+        request.refactorRequest.saveChanges = True
         request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
         request.refactorRequest.oldStepValue.parameters.append('vowels')
         request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is <bsdfdsf>.'
@@ -224,6 +230,85 @@ def assert_default_vowels(bsdfdsf):
     assert given_vowels == "".join(vowels)
 """
         self.assertEqual(expected, actual_data)
+
+    def test_Processor_refactor_request_without_save_change_with_add_param(self):
+        response = Message()
+        request = Message()
+
+        request.refactorRequest.saveChanges = False
+        request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
+        request.refactorRequest.oldStepValue.parameters.append('vowels')
+        request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language \
+is <vowels> <bsdfdsf>.'
+        request.refactorRequest.newStepValue.stepValue = 'Vowels in English language is {} {}.'
+        request.refactorRequest.newStepValue.parameters.extend(['vowels', 'bsdfdsf'])
+        position = ParameterPosition()
+        position.oldPosition = 0
+        position.newPosition = 0
+        param_position = ParameterPosition()
+        param_position.oldPosition = -1
+        param_position.newPosition = 1
+        request.refactorRequest.paramPositions.extend([position, param_position])
+
+        old_content = self.getActualText()
+
+        processors[Message.RefactorRequest](request, response, None)
+
+        expected = """@step("Vowels in English language is <vowels> <bsdfdsf>.")
+def assert_default_vowels(given_vowels, bsdfdsf):
+    Messages.write_message("Given vowels are {0}".format(given_vowels))
+    assert given_vowels == "".join(vowels)
+"""
+
+        self.assertEqual(Message.RefactorResponse, response.messageType)
+        self.assertEqual(True,
+                         response.refactorResponse.success,
+                         response.refactorResponse.error)
+
+        self.assertEqual([RefactorTests.path],
+                         response.refactorResponse.filesChanged)
+
+        self.assertEqual(RefactorTests.path, response.refactorResponse.fileChanges[0].fileName)
+        self.assertEqual(expected, response.refactorResponse.fileChanges[0].fileContent)
+        self.assertEqual(old_content, self.getActualText())
+
+    def test_Processor_refactor_request_without_save_changes_add_param_and_invalid_identifier(self):
+        response = Message()
+        request = Message()
+
+        request.refactorRequest.saveChanges = False
+        request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
+        request.refactorRequest.oldStepValue.parameters.append('vowels')
+        request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is \
+<vowels> <vowels!2_ab%$>.'
+        request.refactorRequest.newStepValue.stepValue = 'Vowels in English language is {} {}.'
+        request.refactorRequest.newStepValue.parameters.extend(['vowels', 'vowels!2_ab%$'])
+        position = ParameterPosition()
+        position.oldPosition = 0
+        position.newPosition = 0
+        param_position = ParameterPosition()
+        param_position.oldPosition = -1
+        param_position.newPosition = 1
+        request.refactorRequest.paramPositions.extend([position, param_position])
+
+        old_content = self.getActualText()
+
+        processors[Message.RefactorRequest](request, response, None)
+
+        self.assertEqual(Message.RefactorResponse, response.messageType)
+        self.assertEqual(True,
+                         response.refactorResponse.success,
+                         response.refactorResponse.error)
+
+        self.assertEqual([RefactorTests.path],
+                         response.refactorResponse.filesChanged)
+        expected = """@step("Vowels in English language is <vowels> <vowels!2_ab%$>.")
+def assert_default_vowels(given_vowels, arg1):
+    Messages.write_message("Given vowels are {0}".format(given_vowels))
+    assert given_vowels == "".join(vowels)
+"""
+        self.assertEqual(expected, response.refactorResponse.fileChanges[0].fileContent)
+        self.assertEqual(old_content, self.getActualText())
 
     def getActualText(self):
         _file = open(RefactorTests.path, 'r+')
