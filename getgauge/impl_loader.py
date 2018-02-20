@@ -55,7 +55,6 @@ def _import_impl(step_impl_dir):
 def _import_file(file_path):
     rel_path = os.path.normpath(file_path.replace(project_root + os.path.sep, ''))
     try:
-        py_compile.compile(file_path)
         importlib.import_module(os.path.splitext(rel_path.replace(os.path.sep, '.'))[0])
     except:
         print('Exception occurred while loading step implementations from file: {}.'.format(rel_path))
