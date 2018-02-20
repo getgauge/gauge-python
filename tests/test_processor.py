@@ -457,6 +457,20 @@ class ProcessorTests(TestCase):
         self.assertIn(('Step {} with {}', 0), steps)
         self.assertIn(('Step 1', 4), steps)
 
+    def test_Processor_put_stub_impl_request(self):
+        request = Message()
+        response = Message()
+
+        inpCodesArray = ["code1", "code2"]
+        request.stubImplementationCodeRequest.implementationFilePath = ""
+        request.stubImplementationCodeRequest.codes.extend(inpCodesArray)
+
+        processors[Message.StubImplementationCodeRequest](request, response, None)
+
+        expectedOutputCodes = "code1\ncode2"
+        self.assertEqual(response.fileChanges.fileContent, expectedOutputCodes)
+        self.assertEqual(response.fileChanges.fileName, "")
+
 
 def impl(a, b):
     pass
