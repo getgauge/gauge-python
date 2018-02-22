@@ -1,6 +1,7 @@
 import sys
 
-from os import path
+from os import path,environ
+import ptvsd
 
 from getgauge.connection import read_message, send_message
 from getgauge.executor import set_response_values, execute_method, run_hook
@@ -65,6 +66,10 @@ def _execute_before_suite_hook(request, response, socket, clear=True):
     if clear:
         registry.clear()
         load_impls(get_step_impl_dir())
+    if environ.get('DEBUGGING'):
+        ptvsd.enable_attach(None, address=('0.0.0.0', int(environ.get('DEBUG_PORT'))))
+        ptvsd.wait_for_attach()
+
     execution_info = create_execution_context_from(request.executionStartingRequest.currentExecutionInfo)
     run_hook(request, response, registry.before_suite(), execution_info)
 
