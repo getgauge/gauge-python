@@ -461,14 +461,14 @@ class ProcessorTests(TestCase):
         request = Message()
         response = Message()
 
-        inpCodesArray = ["code1", "code2"]
+        codes = ["code1", "code2"]
         request.stubImplementationCodeRequest.implementationFilePath = ""
-        request.stubImplementationCodeRequest.codes.extend(inpCodesArray)
+        request.stubImplementationCodeRequest.codes.extend(codes)
 
         processors[Message.StubImplementationCodeRequest](request, response, None)
 
-        expectedOutputCodes = "code1\ncode2"
-        self.assertEqual(response.fileChanges.fileContent, expectedOutputCodes)
+        expected = "from getgauge.python import step\n\ncode1\ncode2"
+        self.assertEqual(response.fileChanges.fileContent, expected)
         self.assertEqual(response.fileChanges.fileName, "")
 
 

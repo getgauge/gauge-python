@@ -1,6 +1,6 @@
 import sys
 
-from os import path,environ
+from os import path, environ
 import ptvsd
 
 from getgauge.connection import read_message, send_message
@@ -170,11 +170,12 @@ def _get_stub_impl_content(request, response, socket):
     file_name = request.stubImplementationCodeRequest.implementationFilePath
     codes = request.stubImplementationCodeRequest.codes
     response.fileChanges.fileName = file_name
-    code_concat = "\n".join(codes)
     existing_file_content = read_file_contents(file_name)
     if len(existing_file_content) > 0:
-        code_concat = existing_file_content + "\n" + code_concat
-    response.fileChanges.fileContent = code_concat
+        codes.insert(0, existing_file_content)
+    else:
+        codes.insert(0, "from getgauge.python import step\n")
+    response.fileChanges.fileContent = "\n".join(codes)
 
 
 processors = {Message.ExecutionStarting: _execute_before_suite_hook,
