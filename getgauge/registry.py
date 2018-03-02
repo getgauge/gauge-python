@@ -156,7 +156,7 @@ def _filter_hooks(tags, hooks):
 
 
 def _get_step_value(step_text):
-    return re.sub('<[^<]+?>', '{}', step_text)
+    return re.sub('(<.*?>)', '{}', step_text)
 
 
 def _take_screenshot():

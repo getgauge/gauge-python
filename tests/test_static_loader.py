@@ -105,6 +105,15 @@ class StaticLoaderTests(unittest.TestCase):
         self.assertFalse(registry.is_implemented("print hello"))
         self.assertTrue(registry.is_implemented("print world"))
 
+    def test_loader_reload_registry_for_given_content_with_empty_arg(self):
+        content = """
+            @step("print hello <>")
+            def print(arg1):
+                print(arg1)
+            """
+
+        load_steps(content, "foo.py")
+        self.assertTrue(registry.is_implemented("print hello {}"))
 
 def tearDown(self):
     registry.clear()

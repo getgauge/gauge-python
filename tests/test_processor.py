@@ -108,7 +108,6 @@ class ProcessorTests(TestCase):
     def test_Processor_step_name_request_with_aliases(self):
         registry.add_step(['Step 1', 'Step 2', 'Step 3'], 'func1', '',
                           {'start': 5, 'startChar': 0, 'end': 6, 'endChar': 10})
-        print(registry.is_implemented("Step 2"))
         response = Message()
         request = Message()
         request.stepNameRequest.stepValue = 'Step 1'
