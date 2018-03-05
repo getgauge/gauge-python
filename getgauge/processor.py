@@ -171,7 +171,7 @@ def _get_stub_impl_content(request, response, socket):
     codes = request.stubImplementationCodeRequest.codes
     response.fileDiff.filePath = file_name
     code_concat = "\n".join(codes)
-    existing_file_content = read_file_contents(file_name)
+    existing_file_content = read_file_contents(file_name).replace("\r\n", "\n")
     if len(existing_file_content) > 0:
         if (len(existing_file_content.strip().split("\n")) ==  len(existing_file_content.split("\n"))):
             code_concat = "\n\n" + code_concat
