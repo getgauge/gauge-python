@@ -466,9 +466,14 @@ class ProcessorTests(TestCase):
 
         processors[Message.StubImplementationCodeRequest](request, response, None)
 
-        expected = "from getgauge.python import step\n\ncode1\ncode2"
-        self.assertEqual(response.fileChanges.fileContent, expected)
-        self.assertEqual(response.fileChanges.fileName, "")
+        expectedOutputCodes = "code1\ncode2"
+        self.assertEqual(len(response.fileDiff.textDiffs), 1)
+        self.assertEqual(response.fileDiff.textDiffs[0].content, expectedOutputCodes)
+        self.assertEqual(response.fileDiff.textDiffs[0].span.start, 0)
+        self.assertEqual(response.fileDiff.textDiffs[0].span.startChar, 0)
+        self.assertEqual(response.fileDiff.textDiffs[0].span.end, 0)
+        self.assertEqual(response.fileDiff.textDiffs[0].span.endChar, 0)
+        self.assertEqual(response.fileDiff.filePath, "")
 
 
 def impl(a, b):

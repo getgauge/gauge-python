@@ -6,7 +6,7 @@ import ptvsd
 from getgauge.connection import read_message, send_message
 from getgauge.executor import set_response_values, execute_method, run_hook
 from getgauge.impl_loader import load_impls
-from getgauge.messages.messages_pb2 import Message, StepPositionsResponse
+from getgauge.messages.messages_pb2 import Message, StepPositionsResponse, TextDiff
 from getgauge.messages.spec_pb2 import Parameter, Span
 from getgauge.python import Table, create_execution_context_from, DataStoreFactory
 from getgauge.refactor import refactor_step
@@ -166,16 +166,23 @@ def _get_impl_file_list(request, response, socket):
 
 
 def _get_stub_impl_content(request, response, socket):
-    response.messageType = Message.FileChanges
+    response.messageType = Message.FileDiff
     file_name = request.stubImplementationCodeRequest.implementationFilePath
     codes = request.stubImplementationCodeRequest.codes
-    response.fileChanges.fileName = file_name
+    response.fileDiff.filePath = file_name
+    code_concat = "\n".join(codes)
     existing_file_content = read_file_contents(file_name)
     if len(existing_file_content) > 0:
-        codes.insert(0, existing_file_content)
+        if (len(existing_file_content.strip().split("\n")) ==  len(existing_file_content.split("\n"))):
+            code_concat = "\n\n" + code_concat
+        else:
+            code_concat = "\n" + code_concat
+        lastLine = len(existing_file_content.split("\n"))
+        span = Span(**{'start': lastLine, 'startChar': 0, 'end': lastLine, 'endChar': 0})
     else:
-        codes.insert(0, "from getgauge.python import step\n")
-    response.fileChanges.fileContent = "\n".join(codes)
+        span = Span(**{'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0})
+    textDiffs = [TextDiff(**{'span': span, 'content': code_concat})]
+    response.fileDiff.textDiffs.extend(textDiffs)
 
 
 processors = {Message.ExecutionStarting: _execute_before_suite_hook,
