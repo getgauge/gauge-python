@@ -16,7 +16,7 @@ def get_step_impl_dir():
     return os.path.join(get_project_root(), STEP_IMPL_DIR_NAME)
 
 
-def list_impl_files():
+def get_impl_files():
     step_impl_dir = get_step_impl_dir()
     file_list = []
     for root, _, files in os.walk(step_impl_dir):
@@ -33,3 +33,13 @@ def read_file_contents(file_name):
         f.close()
         return content
     return ""
+
+
+def get_file_name(prefix='', counter=0):
+    name = 'step_implementation{}.py'.format(prefix)
+    file_name = os.path.join(get_step_impl_dir(), name)
+    if not os.path.exists(file_name):
+        return file_name
+    else:
+        counter = counter + 1
+        return get_file_name('_{}'.format(counter), counter)

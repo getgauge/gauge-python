@@ -1,6 +1,6 @@
 import sys
-
 from os import path, environ
+
 import ptvsd
 
 from getgauge.connection import read_message, send_message
@@ -11,9 +11,9 @@ from getgauge.messages.spec_pb2 import Parameter, Span
 from getgauge.python import Table, create_execution_context_from, DataStoreFactory
 from getgauge.refactor import refactor_step
 from getgauge.registry import registry, _MessagesStore
-from getgauge.util import get_step_impl_dir, list_impl_files, read_file_contents
-from getgauge.validator import validate_step
 from getgauge.static_loader import reload_steps
+from getgauge.util import get_step_impl_dir, get_impl_files, read_file_contents, get_file_name
+from getgauge.validator import validate_step
 
 
 def _validate_step(request, response, socket):
@@ -161,7 +161,7 @@ def _kill_runner(request, response, socket):
 
 def _get_impl_file_list(request, response, socket):
     response.messageType = Message.ImplementationFileListResponse
-    files = list_impl_files()
+    files = get_impl_files()
     response.implementationFileListResponse.implementationFilePaths.extend(files)
 
 
@@ -169,7 +169,6 @@ def _get_stub_impl_content(request, response, socket):
     response.messageType = Message.FileDiff
     file_name = request.stubImplementationCodeRequest.implementationFilePath
     codes = request.stubImplementationCodeRequest.codes
-    response.fileDiff.filePath = file_name
     content = read_file_contents(file_name).replace('\r\n', '\n')
     if len(content) > 0:
         new_line_char = '\n' if len(content.strip().split('\n')) == len(content.split('\n')) else ''
@@ -177,9 +176,11 @@ def _get_stub_impl_content(request, response, socket):
         lastLine = len(content.split('\n'))
         span = Span(**{'start': lastLine, 'startChar': 0, 'end': lastLine, 'endChar': 0})
     else:
+        file_name = get_file_name()
         codes.insert(0, "from getgauge.python import step\n")
         span = Span(**{'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0})
     textDiffs = [TextDiff(**{'span': span, 'content': '\n'.join(codes)})]
+    response.fileDiff.filePath = file_name
     response.fileDiff.textDiffs.extend(textDiffs)
 
 

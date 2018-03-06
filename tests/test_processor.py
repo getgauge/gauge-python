@@ -1,3 +1,4 @@
+from os import path
 from socket import socket, AF_INET, SOCK_STREAM
 from unittest import TestCase, main
 
@@ -466,13 +467,13 @@ class ProcessorTests(TestCase):
 
         processors[Message.StubImplementationCodeRequest](request, response, None)
 
-        expectedOutputCodes = "from getgauge.python import step\n\ncode1\ncode2"
-        expectedSpan = Span(**{'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0})
-        expectedTextDiff = TextDiff(**{'span': expectedSpan, 'content': expectedOutputCodes})
+        expected_output_codes = "from getgauge.python import step\n\ncode1\ncode2"
+        expected_span = Span(**{'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0})
+        expected_text_diff = TextDiff(**{'span': expected_span, 'content': expected_output_codes})
 
         self.assertEqual(len(response.fileDiff.textDiffs), 1)
-        self.assertEqual(response.fileDiff.textDiffs[0], expectedTextDiff)
-        self.assertEqual(response.fileDiff.filePath, "")
+        self.assertEqual(response.fileDiff.textDiffs[0], expected_text_diff)
+        self.assertEqual(path.basename(response.fileDiff.filePath), "step_implementation.py")
 
 
 def impl(a, b):
