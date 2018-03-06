@@ -466,7 +466,7 @@ class ProcessorTests(TestCase):
 
         processors[Message.StubImplementationCodeRequest](request, response, None)
 
-        expectedOutputCodes = "code1\ncode2"
+        expectedOutputCodes = "from getgauge.python import step\n\ncode1\ncode2"
         self.assertEqual(len(response.fileDiff.textDiffs), 1)
         self.assertEqual(response.fileDiff.textDiffs[0].content, expectedOutputCodes)
         self.assertEqual(response.fileDiff.textDiffs[0].span.start, 0)

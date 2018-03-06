@@ -170,18 +170,18 @@ def _get_stub_impl_content(request, response, socket):
     file_name = request.stubImplementationCodeRequest.implementationFilePath
     codes = request.stubImplementationCodeRequest.codes
     response.fileDiff.filePath = file_name
-    code_concat = "\n".join(codes)
     existing_file_content = read_file_contents(file_name).replace("\r\n", "\n")
     if len(existing_file_content) > 0:
-        if (len(existing_file_content.strip().split("\n")) ==  len(existing_file_content.split("\n"))):
-            code_concat = "\n\n" + code_concat
+        if len(existing_file_content.strip().split("\n")) == len(existing_file_content.split("\n")):
+            codes.insert(0, "\n")
         else:
-            code_concat = "\n" + code_concat
+            codes.insert(0, "")
         lastLine = len(existing_file_content.split("\n"))
         span = Span(**{'start': lastLine, 'startChar': 0, 'end': lastLine, 'endChar': 0})
     else:
+        codes.insert(0, "from getgauge.python import step\n")
         span = Span(**{'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0})
-    textDiffs = [TextDiff(**{'span': span, 'content': code_concat})]
+    textDiffs = [TextDiff(**{'span': span, 'content': "\n".join(codes)})]
     response.fileDiff.textDiffs.extend(textDiffs)
 
 
