@@ -1,8 +1,8 @@
 from socket import socket, AF_INET, SOCK_STREAM
 from unittest import TestCase, main
 
-from getgauge.messages.messages_pb2 import Message, StepValidateResponse
-from getgauge.messages.spec_pb2 import ProtoExecutionResult, Parameter
+from getgauge.messages.messages_pb2 import Message, StepValidateResponse, TextDiff
+from getgauge.messages.spec_pb2 import ProtoExecutionResult, Parameter, Span
 from getgauge.processor import processors
 from getgauge.python import DataStoreFactory, DataStore
 from getgauge.registry import registry
@@ -467,12 +467,11 @@ class ProcessorTests(TestCase):
         processors[Message.StubImplementationCodeRequest](request, response, None)
 
         expectedOutputCodes = "from getgauge.python import step\n\ncode1\ncode2"
+        expectedSpan = Span(**{'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0})
+        expectedTextDiff = TextDiff(**{'span': expectedSpan, 'content': expectedOutputCodes})
+
         self.assertEqual(len(response.fileDiff.textDiffs), 1)
-        self.assertEqual(response.fileDiff.textDiffs[0].content, expectedOutputCodes)
-        self.assertEqual(response.fileDiff.textDiffs[0].span.start, 0)
-        self.assertEqual(response.fileDiff.textDiffs[0].span.startChar, 0)
-        self.assertEqual(response.fileDiff.textDiffs[0].span.end, 0)
-        self.assertEqual(response.fileDiff.textDiffs[0].span.endChar, 0)
+        self.assertEqual(response.fileDiff.textDiffs[0], expectedTextDiff)
         self.assertEqual(response.fileDiff.filePath, "")
 
 
