@@ -1,5 +1,7 @@
 import platform
 import sys
+import logging
+import os
 
 from os import path
 from getgauge import connection, processor
@@ -9,7 +11,8 @@ from getgauge.util import get_step_impl_dir
 
 
 def main():
-    print("Python: {}".format(platform.python_version()))
+    _init_logger()
+    logging.info("Python: {}".format(platform.python_version()))
     if sys.argv[1] == "--init":
         copy_skel_files()
     else:
@@ -18,8 +21,15 @@ def main():
         if path.exists(dir):
             load_files(dir)
         else:
-            print('can not load implementations from {}. {} does not exist.'.format(dir, dir))
+            logging.error('can not load implementations from {}. {} does not exist.'.format(dir, dir))
         processor.dispatch_messages(s)
+
+
+def _init_logger():
+    if bool(os.getenv("IsDaemon")):
+        logging.basicConfig(stream=sys.stdout, format='%(asctime)s.%(msecs)03d %(message)s', level=logging.DEBUG, datefmt='%H:%M:%S')
+    else:
+        logging.basicConfig(stream=sys.stdout, format='%(message)s', level=logging.DEBUG)
 
 
 if __name__ == '__main__':

@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import tempfile
+import logging
 from subprocess import call
 
 
@@ -168,9 +169,9 @@ def _take_screenshot():
         _file.close()
         return data
     except Exception as err:
-        print("\nFailed to take screenshot using gauge_screenshot.\n{0}".format(err))
+        logging.error("\nFailed to take screenshot using gauge_screenshot.\n{0}".format(err))
     except:
-        print("\nFailed to take screenshot using gauge_screenshot.\n{0}".format(sys.exc_info()[0]))
+        logging.error("\nFailed to take screenshot using gauge_screenshot.\n{0}".format(sys.exc_info()[0]))
     return str.encode("")
 
 
