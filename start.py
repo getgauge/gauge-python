@@ -26,7 +26,7 @@ def main():
 
 
 def _init_logger():
-    if bool(os.getenv("IsDaemon")):
+    if os.getenv("IS_DAEMON"):
         logging.basicConfig(stream=sys.stdout, format='%(asctime)s.%(msecs)03d %(message)s', level=logging.DEBUG, datefmt='%H:%M:%S')
     else:
         logging.basicConfig(stream=sys.stdout, format='%(message)s', level=logging.DEBUG)
