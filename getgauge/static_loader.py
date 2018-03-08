@@ -1,4 +1,5 @@
 import re
+import logging
 from os import path
 
 from baron.utils import BaronError
@@ -17,7 +18,7 @@ def load_steps(content, file_name):
                     steps = re.findall(r'[\'"](.*?)[\'"]', decorator.call.__str__())
                     add_steps(file_name, func, steps)
     except BaronError as e:
-        print(e.args[0][:-640])
+        logging.error(e.args[0][:-640])
 
 
 

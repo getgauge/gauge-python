@@ -4,6 +4,7 @@ import py_compile
 import shutil
 import sys
 import traceback
+import logging
 from os import path
 
 from getgauge.util import *
@@ -22,24 +23,24 @@ SKEL = 'skel'
 def load_impls(step_impl_dir=impl_dir):
     os.chdir(project_root)
     if not os.path.isdir(step_impl_dir):
-        print('Cannot import step implementations. Error: {} does not exist.'.format(step_impl_dir))
-        print('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
+        logging.error('Cannot import step implementations. Error: {} does not exist.'.format(step_impl_dir))
+        logging.error('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
         return
     _import_impl(step_impl_dir)
 
 
 def copy_skel_files():
     try:
-        print('Initialising Gauge Python project')
-        print('create  {}'.format(env_dir))
+        logging.info('Initialising Gauge Python project')
+        logging.info('create  {}'.format(env_dir))
         os.makedirs(env_dir)
-        print('create  {}'.format(impl_dir))
+        logging.info('create  {}'.format(impl_dir))
         shutil.copytree(os.path.join(SKEL, STEP_IMPL_DIR_NAME), impl_dir)
-        print('create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
+        logging.info('create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
         shutil.copy(os.path.join(SKEL, PYTHON_PROPERTIES), env_dir)
         open(requirements_file, 'w').write('getgauge==' + _get_version())
     except:
-        print('Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
+        logging.error('Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
         sys.exit(1)
 
 
@@ -57,8 +58,8 @@ def _import_file(file_path):
     try:
         importlib.import_module(os.path.splitext(rel_path.replace(os.path.sep, '.'))[0])
     except:
-        print('Exception occurred while loading step implementations from file: {}.'.format(rel_path))
-        print(traceback.format_exc())
+        logging.error('Exception occurred while loading step implementations from file: {}.'.format(rel_path))
+        logging.error(traceback.format_exc())
 
 
 def _get_version():
