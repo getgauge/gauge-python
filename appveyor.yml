@@ -12,6 +12,7 @@ cache:
 - C:\Users\appveyor\.m2
 environment:
     GAUGE_TELEMETRY_ENABLED: false
+    GAUGE_PREFIX: C:\Program Files\Gauge\bin
 install:
    - git submodule init
    - git submodule update
@@ -39,6 +40,8 @@ build_script:
     git clone --depth=1 https://github.com/getgauge/gauge-tests
 
     cd gauge-tests
+
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/getgauge/infrastructure/master/nightly_scripts/install_latest_gauge_nightly.ps1" -OutFile install_latest_gauge_nightly.ps1
 
     .\install_latest_gauge_nightly.ps1
 
