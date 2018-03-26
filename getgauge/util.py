@@ -29,10 +29,10 @@ def get_impl_files():
 def read_file_contents(file_name):
     if os.path.isfile(file_name):
         f = open(file_name)
-        content = f.read()
+        content = f.read().replace('\r\n', '\n')
         f.close()
         return content
-    return ""
+    return None
 
 
 def get_file_name(prefix='', counter=0):

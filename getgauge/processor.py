@@ -169,12 +169,13 @@ def _get_stub_impl_content(request, response, socket):
     response.messageType = Message.FileDiff
     file_name = request.stubImplementationCodeRequest.implementationFilePath
     codes = request.stubImplementationCodeRequest.codes
-    content = read_file_contents(file_name).replace('\r\n', '\n')
-    if len(content) > 0:
+    content = read_file_contents(file_name)
+    if content is not None:
         new_line_char = '\n' if len(content.strip().split('\n')) == len(content.split('\n')) else ''
-        codes.insert(0, new_line_char)
-        lastLine = len(content.split('\n'))
-        span = Span(**{'start': lastLine, 'startChar': 0, 'end': lastLine, 'endChar': 0})
+        last_line = len(content.split('\n'))
+        prefix = "from getgauge.python import step\n" if len(content) == 0 else new_line_char
+        codes.insert(0, prefix)
+        span = Span(**{'start': last_line, 'startChar': 0, 'end': last_line, 'endChar': 0})
     else:
         file_name = get_file_name()
         codes.insert(0, "from getgauge.python import step\n")
