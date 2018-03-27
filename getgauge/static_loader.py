@@ -17,9 +17,8 @@ def load_steps(content, file_name):
                 if decorator.value.__str__() == 'step':
                     steps = re.findall(r'[\'"](.*?)[\'"]', decorator.call.__str__())
                     add_steps(file_name, func, steps)
-    except BaronError as e:
-        logging.error(e.args[0][:-640])
-
+    except Exception:
+        logging.error("Failed to parse {}.".format(file_name))
 
 
 def reload_steps(content, file_name):
