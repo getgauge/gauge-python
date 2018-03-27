@@ -1,7 +1,7 @@
 import sys
 from os import path, environ
-
 import ptvsd
+import logging
 
 from getgauge.connection import read_message, send_message
 from getgauge.executor import set_response_values, execute_method, run_hook
@@ -14,6 +14,8 @@ from getgauge.registry import registry, _MessagesStore
 from getgauge.static_loader import reload_steps
 from getgauge.util import get_step_impl_dir, get_impl_files, read_file_contents, get_file_name
 from getgauge.validator import validate_step
+
+ATTACH_DEBUGGER_EVENT = 'Runner Ready for Debugging'
 
 
 def _validate_step(request, response, socket):
@@ -68,6 +70,7 @@ def _execute_before_suite_hook(request, response, socket, clear=True):
         load_impls(get_step_impl_dir())
     if environ.get('DEBUGGING'):
         ptvsd.enable_attach(None, address=('0.0.0.0', int(environ.get('DEBUG_PORT'))))
+        logging.info(ATTACH_DEBUGGER_EVENT)
         ptvsd.wait_for_attach()
 
     execution_info = create_execution_context_from(request.executionStartingRequest.currentExecutionInfo)
