@@ -10,7 +10,7 @@ from getgauge.messages.messages_pb2 import Message, StepPositionsResponse, TextD
 from getgauge.messages.spec_pb2 import Parameter, Span
 from getgauge.python import Table, create_execution_context_from, DataStoreFactory
 from getgauge.refactor import refactor_step
-from getgauge.registry import registry, _MessagesStore
+from getgauge.registry import registry, MessagesStore
 from getgauge.static_loader import reload_steps
 from getgauge.util import get_step_impl_dir, get_impl_files, read_file_contents, get_file_name
 from getgauge.validator import validate_step
@@ -18,11 +18,11 @@ from getgauge.validator import validate_step
 ATTACH_DEBUGGER_EVENT = 'Runner Ready for Debugging'
 
 
-def _validate_step(request, response, socket):
+def _validate_step(request, response, _socket):
     validate_step(request, response)
 
 
-def _send_step_name(request, response, socket):
+def _send_step_name(request, response, _socket):
     response.messageType = Message.StepNameResponse
     info = registry.get_info_for(request.stepNameRequest.stepValue)
     response.stepNameResponse.isStepPresent = False
@@ -41,7 +41,7 @@ def _send_step_name(request, response, socket):
     response.stepNameResponse.hasAlias = info.has_alias
 
 
-def _refactor(request, response, socket):
+def _refactor(request, response, _socket):
     response.messageType = Message.RefactorResponse
     try:
         refactor_step(request, response)
@@ -50,12 +50,12 @@ def _refactor(request, response, socket):
         response.refactorResponse.error = 'Reason: {}'.format(e.__str__())
 
 
-def _send_all_step_names(request, response, socket):
+def _send_all_step_names(_request, response, _socket):
     response.messageType = Message.StepNamesResponse
     response.stepNamesResponse.steps.extend(registry.steps())
 
 
-def _execute_step(request, response, socket):
+def _execute_step(request, response, _socket):
     params = []
     for p in request.executeStepRequest.parameters:
         params.append(Table(p.table) if p.parameterType in [Parameter.Table, Parameter.Special_Table] else p.value)
@@ -64,12 +64,12 @@ def _execute_step(request, response, socket):
     execute_method(params, impl, response, registry.is_continue_on_failure)
 
 
-def _execute_before_suite_hook(request, response, socket, clear=True):
+def _execute_before_suite_hook(request, response, _socket, clear=True):
     if clear:
         registry.clear()
         load_impls(get_step_impl_dir())
     if environ.get('DEBUGGING'):
-        ptvsd.enable_attach(None, address=('0.0.0.0', int(environ.get('DEBUG_PORT'))))
+        ptvsd.enable_attach('', address=('0.0.0.0', int(environ.get('DEBUG_PORT'))))
         logging.info(ATTACH_DEBUGGER_EVENT)
         ptvsd.wait_for_attach()
 
@@ -77,58 +77,58 @@ def _execute_before_suite_hook(request, response, socket, clear=True):
     run_hook(request, response, registry.before_suite(), execution_info)
 
 
-def _execute_after_suite_hook(request, response, socket):
+def _execute_after_suite_hook(request, response, _socket):
     execution_info = create_execution_context_from(request.executionEndingRequest.currentExecutionInfo)
     run_hook(request, response, registry.after_suite(), execution_info)
 
 
-def _execute_before_spec_hook(request, response, socket):
+def _execute_before_spec_hook(request, response, _socket):
     execution_info = create_execution_context_from(request.specExecutionStartingRequest.currentExecutionInfo)
     run_hook(request, response, registry.before_spec(execution_info.specification.tags), execution_info)
 
 
-def _execute_after_spec_hook(request, response, socket):
+def _execute_after_spec_hook(request, response, _socket):
     execution_info = create_execution_context_from(request.specExecutionEndingRequest.currentExecutionInfo)
     run_hook(request, response, registry.after_spec(execution_info.specification.tags), execution_info)
 
 
-def _execute_before_scenario_hook(request, response, socket):
+def _execute_before_scenario_hook(request, response, _socket):
     execution_info = create_execution_context_from(request.scenarioExecutionStartingRequest.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
     run_hook(request, response, registry.before_scenario(tags), execution_info)
 
 
-def _execute_after_scenario_hook(request, response, socket):
+def _execute_after_scenario_hook(request, response, _socket):
     execution_info = create_execution_context_from(request.scenarioExecutionEndingRequest.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
     run_hook(request, response, registry.after_scenario(tags), execution_info)
 
 
-def _execute_before_step_hook(request, response, socket):
-    _MessagesStore.clear()
+def _execute_before_step_hook(request, response, _socket):
+    MessagesStore.clear()
     execution_info = create_execution_context_from(request.stepExecutionStartingRequest.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
     run_hook(request, response, registry.before_step(tags), execution_info)
 
 
-def _execute_after_step_hook(request, response, socket):
+def _execute_after_step_hook(request, response, _socket):
     execution_info = create_execution_context_from(request.stepExecutionEndingRequest.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
     run_hook(request, response, registry.after_step(tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(_MessagesStore.pending_messages())
+    response.executionStatusResponse.executionResult.message.extend(MessagesStore.pending_messages())
 
 
-def _init_scenario_data_store(request, response, socket):
+def _init_scenario_data_store(request, response, _socket):
     DataStoreFactory.scenario_data_store().clear()
     set_response_values(request, response)
 
 
-def _init_spec_data_store(request, response, socket):
+def _init_spec_data_store(request, response, _socket):
     DataStoreFactory.spec_data_store().clear()
     set_response_values(request, response)
 
 
-def _init_suite_data_store(request, response, socket):
+def _init_suite_data_store(request, response, _socket):
     DataStoreFactory.suite_data_store().clear()
     set_response_values(request, response)
 
@@ -142,33 +142,35 @@ def _load_from_disk(file_path):
         registry.remove_steps(file_path)
 
 
-def _cache_file(request, response, socket):
+def _cache_file(request, _response, _socket):
     if not request.cacheFileRequest.isClosed:
         reload_steps(request.cacheFileRequest.content, request.cacheFileRequest.filePath)
     else:
         _load_from_disk(request.cacheFileRequest.filePath)
 
 
-def _step_positions(request, response, socket):
+def _step_positions(request, response, _socket):
     positions = registry.get_step_positions(request.stepPositionsRequest.filePath)
-    create_pos = lambda p: StepPositionsResponse.StepPosition(
-        **{'stepValue': p['stepValue'], 'span': Span(**p['span'])})
     response.messageType = Message.StepPositionsResponse
-    response.stepPositionsResponse.stepPositions.extend([create_pos(x) for x in positions])
+    response.stepPositionsResponse.stepPositions.extend([_create_pos(x) for x in positions])
 
 
-def _kill_runner(request, response, socket):
+def _create_pos(p):
+    return StepPositionsResponse.StepPosition(**{'stepValue': p['stepValue'], 'span': Span(**p['span'])})
+
+
+def _kill_runner(_request, _response, socket):
     socket.close()
     sys.exit()
 
 
-def _get_impl_file_list(request, response, socket):
+def _get_impl_file_list(_request, response, _socket):
     response.messageType = Message.ImplementationFileListResponse
     files = get_impl_files()
     response.implementationFileListResponse.implementationFilePaths.extend(files)
 
 
-def _get_stub_impl_content(request, response, socket):
+def _get_stub_impl_content(request, response, _socket):
     response.messageType = Message.FileDiff
     file_name = request.stubImplementationCodeRequest.implementationFilePath
     codes = request.stubImplementationCodeRequest.codes
@@ -186,6 +188,11 @@ def _get_stub_impl_content(request, response, socket):
     textDiffs = [TextDiff(**{'span': span, 'content': '\n'.join(codes)})]
     response.fileDiff.filePath = file_name
     response.fileDiff.textDiffs.extend(textDiffs)
+
+
+def _glob_pattern(_request, response, _socket):
+    patterns = ["{}/**/*.py".format(get_step_impl_dir())]
+    return response.implementationFileGlobPatternResponse.globPatterns.extend(patterns)
 
 
 processors = {Message.ExecutionStarting: _execute_before_suite_hook,
@@ -209,6 +216,7 @@ processors = {Message.ExecutionStarting: _execute_before_suite_hook,
               Message.KillProcessRequest: _kill_runner,
               Message.ImplementationFileListRequest: _get_impl_file_list,
               Message.StubImplementationCodeRequest: _get_stub_impl_content,
+              Message.ImplementationFileGlobPatternRequest: _glob_pattern
               }
 
 

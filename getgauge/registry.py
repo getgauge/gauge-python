@@ -43,22 +43,22 @@ class StepInfo(object):
         return self.__span
 
 
-class _MessagesStore:
+class MessagesStore:
     __messages = []
 
     @staticmethod
     def pending_messages():
-        messages = _MessagesStore.__messages
-        _MessagesStore.__messages = []
+        messages = MessagesStore.__messages
+        MessagesStore.__messages = []
         return messages
 
     @staticmethod
     def write_message(message):
-        _MessagesStore.__messages.append(message)
+        MessagesStore.__messages.append(message)
 
     @staticmethod
     def clear():
-        _MessagesStore.__messages = []
+        MessagesStore.__messages = []
 
 
 class Registry(object):

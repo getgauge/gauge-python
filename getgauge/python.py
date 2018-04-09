@@ -1,7 +1,7 @@
 import inspect
 import sys
 
-from getgauge.registry import registry, _MessagesStore
+from getgauge.registry import registry, MessagesStore
 
 
 def step(step_text):
@@ -209,7 +209,7 @@ class Step:
 class Messages:
     @staticmethod
     def write_message(message):
-        _MessagesStore.write_message(message)
+        MessagesStore.write_message(message)
 
 
 class DataStore:

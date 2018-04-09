@@ -475,6 +475,14 @@ class ProcessorTests(TestCase):
         self.assertEqual(response.fileDiff.textDiffs[0], expected_text_diff)
         self.assertEqual(path.basename(response.fileDiff.filePath), "step_implementation.py")
 
+    def test_Processor_glob_patter(self):
+        request = Message()
+        response = Message()
+
+        processors[Message.ImplementationFileGlobPatternRequest](request, response, None)
+
+        self.assertEqual(response.implementationFileGlobPatternResponse.globPatterns, ["step_impl/**/*.py"])
+
 
 def impl(a, b):
     pass

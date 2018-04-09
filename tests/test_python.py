@@ -1,7 +1,7 @@
 from unittest import TestCase, main
 
 from getgauge.messages.messages_pb2 import Message
-from getgauge.registry import registry, _MessagesStore
+from getgauge.registry import registry, MessagesStore
 from getgauge.python import (Messages, DataStore, DataStoreFactory, Table,
                              Specification, Scenario, Step, ExecutionContext,
                              create_execution_context_from)
@@ -14,25 +14,25 @@ class MessagesTests(TestCase):
         messages = ['HAHAHAH', 'HAHAHAH1', 'HAHAHAH2', 'HAHAHAH3']
         for message in messages:
             Messages.write_message(message)
-        pending_messages = _MessagesStore.pending_messages()
+        pending_messages = MessagesStore.pending_messages()
         self.assertEqual(messages, pending_messages)
 
     def test_clear(self):
         messages = ['HAHAHAH', 'HAHAHAH1', 'HAHAHAH2', 'HAHAHAH3']
         for message in messages:
             Messages.write_message(message)
-        _MessagesStore.clear()
-        pending_messages = _MessagesStore.pending_messages()
+        MessagesStore.clear()
+        pending_messages = MessagesStore.pending_messages()
         self.assertEqual([], pending_messages)
 
     def test_pending_messages_gives_only_those_messages_which_are_not_reported(self):
         messages = ['HAHAHAH', 'HAHAHAH1', 'HAHAHAH2', 'HAHAHAH3']
         for message in messages:
             Messages.write_message(message)
-        pending_messages = _MessagesStore.pending_messages()
+        pending_messages = MessagesStore.pending_messages()
         self.assertEqual(messages, pending_messages)
 
-        pending_messages = _MessagesStore.pending_messages()
+        pending_messages = MessagesStore.pending_messages()
 
         self.assertEqual([], pending_messages)
 
@@ -40,7 +40,7 @@ class MessagesTests(TestCase):
         for message in messages:
             Messages.write_message(message)
 
-        pending_messages = _MessagesStore.pending_messages()
+        pending_messages = MessagesStore.pending_messages()
 
         self.assertEqual(messages, pending_messages)
 
