@@ -1,13 +1,15 @@
 from os import path
 from socket import socket, AF_INET, SOCK_STREAM
 from unittest import main
+
 from pyfakefs.fake_filesystem_unittest import TestCase
+
+from getgauge import static_loader as loader
 from getgauge.messages.messages_pb2 import Message, StepValidateResponse, TextDiff, CacheFileRequest
 from getgauge.messages.spec_pb2 import ProtoExecutionResult, Parameter, Span
 from getgauge.processor import processors
 from getgauge.python import DataStoreFactory, DataStore
 from getgauge.registry import registry
-from getgauge import static_loader as loader
 
 
 class ProcessorTests(TestCase):

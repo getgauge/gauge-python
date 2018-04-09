@@ -1,7 +1,8 @@
+import logging
 import sys
 from os import path, environ
+
 import ptvsd
-import logging
 
 from getgauge.connection import read_message, send_message
 from getgauge.executor import set_response_values, execute_method, run_hook
@@ -19,12 +20,16 @@ ATTACH_DEBUGGER_EVENT = 'Runner Ready for Debugging'
 
 
 def _validate_step(request, response, _socket):
-    validate_step(request, response)
+    validate_step(request.stepValidateRequest, response)
 
 
 def _send_step_name(request, response, _socket):
     response.messageType = Message.StepNameResponse
     info = registry.get_info_for(request.stepNameRequest.stepValue)
+    step_name_response(info, response)
+
+
+def step_name_response(info, response):
     response.stepNameResponse.isStepPresent = False
     if info.step_text is not None:
         response.stepNameResponse.isStepPresent = True
@@ -44,7 +49,7 @@ def _send_step_name(request, response, _socket):
 def _refactor(request, response, _socket):
     response.messageType = Message.RefactorResponse
     try:
-        refactor_step(request, response)
+        refactor_step(request.refactorRequest, response)
     except Exception as e:
         response.refactorResponse.success = False
         response.refactorResponse.error = 'Reason: {}'.format(e.__str__())
@@ -136,7 +141,6 @@ def _init_suite_data_store(request, response, _socket):
 def _load_from_disk(file_path):
     if path.isfile(file_path):
         f = open(file_path, 'r+')
-
         reload_steps(f.read(), file_path)
         f.close()
 
@@ -144,8 +148,12 @@ def _load_from_disk(file_path):
 def _cache_file(request, _response, _socket):
     file = request.cacheFileRequest.filePath
     status = request.cacheFileRequest.status
+    update_registry(file, status, request.cacheFileRequest.content)
+
+
+def update_registry(file, status, content):
     if status == CacheFileRequest.CHANGED or status == CacheFileRequest.OPENED:
-        reload_steps(request.cacheFileRequest.content, file)
+        reload_steps(content, file)
     elif status == CacheFileRequest.CREATED or status == CacheFileRequest.CLOSED:
         _load_from_disk(file)
     else:
@@ -153,7 +161,12 @@ def _cache_file(request, _response, _socket):
 
 
 def _step_positions(request, response, _socket):
-    positions = registry.get_step_positions(request.stepPositionsRequest.filePath)
+    file_path = request.stepPositionsRequest.filePath
+    step_positions_response(file_path, response)
+
+
+def step_positions_response(file_path, response):
+    positions = registry.get_step_positions(file_path)
     response.messageType = Message.StepPositionsResponse
     response.stepPositionsResponse.stepPositions.extend([_create_pos(x) for x in positions])
 
@@ -177,6 +190,10 @@ def _get_stub_impl_content(request, response, _socket):
     response.messageType = Message.FileDiff
     file_name = request.stubImplementationCodeRequest.implementationFilePath
     codes = request.stubImplementationCodeRequest.codes
+    stub_impl_response(codes, file_name, response)
+
+
+def stub_impl_response(codes, file_name, response):
     content = read_file_contents(file_name)
     if content is not None:
         new_line_char = '\n' if len(content.strip().split('\n')) == len(content.split('\n')) else ''

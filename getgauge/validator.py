@@ -10,22 +10,22 @@ from getgauge.registry import registry
 def validate_step(request, response):
     response.messageType = Message.StepValidateResponse
     response.stepValidateResponse.isValid = True
-    if registry.is_implemented(request.stepValidateRequest.stepText) is False:
+    if registry.is_implemented(request.stepText) is False:
         response.stepValidateResponse.errorType = StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND
         response.stepValidateResponse.errorMessage = 'Step implementation not found'
         response.stepValidateResponse.isValid = False
-        response.stepValidateResponse.suggestion = _impl_suggestion(request.stepValidateRequest.stepValue)
-    elif registry.has_multiple_impls(request.stepValidateRequest.stepText):
+        response.stepValidateResponse.suggestion = _impl_suggestion(request.stepValue)
+    elif registry.has_multiple_impls(request.stepText):
         response.stepValidateResponse.isValid = False
         response.stepValidateResponse.errorType = StepValidateResponse.DUPLICATE_STEP_IMPLEMENTATION
         response.stepValidateResponse.suggestion = _duplicate_impl_suggestion(request)
 
 
 def _duplicate_impl_suggestion(request):
-    text = request.stepValidateRequest.stepText.replace('{}', '<arg>')
+    text = request.stepText.replace('{}', '<arg>')
     return "Multiple implementations found for `{}`\n".format(text) + '\n'.join(
         ['{}:{}\n''{}'.format(info.file_name, info.span['start'], _format_impl(info.impl.__str__())) for info in
-         registry.get_infos_for(request.stepValidateRequest.stepText)])
+         registry.get_infos_for(request.stepText)])
 
 
 def _impl_suggestion(step_value):

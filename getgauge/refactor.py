@@ -6,13 +6,13 @@ from getgauge.registry import registry
 
 
 def refactor_step(request, response):
-    if registry.has_multiple_impls(request.refactorRequest.oldStepValue.stepValue):
-        step = request.refactorRequest.oldStepValue.parameterizedStepValue
+    if registry.has_multiple_impls(request.oldStepValue.stepValue):
+        step = request.oldStepValue.parameterizedStepValue
         raise Exception('Multiple Implementation found for `{}`'.format(step))
-    info = registry.get_info_for(request.refactorRequest.oldStepValue.stepValue)
+    info = registry.get_info_for(request.oldStepValue.stepValue)
     impl_file = open(info.file_name, 'r+')
     content = _refactor_content(impl_file.read(), info, request)
-    if request.refactorRequest.saveChanges:
+    if request.saveChanges:
         impl_file.seek(0)
         impl_file.truncate()
         impl_file.write(content)
@@ -33,11 +33,11 @@ def _refactor_content(content, info, request):
 
 
 def _refactor_impl(decorator, func, request):
-    decorator.call = '("' + request.refactorRequest.newStepValue.parameterizedStepValue + '")'
-    params = [''] * len(request.refactorRequest.newStepValue.parameters)
-    for index, position in enumerate(request.refactorRequest.paramPositions):
+    decorator.call = '("' + request.newStepValue.parameterizedStepValue + '")'
+    params = [''] * len(request.newStepValue.parameters)
+    for index, position in enumerate(request.paramPositions):
         if position.oldPosition < 0:
-            param = request.refactorRequest.newStepValue.parameters[index]
+            param = request.newStepValue.parameters[index]
             params[position.newPosition] = _get_param_name("arg{}".format(position.newPosition), param)
         else:
             params[position.newPosition] = func.arguments[position.oldPosition].__str__()
