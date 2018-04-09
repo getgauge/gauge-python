@@ -1,8 +1,7 @@
-import re
 import logging
+import re
 from os import path
 
-from baron.utils import BaronError
 from redbaron import RedBaron
 
 from getgauge.registry import registry
@@ -27,9 +26,12 @@ def reload_steps(content, file_name):
 
 
 def _create_span(func):
-    start = func.absolute_bounding_box.top_left
-    end = func.absolute_bounding_box.bottom_right
-    return {"start": start.line, "startChar": start.column, "end": end.line, "endChar": end.column}
+    try:
+        start = func.absolute_bounding_box.top_left
+        end = func.absolute_bounding_box.bottom_right
+        return {"start": start.line, "startChar": start.column, "end": end.line, "endChar": end.column}
+    except:
+        return {"start": 0, "startChar": 0, "end": 0, "endChar": 0}
 
 
 def add_steps(file_name, func, steps):

@@ -6,7 +6,7 @@ import logging
 from getgauge.connection import read_message, send_message
 from getgauge.executor import set_response_values, execute_method, run_hook
 from getgauge.impl_loader import load_impls
-from getgauge.messages.messages_pb2 import Message, StepPositionsResponse, TextDiff
+from getgauge.messages.messages_pb2 import Message, StepPositionsResponse, TextDiff, CacheFileRequest
 from getgauge.messages.spec_pb2 import Parameter, Span
 from getgauge.python import Table, create_execution_context_from, DataStoreFactory
 from getgauge.refactor import refactor_step
@@ -136,17 +136,20 @@ def _init_suite_data_store(request, response, _socket):
 def _load_from_disk(file_path):
     if path.isfile(file_path):
         f = open(file_path, 'r+')
+
         reload_steps(f.read(), file_path)
         f.close()
-    else:
-        registry.remove_steps(file_path)
 
 
 def _cache_file(request, _response, _socket):
-    if not request.cacheFileRequest.isClosed:
-        reload_steps(request.cacheFileRequest.content, request.cacheFileRequest.filePath)
+    file = request.cacheFileRequest.filePath
+    status = request.cacheFileRequest.status
+    if status == CacheFileRequest.CHANGED or status == CacheFileRequest.OPENED:
+        reload_steps(request.cacheFileRequest.content, file)
+    elif status == CacheFileRequest.CREATED or status == CacheFileRequest.CLOSED:
+        _load_from_disk(file)
     else:
-        _load_from_disk(request.cacheFileRequest.filePath)
+        registry.remove_steps(file)
 
 
 def _step_positions(request, response, _socket):

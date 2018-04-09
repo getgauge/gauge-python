@@ -1,16 +1,18 @@
 from os import path
 from socket import socket, AF_INET, SOCK_STREAM
-from unittest import TestCase, main
-
-from getgauge.messages.messages_pb2 import Message, StepValidateResponse, TextDiff
+from unittest import main
+from pyfakefs.fake_filesystem_unittest import TestCase
+from getgauge.messages.messages_pb2 import Message, StepValidateResponse, TextDiff, CacheFileRequest
 from getgauge.messages.spec_pb2 import ProtoExecutionResult, Parameter, Span
 from getgauge.processor import processors
 from getgauge.python import DataStoreFactory, DataStore
 from getgauge.registry import registry
+from getgauge import static_loader as loader
 
 
 class ProcessorTests(TestCase):
     def setUp(self):
+        self.setUpPyfakefs()
         DataStoreFactory.suite_data_store().clear()
         DataStoreFactory.spec_data_store().clear()
         DataStoreFactory.scenario_data_store().clear()
@@ -475,13 +477,79 @@ class ProcessorTests(TestCase):
         self.assertEqual(response.fileDiff.textDiffs[0], expected_text_diff)
         self.assertEqual(path.basename(response.fileDiff.filePath), "step_implementation.py")
 
-    def test_Processor_glob_patter(self):
+    def test_Processor_glob_pattern(self):
         request = Message()
         response = Message()
 
         processors[Message.ImplementationFileGlobPatternRequest](request, response, None)
 
         self.assertEqual(response.implementationFileGlobPatternResponse.globPatterns, ["step_impl/**/*.py"])
+
+    def test_Processor_cache_file_with_opened_status(self):
+        request = Message()
+        response = Message()
+        loader.load_steps("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", 'foo.py')
+
+        request.cacheFileRequest.filePath = 'foo.py'
+        request.cacheFileRequest.content = "from getgauge.python import step\n@step('foo <bar>')\ndef foo():\n\tpass\n"
+        request.cacheFileRequest.status = CacheFileRequest.OPENED
+
+        processors[Message.CacheFileRequest](request, response, None)
+
+        self.assertEqual(registry.is_implemented('foo1'), False)
+        self.assertEqual(registry.is_implemented('foo {}'), True)
+
+    def test_Processor_cache_file_with_changed_status(self):
+        request = Message()
+        response = Message()
+        loader.load_steps("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", 'foo.py')
+
+        request.cacheFileRequest.filePath = 'foo.py'
+        request.cacheFileRequest.content = "from getgauge.python import step\n@step('foo <bar>')\ndef foo():\n\tpass\n"
+        request.cacheFileRequest.status = CacheFileRequest.CHANGED
+
+        processors[Message.CacheFileRequest](request, response, None)
+
+        self.assertEqual(registry.is_implemented('foo1'), False)
+        self.assertEqual(registry.is_implemented('foo {}'), True)
+
+    def test_Processor_cache_file_with_create_status(self):
+        request = Message()
+        response = Message()
+
+        request.cacheFileRequest.filePath = 'foo.py'
+        request.cacheFileRequest.status = CacheFileRequest.CREATED
+        self.fs.create_file('foo.py',
+                            contents="from getgauge.python import step\n@step('foo <bar>')\ndef foo():\n\tpass\n")
+        processors[Message.CacheFileRequest](request, response, None)
+
+        self.assertEqual(registry.is_implemented('foo {}'), True)
+
+    def test_Processor_cache_file_with_closed_status(self):
+        request = Message()
+        response = Message()
+        loader.load_steps("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", 'foo.py')
+
+        request.cacheFileRequest.filePath = 'foo.py'
+        request.cacheFileRequest.status = CacheFileRequest.CLOSED
+        self.fs.create_file('foo.py',
+                            contents="from getgauge.python import step\n@step('foo <bar>')\ndef foo():\n\tpass\n")
+        processors[Message.CacheFileRequest](request, response, None)
+
+        self.assertEqual(registry.is_implemented('foo1'), False)
+        self.assertEqual(registry.is_implemented('foo {}'), True)
+
+    def test_Processor_cache_file_with_delete_status(self):
+        request = Message()
+        response = Message()
+        loader.load_steps("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", 'foo.py')
+
+        request.cacheFileRequest.filePath = 'foo.py'
+        request.cacheFileRequest.status = CacheFileRequest.DELETED
+
+        processors[Message.CacheFileRequest](request, response, None)
+
+        self.assertEqual(registry.is_implemented('foo1'), False)
 
 
 def impl(a, b):
