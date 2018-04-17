@@ -2,6 +2,7 @@ import logging
 import os
 import platform
 import sys
+import threading
 from concurrent import futures
 from os import path
 
@@ -39,11 +40,9 @@ def start():
         p = server.add_insecure_port('127.0.0.1:0')
         handler = lsp_server.LspServerHandler(server)
         lsp_pb2_grpc.add_lspServiceServicer_to_server(handler, server)
-        server.start()
         logging.info('Listening on port:{}'.format(p))
-        while handler.is_server_running():
-            pass
-        exit(0)
+        threading.Thread(name="server", target=server.start).start()
+        threading.Thread(name="listener", target=handler.wait_till_terminated).start()
     else:
         s = connection.connect()
         processor.dispatch_messages(s)

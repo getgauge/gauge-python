@@ -1,4 +1,4 @@
-import sys
+import threading
 
 from getgauge import processor, validator, refactor
 from getgauge.messages import lsp_pb2_grpc
@@ -12,7 +12,7 @@ from getgauge.util import get_impl_files, get_step_impl_dir
 class LspServerHandler(lsp_pb2_grpc.lspServiceServicer):
     def __init__(self, server):
         self.server = server
-        self.alive = True
+        self.kill_event = threading.Event()
 
     def GetStepNames(self, request, context):
         res = StepNamesResponse()
@@ -63,8 +63,9 @@ class LspServerHandler(lsp_pb2_grpc.lspServiceServicer):
 
     def KillProcess(self, request, context):
         self.server.stop(0)
-        self.alive = False
+        self.kill_event.set()
         return Empty()
 
-    def is_server_running(self):
-        return self.alive
+    def wait_till_terminated(self):
+        self.kill_event.wait()
+        exit(0)
