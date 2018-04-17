@@ -12,6 +12,7 @@ from getgauge.util import get_impl_files, get_step_impl_dir
 class LspServerHandler(lsp_pb2_grpc.lspServiceServicer):
     def __init__(self, server):
         self.server = server
+        self.alive = True
 
     def GetStepNames(self, request, context):
         res = StepNamesResponse()
@@ -62,4 +63,8 @@ class LspServerHandler(lsp_pb2_grpc.lspServiceServicer):
 
     def KillProcess(self, request, context):
         self.server.stop(0)
-        sys.exit(0)
+        self.alive = False
+        return Empty()
+
+    def is_server_running(self):
+        return self.alive

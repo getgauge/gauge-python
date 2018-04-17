@@ -37,11 +37,13 @@ def start():
     if os.getenv('GAUGE_LSP_GRPC'):
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
         p = server.add_insecure_port('127.0.0.1:0')
-        lsp_pb2_grpc.add_lspServiceServicer_to_server(lsp_server.LspServerHandler(server), server)
+        handler = lsp_server.LspServerHandler(server)
+        lsp_pb2_grpc.add_lspServiceServicer_to_server(handler, server)
         server.start()
         logging.info('Listening on port:{}'.format(p))
-        while True:
+        while handler.is_server_running():
             pass
+        exit(0)
     else:
         s = connection.connect()
         processor.dispatch_messages(s)
