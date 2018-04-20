@@ -36,7 +36,7 @@ def load_implementations():
 
 def start():
     if os.getenv('GAUGE_LSP_GRPC'):
-        server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
         p = server.add_insecure_port('127.0.0.1:0')
         handler = lsp_server.LspServerHandler(server)
         lsp_pb2_grpc.add_lspServiceServicer_to_server(handler, server)
