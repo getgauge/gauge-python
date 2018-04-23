@@ -36,7 +36,8 @@ class RegistryTests(TestCase):
     def test_LspServerHandler_step_names(self):
         handler = LspServerHandler(None)
         content = "@step('foo')\ndef foo():\n\tpass\n"
-        loader.load_steps(content, 'foo.py')
+        ast = loader.generate_ast(content, 'foo.py')
+        loader.load_steps(ast, 'foo.py')
 
         req = StepNamesRequest()
         res = handler.GetStepNames(req, None)
@@ -46,7 +47,8 @@ class RegistryTests(TestCase):
     def test_LspServerHandler_step_name(self):
         handler = LspServerHandler(None)
         content = "@step('foo')\ndef foo():\n\tpass\n"
-        loader.load_steps(content, 'foo.py')
+        ast = loader.generate_ast(content, 'foo.py')
+        loader.load_steps(ast, 'foo.py')
 
         req = StepNameRequest(**{'stepValue': 'foo'})
         res = handler.GetStepName(req, None)
@@ -57,7 +59,8 @@ class RegistryTests(TestCase):
     def test_LspServerHandler_validate_step(self):
         handler = LspServerHandler(None)
         content = "@step('foo')\ndef foo():\n\tpass\n"
-        loader.load_steps(content, 'foo.py')
+        ast = loader.generate_ast(content, 'foo.py')
+        loader.load_steps(ast, 'foo.py')
         step_value = ProtoStepValue(**{'stepValue': 'foo', 'parameterizedStepValue': 'foo'})
 
         req = StepValidateRequest(**{'stepText': 'foo', 'stepValue': step_value, 'numberOfParameters': 0})
@@ -67,7 +70,8 @@ class RegistryTests(TestCase):
     def test_LspServerHandler_step_positions(self):
         handler = LspServerHandler(None)
         content = "@step('foo')\ndef foo():\n\tpass\n"
-        loader.load_steps(content, 'foo.py')
+        ast = loader.generate_ast(content, 'foo.py')
+        loader.load_steps(ast, 'foo.py')
 
         req = StepPositionsRequest(**{'filePath': 'foo.py'})
         res = handler.GetStepPositions(req, None)
@@ -76,7 +80,8 @@ class RegistryTests(TestCase):
     def test_LspServerHandler_implement_stub(self):
         handler = LspServerHandler(None)
         content = "@step('foo')\ndef foo():\n\tpass\n"
-        loader.load_steps(content, 'foo.py')
+        ast = loader.generate_ast(content, 'foo.py')
+        loader.load_steps(ast, 'foo.py')
 
         req = StubImplementationCodeRequest(**{'implementationFilePath': 'New File', 'codes': ['add hello']})
         res = handler.ImplementStub(req, None)
@@ -118,7 +123,8 @@ class RegistryTests(TestCase):
                   "def foo(vowels):" \
                   "\tprint(vowels)"
 
-        loader.load_steps(content, 'foo.py')
+        ast = loader.generate_ast(content, 'foo.py')
+        loader.load_steps(ast, 'foo.py')
 
         self.assertTrue(registry.is_implemented('Vowels in English language are {}.'))
 

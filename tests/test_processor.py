@@ -490,7 +490,8 @@ class ProcessorTests(TestCase):
     def test_Processor_cache_file_with_opened_status(self):
         request = Message()
         response = Message()
-        loader.load_steps("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", 'foo.py')
+        ast = loader.generate_ast("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", "foo.py")
+        loader.load_steps(ast, "foo.py")
 
         request.cacheFileRequest.filePath = 'foo.py'
         request.cacheFileRequest.content = "from getgauge.python import step\n@step('foo <bar>')\ndef foo():\n\tpass\n"
@@ -504,7 +505,8 @@ class ProcessorTests(TestCase):
     def test_Processor_cache_file_with_changed_status(self):
         request = Message()
         response = Message()
-        loader.load_steps("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", 'foo.py')
+        ast = loader.generate_ast("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", "foo.py")
+        loader.load_steps(ast, "foo.py")
 
         request.cacheFileRequest.filePath = 'foo.py'
         request.cacheFileRequest.content = "from getgauge.python import step\n@step('foo <bar>')\ndef foo():\n\tpass\n"
@@ -530,7 +532,9 @@ class ProcessorTests(TestCase):
     def test_Processor_cache_file_with_closed_status(self):
         request = Message()
         response = Message()
-        loader.load_steps("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", 'foo.py')
+
+        ast = loader.generate_ast("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", "foo.py")
+        loader.load_steps(ast, "foo.py")
 
         request.cacheFileRequest.filePath = 'foo.py'
         request.cacheFileRequest.status = CacheFileRequest.CLOSED
@@ -544,7 +548,8 @@ class ProcessorTests(TestCase):
     def test_Processor_cache_file_with_delete_status(self):
         request = Message()
         response = Message()
-        loader.load_steps("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", 'foo.py')
+        ast = loader.generate_ast("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", "foo.py")
+        loader.load_steps(ast, "foo.py")
 
         request.cacheFileRequest.filePath = 'foo.py'
         request.cacheFileRequest.status = CacheFileRequest.DELETED
