@@ -112,9 +112,12 @@ class RegistryTests(TestCase):
         param_position.newPosition = 1
         request.paramPositions.extend([position, param_position])
 
-        res = handler.Refactor(request, None)
+        res = handler.Refactor(request, None, False)
 
         self.assertTrue(res.success)
+        diff_contents = [diff.content for diff in res.fileChanges[0].diffs]
+        self.assertIn("vowels, bsdfdsf", diff_contents)
+        self.assertIn('("Vowels in English language is <vowels> <bsdfdsf>.")', diff_contents)
 
     def test_LspServerHandler_cache_file(self):
         handler = LspServerHandler(None)
