@@ -1,5 +1,4 @@
 pyfakefs
-protobuf==3.3.0
 redbaron
 coverage>=3.7.1
 twine

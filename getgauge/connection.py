@@ -21,7 +21,7 @@ def read_message(s, msg):
 def send_message(response, msg, s):
     response.messageId = msg.messageId
     s_response = response.SerializeToString()
-    _EncodeVarint(s.sendall, len(s_response))
+    _EncodeVarint(s.sendall, len(s_response), False)
     s.sendall(s_response)
 
 
