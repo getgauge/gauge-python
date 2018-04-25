@@ -17,6 +17,8 @@ env:
   global:
     - JAVA_HOME=/usr/lib/jvm/java-8-oracle
     - TAGS="python"
+    - GAUGE_TELEMETRY_ENABLE=false
+    - GAUGE_PREFIX=/tmp
 
 # command to install dependencies
 install: "pip install -r requirements.txt"
@@ -24,10 +26,8 @@ install: "pip install -r requirements.txt"
 # command to run tests
 script:
   - python build.py --test
-  - sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-keys 023EDB0B
-  - echo "deb https://dl.bintray.com/gauge/gauge-deb nightly main" | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get -y update > /dev/null | echo "Updated"
-  - sudo apt-get install -y gauge
+  - curl -sSfL https://raw.githubusercontent.com/getgauge/infrastructure/master/nightly_scripts/install_latest_gauge_nightly.sh | bash
+  - export PATH=/tmp/bin:$PATH
   - gauge -v
   - python build.py --dist
   - export GAUGE_PYTHON_VERSION=$(cd bin; ls gauge-python-*.zip | sed "s/^gauge-python-\([^;]*\).zip/\1/")
