@@ -41,8 +41,10 @@ def start():
         handler = lsp_server.LspServerHandler(server)
         lsp_pb2_grpc.add_lspServiceServicer_to_server(handler, server)
         logging.info('Listening on port:{}'.format(p))
-        threading.Thread(name="server", target=server.start).start()
-        threading.Thread(name="listener", target=handler.wait_till_terminated).start()
+        server.start()
+        wait_thread = threading.Thread(name="listener", target=handler.wait_till_terminated)
+        wait_thread.start()
+        wait_thread.join()
     else:
         s = connection.connect()
         processor.dispatch_messages(s)
