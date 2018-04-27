@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='getgauge',
     packages=['getgauge', 'getgauge/messages'],
-    version='{}',
+    version='{0}',
     description='Enables Python support for Gauge',
     author='Gauge Team',
     author_email='getgauge@outlook.com',
@@ -22,4 +22,5 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     install_requires=['redBaron', 'ptvsd==3.0.0', 'grpcio'],
+    extras_require={1},
 )
