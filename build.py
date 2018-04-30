@@ -38,7 +38,7 @@ def create_setup_file():
         v = "{}.dev.{}".format(get_version(), str(date.today()).replace("-", ""))
     else:
         v = get_version()
-    setup.write(tmpl.read().format(v))
+    setup.write(tmpl.read().format(v, "{\n\t\t':python_version == \"2.7\"': ['futures']\n\t}"))
     setup.close()
     tmpl.close()
 
