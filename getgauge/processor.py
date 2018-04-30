@@ -205,16 +205,17 @@ def _get_stub_impl_content(request, response, _socket):
 
 def stub_impl_response(codes, file_name, response):
     content = read_file_contents(file_name)
+    prefix = ""
     if content is not None:
         new_line_char = '\n' if len(content.strip().split('\n')) == len(content.split('\n')) else ''
         last_line = len(content.split('\n'))
         prefix = "from getgauge.python import step\n" if len(content.strip()) == 0 else new_line_char
-        codes.insert(0, prefix)
         span = Span(**{'start': last_line, 'startChar': 0, 'end': last_line, 'endChar': 0})
     else:
         file_name = get_file_name()
-        codes.insert(0, "from getgauge.python import step\n")
+        prefix = "from getgauge.python import step\n"
         span = Span(**{'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0})
+    codes = [prefix] + codes[:]
     textDiffs = [TextDiff(**{'span': span, 'content': '\n'.join(codes)})]
     response.fileDiff.filePath = file_name
     response.fileDiff.textDiffs.extend(textDiffs)
