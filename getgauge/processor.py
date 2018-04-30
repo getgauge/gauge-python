@@ -198,7 +198,7 @@ def stub_impl_response(codes, file_name, response):
     if content is not None:
         new_line_char = '\n' if len(content.strip().split('\n')) == len(content.split('\n')) else ''
         last_line = len(content.split('\n'))
-        prefix = "from getgauge.python import step\n" if len(content) == 0 else new_line_char
+        prefix = "from getgauge.python import step\n" if len(content.strip()) == 0 else new_line_char
         codes.insert(0, prefix)
         span = Span(**{'start': last_line, 'startChar': 0, 'end': last_line, 'endChar': 0})
     else:
