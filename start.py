@@ -7,7 +7,6 @@ from concurrent import futures
 from os import path
 import pkg_resources 
 import grpc
-import numpy as np
 import json
 
 from getgauge import connection, processor
@@ -28,14 +27,14 @@ def main():
     if sys.argv[1] == "--init":
         copy_skel_files()
     else:
-        pythonPluginVersion = get_version()
-        getgaugeVersion = version.LooseVersion(pkg_resources.get_distribution('getgauge').version)
-        if not np.array_equal(list(map(int, pythonPluginVersion.split(".")[0:2])), getgaugeVersion.version[0:2]):
-            show_error_exit(pythonPluginVersion, getgaugeVersion)
-        if getgaugeVersion.version.__contains__("dev") & pythonPluginVersion.find("nightly") != -1:
-            pythonPluginVersion.replace("-","")
-            if pythonPluginVersion.find(str(getgaugeVersion.version.pop())) == -1:
-                show_error_exit(pythonPluginVersion, getgaugeVersion)
+        python_plugin_version = get_version()
+        getgauge_version = version.LooseVersion(pkg_resources.get_distribution('getgauge').version)
+        if list(map(int, python_plugin_version.split(".")[0:2])) != getgauge_version.version[0:2]:
+            show_error_exit(python_plugin_version, getgauge_version)
+        if 'dev' in getgauge_version.version and 'nightly' in python_plugin_version:
+            python_plugin_version.replace("-","")
+            if python_plugin_version.find(str(getgauge_version.version.pop())) == -1:
+                show_error_exit(python_plugin_version, getgauge_version)
         else:
             load_implementations()
             start()
