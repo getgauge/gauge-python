@@ -1,7 +1,8 @@
 import logging
-import signal
 import sys
+import os
 from os import path, environ
+from threading import Timer
 
 import ptvsd
 import time
@@ -71,10 +72,10 @@ def _execute_step(request, response, _socket):
     execute_method(params, impl, response, registry.is_continue_on_failure)
 
 
-def handle_detached(_p1, _p2):
+def handle_detached():
     logging.info("No debugger attached. Stopping the execution.")
     time.sleep(1)
-    exit(1)
+    os._exit(1)
 
 
 def _execute_before_suite_hook(request, response, _socket, clear=True):
@@ -84,9 +85,10 @@ def _execute_before_suite_hook(request, response, _socket, clear=True):
     if environ.get('DEBUGGING'):
         ptvsd.enable_attach('', address=('127.0.0.1', int(environ.get('DEBUG_PORT'))))
         logging.info(ATTACH_DEBUGGER_EVENT)
-        signal.signal(signal.SIGALRM, handle_detached)
-        signal.alarm(int(environ.get("debugger_wait_time", 30)))
+        t = Timer(int(environ.get("debugger_wait_time", 30)), handle_detached)
+        t.start()
         ptvsd.wait_for_attach()
+        t.cancel()
 
     execution_info = create_execution_context_from(request.executionStartingRequest.currentExecutionInfo)
     run_hook(request, response, registry.before_suite(), execution_info)
