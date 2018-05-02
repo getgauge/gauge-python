@@ -5,3 +5,4 @@ twine
 ptvsd==3.0.0
 grpcio-tools
 grpcio
+numpy
