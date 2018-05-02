@@ -1,8 +1,10 @@
 import logging
+import signal
 import sys
 from os import path, environ
 
 import ptvsd
+import time
 
 from getgauge.connection import read_message, send_message
 from getgauge.executor import set_response_values, execute_method, run_hook
@@ -69,13 +71,21 @@ def _execute_step(request, response, _socket):
     execute_method(params, impl, response, registry.is_continue_on_failure)
 
 
+def handle_detached(_p1, _p2):
+    logging.info("No debugger attached. Stopping the execution.")
+    time.sleep(1)
+    exit(1)
+
+
 def _execute_before_suite_hook(request, response, _socket, clear=True):
     if clear:
         registry.clear()
         load_impls(get_step_impl_dir())
     if environ.get('DEBUGGING'):
-        ptvsd.enable_attach('', address=('0.0.0.0', int(environ.get('DEBUG_PORT'))))
+        ptvsd.enable_attach('', address=('127.0.0.1', int(environ.get('DEBUG_PORT'))))
         logging.info(ATTACH_DEBUGGER_EVENT)
+        signal.signal(signal.SIGALRM, handle_detached)
+        signal.alarm(int(environ.get("debugger_wait_time", 30)))
         ptvsd.wait_for_attach()
 
     execution_info = create_execution_context_from(request.executionStartingRequest.currentExecutionInfo)
@@ -195,16 +205,17 @@ def _get_stub_impl_content(request, response, _socket):
 
 def stub_impl_response(codes, file_name, response):
     content = read_file_contents(file_name)
+    prefix = ""
     if content is not None:
         new_line_char = '\n' if len(content.strip().split('\n')) == len(content.split('\n')) else ''
         last_line = len(content.split('\n'))
-        prefix = "from getgauge.python import step\n" if len(content) == 0 else new_line_char
-        codes.insert(0, prefix)
+        prefix = "from getgauge.python import step\n" if len(content.strip()) == 0 else new_line_char
         span = Span(**{'start': last_line, 'startChar': 0, 'end': last_line, 'endChar': 0})
     else:
         file_name = get_file_name()
-        codes.insert(0, "from getgauge.python import step\n")
+        prefix = "from getgauge.python import step\n"
         span = Span(**{'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0})
+    codes = [prefix] + codes[:]
     textDiffs = [TextDiff(**{'span': span, 'content': '\n'.join(codes)})]
     response.fileDiff.filePath = file_name
     response.fileDiff.textDiffs.extend(textDiffs)
