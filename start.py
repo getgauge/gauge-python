@@ -5,8 +5,9 @@ import sys
 import threading
 from concurrent import futures
 from os import path
-
+import pkg_resources 
 import grpc
+import json
 
 from getgauge import connection, processor
 from getgauge import lsp_server
@@ -14,7 +15,11 @@ from getgauge.impl_loader import copy_skel_files
 from getgauge.messages import lsp_pb2_grpc
 from getgauge.static_loader import load_files
 from getgauge.util import get_step_impl_dir
+from distutils import version
+from subprocess import Popen, PIPE
 
+PLUGIN_JSON = 'python.json'
+VERSION = 'version'
 
 def main():
     _init_logger()
@@ -22,9 +27,30 @@ def main():
     if sys.argv[1] == "--init":
         copy_skel_files()
     else:
-        load_implementations()
-        start()
+        python_plugin_version = get_version()
+        getgauge_version = version.LooseVersion(pkg_resources.get_distribution('getgauge').version)
+        if list(map(int, python_plugin_version.split(".")[0:2])) != getgauge_version.version[0:2]:
+            show_error_exit(python_plugin_version, getgauge_version)
+        if 'dev' in getgauge_version.version and 'nightly' in python_plugin_version:
+            python_plugin_version.replace("-","")
+            if python_plugin_version.find(str(getgauge_version.version.pop())) == -1:
+                show_error_exit(python_plugin_version, getgauge_version)
+        else:
+            load_implementations()
+            start()
 
+def show_error_exit(pythonPluginVersion, getgaugeVersion):
+    logging.fatal('Gauge-python({}) is not compatible with getgauge({}). Please install compatible versions.\n'.format(pythonPluginVersion, getgaugeVersion))
+    exit(1)
+
+def get_version():
+    proc = Popen(['gauge', '-v', '--machine-readable'], stdout=PIPE, stderr=PIPE)
+    out, _ = proc.communicate()
+    data = json.loads(str(out.decode()))
+    for plugin in data['plugins']:
+        if plugin['name'] == 'python':
+            return plugin['version']
+    return ''
 
 def load_implementations():
     d = get_step_impl_dir()
