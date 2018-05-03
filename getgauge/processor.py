@@ -74,7 +74,6 @@ def _execute_step(request, response, _socket):
 
 def handle_detached():
     logging.info("No debugger attached. Stopping the execution.")
-    time.sleep(1)
     os._exit(1)
 
 
