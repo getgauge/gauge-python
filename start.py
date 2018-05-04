@@ -29,7 +29,7 @@ def main():
     else:
         python_plugin_version = get_version()
         getgauge_version = version.LooseVersion(pkg_resources.get_distribution('getgauge').version)
-        if list(map(int, python_plugin_version.split(".")[0:2])) != getgauge_version.version[0:2]:
+        if (list(map(int, python_plugin_version.split(".")[0:3])) != getgauge_version.version[0:3]) or ('dev' in getgauge_version.version and 'nightly' not in python_plugin_version) or ('dev' not in getgauge_version.version and 'nightly' in python_plugin_version):
             show_error_exit(python_plugin_version, getgauge_version)
         if 'dev' in getgauge_version.version and 'nightly' in python_plugin_version:
             python_plugin_version.replace("-","")
