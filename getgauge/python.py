@@ -187,7 +187,9 @@ class Scenario:
 
 
 class Step:
-    def __init__(self, text, is_failing):
+    def __init__(self, text, is_failing, message="", stacktrace=""):
+        self.__stacktrace = stacktrace
+        self.__error_message = message
         self.__text = text
         self.__is_failing = is_failing
 
@@ -199,8 +201,17 @@ class Step:
     def is_failing(self):
         return self.__is_failing
 
+    @property
+    def error_message(self):
+        return self.__error_message
+
+    @property
+    def stacktrace(self):
+        return self.__stacktrace
+
     def __str__(self):
-        return "Step: {{ text: {}, is_failing: {} }}".format(self.text, str(self.is_failing))
+        s = "Step: {{ text: {}, is_failing: {}, error_message: {}, stacktrace: {} }}"
+        return s.format(self.text, str(self.is_failing), str(self.error_message), str(self.stacktrace))
 
     def __eq__(self, other):
         return self.__str__() == other.__str__()
@@ -256,7 +267,8 @@ def create_execution_context_from(current_execution_info):
                       current_execution_info.currentSpec.isFailed, current_execution_info.currentSpec.tags),
         Scenario(current_execution_info.currentScenario.name, current_execution_info.currentScenario.isFailed,
                  current_execution_info.currentScenario.tags),
-        Step(current_execution_info.currentStep.step.actualStepText, current_execution_info.currentStep.isFailed)
+        Step(current_execution_info.currentStep.step.actualStepText, current_execution_info.currentStep.isFailed,
+             current_execution_info.currentStep.errorMessage, current_execution_info.currentStep.stackTrace)
     )
 
 

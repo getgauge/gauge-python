@@ -330,10 +330,14 @@ class ExecutionContextTests(TestCase):
             currentExecutionInfo.currentStep.step.actualStepText = step_name
         message.executionStartingRequest.\
             currentExecutionInfo.currentStep.isFailed = True
+        message.executionStartingRequest. \
+            currentExecutionInfo.currentStep.errorMessage = "Error"
+        message.executionStartingRequest. \
+            currentExecutionInfo.currentStep.stackTrace = "stack trace"
 
         specification = Specification(spec_name, spec_file_name, True, [])
         scenario = Scenario(scenario_name, False, [])
-        step = Step(step_name, True)
+        step = Step(step_name, True, "Error", "stack trace")
 
         context = ExecutionContext(specification, scenario, step)
 
