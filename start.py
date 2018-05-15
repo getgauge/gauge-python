@@ -1,4 +1,3 @@
-import json
 import logging
 import os
 import platform
@@ -7,7 +6,7 @@ import threading
 from concurrent import futures
 from distutils import version
 from os import path
-from subprocess import Popen, PIPE
+
 
 import grpc
 import pkg_resources
@@ -18,6 +17,7 @@ from getgauge.impl_loader import copy_skel_files
 from getgauge.messages import lsp_pb2_grpc
 from getgauge.static_loader import load_files
 from getgauge.util import get_step_impl_dir
+from util import get_version
 
 PLUGIN_JSON = 'python.json'
 VERSION = 'version'
@@ -50,16 +50,6 @@ def show_error_exit(python_plugin_version, getgauge_version):
     logging.fatal('Gauge-python({}) is not compatible with getgauge({}). Please install compatible versions.\n'.format(
         python_plugin_version, getgauge_version))
     exit(1)
-
-
-def get_version():
-    proc = Popen(['gauge', '-v', '--machine-readable'], stdout=PIPE, stderr=PIPE)
-    out, _ = proc.communicate()
-    data = json.loads(str(out.decode()))
-    for plugin in data['plugins']:
-        if plugin['name'] == 'python':
-            return plugin['version']
-    return ''
 
 
 def load_implementations():
