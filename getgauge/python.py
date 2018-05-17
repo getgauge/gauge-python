@@ -17,14 +17,12 @@ def continue_on_failure(obj):
     return _define_wrapper(obj, registry.continue_on_failure)
 
 
-def before_suite(func):
-    registry.add_before_suite(func)
-    return func
+def before_suite(obj=None):
+    return _define_wrapper(obj, registry.add_before_suite)
 
 
-def after_suite(func):
-    registry.add_after_suite(func)
-    return func
+def after_suite(obj=None):
+    return _define_wrapper(obj, registry.add_after_suite)
 
 
 def before_scenario(obj=None):
