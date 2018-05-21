@@ -68,21 +68,15 @@ def _refactor_impl(decorator, func, request, with_location):
     params = [''] * len(request.newStepValue.parameters)
     for index, position in enumerate(request.paramPositions):
         if position.oldPosition < 0:
-            param = request.newStepValue.parameters[index]
-            params[position.newPosition] = _get_param_name("arg{}".format(position.newPosition), param)
+            params[position.newPosition] = _get_param_name(index, params)
         else:
             params[position.newPosition] = func.arguments[position.oldPosition].__str__()
     func.arguments = ', '.join(params)
     return create_diff(old_call_loc, str(decorator.call), old_params_loc, ', '.join(params), with_location)
 
 
-def _get_param_name(prefix, param_name):
-    return param_name if _is_valid(param_name) else prefix
-
-
-def _is_valid(name):
-    try:
-        ast.parse("{} = None".format(name))
-        return True
-    except:
-        return False
+def _get_param_name(index, params):
+    param = "arg{}".format(index)
+    if param not in params:
+        return param
+    return _get_param_name(index + 1, params)

@@ -59,7 +59,7 @@ def assert_default_vowels(given_vowels):
                          response.refactorResponse.filesChanged)
 
         expected = """@step("Vowels in English language is <vowels> <bsdfdsf>.")
-def assert_default_vowels(given_vowels, bsdfdsf):
+def assert_default_vowels(given_vowels, arg1):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -225,7 +225,7 @@ def assert_default_vowels(given_vowels):
                          response.refactorResponse.filesChanged)
 
         expected = """@step("Vowels in English language is <bsdfdsf>.")
-def assert_default_vowels(bsdfdsf):
+def assert_default_vowels(arg0):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -255,7 +255,7 @@ is <vowels> <bsdfdsf>.'
         processors[Message.RefactorRequest](request, response, None)
 
         expected = """@step("Vowels in English language is <vowels> <bsdfdsf>.")
-def assert_default_vowels(given_vowels, bsdfdsf):
+def assert_default_vowels(given_vowels, arg1):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
