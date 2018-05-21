@@ -309,6 +309,9 @@ def assert_default_vowels(given_vowels, arg1):
 """
         self.assertEqual(expected, response.refactorResponse.fileChanges[0].fileContent)
         self.assertEqual(old_content, self.getActualText())
+        diff_contents = [diff.content for diff in response.refactorResponse.fileChanges[0].diffs]
+        self.assertIn('("Vowels in English language is <vowels> <vowels!2_ab%$>.")', diff_contents)
+        self.assertIn('given_vowels, arg1', diff_contents)
 
     def getActualText(self):
         _file = open(RefactorTests.path, 'r+')

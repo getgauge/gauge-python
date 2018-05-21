@@ -45,9 +45,9 @@ class LspServerHandler(lsp_pb2_grpc.lspServiceServicer):
         validator.validate_step(request, res)
         return res.stepValidateResponse
 
-    def Refactor(self, request, context):
+    def Refactor(self, request, context, with_location=True):
         res = Message()
-        refactor.refactor_step(request, res)
+        refactor.refactor_step(request, res, with_location)
         return res.refactorResponse
 
     def GetStepName(self, request, context):
