@@ -65,10 +65,11 @@ def _refactor_impl(decorator, func, request, with_location):
         old_call_loc = copy.deepcopy(decorator.call.absolute_bounding_box)
         old_params_loc = copy.deepcopy(func.arguments.node_list.absolute_bounding_box)
     decorator.call = '("' + request.newStepValue.parameterizedStepValue + '")'
+    old_params = [arg.target.value for arg in func.arguments][:len(request.oldStepValue.parameters)]
     params = [''] * len(request.newStepValue.parameters)
     for index, position in enumerate(request.paramPositions):
         if position.oldPosition < 0:
-            params[position.newPosition] = _get_param_name(index, params)
+            params[position.newPosition] = _get_param_name(index, old_params)
         else:
             params[position.newPosition] = func.arguments[position.oldPosition].__str__()
     func.arguments = ', '.join(params)
