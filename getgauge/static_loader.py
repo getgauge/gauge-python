@@ -32,21 +32,11 @@ def reload_steps(content, file_name):
         load_steps(ast, file_name)
 
 
-def _create_span(func):
-    try:
-        absolute_bounding_box = func.absolute_bounding_box
-        start = absolute_bounding_box.top_left
-        end = absolute_bounding_box.bottom_right
-        return {"start": start.line, "startChar": start.column, "end": end.line, "endChar": end.column}
-    except:
-        return {"start": 0, "startChar": 0, "end": 0, "endChar": 0}
-
-
 def add_steps(file_name, func, steps):
     if len(steps) > 1:
-        registry.add_step(steps, func, file_name, _create_span(func))
+        registry.add_step(steps, func, file_name, None)
     elif len(steps) == 1:
-        registry.add_step(steps[0], func, file_name, _create_span(func))
+        registry.add_step(steps[0], func, file_name, None)
 
 
 def load_files(step_impl_dir):
