@@ -7,6 +7,7 @@ from google.protobuf.internal.encoder import _EncodeVarint
 
 def connect():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
     s.connect(('127.0.0.1', int(os.environ['GAUGE_INTERNAL_PORT'])))
     return s
 
