@@ -1,7 +1,7 @@
 from pyfakefs.fake_filesystem_unittest import TestCase
 from unittest import main
 import getgauge
-import configparser
+from six.moves import configparser
 import os
 import logging
 import sys
