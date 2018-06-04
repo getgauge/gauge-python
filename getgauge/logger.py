@@ -3,12 +3,12 @@ from logging.handlers import RotatingFileHandler
 import os
 import configparser
 import util
+import sys
 
 
-
-def get_logger(name):
+def get_logger():
     config = _read_config()
-    logger = logging.getLogger(name)
+    logger = logging.getLogger()
     logger.propagate = False
     level = config.get('LOGGING','runner_log_level')
     logger.setLevel(level)
@@ -32,3 +32,15 @@ def _read_config():
     config = configparser.RawConfigParser()
     config.read(os.path.join(util.get_project_root(), 'env/default/python.properties'))
     return config
+
+def except_handler(exc_type, exc_value, exc_traceback):
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+    logger.error("Uncaught exception",exc_info=(exc_type, exc_value, exc_traceback))
+
+# Install exception handler
+sys.excepthook = except_handler
+
+logger = get_logger()
+    

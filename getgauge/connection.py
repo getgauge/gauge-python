@@ -5,7 +5,7 @@ import logger
 
 from google.protobuf.internal.encoder import _EncodeVarint
 
-logger = logger.get_logger('connection')
+logger = logger.logger
 
 def connect():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
