@@ -1,7 +1,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import os
-import configparser
+from six.moves import configparser
 import util
 import sys
 
