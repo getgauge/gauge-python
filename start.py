@@ -11,6 +11,7 @@ import grpc
 
 from getgauge import connection, processor
 from getgauge import lsp_server
+from getgauge.logger import logger
 from getgauge.impl_loader import copy_skel_files
 from getgauge.messages import lsp_pb2_grpc
 from getgauge.static_loader import load_files
@@ -21,8 +22,7 @@ VERSION = 'version'
 
 
 def main():
-    _init_logger()
-    logging.info("Python: {}".format(platform.python_version()))
+    logger.info("Python: {}".format(platform.python_version()))
     if sys.argv[1] == "--init":
         copy_skel_files()
     else:
@@ -34,7 +34,7 @@ def load_implementations():
     if path.exists(d):
         load_files(d)
     else:
-        logging.error('can not load implementations from {}. {} does not exist.'.format(d, d))
+        logger.error('can not load implementations from {}. {} does not exist.'.format(d, d))
 
 
 def start():
@@ -51,15 +51,6 @@ def start():
     else:
         s = connection.connect()
         processor.dispatch_messages(s)
-
-
-def _init_logger():
-    if os.getenv('IS_DAEMON'):
-        f = '%(asctime)s.%(msecs)03d %(message)s'
-        logging.basicConfig(stream=sys.stdout, format=f, level=logging.DEBUG, datefmt='%H:%M:%S')
-    else:
-        logging.basicConfig(stream=sys.stdout, format='%(message)s', level=logging.DEBUG)
-
 
 if __name__ == '__main__':
     main()
