@@ -1,5 +1,6 @@
 import inspect
 import sys
+import warnings
 
 from getgauge.registry import registry, MessagesStore
 
@@ -287,6 +288,13 @@ class DataStore:
         return self.__data_store == other.__data_store
 
 
+def _warn_datastore_deprecation(store_type):
+    warnings.warn(
+        "'DataStoreFactory.{0}_data_store()' is deprecated in favour of 'data_store.{0}'".format(store_type),
+        DeprecationWarning, stacklevel=3)
+    warnings.simplefilter('default', DeprecationWarning)
+
+
 class DataStoreFactory:
     __scenario_data_store = DataStore(data_store.scenario)
     __spec_data_store = DataStore(data_store.spec)
@@ -294,14 +302,17 @@ class DataStoreFactory:
 
     @staticmethod
     def scenario_data_store():
+        _warn_datastore_deprecation("scenario")
         return DataStoreFactory.__scenario_data_store
 
     @staticmethod
     def spec_data_store():
+        _warn_datastore_deprecation("spec")
         return DataStoreFactory.__spec_data_store
 
     @staticmethod
     def suite_data_store():
+        _warn_datastore_deprecation("suite")
         return DataStoreFactory.__suite_data_store
 
 
