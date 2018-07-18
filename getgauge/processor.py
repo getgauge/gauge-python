@@ -5,14 +5,13 @@ from os import path, environ
 from threading import Timer
 
 import ptvsd
-import time
 
 from getgauge.connection import read_message, send_message
 from getgauge.executor import set_response_values, execute_method, run_hook
 from getgauge.impl_loader import load_impls
 from getgauge.messages.messages_pb2 import Message, StepPositionsResponse, TextDiff, CacheFileRequest
 from getgauge.messages.spec_pb2 import Parameter, Span
-from getgauge.python import Table, create_execution_context_from, DataStoreFactory
+from getgauge.python import Table, create_execution_context_from, data_store
 from getgauge.refactor import refactor_step
 from getgauge.registry import registry, MessagesStore
 from getgauge.static_loader import reload_steps
@@ -141,17 +140,17 @@ def _execute_after_step_hook(request, response, _socket):
 
 
 def _init_scenario_data_store(request, response, _socket):
-    DataStoreFactory.scenario_data_store().clear()
+    data_store.scenario.clear()
     set_response_values(request, response)
 
 
 def _init_spec_data_store(request, response, _socket):
-    DataStoreFactory.spec_data_store().clear()
+    data_store.spec.clear()
     set_response_values(request, response)
 
 
 def _init_suite_data_store(request, response, _socket):
-    DataStoreFactory.suite_data_store().clear()
+    data_store.suite.clear()
     set_response_values(request, response)
 
 

@@ -2,9 +2,13 @@ from unittest import TestCase, main
 
 from getgauge.messages.messages_pb2 import Message
 from getgauge.registry import registry, MessagesStore
-from getgauge.python import (Messages, DataStore, DataStoreFactory, Table,
-                             Specification, Scenario, Step, ExecutionContext,
-                             create_execution_context_from)
+from getgauge.python import (Messages, DataStore, DataStoreFactory, data_store,
+                             DataStoreContainer, Table, Specification, Scenario,
+                             Step, ExecutionContext, create_execution_context_from)
+try:
+    from collections.abc import MutableMapping
+except ImportError:
+    from collections import MutableMapping
 
 registry.clear()
 
@@ -99,6 +103,39 @@ class DataStoreTests(TestCase):
 
         self.assertNotEqual(store, store1)
 
+    def test_data_store_as_proxy(self):
+        store = {}
+        proxy = DataStore(store)
+
+        store['a'] = 'alpha'
+        self.assertTrue(proxy.is_present('a'))
+        self.assertEqual(proxy.get('a'), store['a'])
+
+        proxy.put('b', 'beta')
+        self.assertIn('b', store)
+        self.assertEqual(store['b'], proxy.get('b'))
+
+        proxy2 = DataStore(store)
+        self.assertEqual(proxy, proxy2)
+
+        proxy.clear()
+        self.assertDictEqual(store, {})
+        self.assertFalse(proxy2.is_present('a'))
+        self.assertFalse(proxy2.is_present('b'))
+
+        proxy2.put('c', 'charlie')
+        proxy2.put('d', 'delta')
+        self.assertIn('c', store)
+        self.assertIn('d', store)
+        self.assertTrue(proxy.is_present('c'))
+        self.assertTrue(proxy.is_present('d'))
+
+        store.clear()
+        self.assertFalse(proxy.is_present('c'))
+        self.assertFalse(proxy.is_present('d'))
+        self.assertFalse(proxy2.is_present('c'))
+        self.assertFalse(proxy2.is_present('d'))
+
 
 class DataStoreFactoryTests(TestCase):
     def test_data_store_factory(self):
@@ -106,11 +143,48 @@ class DataStoreFactoryTests(TestCase):
         spec_data_store = DataStoreFactory.spec_data_store()
         suite_data_store = DataStoreFactory.suite_data_store()
 
-        data_store = DataStore()
+        store = DataStore()
 
-        self.assertEqual(data_store, scenario_data_store)
-        self.assertEqual(data_store, spec_data_store)
-        self.assertEqual(data_store, suite_data_store)
+        self.assertEqual(store, scenario_data_store)
+        self.assertEqual(store, spec_data_store)
+        self.assertEqual(store, suite_data_store)
+
+    def test_data_store_factory_as_proxy(self):
+        stores = [
+            (data_store.scenario, DataStoreFactory.scenario_data_store()),
+            (data_store.spec, DataStoreFactory.spec_data_store()),
+            (data_store.suite, DataStoreFactory.suite_data_store()),
+        ]
+        for (store, proxy) in stores:
+            store['a'] = 'alpha'
+            self.assertTrue(proxy.is_present('a'))
+            self.assertEqual(proxy.get('a'), store['a'])
+
+            proxy.put('b', 'beta')
+            self.assertIn('b', store)
+            self.assertEqual(store['b'], proxy.get('b'))
+
+            proxy.clear()
+            self.assertDictEqual(store, {})
+
+
+class DataStoreContainerTests(TestCase):
+    def test_data_store_container(self):
+        store = DataStoreContainer()
+        # Verify that each store is a mapping
+        self.assertIsInstance(store.scenario, MutableMapping)
+        self.assertIsInstance(store.spec, MutableMapping)
+        self.assertIsInstance(store.suite, MutableMapping)
+        # Verify that stores can not be reassigned
+        with self.assertRaises(AttributeError):
+            store.scenario = {}
+        with self.assertRaises(AttributeError):
+            store.spec = {}
+        with self.assertRaises(AttributeError):
+            store.suite = {}
+
+    def test_module_data_store(self):
+        self.assertIsInstance(data_store, DataStoreContainer)
 
 
 class ProtoTable:

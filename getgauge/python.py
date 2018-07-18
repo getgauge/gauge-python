@@ -221,9 +221,33 @@ class Messages:
         MessagesStore.write_message(message)
 
 
-class DataStore:
+class DataStoreContainer(object):
     def __init__(self):
-        self.__data_store = {}
+        self.__scenario = {}
+        self.__spec = {}
+        self.__suite = {}
+
+    @property
+    def scenario(self):
+        return self.__scenario
+
+    @property
+    def spec(self):
+        return self.__spec
+
+    @property
+    def suite(self):
+        return self.__suite
+
+
+data_store = DataStoreContainer()
+
+
+class DataStore:
+    def __init__(self, data_store=None):
+        if data_store is None:
+            data_store = {}
+        self.__data_store = data_store
 
     def get(self, key):
         return self.__data_store[key]
@@ -235,16 +259,16 @@ class DataStore:
         return key in self.__data_store
 
     def clear(self):
-        self.__data_store = {}
+        self.__data_store.clear()
 
     def __eq__(self, other):
         return self.__data_store == other.__data_store
 
 
 class DataStoreFactory:
-    __scenario_data_store = DataStore()
-    __spec_data_store = DataStore()
-    __suite_data_store = DataStore()
+    __scenario_data_store = DataStore(data_store.scenario)
+    __spec_data_store = DataStore(data_store.spec)
+    __suite_data_store = DataStore(data_store.suite)
 
     @staticmethod
     def scenario_data_store():
