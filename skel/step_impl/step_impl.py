@@ -1,8 +1,9 @@
-from getgauge.python import step, before_scenario, Messages, data_store
+from getgauge.python import step, before_scenario, Messages
+
+vowels = ["a", "e", "i", "o", "u"]
 
 
 def number_of_vowels(word):
-    vowels = data_store.scenario["vowels"]
     return len([elem for elem in list(word) if elem in vowels])
 
 
@@ -17,7 +18,6 @@ def assert_no_of_vowels_in(word, number):
 
 @step("Vowels in English language are <vowels>.")
 def assert_default_vowels(given_vowels):
-    vowels = data_store.scenario["vowels"]
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 
@@ -35,4 +35,4 @@ def assert_words_vowel_count(table):
 
 @before_scenario()
 def before_scenario_hook():
-    data_store.scenario["vowels"] = ["a", "e", "i", "o", "u"]
+    assert "".join(vowels) == "aeiou"
