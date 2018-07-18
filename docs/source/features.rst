@@ -175,7 +175,8 @@ Data Stores
 
 Step implementations can share custom data across scenarios, specifications and suites using data stores.
 There are 3 different types of data stores based on the lifecycle of when it gets cleared.
-These data stores provide a dict like interface for managing data.
+These data stores provide a dict like interface for managing data. In addition to this, data keys
+can also be accessed as attributes for convenience.
 
 Scenario store
 ^^^^^^^^^^^^^^
@@ -188,12 +189,16 @@ This data store keeps values added to it in the lifecycle of the scenario execut
 
     from getgauge.python import data_store
     data_store.scenario[key] = value
+    # OR
+    data_store.scenario.key = value
 
 **Retrieve a value:**
 
 .. code::
 
     data_store.scenario[key]
+    # OR
+    data_store.scenario.key
 
 Specification store
 ^^^^^^^^^^^^^^^^^^^
@@ -208,12 +213,16 @@ executes.
 
     from getgauge.python import data_store
     data_store.spec[key] = value
+    # OR
+    data_store.spec.key = value
 
 **Retrieve a value:**
 
 .. code::
 
     data_store.spec[key]
+    # OR
+    data_store.spec.key
 
 Suite store
 ^^^^^^^^^^^
@@ -227,12 +236,16 @@ suite’s execution. Values are cleared after entire suite executes.
 
     from getgauge.python import data_store
     data_store.suite[key] = value
+    # OR
+    data_store.suite.key = value
 
 **Retrieve a value:**
 
 .. code::
 
     data_store.suite[key]
+    # OR
+    data_store.suite.key
 
 .. note::
     Suite Store is not advised to be used when executing specs in parallel. The values are not retained between parallel streams of execution.

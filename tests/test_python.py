@@ -2,9 +2,10 @@ from unittest import TestCase, main
 
 from getgauge.messages.messages_pb2 import Message
 from getgauge.registry import registry, MessagesStore
-from getgauge.python import (Messages, DataStore, DataStoreFactory, data_store,
-                             DataStoreContainer, Table, Specification, Scenario,
-                             Step, ExecutionContext, create_execution_context_from)
+from getgauge.python import (Messages, DataStore, DataStoreFactory, DictObject,
+                             DataStoreContainer, data_store, Table, Specification,
+                             Scenario, Step, ExecutionContext,
+                             create_execution_context_from)
 try:
     from collections.abc import MutableMapping
 except ImportError:
@@ -166,6 +167,27 @@ class DataStoreFactoryTests(TestCase):
 
             proxy.clear()
             self.assertDictEqual(store, {})
+
+
+class DictObjectTests(TestCase):
+    def test_attribute_access(self):
+        store = DictObject()
+
+        store['a'] = 'alpha'
+        self.assertEqual(store.a, 'alpha')
+
+        store.clear()
+        with self.assertRaises(AttributeError):
+            store.a
+
+        store.b = 'beta'
+        self.assertIn('b', store)
+        del store.b
+        self.assertNotIn('b', store)
+
+        store['k e y'] = 'value'
+        with self.assertRaises(AttributeError):
+            store.k
 
 
 class DataStoreContainerTests(TestCase):
