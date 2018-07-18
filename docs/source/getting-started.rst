@@ -40,7 +40,7 @@ To execute a gauge-python project, run the following command in the project:
 
     .. code:: sh
 
-        $ gauge specs/
+        $ gauge run specs/
 
     .. _Gauge documentation: http://getgauge.io/documentation/user/current/
 
