@@ -1,7 +1,13 @@
 import inspect
 import sys
+import warnings
 
 from getgauge.registry import registry, MessagesStore
+
+try:
+    from collections.abc import MutableMapping
+except ImportError:
+    from collections import MutableMapping
 
 
 def step(step_text):
@@ -221,9 +227,50 @@ class Messages:
         MessagesStore.write_message(message)
 
 
-class DataStore:
+class DictObject(dict):
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError("'{0}' object has no attribute '{1}'".format(self.__class__.__name__, name))
+
+    def __setattr__(self, name, value):
+        self[name] = value
+
+    def __delattr__(self, name):
+        try:
+            del self[name]
+        except KeyError:
+            raise AttributeError("'{0}' object has no attribute '{1}'".format(self.__class__.__name__, name))
+
+
+class DataStoreContainer(object):
     def __init__(self):
-        self.__data_store = {}
+        self.__scenario = DictObject()
+        self.__spec = DictObject()
+        self.__suite = DictObject()
+
+    @property
+    def scenario(self):
+        return self.__scenario
+
+    @property
+    def spec(self):
+        return self.__spec
+
+    @property
+    def suite(self):
+        return self.__suite
+
+
+data_store = DataStoreContainer()
+
+
+class DataStore:
+    def __init__(self, data_store=None):
+        if data_store is None:
+            data_store = {}
+        self.__data_store = data_store
 
     def get(self, key):
         return self.__data_store[key]
@@ -235,27 +282,37 @@ class DataStore:
         return key in self.__data_store
 
     def clear(self):
-        self.__data_store = {}
+        self.__data_store.clear()
 
     def __eq__(self, other):
         return self.__data_store == other.__data_store
 
 
+def _warn_datastore_deprecation(store_type):
+    warnings.warn(
+        "'DataStoreFactory.{0}_data_store()' is deprecated in favour of 'data_store.{0}'".format(store_type),
+        DeprecationWarning, stacklevel=3)
+    warnings.simplefilter('default', DeprecationWarning)
+
+
 class DataStoreFactory:
-    __scenario_data_store = DataStore()
-    __spec_data_store = DataStore()
-    __suite_data_store = DataStore()
+    __scenario_data_store = DataStore(data_store.scenario)
+    __spec_data_store = DataStore(data_store.spec)
+    __suite_data_store = DataStore(data_store.suite)
 
     @staticmethod
     def scenario_data_store():
+        _warn_datastore_deprecation("scenario")
         return DataStoreFactory.__scenario_data_store
 
     @staticmethod
     def spec_data_store():
+        _warn_datastore_deprecation("spec")
         return DataStoreFactory.__spec_data_store
 
     @staticmethod
     def suite_data_store():
+        _warn_datastore_deprecation("suite")
         return DataStoreFactory.__suite_data_store
 
 
