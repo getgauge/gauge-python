@@ -175,6 +175,8 @@ Data Stores
 
 Step implementations can share custom data across scenarios, specifications and suites using data stores.
 There are 3 different types of data stores based on the lifecycle of when it gets cleared.
+These data stores provide a dict like interface for managing data. In addition to this, data keys
+can also be accessed as attributes for convenience.
 
 Scenario store
 ^^^^^^^^^^^^^^
@@ -185,14 +187,18 @@ This data store keeps values added to it in the lifecycle of the scenario execut
 
 .. code::
 
-    from getgauge.python import DataStoreFactory
-    DataStoreFactory.scenario_data_store().put(key, value)
+    from getgauge.python import data_store
+    data_store.scenario[key] = value
+    # OR
+    data_store.scenario.key = value
 
 **Retrieve a value:**
 
 .. code::
 
-    DataStoreFactory.scenario_data_store().get(key)
+    data_store.scenario[key]
+    # OR
+    data_store.scenario.key
 
 Specification store
 ^^^^^^^^^^^^^^^^^^^
@@ -205,14 +211,18 @@ executes.
 
 .. code::
 
-    from getgauge.python import DataStoreFactory
-    DataStoreFactory.spec_data_store().put(key, value)
+    from getgauge.python import data_store
+    data_store.spec[key] = value
+    # OR
+    data_store.spec.key = value
 
 **Retrieve a value:**
 
 .. code::
 
-    DataStoreFactory.spec_data_store().get(key)
+    data_store.spec[key]
+    # OR
+    data_store.spec.key
 
 Suite store
 ^^^^^^^^^^^
@@ -224,14 +234,18 @@ suite’s execution. Values are cleared after entire suite executes.
 
 .. code::
 
-    from getgauge.python import DataStoreFactory
-    DataStoreFactory.suite_data_store().put(key, value);
+    from getgauge.python import data_store
+    data_store.suite[key] = value
+    # OR
+    data_store.suite.key = value
 
 **Retrieve a value:**
 
 .. code::
 
-    DataStoreFactory.suite_data_store().get(key);
+    data_store.suite[key]
+    # OR
+    data_store.suite.key
 
 .. note::
     Suite Store is not advised to be used when executing specs in parallel. The values are not retained between parallel streams of execution.
