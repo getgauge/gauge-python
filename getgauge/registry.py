@@ -38,18 +38,8 @@ class StepInfo(object):
     def file_name(self):
         return self.__file_name
 
-    def __create_span(self):
-        try:
-            absolute_bounding_box = self.__impl.absolute_bounding_box
-            start = absolute_bounding_box.top_left
-            end = absolute_bounding_box.bottom_right
-            self.__span = {"start": start.line, "startChar": start.column, "end": end.line, "endChar": end.column}
-        except:
-            self.__span = {"start": 0, "startChar": 0, "end": 0, "endChar": 0}     
-
     @property
     def span(self):
-        if self.__span is None: self.__create_span()
         return self.__span
 
 

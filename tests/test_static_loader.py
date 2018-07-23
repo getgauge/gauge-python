@@ -71,7 +71,8 @@ class StaticLoaderTests(unittest.TestCase):
 
         """
         ast = generate_ast(content, "foo.py")
-        load_steps(ast, "foo.py")
+        if ast:
+            load_steps(ast, "foo.py")
 
         self.assertFalse(registry.is_implemented("print hello"))
 
@@ -121,6 +122,41 @@ class StaticLoaderTests(unittest.TestCase):
         load_steps(ast, "foo.py")
 
         self.assertTrue(registry.is_implemented("print hello {}"))
+
+    def test_loader_triple_quote_strings(self):
+        content = """
+            @step('''print hello <>''')
+            def print(arg1):
+                print(arg1)
+            """
+        ast = generate_ast(content, "foo.py")
+        load_steps(ast, "foo.py")
+
+        self.assertTrue(registry.is_implemented("print hello {}"))
+
+    def test_loader_step_indirect_argument(self):
+        content = """
+            v = 'print hello <>'
+            @step(v)
+            def print(arg1):
+                print(arg1)
+            """
+        ast = generate_ast(content, "foo.py")
+        load_steps(ast, "foo.py")
+
+        self.assertFalse(registry.is_implemented("print hello {}"))
+
+    def test_loader_non_string_argument(self):
+        content = """
+            @step(100)
+            def print(arg1):
+                print(arg1)
+            """
+        ast = generate_ast(content, "foo.py")
+        load_steps(ast, "foo.py")
+
+        self.assertFalse(registry.is_implemented("print hello {}"))
+
 
 def tearDown(self):
     registry.clear()
