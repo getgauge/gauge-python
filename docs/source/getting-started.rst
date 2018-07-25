@@ -12,7 +12,7 @@ To initialize a project with gauge-python, in an empty directory run:
 
     .. code:: sh
 
-        $ gauge --init python
+        $ gauge init python
 
     The project structure should look like this:
 
