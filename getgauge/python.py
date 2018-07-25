@@ -1,4 +1,3 @@
-import inspect
 import sys
 import warnings
 
@@ -12,8 +11,9 @@ except ImportError:
 
 def step(step_text):
     def _step(func):
-        f_back = sys._getframe().f_back
-        registry.add_step(step_text, func, f_back.f_code.co_filename, inspect.getsourcelines(func)[1])
+        f_code = sys._getframe().f_back.f_code
+        span = {'start': f_code.co_firstlineno, 'startChar': 0, 'end': 0, 'endChar': 0}
+        registry.add_step(step_text, func, f_code.co_filename, span)
         return func
 
     return _step

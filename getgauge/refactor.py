@@ -27,7 +27,7 @@ def refactor_step(request, response, with_location=True):
 def _refactor_content(content, info, request, with_location):
     red = RedBaron(content)
     diff = None
-    for func in red.find_all('def'):
+    for func in (n for n in red if n.type == 'def'):
         for decorator in func.decorators:
             steps = re.findall(r'[\'"](.*?)[\'"]', decorator.call.__str__())
             if len(steps) > 0 and steps[0] == info.step_text:
