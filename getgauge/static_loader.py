@@ -42,7 +42,8 @@ def load_steps(ast, file_name):
             # Otherwise the argument must be a string
             continue
         steps = step_arg.to_python()
-        span = span_for_node(func)
+        # Lazy load span since it is very expensive to calculate
+        span = lambda: span_for_node(func)
         registry.add_step(steps, func, file_name, span)
 
 

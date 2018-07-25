@@ -40,6 +40,9 @@ class StepInfo(object):
 
     @property
     def span(self):
+        # If span is callable, lazy load span on access
+        if callable(self.__span):
+            self.__span = self.__span()
         return self.__span
 
 
