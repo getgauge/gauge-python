@@ -23,7 +23,7 @@ def span_for_node(node):
 
 
 def load_steps(ast, file_name):
-    for func in ast.find_all('def'):
+    for func in (n for n in ast if n.type == 'def'):
         # Check if function has a step decorator
         decorator = next((d for d in func.decorators if d.name.value == 'step'), None)
         if not decorator:
