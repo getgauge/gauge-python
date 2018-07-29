@@ -1,3 +1,4 @@
+six
 pyfakefs
 redbaron
 coverage>=3.7.1
@@ -6,3 +7,4 @@ ptvsd==3.0.0
 grpcio-tools
 grpcio
 protobuf>=3.5.2
+parso
