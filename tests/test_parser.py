@@ -1,4 +1,5 @@
 import six
+import sys
 import unittest
 from textwrap import dedent
 from getgauge.internal import Span
@@ -670,6 +671,7 @@ class ParsoPythonFileTests(unittest.TestCase, CommonPythonFileTests):
         self.assertEqual(func.name.value, 'print_word')
 
 
+@unittest.skipIf(sys.hexversion > 0x3070000, "RedBaron does not support python 3.7")
 class RedBaronPythonFileTests(unittest.TestCase, CommonPythonFileTests):
     def parse(self, content, file_path='foo.py'):
         return RedbaronPythonFile.parse(file_path, content)

@@ -1,3 +1,4 @@
+import sys
 import unittest
 from textwrap import dedent
 from getgauge.registry import registry
@@ -134,6 +135,7 @@ class StaticLoaderTests(object):
         self.assertFalse(registry.is_implemented("print hello {}"))
 
 
+@unittest.skipIf(sys.hexversion > 0x3070000, "RedBaron does not support python 3.7")
 class RedBaron_StaticLoaderTests(unittest.TestCase, StaticLoaderTests):
     def setUp(self):
         registry.clear()
