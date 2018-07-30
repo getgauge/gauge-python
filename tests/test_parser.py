@@ -676,3 +676,7 @@ class RedBaronPythonFileTests(unittest.TestCase, CommonPythonFileTests):
 
     def setUp(self):
         self.preservesNewlines = False
+
+
+if __name__ == '__main__':
+    unittest.main()

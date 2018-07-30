@@ -1,17 +1,15 @@
 import unittest
-
+from textwrap import dedent
 from getgauge.registry import registry
-from getgauge.static_loader import load_steps, reload_steps, generate_ast
+from getgauge.parser import PythonFile
+from getgauge.static_loader import load_steps, reload_steps
 
 
-class StaticLoaderTests(unittest.TestCase):
-    def setUp(self):
-        registry.clear()
-
+class StaticLoaderTests(object):
     def test_loader_populates_registry_from_given_file_content(self):
-        content = """
+        content = dedent("""
         @step("print hello")
-        def print():
+        def printf():
             print("hello")
 
 
@@ -19,18 +17,17 @@ class StaticLoaderTests(unittest.TestCase):
         def print_word(word):
             print(word)
 
-        """
-        ast = generate_ast(content, "foo.py")
-        load_steps(ast, "foo.py")
+        """)
+        load_steps(PythonFile.parse("foo.py", content))
 
         self.assertTrue(registry.is_implemented("print hello"))
         self.assertTrue(registry.is_implemented("print {}."))
         self.assertEqual(len(registry.steps()), 2)
 
     def test_loader_populates_registry_only_with_steps_from_given_file_content(self):
-        content = """
+        content = dedent("""
         @step("print hello")
-        def print():
+        def printf():
             print("hello")
 
 
@@ -39,18 +36,17 @@ class StaticLoaderTests(unittest.TestCase):
         def print_word(word):
             print(word)
 
-        """
-        ast = generate_ast(content, "foo.py")
-        load_steps(ast, "foo.py")
+        """)
+        load_steps(PythonFile.parse("foo.py", content))
 
         self.assertTrue(registry.is_implemented("print hello"))
         self.assertTrue(registry.is_implemented("print {}."))
         self.assertFalse(registry.is_implemented("some other decorator"))
 
     def test_loader_populates_registry_with_duplicate_steps(self):
-        content = """
+        content = dedent("""
         @step("print hello")
-        def print():
+        def printf():
             print("hello")
 
 
@@ -58,104 +54,102 @@ class StaticLoaderTests(unittest.TestCase):
         def print_word():
             print("hello")
 
-        """
-        ast = generate_ast(content, "foo.py")
-        load_steps(ast, "foo.py")
+        """)
+        load_steps(PythonFile.parse("foo.py", content))
         self.assertTrue(registry.has_multiple_impls("print hello"))
 
-    def test_loader_does_not_populate_registry_for_content_having_parse_error(self):
-        content = """
-        @step("print hello")
-        def print():
-            print(.__str_())
-
-        """
-        ast = generate_ast(content, "foo.py")
-        if ast:
-            load_steps(ast, "foo.py")
-
-        self.assertFalse(registry.is_implemented("print hello"))
-
     def test_loader_populates_registry_for_with_aliases(self):
-        content = """
+        content = dedent("""
         @step(["print hello", "say hello"])
-        def print():
+        def printf():
             print("hello")
 
-        """
+        """)
 
-        ast = generate_ast(content, "foo.py")
-        load_steps(ast, "foo.py")
+        load_steps(PythonFile.parse("foo.py", content))
 
         self.assertTrue(registry.is_implemented("say hello"))
         self.assertTrue(registry.get_info_for("say hello").has_alias)
 
     def test_loader_reload_registry_for_given_content(self):
-        content = """
+        content = dedent("""
             @step("print hello")
-            def print():
+            def printf():
                 print("hello")
-            """
-        ast = generate_ast(content, "foo.py")
-        load_steps(ast, "foo.py")
+            """)
+        load_steps(PythonFile.parse("foo.py", content))
 
         self.assertTrue(registry.is_implemented("print hello"))
 
-        content = """
+        content = dedent("""
                 @step("print world")
-                def print():
+                def printf():
                     print("hello")
-                """
+                """)
 
-        reload_steps(content, 'foo.py')
+        reload_steps('foo.py', content)
 
         self.assertFalse(registry.is_implemented("print hello"))
         self.assertTrue(registry.is_implemented("print world"))
 
     def test_loader_reload_registry_for_given_content_with_empty_arg(self):
-        content = """
+        content = dedent("""
             @step("print hello <>")
-            def print(arg1):
+            def printf(arg1):
                 print(arg1)
-            """
-        ast = generate_ast(content, "foo.py")
-        load_steps(ast, "foo.py")
+            """)
+        load_steps(PythonFile.parse("foo.py", content))
 
         self.assertTrue(registry.is_implemented("print hello {}"))
 
     def test_loader_triple_quote_strings(self):
-        content = """
+        content = dedent("""
             @step('''print hello <>''')
-            def print(arg1):
+            def printf(arg1):
                 print(arg1)
-            """
-        ast = generate_ast(content, "foo.py")
-        load_steps(ast, "foo.py")
+            """)
+        load_steps(PythonFile.parse("foo.py", content))
 
         self.assertTrue(registry.is_implemented("print hello {}"))
 
     def test_loader_step_indirect_argument(self):
-        content = """
+        content = dedent("""
             v = 'print hello <>'
             @step(v)
-            def print(arg1):
+            def printf(arg1):
                 print(arg1)
-            """
-        ast = generate_ast(content, "foo.py")
-        load_steps(ast, "foo.py")
+            """)
+        load_steps(PythonFile.parse("foo.py", content))
 
         self.assertFalse(registry.is_implemented("print hello {}"))
 
     def test_loader_non_string_argument(self):
-        content = """
+        content = dedent("""
             @step(100)
-            def print(arg1):
+            def printf(arg1):
                 print(arg1)
-            """
-        ast = generate_ast(content, "foo.py")
-        load_steps(ast, "foo.py")
+            """)
+        load_steps(PythonFile.parse("foo.py", content))
 
         self.assertFalse(registry.is_implemented("print hello {}"))
+
+
+class RedBaron_StaticLoaderTests(unittest.TestCase, StaticLoaderTests):
+    def setUp(self):
+        registry.clear()
+        PythonFile.selectPythonFileParser('redbaron')
+
+    def tearDown(self):
+        PythonFile.selectPythonFileParser()
+
+
+class Parso_StaticLoaderTests(unittest.TestCase, StaticLoaderTests):
+    def setUp(self):
+        registry.clear()
+        PythonFile.selectPythonFileParser('parso')
+
+    def tearDown(self):
+        PythonFile.selectPythonFileParser()
 
 
 def tearDown(self):

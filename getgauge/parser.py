@@ -6,6 +6,33 @@ from .parser_parso import ParsoPythonFile
 from .parser_redbaron import RedbaronPythonFile
 
 
+class PythonFile(object):
+    Klass = None
+
+    @staticmethod
+    def parse(file_path, content=None):
+        # type: (str, Optional[str]) -> Optional[PythonFile]
+        '''
+        Create a PythonFileABC object with specified file_path and content. If content is None
+        then, it is loaded from the file_path method. Otherwise, file_path is only used for
+        reporting errors.
+        '''
+        return PythonFile.Klass.parse(file_path, content)
+
+    @staticmethod
+    def selectPythonFileParser(parser=None):
+        if parser == 'redbaron':
+            PythonFile.Klass = RedbaronPythonFile
+        elif parser == 'parso' or sys.hexversion > 0x3070000 or os.environ.get('GETGAUGE_USE_PARSO'):
+            PythonFile.Klass = ParsoPythonFile
+        else:
+            PythonFile.Klass = RedbaronPythonFile
+
+
+# Select the default implementation
+PythonFile.selectPythonFileParser()
+
+
 class PythonFileABC(six.with_metaclass(ABCMeta)):
     @staticmethod
     def parse(file_path, content=None):
@@ -49,9 +76,3 @@ class PythonFileABC(six.with_metaclass(ABCMeta)):
 # Verify that implemetations are subclasses of ABC
 PythonFileABC.register(ParsoPythonFile)
 PythonFileABC.register(RedbaronPythonFile)
-
-# Use RedbaronPythonFile as the default implemetation
-PythonFile = RedbaronPythonFile
-# Overide if using python 3.7 or user configuration
-if sys.hexversion > 0x3070000 or os.environ.get('GETGAUGE_USE_PARSO'):
-    PythonFile = ParsoPythonFile
