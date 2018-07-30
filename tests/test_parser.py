@@ -515,6 +515,116 @@ class CommonPythonFileTests(object):
             assert z == a * b * c
         """))
 
+    def test_refactor_step_remove_first_arg_newline(self):
+        content = dedent("""\
+        @step("multiply <a>, <b>, <c> equals <z>")
+        def mul(a,
+                b,
+                c,
+                z):
+            assert z == a * b * c
+        """)
+        pf = self.parse(content)
+        self.assertIsNotNone(pf)
+
+        diffs = pf.refactor_step(
+            'multiply <a>, <b>, <c> equals <z>',
+            'multiply <b>, <c> equals <z>',
+            [1, 2, 3])
+
+        expectedArgs = "b,\n        c,\n        z"
+        if not self.preservesNewlines:
+            expectedArgs = expectedArgs.replace('\n       ', '')
+        self.assertEqual(diffs, [
+            (Span(1, 6, 1, 41), '"multiply <b>, <c> equals <z>"'),
+            (Span(2, 8, 5, 9), expectedArgs),
+        ])
+        self.assertEqual(pf.get_code(), dedent("""\
+        @step("multiply <b>, <c> equals <z>")
+        def mul({}):
+            assert z == a * b * c
+        """).format(expectedArgs))
+
+    def test_refactor_step_remove_last_arg_newline(self):
+        content = dedent("""\
+        @step("multiply <a>, <b>, <c> equals <z>")
+        def mul(a,
+                b,
+                c,
+                z):
+            assert z == a * b * c
+        """)
+        pf = self.parse(content)
+        self.assertIsNotNone(pf)
+
+        diffs = pf.refactor_step(
+            'multiply <a>, <b>, <c> equals <z>',
+            'multiply <a>, <b> equals <c>',
+            [0, 1, 2])
+
+        expectedArgs = "a,\n        b,\n        c"
+        if not self.preservesNewlines:
+            expectedArgs = expectedArgs.replace('\n       ', '')
+        self.assertEqual(diffs, [
+            (Span(1, 6, 1, 41), '"multiply <a>, <b> equals <c>"'),
+            (Span(2, 8, 5, 9), expectedArgs),
+        ])
+        self.assertEqual(pf.get_code(), dedent("""\
+        @step("multiply <a>, <b> equals <c>")
+        def mul({}):
+            assert z == a * b * c
+        """).format(expectedArgs))
+
+    def test_refactor_step_remove_arg_in_middle_newline(self):
+        content = dedent("""\
+        @step("multiply <a>, <b>, <c> equals <z>")
+        def mul(a,
+                b,
+                c,
+                z):
+            assert z == a * b * c
+        """)
+        pf = self.parse(content)
+        self.assertIsNotNone(pf)
+
+        diffs = pf.refactor_step(
+            'multiply <a>, <b>, <c> equals <z>',
+            'multiply <a>, <b> equals <z>',
+            [0, 1, 3])
+
+        expectedArgs = "a,\n        b,\n        z"
+        if not self.preservesNewlines:
+            expectedArgs = expectedArgs.replace('\n       ', '')
+        self.assertEqual(diffs, [
+            (Span(1, 6, 1, 41), '"multiply <a>, <b> equals <z>"'),
+            (Span(2, 8, 5, 9), expectedArgs),
+        ])
+        self.assertEqual(pf.get_code(), dedent("""\
+        @step("multiply <a>, <b> equals <z>")
+        def mul({}):
+            assert z == a * b * c
+        """).format(expectedArgs))
+
+        # Remove one more arg
+        diffs = pf.refactor_step(
+            'multiply <a>, <b> equals <z>',
+            'multiply <a> equals <z>',
+            [0, 2])
+        expectedArgs = "a,\n        z"
+        expectedArgSpan = Span(2, 8, 2, 31)
+        if not self.preservesNewlines:
+            expectedArgs = expectedArgs.replace('\n       ', '')
+            expectedArgSpan = Span(2, 8, 2, 15)
+        self.assertEqual(diffs, [
+            (Span(1, 6, 1, 36), '"multiply <a> equals <z>"'),
+            (expectedArgSpan, expectedArgs),
+        ])
+        self.assertEqual(pf.get_code(), dedent("""\
+        @step("multiply <a> equals <z>")
+        def mul({}):
+            assert z == a * b * c
+        """).format(expectedArgs))
+
 
 class ParsoPythonFileTests(unittest.TestCase, CommonPythonFileTests):
     def parse(self, content, file_path='foo.py'):
