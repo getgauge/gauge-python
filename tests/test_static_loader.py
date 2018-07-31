@@ -7,6 +7,9 @@ from getgauge.static_loader import load_steps, reload_steps
 
 
 class StaticLoaderTests(object):
+    def setUp(self):
+        registry.clear()
+
     def test_loader_populates_registry_from_given_file_content(self):
         content = dedent("""
         @step("print hello")
@@ -138,8 +141,8 @@ class StaticLoaderTests(object):
 @unittest.skipIf(sys.hexversion > 0x3070000, "RedBaron does not support python 3.7")
 class RedBaron_StaticLoaderTests(unittest.TestCase, StaticLoaderTests):
     def setUp(self):
-        registry.clear()
         PythonFile.selectPythonFileParser('redbaron')
+        StaticLoaderTests.setUp(self)
 
     def tearDown(self):
         PythonFile.selectPythonFileParser()
@@ -147,8 +150,8 @@ class RedBaron_StaticLoaderTests(unittest.TestCase, StaticLoaderTests):
 
 class Parso_StaticLoaderTests(unittest.TestCase, StaticLoaderTests):
     def setUp(self):
-        registry.clear()
         PythonFile.selectPythonFileParser('parso')
+        StaticLoaderTests.setUp(self)
 
     def tearDown(self):
         PythonFile.selectPythonFileParser()

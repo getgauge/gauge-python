@@ -248,11 +248,11 @@ class CommonPythonFileTests(object):
         diffs = pf.refactor_step('print hello', 'print <word>', [-1])
         self.assertEqual(diffs, [
             (Span(1, 6, 1, 19), "'print <word>'"),
-            (Span(2, 16, 2, 16), "arg1"),
+            (Span(2, 16, 2, 16), "arg0"),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step('print <word>')
-        def print_hello(arg1):
+        def print_hello(arg0):
             print("hello")
         """))
 
@@ -271,11 +271,11 @@ class CommonPythonFileTests(object):
             [-1, 0, 1, 2])
         self.assertEqual(diffs, [
             (Span(1, 6, 1, 36), '"multiply <x>, <a>, <b> equals <z>"'),
-            (Span(2, 8, 2, 15), "arg1, a, b, z"),
+            (Span(2, 8, 2, 15), "arg0, a, b, z"),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <x>, <a>, <b> equals <z>")
-        def mul(arg1, a, b, z):
+        def mul(arg0, a, b, z):
             assert z == a * b
         """))
 
@@ -294,11 +294,11 @@ class CommonPythonFileTests(object):
             [0, 1, 2, -1])
         self.assertEqual(diffs, [
             (Span(1, 6, 1, 36), '"multiply <a>, <b>, <x> equals <z>"'),
-            (Span(2, 8, 2, 15), "a, b, z, arg4"),
+            (Span(2, 8, 2, 15), "a, b, z, arg3"),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <a>, <b>, <x> equals <z>")
-        def mul(a, b, z, arg4):
+        def mul(a, b, z, arg3):
             assert z == a * b
         """))
 
@@ -317,11 +317,11 @@ class CommonPythonFileTests(object):
             [0, 1, -1, 2])
         self.assertEqual(diffs, [
             (Span(1, 6, 1, 36), '"multiply <a>, <b>, <x> equals <z>"'),
-            (Span(2, 8, 2, 15), "a, b, arg3, z"),
+            (Span(2, 8, 2, 15), "a, b, arg2, z"),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <a>, <b>, <x> equals <z>")
-        def mul(a, b, arg3, z):
+        def mul(a, b, arg2, z):
             assert z == a * b
         """))
 
@@ -341,7 +341,7 @@ class CommonPythonFileTests(object):
             'multiply <x>, <a>, <b> equals <z>',
             [-1, 0, 1, 2])
 
-        expectedArgs = "arg1,\n        a,\n        b,\n        z"
+        expectedArgs = "arg0,\n        a,\n        b,\n        z"
         if not self.preservesNewlines:
             expectedArgs = expectedArgs.replace('\n       ', '')
         self.assertEqual(diffs, [
@@ -371,7 +371,7 @@ class CommonPythonFileTests(object):
             'multiply <x>, <a>, <b> equals <z>',
             [0, 1, 2, -1])
 
-        expectedArgs = "a,\n        b,\n        z,\n        arg4"
+        expectedArgs = "a,\n        b,\n        z,\n        arg3"
         if not self.preservesNewlines:
             expectedArgs = expectedArgs.replace('\n       ', '')
         self.assertEqual(diffs, [
@@ -400,7 +400,7 @@ class CommonPythonFileTests(object):
             'multiply <a>, <x>, <b> equals <z>',
             [0, -1, 1, 2])
 
-        expectedArgs = "a,\n        arg2,\n        b,\n        z"
+        expectedArgs = "a,\n        arg1,\n        b,\n        z"
         if not self.preservesNewlines:
             expectedArgs = expectedArgs.replace('\n       ', '')
         self.assertEqual(diffs, [

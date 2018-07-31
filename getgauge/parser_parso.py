@@ -107,7 +107,7 @@ class ParsoPythonFile(object):
             # If it is a new parameter name it `arg_x`
             name_prefix = '' if i == 0 else param_prefix
             name = parso.python.tree.Name(
-                'arg{}'.format(i + 1) if move_from < 0 else old_params[move_from].name.value,
+                'arg{}'.format(i) if move_from < 0 else old_params[move_from].name.value,
                 (new_params[-1].end_pos[0], new_params[-1].end_pos[1] + len(name_prefix)),
                 name_prefix,
             )

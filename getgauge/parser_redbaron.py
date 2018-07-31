@@ -123,7 +123,7 @@ class RedbaronPythonFile(object):
         new_params = []
         for i, move_from in enumerate(move_param_from_idx):
             if move_from < 0:
-                name = 'arg{}'.format(i + 1)
+                name = 'arg{}'.format(i)
             else:
                 name = old_params[move_from].name.value
             new_params.append(name)

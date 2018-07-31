@@ -1,13 +1,15 @@
 import os
+import sys
 import tempfile
 import unittest
 
-from getgauge.messages.messages_pb2 import Message, ParameterPosition
-from getgauge.processor import processors
+from getgauge.parser import PythonFile
 from getgauge.registry import registry
+from getgauge.processor import processors
+from getgauge.messages.messages_pb2 import Message, ParameterPosition
 
 
-class RefactorTests(unittest.TestCase):
+class RefactorTests(object):
     file = None
     data = None
     path = ''
@@ -18,7 +20,7 @@ class RefactorTests(unittest.TestCase):
         RefactorTests.file.write("""@step("Vowels in English language are <vowels>.")
 def assert_default_vowels(given_vowels):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
-    assert given_vowels == "".join(vowels)""")
+    assert given_vowels == "".join(vowels)\n""")
         RefactorTests.file.close()
         RefactorTests.file = open(RefactorTests.path, 'r')
         RefactorTests.data = RefactorTests.file.read()
@@ -310,7 +312,7 @@ def assert_default_vowels(given_vowels, arg1):
         self.assertEqual(expected, response.refactorResponse.fileChanges[0].fileContent)
         self.assertEqual(old_content, self.getActualText())
         diff_contents = [diff.content for diff in response.refactorResponse.fileChanges[0].diffs]
-        self.assertIn('("Vowels in English language is <vowels> <vowels!2_ab%$>.")', diff_contents)
+        self.assertIn('"Vowels in English language is <vowels> <vowels!2_ab%$>."', diff_contents)
         self.assertIn('given_vowels, arg1', diff_contents)
 
     def getActualText(self):
@@ -321,3 +323,24 @@ def assert_default_vowels(given_vowels, arg1):
         _file.write(RefactorTests.data)
         _file.close()
         return actual_data
+
+
+@unittest.skipIf(sys.hexversion > 0x3070000, "RedBaron does not support python 3.7")
+class RedBaron_RefactorTests(unittest.TestCase, RefactorTests):
+    def setUp(self):
+        PythonFile.selectPythonFileParser('redbaron')
+        RefactorTests.setUp(self)
+
+    def tearDown(self):
+        RefactorTests.tearDown(self)
+        PythonFile.selectPythonFileParser()
+
+
+class Parso_RefactorTests(unittest.TestCase, RefactorTests):
+    def setUp(self):
+        PythonFile.selectPythonFileParser('parso')
+        RefactorTests.setUp(self)
+
+    def tearDown(self):
+        RefactorTests.tearDown(self)
+        PythonFile.selectPythonFileParser()
