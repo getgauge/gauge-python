@@ -52,7 +52,7 @@ class PythonFileABC(six.with_metaclass(ABCMeta)):
 
     @abstractmethod
     def refactor_step(self, old_text, new_text, move_param_from_idx):
-        # type: (str, str, List[int]) -> RefactorDiff[ContentDiff[Span, str], ContentDiff[Span, str]]
+        # type: (str, str, List[int]) -> List[Tuple[Span, str]]
         '''
         Find the step with old_text and change it to new_text. The step function
         parameters are also changed accoring to move_param_from_idx. Each entry in
