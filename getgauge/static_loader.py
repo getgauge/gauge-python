@@ -5,7 +5,7 @@ from .parser import PythonFile
 
 def load_steps(python_file):
     for funcStep in python_file.iter_steps():
-        registry.add_step(funcStep.steps, funcStep.func, funcStep.file_path, funcStep.span)
+        registry.add_step(funcStep[0], funcStep[1], python_file.file_path, funcStep[2])
 
 
 def reload_steps(file_path, content=None):

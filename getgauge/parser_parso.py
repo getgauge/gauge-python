@@ -2,13 +2,11 @@ import ast
 import six
 import parso
 import logging
-from .internal import Span, FunctionSteps
 
 
 class ParsoPythonFile(object):
     @staticmethod
     def parse(file_path, content=None):
-        # type: (str, Optional[str]) -> Optional[ParsoPythonFile]
         '''
         Create a PythonFile object with specified file_path and content. If content is None
         then, it is loaded from the file_path method. Otherwise, file_path is only used for
@@ -21,15 +19,18 @@ class ParsoPythonFile(object):
             logging.error("Failed to parse %s:%d '%s'", file_path, ex.error_leaf.line, ex.error_leaf.get_code())
 
     def __init__(self, file_path, py_tree):
-        # type: (str, parso.python.tree.Module)
         self.file_path = file_path
         self.py_tree = py_tree
 
     def _span_from_pos(self, start_pos, end_pos):
-        return Span(start_pos[0], start_pos[1], end_pos[0], end_pos[1])
+        return {
+            'start': start_pos[0],
+            'startChar': start_pos[1],
+            'end': end_pos[0],
+            'endChar': end_pos[1],
+        }
 
     def _iter_step_func_decorators(self):
-        # type: () -> Generator[parso.python.tree.Function, parso.python.tree.Decorator]
         '''Find top level functions with step decorator in parsed file'''
         for func in self.py_tree.iter_funcdefs():
             for decorator in func.get_decorators():
@@ -38,7 +39,6 @@ class ParsoPythonFile(object):
                     break
 
     def _step_decorator_args(self, decorator):
-        # type: (parso.python.tree.Decorator) -> Optional(Union[str, List[str]])
         '''Get the arguments passed to step decorators converted to python objects'''
         args = decorator.children[3:-2]
         step = None
@@ -56,16 +56,14 @@ class ParsoPythonFile(object):
                           self.file_path, decorator.start_pos[0])
 
     def iter_steps(self):
-        # type: () -> Generator[FunctionSteps]
         '''Iterate over steps in the parsed file'''
         for func, decorator in self._iter_step_func_decorators():
             step = self._step_decorator_args(decorator)
             if step:
                 span = self._span_from_pos(decorator.start_pos, func.end_pos)
-                yield FunctionSteps(step, func.name.value, self.file_path, span)
+                yield step, func.name.value, span
 
     def _find_step_node(self, step_text):
-        # type: (str) -> Optional[Tuple[parso.python.tree.String, parso.python.tree.Function]]
         '''Find the ast node which contains the text'''
         for func, decorator in self._iter_step_func_decorators():
             step = self._step_decorator_args(decorator)
@@ -79,7 +77,6 @@ class ParsoPythonFile(object):
         return None, None
 
     def refactor_step(self, old_text, new_text, move_param_from_idx):
-        # type: (str, str, List[int]) -> List[Tuple[Span, str]]
         '''
         Find the step with old_text and change it to new_text. The step function
         parameters are also changed accoring to move_param_from_idx. Each entry in
@@ -127,6 +124,5 @@ class ParsoPythonFile(object):
         return diffs
 
     def get_code(self):
-        # type: () -> str
         '''Returns current content of the tree.'''
         return self.py_tree.get_code()

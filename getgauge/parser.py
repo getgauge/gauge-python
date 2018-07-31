@@ -11,7 +11,6 @@ class PythonFile(object):
 
     @staticmethod
     def parse(file_path, content=None):
-        # type: (str, Optional[str]) -> Optional[PythonFile]
         '''
         Create a PythonFileABC object with specified file_path and content. If content is None
         then, it is loaded from the file_path method. Otherwise, file_path is only used for
@@ -36,7 +35,6 @@ PythonFile.selectPythonFileParser()
 class PythonFileABC(six.with_metaclass(ABCMeta)):
     @staticmethod
     def parse(file_path, content=None):
-        # type: (str, Optional[str]) -> Optional[PythonFileABC]
         '''
         Create a PythonFileABC object with specified file_path and content. If content is None
         then, it is loaded from the file_path method. Otherwise, file_path is only used for
@@ -46,13 +44,11 @@ class PythonFileABC(six.with_metaclass(ABCMeta)):
 
     @abstractmethod
     def iter_steps(self):
-        # type: () -> Generator[FunctionSteps]
         '''Iterate over steps in the parsed file'''
         raise NotImplementedError
 
     @abstractmethod
     def refactor_step(self, old_text, new_text, move_param_from_idx):
-        # type: (str, str, List[int]) -> List[Tuple[Span, str]]
         '''
         Find the step with old_text and change it to new_text. The step function
         parameters are also changed accoring to move_param_from_idx. Each entry in
@@ -62,7 +58,6 @@ class PythonFileABC(six.with_metaclass(ABCMeta)):
 
     @abstractmethod
     def get_code(self):
-        # type: () -> str
         '''Returns current content of the tree.'''
         raise NotImplementedError
 

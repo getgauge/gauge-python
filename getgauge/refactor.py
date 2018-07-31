@@ -25,7 +25,7 @@ def refactor_step(request, response, with_location=True):
     response.refactorResponse.fileChanges.add(
         fileName=info.file_name,
         fileContent=content,  # FIXME: Remove deprecated field
-        diffs=[TextDiff(span=Span(**d[0]._asdict()), content=d[1]) for d in diffs],
+        diffs=[TextDiff(span=Span(**d[0]), content=d[1]) for d in diffs],
     )
 
 

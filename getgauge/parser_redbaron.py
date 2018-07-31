@@ -1,13 +1,11 @@
 import six
 import logging
 from redbaron import RedBaron
-from .internal import Span, FunctionSteps
 
 
 class RedbaronPythonFile(object):
     @staticmethod
     def parse(file_path, content=None):
-        # type: (str, Optional[str]) -> Optional[RedbaronPythonFile]
         '''
         Create a PythonFile object with specified file_path and content. If content is None
         then, it is loaded from the file_path method. Otherwise, file_path is only used for
@@ -35,7 +33,6 @@ class RedbaronPythonFile(object):
 
     def _span_for_node(self, node, lazy=False):
         def calculate_span():
-            # type: (redbaron.nodes.Node, Optional[bool]) -> Span
             try:
                 # For some reason RedBaron does not create absolute_bounding_box
                 # attributes for some content passed during unit test so we have
@@ -43,14 +40,14 @@ class RedbaronPythonFile(object):
                 box = node.absolute_bounding_box
                 # Column numbers start at 1 where-as we want to start at 0. Also
                 # column 0 is used to indicate end before start of line.
-                return Span(
-                    box.top_left.line,
-                    max(0, box.top_left.column - 1),
-                    box.bottom_right.line,
-                    max(0, box.bottom_right.column),
-                )
+                return {
+                    'start': box.top_left.line,
+                    'startChar': max(0, box.top_left.column - 1),
+                    'end': box.bottom_right.line,
+                    'endChar': max(0, box.bottom_right.column),
+                }
             except AttributeError:
-                return Span(0, 0, 0, 0)
+                return {'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0}
         return calculate_span if lazy else calculate_span()
 
     def _iter_step_func_decorators(self):
@@ -87,7 +84,7 @@ class RedbaronPythonFile(object):
         for func, decorator in self._iter_step_func_decorators():
             step = self._step_decorator_args(decorator)
             if step:
-                yield FunctionSteps(step, func.name, self.file_path, self._span_for_node(func, True))
+                yield step, func.name, self._span_for_node(func, True)
 
     def _find_step_node(self, step_text):
         # type: (str) -> Optional[Tuple[redbaron.nodes.StringNode, redbaron.nodes.DefNode]]

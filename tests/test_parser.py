@@ -2,8 +2,11 @@ import six
 import sys
 import unittest
 from textwrap import dedent
-from getgauge.internal import Span
 from getgauge.parser import ParsoPythonFile, RedbaronPythonFile
+
+
+def _span(start, startChar, end, endChar):
+    return locals()
 
 
 class CommonPythonFileTests(object):
@@ -13,8 +16,8 @@ class CommonPythonFileTests(object):
     def assertSpanStart(self, actualSpan, expectedStartLine, expectedStartChar):
         if callable(actualSpan):
             actualSpan = actualSpan()
-        self.assertEqual(actualSpan.start, expectedStartLine)
-        self.assertEqual(actualSpan.startChar, expectedStartChar)
+        self.assertEqual(actualSpan['start'], expectedStartLine)
+        self.assertEqual(actualSpan['startChar'], expectedStartChar)
 
     def test_can_parse_content_directly(self):
         content = dedent('''\
@@ -54,12 +57,12 @@ class CommonPythonFileTests(object):
         self.assertIsNotNone(pf)
         steps = list(pf.iter_steps())
         self.assertEqual(len(steps), 2)
-        self.assertEqual(steps[0].steps, "print hello")
-        self.assertEqual(steps[0].func, "print_hello")
-        self.assertSpanStart(steps[0].span, 1, 0)
-        self.assertEqual(steps[1].steps, "print <word>")
-        self.assertEqual(steps[1].func, "print_word")
-        self.assertSpanStart(steps[1].span, 5, 0)
+        self.assertEqual(steps[0][0], "print hello")
+        self.assertEqual(steps[0][1], "print_hello")
+        self.assertSpanStart(steps[0][2], 1, 0)
+        self.assertEqual(steps[1][0], "print <word>")
+        self.assertEqual(steps[1][1], "print_word")
+        self.assertSpanStart(steps[1][2], 5, 0)
 
     def test_iter_steps_loads_multiple_steps_from_list(self):
         content = dedent('''\
@@ -78,12 +81,12 @@ class CommonPythonFileTests(object):
         self.assertIsNotNone(pf)
         steps = list(pf.iter_steps())
         self.assertEqual(len(steps), 2)
-        self.assertEqual(steps[0].steps, ["print hello", "display hello"])
-        self.assertEqual(steps[0].func, "print_hello")
-        self.assertSpanStart(steps[0].span, 1, 0)
-        self.assertEqual(steps[1].steps, ["print <word>", "display <word>"])
-        self.assertEqual(steps[1].func, "print_word")
-        self.assertSpanStart(steps[1].span, 5, 0)
+        self.assertEqual(steps[0][0], ["print hello", "display hello"])
+        self.assertEqual(steps[0][1], "print_hello")
+        self.assertSpanStart(steps[0][2], 1, 0)
+        self.assertEqual(steps[1][0], ["print <word>", "display <word>"])
+        self.assertEqual(steps[1][1], "print_word")
+        self.assertSpanStart(steps[1][2], 5, 0)
 
     def test_iter_steps_only_checks_step_decorator(self):
         content = dedent('''\
@@ -100,9 +103,9 @@ class CommonPythonFileTests(object):
         self.assertIsNotNone(pf)
         steps = list(pf.iter_steps())
         self.assertEqual(len(steps), 1)
-        self.assertEqual(steps[0].steps, "print <word>")
-        self.assertEqual(steps[0].func, "print_word")
-        self.assertSpanStart(steps[0].span, 1, 0)
+        self.assertEqual(steps[0][0], "print <word>")
+        self.assertEqual(steps[0][1], "print_word")
+        self.assertSpanStart(steps[0][2], 1, 0)
 
     def test_iter_steps_loads_multiple_step_implementations(self):
         content = dedent('''\
@@ -118,12 +121,12 @@ class CommonPythonFileTests(object):
         self.assertIsNotNone(pf)
         steps = list(pf.iter_steps())
         self.assertEqual(len(steps), 2)
-        self.assertEqual(steps[0].steps, "print hello")
-        self.assertEqual(steps[0].func, "print_hello")
-        self.assertSpanStart(steps[0].span, 1, 0)
-        self.assertEqual(steps[1].steps, "print hello")
-        self.assertEqual(steps[1].func, "print_word")
-        self.assertSpanStart(steps[1].span, 5, 0)
+        self.assertEqual(steps[0][0], "print hello")
+        self.assertEqual(steps[0][1], "print_hello")
+        self.assertSpanStart(steps[0][2], 1, 0)
+        self.assertEqual(steps[1][0], "print hello")
+        self.assertEqual(steps[1][1], "print_word")
+        self.assertSpanStart(steps[1][2], 5, 0)
 
     def test_iter_steps_loads_triple_quoted_strings_1(self):
         content = dedent('''\
@@ -135,9 +138,9 @@ class CommonPythonFileTests(object):
         self.assertIsNotNone(pf)
         steps = list(pf.iter_steps())
         self.assertEqual(len(steps), 1)
-        self.assertEqual(steps[0].steps, "print hello")
-        self.assertEqual(steps[0].func, "print_hello")
-        self.assertSpanStart(steps[0].span, 1, 0)
+        self.assertEqual(steps[0][0], "print hello")
+        self.assertEqual(steps[0][1], "print_hello")
+        self.assertSpanStart(steps[0][2], 1, 0)
 
     def test_iter_steps_loads_triple_quoted_strings_2(self):
         content = dedent("""\
@@ -149,9 +152,9 @@ class CommonPythonFileTests(object):
         self.assertIsNotNone(pf)
         steps = list(pf.iter_steps())
         self.assertEqual(len(steps), 1)
-        self.assertEqual(steps[0].steps, "print hello")
-        self.assertEqual(steps[0].func, "print_hello")
-        self.assertSpanStart(steps[0].span, 1, 0)
+        self.assertEqual(steps[0][0], "print hello")
+        self.assertEqual(steps[0][1], "print_hello")
+        self.assertSpanStart(steps[0][2], 1, 0)
 
     def test_iter_steps_loads_r_strings(self):
         content = dedent("""\
@@ -163,9 +166,9 @@ class CommonPythonFileTests(object):
         self.assertIsNotNone(pf)
         steps = list(pf.iter_steps())
         self.assertEqual(len(steps), 1)
-        self.assertEqual(steps[0].steps, "print hello")
-        self.assertEqual(steps[0].func, "print_hello")
-        self.assertSpanStart(steps[0].span, 1, 0)
+        self.assertEqual(steps[0][0], "print hello")
+        self.assertEqual(steps[0][1], "print_hello")
+        self.assertSpanStart(steps[0][2], 1, 0)
 
     @unittest.skipIf(six.PY2, "f-strings are not supported on python2")
     def test_iter_steps_does_not_load_f_strings(self):
@@ -214,7 +217,7 @@ class CommonPythonFileTests(object):
 
         diffs = pf.refactor_step('print hello', 'display hello', [])
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 19), '"display hello"'),
+            (_span(1, 6, 1, 19), '"display hello"'),
         ])
         self.assertEqual(pf.get_code(), content.replace('print hello', 'display hello'))
 
@@ -232,7 +235,7 @@ class CommonPythonFileTests(object):
 
         diffs = pf.refactor_step('display <word>', 'show <word>', [0])
         self.assertEqual(diffs, [
-            (Span(3, 4, 3, 20), "'show <word>'"),
+            (_span(3, 4, 3, 20), "'show <word>'"),
         ])
         self.assertEqual(pf.get_code(), content.replace('display <word>', 'show <word>'))
 
@@ -247,8 +250,8 @@ class CommonPythonFileTests(object):
 
         diffs = pf.refactor_step('print hello', 'print <word>', [-1])
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 19), "'print <word>'"),
-            (Span(2, 16, 2, 16), "arg0"),
+            (_span(1, 6, 1, 19), "'print <word>'"),
+            (_span(2, 16, 2, 16), "arg0"),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step('print <word>')
@@ -270,8 +273,8 @@ class CommonPythonFileTests(object):
             'multiply <x>, <a>, <b> equals <z>',
             [-1, 0, 1, 2])
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 36), '"multiply <x>, <a>, <b> equals <z>"'),
-            (Span(2, 8, 2, 15), "arg0, a, b, z"),
+            (_span(1, 6, 1, 36), '"multiply <x>, <a>, <b> equals <z>"'),
+            (_span(2, 8, 2, 15), "arg0, a, b, z"),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <x>, <a>, <b> equals <z>")
@@ -293,8 +296,8 @@ class CommonPythonFileTests(object):
             'multiply <a>, <b>, <x> equals <z>',
             [0, 1, 2, -1])
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 36), '"multiply <a>, <b>, <x> equals <z>"'),
-            (Span(2, 8, 2, 15), "a, b, z, arg3"),
+            (_span(1, 6, 1, 36), '"multiply <a>, <b>, <x> equals <z>"'),
+            (_span(2, 8, 2, 15), "a, b, z, arg3"),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <a>, <b>, <x> equals <z>")
@@ -316,8 +319,8 @@ class CommonPythonFileTests(object):
             'multiply <a>, <b>, <x> equals <z>',
             [0, 1, -1, 2])
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 36), '"multiply <a>, <b>, <x> equals <z>"'),
-            (Span(2, 8, 2, 15), "a, b, arg2, z"),
+            (_span(1, 6, 1, 36), '"multiply <a>, <b>, <x> equals <z>"'),
+            (_span(2, 8, 2, 15), "a, b, arg2, z"),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <a>, <b>, <x> equals <z>")
@@ -345,8 +348,8 @@ class CommonPythonFileTests(object):
         if not self.preservesNewlines:
             expectedArgs = expectedArgs.replace('\n       ', '')
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 36), '"multiply <x>, <a>, <b> equals <z>"'),
-            (Span(2, 8, 4, 9), expectedArgs),
+            (_span(1, 6, 1, 36), '"multiply <x>, <a>, <b> equals <z>"'),
+            (_span(2, 8, 4, 9), expectedArgs),
         ])
 
         self.assertEqual(pf.get_code(), dedent("""\
@@ -375,8 +378,8 @@ class CommonPythonFileTests(object):
         if not self.preservesNewlines:
             expectedArgs = expectedArgs.replace('\n       ', '')
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 36), '"multiply <x>, <a>, <b> equals <z>"'),
-            (Span(2, 8, 4, 9), expectedArgs),
+            (_span(1, 6, 1, 36), '"multiply <x>, <a>, <b> equals <z>"'),
+            (_span(2, 8, 4, 9), expectedArgs),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <x>, <a>, <b> equals <z>")
@@ -404,8 +407,8 @@ class CommonPythonFileTests(object):
         if not self.preservesNewlines:
             expectedArgs = expectedArgs.replace('\n       ', '')
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 36), '"multiply <a>, <x>, <b> equals <z>"'),
-            (Span(2, 8, 4, 9), expectedArgs),
+            (_span(1, 6, 1, 36), '"multiply <a>, <x>, <b> equals <z>"'),
+            (_span(2, 8, 4, 9), expectedArgs),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <a>, <x>, <b> equals <z>")
@@ -424,8 +427,8 @@ class CommonPythonFileTests(object):
 
         diffs = pf.refactor_step('print <word>', 'print hello', [])
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 20), '"print hello"'),
-            (Span(2, 15, 2, 19), ""),
+            (_span(1, 6, 1, 20), '"print hello"'),
+            (_span(2, 15, 2, 19), ""),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("print hello")
@@ -447,8 +450,8 @@ class CommonPythonFileTests(object):
             'multiply <b>, <c> equals <z>',
             [1, 2, 3])
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 41), '"multiply <b>, <c> equals <z>"'),
-            (Span(2, 8, 2, 18), "b, c, z"),
+            (_span(1, 6, 1, 41), '"multiply <b>, <c> equals <z>"'),
+            (_span(2, 8, 2, 18), "b, c, z"),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <b>, <c> equals <z>")
@@ -470,8 +473,8 @@ class CommonPythonFileTests(object):
             'multiply <a>, <b> equals <c>',
             [0, 1, 2])
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 41), '"multiply <a>, <b> equals <c>"'),
-            (Span(2, 8, 2, 18), "a, b, c"),
+            (_span(1, 6, 1, 41), '"multiply <a>, <b> equals <c>"'),
+            (_span(2, 8, 2, 18), "a, b, c"),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <a>, <b> equals <c>")
@@ -493,8 +496,8 @@ class CommonPythonFileTests(object):
             'multiply <a>, <b> equals <z>',
             [0, 1, 3])
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 41), '"multiply <a>, <b> equals <z>"'),
-            (Span(2, 8, 2, 18), "a, b, z"),
+            (_span(1, 6, 1, 41), '"multiply <a>, <b> equals <z>"'),
+            (_span(2, 8, 2, 18), "a, b, z"),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <a>, <b> equals <z>")
@@ -507,8 +510,8 @@ class CommonPythonFileTests(object):
             'multiply <a> equals <z>',
             [0, 2])
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 36), '"multiply <a> equals <z>"'),
-            (Span(2, 8, 2, 15), "a, z"),
+            (_span(1, 6, 1, 36), '"multiply <a> equals <z>"'),
+            (_span(2, 8, 2, 15), "a, z"),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <a> equals <z>")
@@ -537,8 +540,8 @@ class CommonPythonFileTests(object):
         if not self.preservesNewlines:
             expectedArgs = expectedArgs.replace('\n       ', '')
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 41), '"multiply <b>, <c> equals <z>"'),
-            (Span(2, 8, 5, 9), expectedArgs),
+            (_span(1, 6, 1, 41), '"multiply <b>, <c> equals <z>"'),
+            (_span(2, 8, 5, 9), expectedArgs),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <b>, <c> equals <z>")
@@ -567,8 +570,8 @@ class CommonPythonFileTests(object):
         if not self.preservesNewlines:
             expectedArgs = expectedArgs.replace('\n       ', '')
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 41), '"multiply <a>, <b> equals <c>"'),
-            (Span(2, 8, 5, 9), expectedArgs),
+            (_span(1, 6, 1, 41), '"multiply <a>, <b> equals <c>"'),
+            (_span(2, 8, 5, 9), expectedArgs),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <a>, <b> equals <c>")
@@ -597,8 +600,8 @@ class CommonPythonFileTests(object):
         if not self.preservesNewlines:
             expectedArgs = expectedArgs.replace('\n       ', '')
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 41), '"multiply <a>, <b> equals <z>"'),
-            (Span(2, 8, 5, 9), expectedArgs),
+            (_span(1, 6, 1, 41), '"multiply <a>, <b> equals <z>"'),
+            (_span(2, 8, 5, 9), expectedArgs),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
         @step("multiply <a>, <b> equals <z>")
@@ -612,12 +615,12 @@ class CommonPythonFileTests(object):
             'multiply <a> equals <z>',
             [0, 2])
         expectedArgs = "a,\n        z"
-        expectedArgSpan = Span(2, 8, 2, 31)
+        expectedArgSpan = _span(2, 8, 2, 31)
         if not self.preservesNewlines:
             expectedArgs = expectedArgs.replace('\n       ', '')
-            expectedArgSpan = Span(2, 8, 2, 15)
+            expectedArgSpan = _span(2, 8, 2, 15)
         self.assertEqual(diffs, [
-            (Span(1, 6, 1, 36), '"multiply <a> equals <z>"'),
+            (_span(1, 6, 1, 36), '"multiply <a> equals <z>"'),
             (expectedArgSpan, expectedArgs),
         ])
         self.assertEqual(pf.get_code(), dedent("""\
