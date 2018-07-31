@@ -2,7 +2,7 @@ import ast
 import six
 import parso
 import logging
-from .internal import Span, FunctionSteps
+from .internal import Span, FunctionSteps, RefactorDiff, ContentDiff, EmptyContentDiff
 
 
 class ParsoPythonFile(object):
@@ -79,7 +79,7 @@ class ParsoPythonFile(object):
         return None, None
 
     def refactor_step(self, old_text, new_text, move_param_from_idx):
-        # type: (str, str, List[int]) -> List[Tuple[Span, str]]
+        # type: (str, str, List[int]) -> RefactorDiff[ContentDiff[Span, str], ContentDiff[Span, str]]
         '''
         Find the step with old_text and change it to new_text. The step function
         parameters are also changed accoring to move_param_from_idx. Each entry in
@@ -90,11 +90,11 @@ class ParsoPythonFile(object):
             return []
         step_span = self._span_from_pos(step.start_pos, step.end_pos)
         step.value = step.value.replace(old_text, new_text)
-        diffs = [(step_span, step.value)]
+        stepDiff = ContentDiff(step_span, step.value)
         old_params = func.get_params()
         # Check if any parameters have moved
         if len(old_params) == len(move_param_from_idx) and all(i == v for (i, v) in enumerate(move_param_from_idx)):
-            return diffs
+            return RefactorDiff(stepDiff, EmptyContentDiff)
         func_params_node = func.children[2]
         params_span = self._span_from_pos(func_params_node.children[0].end_pos, func_params_node.children[-1].start_pos)
         # Use prefix from existing parameter if available
@@ -123,17 +123,9 @@ class ParsoPythonFile(object):
         func_params_node.children = new_params
         # Generate code excluding braces
         param_code = ''.join(p.get_code() for p in new_params[1:-1])
-        diffs.append((params_span, param_code))
-        return diffs
+        return RefactorDiff(stepDiff, ContentDiff(params_span, param_code))
 
     def get_code(self):
         # type: () -> str
         '''Returns current content of the tree.'''
         return self.py_tree.get_code()
-
-    def save(self, new_path=None):
-        # type: (Optional[str])
-        '''Saves the tree to specified path or file_path'''
-        file_path = new_path or self.file_path
-        with open(file_path, 'w') as f:
-            f.write(self.get_code())

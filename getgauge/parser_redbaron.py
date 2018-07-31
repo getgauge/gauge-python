@@ -1,7 +1,7 @@
 import six
 import logging
 from redbaron import RedBaron
-from .internal import Span, FunctionSteps
+from .internal import Span, FunctionSteps, RefactorDiff, ContentDiff, EmptyContentDiff
 
 
 class RedbaronPythonFile(object):
@@ -114,11 +114,11 @@ class RedbaronPythonFile(object):
             return []
         step_span = self._span_for_node(step, False)
         step.value = step.value.replace(old_text, new_text)
-        diffs = [(step_span, step.value)]
+        stepDiff = ContentDiff(step_span, step.value)
         old_params = func.arguments
         # Check if any parameters have moved
         if len(old_params) == len(move_param_from_idx) and all(i == v for (i, v) in enumerate(move_param_from_idx)):
-            return diffs
+            return RefactorDiff(stepDiff, EmptyContentDiff)
         params_span = self._span_for_node(old_params, False)
         new_params = []
         for i, move_from in enumerate(move_param_from_idx):
@@ -128,17 +128,9 @@ class RedbaronPythonFile(object):
                 name = old_params[move_from].name.value
             new_params.append(name)
         func.arguments = ', '.join(new_params)
-        diffs.append((params_span, func.arguments.dumps()))
-        return diffs
+        return RefactorDiff(stepDiff, ContentDiff(params_span, func.arguments.dumps()))
 
     def get_code(self):
         # type: () -> str
         '''Returns current content of the tree.'''
         return self.py_tree.dumps()
-
-    def save(self, new_path=None):
-        # type: (Optional[str])
-        '''Saves the tree to specified path or file_path'''
-        file_path = new_path or self.file_path
-        with open(file_path, 'w') as f:
-            f.write(self.get_code())

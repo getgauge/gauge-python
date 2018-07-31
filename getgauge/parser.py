@@ -52,7 +52,7 @@ class PythonFileABC(six.with_metaclass(ABCMeta)):
 
     @abstractmethod
     def refactor_step(self, old_text, new_text, move_param_from_idx):
-        # type: (str, str, List[int]) -> List[Tuple[Span, str]]
+        # type: (str, str, List[int]) -> RefactorDiff[ContentDiff[Span, str], ContentDiff[Span, str]]
         '''
         Find the step with old_text and change it to new_text. The step function
         parameters are also changed accoring to move_param_from_idx. Each entry in
@@ -64,12 +64,6 @@ class PythonFileABC(six.with_metaclass(ABCMeta)):
     def get_code(self):
         # type: () -> str
         '''Returns current content of the tree.'''
-        raise NotImplementedError
-
-    @abstractmethod
-    def save(self, new_path=None):
-        # type: (Optional[str])
-        '''Saves the tree to specified path or file_path'''
         raise NotImplementedError
 
 
