@@ -20,12 +20,10 @@ class PythonFile(object):
 
     @staticmethod
     def selectPythonFileParser(parser=None):
-        if parser == 'redbaron':
+        if parser == 'redbaron' or os.environ.get('GETGAUGE_USE_0_3_3_PARSER'):
             PythonFile.Klass = RedbaronPythonFile
-        elif parser == 'parso' or sys.hexversion > 0x3070000 or os.environ.get('GETGAUGE_USE_PARSO'):
-            PythonFile.Klass = ParsoPythonFile
         else:
-            PythonFile.Klass = RedbaronPythonFile
+            PythonFile.Klass = ParsoPythonFile
 
 
 # Select the default implementation
