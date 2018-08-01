@@ -10,11 +10,28 @@ except ImportError:
     from collections import MutableMapping
 
 
-def step(step_text):
+def step(step_def, step_text=None):
+    """
+    @step("Perform this step")
+    def my_step():
+        assert True
+
+    @step
+    def my_step():
+        '''Perform this step'''
+        assert True
+
+    my_step = step(lambda: assert True, "Perform this step")
+    """
     def _step(func):
         f_back = sys._getframe().f_back
         registry.add_step(step_text, func, f_back.f_code.co_filename, inspect.getsourcelines(func)[1])
         return func
+
+    if inspect.isfunction(step_def):
+        if step_text is None:
+            step_text = inspect.getdoc(step_def)
+        return _step(step_def)
 
     return _step
 
