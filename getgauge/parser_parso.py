@@ -4,6 +4,11 @@ import parso
 import logging
 
 
+# Reuse parser for multiple invocations. This also prevents
+# problems with pyfakefs during testing for Python 3.7
+_parser = parso.load_grammar()
+
+
 class ParsoPythonFile(object):
     @staticmethod
     def parse(file_path, content=None):
@@ -13,7 +18,7 @@ class ParsoPythonFile(object):
         reporting errors.
         '''
         try:
-            py_tree = parso.parse(content, path=file_path, error_recovery=False)
+            py_tree = _parser.parse(content, path=file_path, error_recovery=False)
             return ParsoPythonFile(file_path, py_tree)
         except parso.parser.ParserSyntaxError as ex:
             logging.error("Failed to parse %s:%d '%s'", file_path, ex.error_leaf.line, ex.error_leaf.get_code())
