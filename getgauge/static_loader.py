@@ -43,7 +43,7 @@ def load_files(step_impl_dir):
     for f in os.listdir(step_impl_dir):
         file_path = os.path.join(step_impl_dir, f)
         if f.endswith('.py'):
-            impl_file = open(file_path, 'r+')
+            impl_file = open(file_path, 'r')
             ast = generate_ast(impl_file.read(), file_path)
             if ast is not None:
                 load_steps(ast, file_path)
