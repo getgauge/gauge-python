@@ -170,7 +170,7 @@ class CommonPythonFileTests(object):
         self.assertEqual(steps[0][1], "print_hello")
         self.assertSpanStart(steps[0][2], 1, 0)
 
-    @unittest.skipIf(six.PY2, "f-strings are not supported on python2")
+    @unittest.skipIf(sys.hexversion < 0x3060000, "f-strings are introduced in python3.6")
     def test_iter_steps_does_not_load_f_strings(self):
         content = dedent("""\
         @step(f'print hello')
