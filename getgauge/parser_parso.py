@@ -88,51 +88,65 @@ class ParsoPythonFile(object):
                 return step_node, func
         return None, None
 
+    def _refactor_step_text(self, step, old_text, new_text):
+        step_span = self._span_from_pos(step.start_pos, step.end_pos)
+        step.value = step.value.replace(old_text, new_text)
+        return step_span, step.value
+
+    def _create_param_node(self, parent, name, prefix, is_last):
+        start_pos = parent[-1].end_pos[0], parent[-1].end_pos[1] + len(prefix)
+        children = [parso.python.tree.Name(name, start_pos, prefix)]
+        if not is_last:
+            children.append(parso.python.tree.Operator(',', children[-1].end_pos))
+        return parso.python.tree.Param(children, parent)
+
+    def _move_param_nodes(self, param_nodes, move_param_from_idx):
+        # Param nodes include opening and closing braces
+        num_params = len(param_nodes) - 2
+        # If the move list is exactly same as current params
+        # list then no need to create a new list.
+        if list(range(num_params)) == move_param_from_idx:
+            return param_nodes
+        # Get the prefix from second parameter to use with new parameters
+        prefix = param_nodes[2].name.prefix if num_params > 1 else ' '
+        new_param_nodes = [parso.python.tree.Operator('(', param_nodes[0].start_pos)]
+        for i, move_from in enumerate(move_param_from_idx):
+            param = self._create_param_node(
+                new_param_nodes,
+                'arg{}'.format(i) if move_from < 0 else param_nodes[move_from+1].name.value,
+                '' if i == 0 else prefix,
+                i >= len(move_param_from_idx) - 1
+            )
+            new_param_nodes.append(param)
+        new_param_nodes.append(parso.python.tree.Operator(')', new_param_nodes[-1].end_pos))
+        # Change the parent to actual function
+        for node in new_param_nodes:
+            node.parent = param_nodes[0].parent
+        return new_param_nodes
+
     def refactor_step(self, old_text, new_text, move_param_from_idx):
         """
         Find the step with old_text and change it to new_text. The step function
         parameters are also changed according to move_param_from_idx. Each entry in
         this list should specify parameter position from old
         """
+        diffs = []
         step, func = self._find_step_node(old_text)
         if step is None:
-            return []
-        step_span = self._span_from_pos(step.start_pos, step.end_pos)
-        step.value = step.value.replace(old_text, new_text)
-        diffs = [(step_span, step.value)]
-        old_params = func.get_params()
-        # Check if any parameters have moved
-        if len(old_params) == len(move_param_from_idx) and all(i == v for (i, v) in enumerate(move_param_from_idx)):
             return diffs
-        func_params_node = func.children[2]
-        params_span = self._span_from_pos(func_params_node.children[0].end_pos, func_params_node.children[-1].start_pos)
-        # Use prefix from existing parameter if available
-        if len(old_params) > 1:
-            param_prefix = old_params[1].name.prefix
-        else:
-            param_prefix = ' '
-        new_params = [parso.python.tree.Operator('(', func_params_node.start_pos)]
-        for i, move_from in enumerate(move_param_from_idx):
-            # If it is a new parameter name it `arg_x`
-            name_prefix = '' if i == 0 else param_prefix
-            name = parso.python.tree.Name(
-                'arg{}'.format(i) if move_from < 0 else old_params[move_from].name.value,
-                (new_params[-1].end_pos[0], new_params[-1].end_pos[1] + len(name_prefix)),
-                name_prefix,
-            )
-            param_nodes = [name]
-            # Do not add comma after the last parameter
-            if i < len(move_param_from_idx) - 1:
-                param_nodes.append(parso.python.tree.Operator(',', param_nodes[-1].end_pos))
-            new_param = parso.python.tree.Param(param_nodes, new_params)
-            new_params.append(new_param)
-        new_params.append(parso.python.tree.Operator(')', new_params[-1].end_pos))
-        for p in new_params:
-            p.parent = func_params_node
-        func_params_node.children = new_params
-        # Generate code excluding braces
-        param_code = ''.join(p.get_code() for p in new_params[1:-1])
-        diffs.append((params_span, param_code))
+        step_diff = self._refactor_step_text(step, old_text, new_text)
+        diffs.append(step_diff)
+        params_list_node = func.children[2]
+        moved_params = self._move_param_nodes(params_list_node.children, move_param_from_idx)
+        if params_list_node.children is not moved_params:
+            # Record original parameter list span excluding braces
+            params_span = self._span_from_pos(
+                params_list_node.children[0].end_pos,
+                params_list_node.children[-1].start_pos)
+            params_list_node.children = moved_params
+            # Get code for moved paramters excluding braces
+            param_code = ''.join(p.get_code() for p in moved_params[1:-1])
+            diffs.append((params_span, param_code))
         return diffs
 
     def get_code(self):
