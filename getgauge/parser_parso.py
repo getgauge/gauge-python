@@ -18,6 +18,13 @@ class ParsoPythonFile(object):
         reporting errors.
         '''
         try:
+            # Parso reads files in binary mode and converts to unicode using python_bytes_to_unicode()
+            # function. As a result, we no longer have information about original file encoding and
+            # output of module.get_content() can not be converted back to bytes. For now we can make a
+            # compromise by reading the file ourselves and passing content to parse() function.
+            if content is None:
+                with open(file_path) as f:
+                    content = f.read()
             py_tree = _parser.parse(content, path=file_path, error_recovery=False)
             return ParsoPythonFile(file_path, py_tree)
         except parso.parser.ParserSyntaxError as ex:
