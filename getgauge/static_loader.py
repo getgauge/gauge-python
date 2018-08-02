@@ -1,6 +1,6 @@
 import os
-from .registry import registry
-from .parser import PythonFile
+from getgauge.registry import registry
+from getgauge.parser import PythonFile
 
 
 def load_steps(python_file):

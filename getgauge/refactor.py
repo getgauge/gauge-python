@@ -1,7 +1,7 @@
-from .registry import registry
-from .parser import PythonFile
-from .messages.spec_pb2 import Span
-from .messages.messages_pb2 import TextDiff
+from getgauge.registry import registry
+from getgauge.parser import PythonFile
+from getgauge.messages.spec_pb2 import Span
+from getgauge.messages.messages_pb2 import TextDiff
 
 
 def refactor_step(request, response, with_location=True):

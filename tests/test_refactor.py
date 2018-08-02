@@ -328,19 +328,19 @@ def assert_default_vowels(given_vowels, arg1):
 @unittest.skipIf(sys.hexversion > 0x3070000, "RedBaron does not support python 3.7")
 class RedBaron_RefactorTests(unittest.TestCase, RefactorTests):
     def setUp(self):
-        PythonFile.selectPythonFileParser('redbaron')
+        PythonFile.select_python_parser('redbaron')
         RefactorTests.setUp(self)
 
     def tearDown(self):
         RefactorTests.tearDown(self)
-        PythonFile.selectPythonFileParser()
+        PythonFile.select_python_parser()
 
 
 class Parso_RefactorTests(unittest.TestCase, RefactorTests):
     def setUp(self):
-        PythonFile.selectPythonFileParser('parso')
+        PythonFile.select_python_parser('parso')
         RefactorTests.setUp(self)
 
     def tearDown(self):
         RefactorTests.tearDown(self)
-        PythonFile.selectPythonFileParser()
+        PythonFile.select_python_parser()

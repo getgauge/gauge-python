@@ -141,20 +141,20 @@ class StaticLoaderTests(object):
 @unittest.skipIf(sys.hexversion > 0x3070000, "RedBaron does not support python 3.7")
 class RedBaron_StaticLoaderTests(unittest.TestCase, StaticLoaderTests):
     def setUp(self):
-        PythonFile.selectPythonFileParser('redbaron')
+        PythonFile.select_python_parser('redbaron')
         StaticLoaderTests.setUp(self)
 
     def tearDown(self):
-        PythonFile.selectPythonFileParser()
+        PythonFile.select_python_parser()
 
 
 class Parso_StaticLoaderTests(unittest.TestCase, StaticLoaderTests):
     def setUp(self):
-        PythonFile.selectPythonFileParser('parso')
+        PythonFile.select_python_parser('parso')
         StaticLoaderTests.setUp(self)
 
     def tearDown(self):
-        PythonFile.selectPythonFileParser()
+        PythonFile.select_python_parser()
 
 
 def tearDown(self):
