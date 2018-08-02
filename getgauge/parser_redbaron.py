@@ -94,32 +94,42 @@ class RedbaronPythonFile(object):
                 return step_node, func
         return None, None
 
+    def _refactor_step_text(self, step, old_text, new_text):
+        step_span = self._span_for_node(step, False)
+        step.value = step.value.replace(old_text, new_text)
+        return step_span, step.value
+
+    def _get_param_name(self, params, new_idx, old_idx):
+        if old_idx < 0:
+            return 'arg{}'.format(new_idx)
+        else:
+            return params[old_idx].name.value
+
+    def _move_params(self, params, move_param_from_idx):
+        # If the move list is exactly same as current params
+        # list then no need to create a new list.
+        if list(range(len(params))) == move_param_from_idx:
+            return params
+        return ', '.join(self._get_param_name(params, new, old)
+                         for (new, old) in enumerate(move_param_from_idx))
+
     def refactor_step(self, old_text, new_text, move_param_from_idx):
         """
         Find the step with old_text and change it to new_text. The step function
         parameters are also changed according to move_param_from_idx. Each entry in
         this list should specify parameter position from old
         """
+        diffs = []
         step, func = self._find_step_node(old_text)
         if step is None:
-            return []
-        step_span = self._span_for_node(step, False)
-        step.value = step.value.replace(old_text, new_text)
-        diffs = [(step_span, step.value)]
-        old_params = func.arguments
-        # Check if any parameters have moved
-        if len(old_params) == len(move_param_from_idx) and all(i == v for (i, v) in enumerate(move_param_from_idx)):
             return diffs
-        params_span = self._span_for_node(old_params, False)
-        new_params = []
-        for i, move_from in enumerate(move_param_from_idx):
-            if move_from < 0:
-                name = 'arg{}'.format(i)
-            else:
-                name = old_params[move_from].name.value
-            new_params.append(name)
-        func.arguments = ', '.join(new_params)
-        diffs.append((params_span, func.arguments.dumps()))
+        step_diff = self._refactor_step_text(step, old_text, new_text)
+        diffs.append(step_diff)
+        moved_params = self._move_params(func.arguments, move_param_from_idx)
+        if func.arguments is not moved_params:
+            params_span = self._span_for_node(func.arguments, False)
+            func.arguments = moved_params
+            diffs.append((params_span, func.arguments.dumps()))
         return diffs
 
     def get_code(self):
