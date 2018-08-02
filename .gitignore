@@ -16,3 +16,4 @@ docs/build/html
 venv/
 setup.py
 build
+.tox/

@@ -156,9 +156,7 @@ def _init_suite_data_store(request, response, _socket):
 
 def _load_from_disk(file_path):
     if path.isfile(file_path):
-        f = open(file_path, 'r+')
-        reload_steps(f.read(), file_path)
-        f.close()
+        reload_steps(file_path)
 
 
 def _cache_file(request, _response, _socket):
@@ -169,7 +167,7 @@ def _cache_file(request, _response, _socket):
 
 def update_registry(file, status, content):
     if status == CacheFileRequest.CHANGED or status == CacheFileRequest.OPENED:
-        reload_steps(content, file)
+        reload_steps(file, content)
     elif status == CacheFileRequest.CREATED or status == CacheFileRequest.CLOSED:
         _load_from_disk(file)
     else:
