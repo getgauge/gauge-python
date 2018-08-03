@@ -61,3 +61,16 @@ ImportError: No module named step_impl.<file_name>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This error happens on older versions of Python(2.7, 3.2). Create ``step_impl/__init__.py`` to fix this.
+
+
+Steps not found or refactor failure after upgrading from 0.3.3
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We have replaced the internal Python parsing engine after version 0.3.3 was released. This change was necessary to support Python 3 syntax. We have tried our best to make sure there is no user impact on users. However, you may have found a bug in our new parser.
+
+To revert to the old parser implementation, add ``GETGAUGE_USE_0_3_3_PARSER`` property to the ``python.properties`` file in the ``<PROJECT_DIR>/env/default`` directory.
+
+::
+    GETGAUGE_USE_0_3_3_PARSER = true
+
+If this fixes your issue (or if you are still encountering it); please create an issue in our GitHub Project. This property along with the old parser will be removed in future releases.

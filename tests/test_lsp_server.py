@@ -1,5 +1,6 @@
 import os
 from unittest import main
+from textwrap import dedent
 
 from pyfakefs.fake_filesystem_unittest import TestCase
 
@@ -9,12 +10,19 @@ from getgauge.messages.messages_pb2 import *
 from getgauge.messages.spec_pb2 import ProtoStepValue
 from getgauge.registry import registry
 from getgauge.util import get_step_impl_dir
+from getgauge.parser import PythonFile
 
 
 class RegistryTests(TestCase):
     def setUp(self):
         registry.clear()
         self.setUpPyfakefs()
+
+    def load_content_steps(self, content):
+        content = dedent(content)
+        pf = PythonFile.parse("foo.py", content)
+        self.assertIsNotNone(pf)
+        loader.load_steps(pf)
 
     def test_LspServerHandler_glob_pattern(self):
         handler = LspServerHandler(None)
@@ -35,9 +43,11 @@ class RegistryTests(TestCase):
 
     def test_LspServerHandler_step_names(self):
         handler = LspServerHandler(None)
-        content = "@step('foo')\ndef foo():\n\tpass\n"
-        ast = loader.generate_ast(content, 'foo.py')
-        loader.load_steps(ast, 'foo.py')
+        self.load_content_steps('''\
+        @step('foo')
+        def foo():
+            pass
+        ''')
 
         req = StepNamesRequest()
         res = handler.GetStepNames(req, None)
@@ -46,11 +56,13 @@ class RegistryTests(TestCase):
 
     def test_LspServerHandler_step_name(self):
         handler = LspServerHandler(None)
-        content = "@step('foo')\ndef foo():\n\tpass\n"
-        ast = loader.generate_ast(content, 'foo.py')
-        loader.load_steps(ast, 'foo.py')
+        self.load_content_steps('''\
+        @step('foo')
+        def foo():
+            pass
+        ''')
 
-        req = StepNameRequest(**{'stepValue': 'foo'})
+        req = StepNameRequest(stepValue='foo')
         res = handler.GetStepName(req, None)
 
         self.assertTrue(res.isStepPresent)
@@ -58,42 +70,47 @@ class RegistryTests(TestCase):
 
     def test_LspServerHandler_validate_step(self):
         handler = LspServerHandler(None)
-        content = "@step('foo')\ndef foo():\n\tpass\n"
-        ast = loader.generate_ast(content, 'foo.py')
-        loader.load_steps(ast, 'foo.py')
-        step_value = ProtoStepValue(**{'stepValue': 'foo', 'parameterizedStepValue': 'foo'})
+        self.load_content_steps('''\
+        @step('foo')
+        def foo():
+            pass
+        ''')
+        step_value = ProtoStepValue(stepValue='foo', parameterizedStepValue='foo')
 
-        req = StepValidateRequest(**{'stepText': 'foo', 'stepValue': step_value, 'numberOfParameters': 0})
+        req = StepValidateRequest(stepText='foo', stepValue=step_value, numberOfParameters=0)
         res = handler.ValidateStep(req, None)
         self.assertTrue(res.isValid)
 
     def test_LspServerHandler_step_positions(self):
         handler = LspServerHandler(None)
-        content = "@step('foo')\ndef foo():\n\tpass\n"
-        ast = loader.generate_ast(content, 'foo.py')
-        loader.load_steps(ast, 'foo.py')
+        self.load_content_steps('''\
+        @step('foo')
+        def foo():
+            pass
+        ''')
 
-        req = StepPositionsRequest(**{'filePath': 'foo.py'})
+        req = StepPositionsRequest(filePath='foo.py')
         res = handler.GetStepPositions(req, None)
         self.assertEqual(res.stepPositions[0].stepValue, 'foo')
 
     def test_LspServerHandler_implement_stub(self):
         handler = LspServerHandler(None)
-        content = "@step('foo')\ndef foo():\n\tpass\n"
-        ast = loader.generate_ast(content, 'foo.py')
-        loader.load_steps(ast, 'foo.py')
+        self.load_content_steps("@step('foo')\ndef foo():\n\tpass\n")
 
-        req = StubImplementationCodeRequest(**{'implementationFilePath': 'New File', 'codes': ['add hello']})
+        req = StubImplementationCodeRequest(implementationFilePath='New File', codes=['add hello'])
         res = handler.ImplementStub(req, None)
         self.assertEqual(os.path.basename(res.filePath), 'step_implementation.py')
         self.assertEqual(res.textDiffs[0].content, 'from getgauge.python import step\n\nadd hello')
 
     def test_LspServerHandler_refactor(self):
         handler = LspServerHandler(None)
-        content = "from getgauge.python import step\n\n" \
-                  "@step('Vowels in English language are <aeiou>.')\n" \
-                  "def foo(vowels):" \
-                  "\tprint(vowels)"
+        content = dedent('''\
+        from getgauge.python import step
+
+        @step('Vowels in English language are <aeiou>.')
+        def foo(vowels):
+            print(vowels)
+        ''')
         self.fs.create_file(os.path.join(get_step_impl_dir(), 'foo.py'), contents=content)
         loader.load_files(get_step_impl_dir())
 
@@ -117,26 +134,28 @@ class RegistryTests(TestCase):
         self.assertTrue(res.success)
         diff_contents = [diff.content for diff in res.fileChanges[0].diffs]
         self.assertIn("vowels, arg1", diff_contents)
-        self.assertIn('("Vowels in English language is <vowels> <bsdfdsf>.")', diff_contents)
+        self.assertIn("'Vowels in English language is <vowels> <bsdfdsf>.'", diff_contents)
 
     def test_LspServerHandler_cache_file(self):
         handler = LspServerHandler(None)
-        content = "from getgauge.python import step\n\n" \
-                  "@step('Vowels in English language are <aeiou>.')\n" \
-                  "def foo(vowels):" \
-                  "\tprint(vowels)"
+        self.load_content_steps('''\
+        from getgauge.python import step
 
-        ast = loader.generate_ast(content, 'foo.py')
-        loader.load_steps(ast, 'foo.py')
+        @step('Vowels in English language are <aeiou>.')
+        def foo(vowels):
+            print(vowels)
+        ''')
 
         self.assertTrue(registry.is_implemented('Vowels in English language are {}.'))
 
-        content = "from getgauge.python import step\n\n" \
-                  "@step('get lost!')\n" \
-                  "def foo():" \
-                  "\tpass"
+        content = dedent('''\
+        from getgauge.python import step
 
-        req = CacheFileRequest(**{'content': content, 'filePath': 'foo.py', 'status': CacheFileRequest.CHANGED})
+        @step('get lost!')
+        def foo():
+            pass
+        ''')
+        req = CacheFileRequest(content=content, filePath='foo.py', status=CacheFileRequest.CHANGED)
         handler.CacheFile(req, None)
 
         self.assertTrue(registry.is_implemented('get lost!'))

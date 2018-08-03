@@ -1,6 +1,7 @@
 from os import path
 from socket import socket, AF_INET, SOCK_STREAM
 from unittest import main
+from textwrap import dedent
 
 from pyfakefs.fake_filesystem_unittest import TestCase
 
@@ -8,20 +9,27 @@ from getgauge import static_loader as loader
 from getgauge.messages.messages_pb2 import Message, StepValidateResponse, TextDiff, CacheFileRequest
 from getgauge.messages.spec_pb2 import ProtoExecutionResult, Parameter, Span
 from getgauge.processor import processors
-from getgauge.python import DataStoreFactory, DataStore
+from getgauge.python import data_store
 from getgauge.registry import registry
+from getgauge.parser import PythonFile
 
 
 class ProcessorTests(TestCase):
     def setUp(self):
         self.setUpPyfakefs()
-        DataStoreFactory.suite_data_store().clear()
-        DataStoreFactory.spec_data_store().clear()
-        DataStoreFactory.scenario_data_store().clear()
+        data_store.suite.clear()
+        data_store.spec.clear()
+        data_store.scenario.clear()
         registry.clear()
 
     def tearDown(self):
         registry.clear()
+
+    def load_content_steps(self, content):
+        content = dedent(content)
+        pf = PythonFile.parse("foo.py", content)
+        self.assertIsNotNone(pf)
+        loader.load_steps(pf)
 
     def test_Processor_kill_request(self):
         with self.assertRaises(SystemExit):
@@ -31,9 +39,9 @@ class ProcessorTests(TestCase):
                                                           SOCK_STREAM))
 
     def test_Processor_suite_data_store_init_request(self):
-        DataStoreFactory.suite_data_store().put('suite', 'value')
+        data_store.suite['suite'] = 'value'
 
-        self.assertNotEqual(DataStore(), DataStoreFactory.suite_data_store())
+        self.assertNotEqual(0, len(data_store.suite))
 
         response = Message()
         processors[Message.SuiteDataStoreInit](None, response, None)
@@ -45,12 +53,12 @@ class ProcessorTests(TestCase):
         self.assertEqual(0,
                          response.executionStatusResponse.executionResult.executionTime)
 
-        self.assertEqual(DataStore(), DataStoreFactory.suite_data_store())
+        self.assertDictEqual({}, data_store.suite)
 
     def test_Processor_spec_data_store_init_request(self):
-        DataStoreFactory.spec_data_store().put('spec', 'value')
+        data_store.spec['spec'] = 'value'
 
-        self.assertNotEqual(DataStore(), DataStoreFactory.spec_data_store())
+        self.assertNotEqual(0, len(data_store.spec))
 
         response = Message()
         processors[Message.SpecDataStoreInit](None, response, None)
@@ -59,12 +67,12 @@ class ProcessorTests(TestCase):
         self.assertEqual(False, response.executionStatusResponse.executionResult.failed)
         self.assertEqual(0, response.executionStatusResponse.executionResult.executionTime)
 
-        self.assertEqual(DataStore(), DataStoreFactory.spec_data_store())
+        self.assertDictEqual({}, data_store.spec)
 
     def test_Processor_scenario_data_store_init_request(self):
-        DataStoreFactory.scenario_data_store().put('scenario', 'value')
+        data_store.scenario['scenario'] = 'value'
 
-        self.assertNotEqual(DataStore(), DataStoreFactory.scenario_data_store())
+        self.assertNotEqual(0, len(data_store.scenario))
 
         response = Message()
         processors[Message.ScenarioDataStoreInit](None, response, None)
@@ -73,7 +81,7 @@ class ProcessorTests(TestCase):
         self.assertEqual(False, response.executionStatusResponse.executionResult.failed)
         self.assertEqual(0, response.executionStatusResponse.executionResult.executionTime)
 
-        self.assertEqual(DataStore(), DataStoreFactory.scenario_data_store())
+        self.assertDictEqual({}, data_store.scenario)
 
     def test_Processor_step_names_request(self):
         registry.add_step('Step <a> with <b>', 'func', '')
@@ -471,7 +479,11 @@ class ProcessorTests(TestCase):
 
         processors[Message.StubImplementationCodeRequest](request, response, None)
 
-        expected_output_codes = "from getgauge.python import step\n\ncode1\ncode2"
+        expected_output_codes = dedent('''\
+        from getgauge.python import step
+
+        code1
+        code2''')
         expected_span = Span(**{'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0})
         expected_text_diff = TextDiff(**{'span': expected_span, 'content': expected_output_codes})
 
@@ -490,11 +502,22 @@ class ProcessorTests(TestCase):
     def test_Processor_cache_file_with_opened_status(self):
         request = Message()
         response = Message()
-        ast = loader.generate_ast("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", "foo.py")
-        loader.load_steps(ast, "foo.py")
+        self.load_content_steps('''\
+        from getgauge.python import step
+
+        @step('foo1')
+        def foo():
+            pass
+        ''')
 
         request.cacheFileRequest.filePath = 'foo.py'
-        request.cacheFileRequest.content = "from getgauge.python import step\n@step('foo <bar>')\ndef foo():\n\tpass\n"
+        request.cacheFileRequest.content = dedent('''\
+        from getgauge.python import step
+
+        @step('foo <bar>')
+        def foo():
+            pass
+        ''')
         request.cacheFileRequest.status = CacheFileRequest.OPENED
 
         processors[Message.CacheFileRequest](request, response, None)
@@ -505,11 +528,22 @@ class ProcessorTests(TestCase):
     def test_Processor_cache_file_with_changed_status(self):
         request = Message()
         response = Message()
-        ast = loader.generate_ast("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", "foo.py")
-        loader.load_steps(ast, "foo.py")
+        self.load_content_steps('''\
+        from getgauge.python import step
+
+        @step('foo1')
+        def foo():
+            pass
+        ''')
 
         request.cacheFileRequest.filePath = 'foo.py'
-        request.cacheFileRequest.content = "from getgauge.python import step\n@step('foo <bar>')\ndef foo():\n\tpass\n"
+        request.cacheFileRequest.content = dedent('''\
+        from getgauge.python import step
+
+        @step('foo <bar>')
+        def foo():
+            pass
+        ''')
         request.cacheFileRequest.status = CacheFileRequest.CHANGED
 
         processors[Message.CacheFileRequest](request, response, None)
@@ -523,8 +557,13 @@ class ProcessorTests(TestCase):
 
         request.cacheFileRequest.filePath = 'foo.py'
         request.cacheFileRequest.status = CacheFileRequest.CREATED
-        self.fs.create_file('foo.py',
-                            contents="from getgauge.python import step\n@step('foo <bar>')\ndef foo():\n\tpass\n")
+        self.fs.create_file('foo.py', contents=dedent('''\
+        from getgauge.python import step
+
+        @step('foo <bar>')
+        def foo():
+            pass
+        '''))
         processors[Message.CacheFileRequest](request, response, None)
 
         self.assertEqual(registry.is_implemented('foo {}'), True)
@@ -533,13 +572,23 @@ class ProcessorTests(TestCase):
         request = Message()
         response = Message()
 
-        ast = loader.generate_ast("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", "foo.py")
-        loader.load_steps(ast, "foo.py")
+        self.load_content_steps('''\
+        from getgauge.python import step
+
+        @step('foo1')
+        def foo():
+            pass
+        ''')
 
         request.cacheFileRequest.filePath = 'foo.py'
         request.cacheFileRequest.status = CacheFileRequest.CLOSED
-        self.fs.create_file('foo.py',
-                            contents="from getgauge.python import step\n@step('foo <bar>')\ndef foo():\n\tpass\n")
+        self.fs.create_file('foo.py', contents=dedent('''\
+        from getgauge.python import step
+
+        @step('foo <bar>')
+        def foo():
+            pass
+        '''))
         processors[Message.CacheFileRequest](request, response, None)
 
         self.assertEqual(registry.is_implemented('foo1'), False)
@@ -548,8 +597,13 @@ class ProcessorTests(TestCase):
     def test_Processor_cache_file_with_delete_status(self):
         request = Message()
         response = Message()
-        ast = loader.generate_ast("from getgauge.python import step\n@step('foo1')\ndef foo():\n\tpass\n", "foo.py")
-        loader.load_steps(ast, "foo.py")
+        self.load_content_steps('''\
+        from getgauge.python import step
+
+        @step('foo1')
+        def foo():
+            pass
+        ''')
 
         request.cacheFileRequest.filePath = 'foo.py'
         request.cacheFileRequest.status = CacheFileRequest.DELETED

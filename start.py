@@ -52,5 +52,12 @@ def start():
         s = connection.connect()
         processor.dispatch_messages(s)
 
+def _init_logger():
+    if os.getenv('IS_DAEMON'):
+        f = '%(asctime)s.%(msecs)03d %(message)s'
+        logging.basicConfig(stream=sys.stdout, format=f, level=logging.DEBUG, datefmt='%H:%M:%S')
+    else:
+        logging.basicConfig(stream=sys.stdout, format='%(message)s', level=logging.ERROR)
+
 if __name__ == '__main__':
     main()
