@@ -38,7 +38,7 @@ def copy_skel_files():
         shutil.copytree(os.path.join(SKEL, STEP_IMPL_DIR_NAME), impl_dir)
         logging.info('create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
         shutil.copy(os.path.join(SKEL, PYTHON_PROPERTIES), env_dir)
-        open(requirements_file, 'w').write('getgauge==' + _get_version())
+        open(requirements_file, 'w',encoding='utf-8').write('getgauge==' + _get_version())
     except:
         logging.error('Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
         sys.exit(1)
@@ -63,6 +63,6 @@ def _import_file(file_path):
 
 
 def _get_version():
-    json_data = open(PLUGIN_JSON).read()
+    json_data = open(PLUGIN_JSON, encoding='utf-8').read()
     data = json.loads(json_data)
     return data[VERSION]
