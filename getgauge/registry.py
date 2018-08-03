@@ -167,7 +167,7 @@ def _take_screenshot():
     temp_file = os.path.join(tempfile.gettempdir(), 'screenshot.png')
     try:
         call(['gauge_screenshot', temp_file])
-        _file = open(temp_file, 'r+b')
+        _file = open(temp_file, 'r+b', encoding='utf-8')
         data = _file.read()
         _file.close()
         return data
