@@ -1,7 +1,7 @@
 import sys
 import warnings
 
-from getgauge.registry import registry, MessagesStore
+from getgauge.registry import registry, MessagesStore, ScreenshotsStore
 
 try:
     from collections.abc import MutableMapping
@@ -56,8 +56,21 @@ def after_step(obj=None):
 
 
 def screenshot(func):
+    _warn_screenshot_deprecation()
     registry.set_screenshot_provider(func)
     return func
+
+
+def custom_screen_grabber(func):
+    registry.set_screenshot_provider(func)
+    return func
+
+
+def _warn_screenshot_deprecation():
+    warnings.warn(
+        "'screenshot' is deprecated in favour of 'custom_screen_grabber'",
+        DeprecationWarning, stacklevel=3)
+    warnings.simplefilter('default', DeprecationWarning)
 
 
 class Table:
@@ -341,3 +354,9 @@ def _define_wrapper(obj, callback):
         return function
 
     return func
+
+
+class Screenshots:
+    @staticmethod
+    def capture_screenshot():
+        ScreenshotsStore.capture()

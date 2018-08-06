@@ -1,6 +1,6 @@
 from getgauge.python import (before_step, step, after_step, before_scenario,
                              after_scenario, before_spec, after_spec,
-                             before_suite, after_suite, screenshot,
+                             before_suite, after_suite, custom_screen_grabber,
                              continue_on_failure)
 
 
@@ -85,6 +85,6 @@ def after_suite2():
     pass
 
 
-@screenshot
+@custom_screen_grabber
 def take_screenshot():
-    return ""
+    return "foo"
