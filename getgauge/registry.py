@@ -179,3 +179,21 @@ def _take_screenshot():
 
 
 registry = Registry()
+
+
+class ScreenshotsStore:
+    __screenshots = []
+
+    @staticmethod
+    def pending_screenshots():
+        screenshots = ScreenshotsStore.__screenshots
+        ScreenshotsStore.__screenshots = []
+        return screenshots
+
+    @staticmethod
+    def capture():
+        ScreenshotsStore.__screenshots.append(registry.screenshot_provider()())
+
+    @staticmethod
+    def clear():
+        ScreenshotsStore.__screenshots = []

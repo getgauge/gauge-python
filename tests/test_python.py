@@ -1,7 +1,7 @@
 from unittest import TestCase, main
 
 from getgauge.messages.messages_pb2 import Message
-from getgauge.registry import registry, MessagesStore
+from getgauge.registry import registry, MessagesStore, ScreenshotsStore
 from getgauge.python import (Messages, DataStore, DataStoreFactory, DictObject,
                              DataStoreContainer, data_store, Table, Specification,
                              Scenario, Step, ExecutionContext,
@@ -505,6 +505,30 @@ class DecoratorTests(TestCase):
         func = registry.screenshot_provider()
         expected = 'take_screenshot'
         self.assertEqual(expected, func.__name__)
+
+
+class ScreenshotsTests(TestCase):
+
+    def test_pending_screenshots(self):
+        ScreenshotsStore.capture()
+        pending_screenshots = ScreenshotsStore.pending_screenshots()
+        self.assertEqual(['foo'], pending_screenshots)
+
+    def test_clear(self):
+        ScreenshotsStore.capture()
+        ScreenshotsStore.clear()
+        pending_screenshots = ScreenshotsStore.pending_screenshots()
+        self.assertEqual([], pending_screenshots)
+
+    def test_pending_screenshots_gives_only_those_screenshots_which_are_not_collected(self):
+        ScreenshotsStore.capture()
+        pending_screenshots = ScreenshotsStore.pending_screenshots()
+        self.assertEqual(['foo'], pending_screenshots)
+        pending_screenshots = ScreenshotsStore.pending_screenshots()
+        self.assertEqual([], pending_screenshots)
+        ScreenshotsStore.capture()
+        pending_screenshots = ScreenshotsStore.pending_screenshots()
+        self.assertEqual(['foo'], pending_screenshots)
 
 
 if __name__ == '__main__':
