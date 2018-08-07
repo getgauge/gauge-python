@@ -33,9 +33,8 @@ gauge run specs
 
 ### Useful links
 
-- [User Docs](https://gauge-python.readthedocs.io)
+- [User Docs](https://docs.gauge.org)
 - [Setup Guide](https://gauge-python.readthedocs.io/en/latest/contributing.html#development-guide)
-- [Examples](https://gauge-python.readthedocs.io/en/latest/getting-started.html#examples)
 
 ### Alternate Installation options
 
@@ -108,9 +107,16 @@ NIGHTLY=true python build.py --dist
 
 This will create the .zip nightly file and a .dev.DATE.tar.gz(PyPi pre release package) file.
 
+## Examples
+
+- Selenium: This project serves as an example for writing automation using Gauge. It uses selenium and various Gauge/Gauge-Python features. For more details, Check out the [gauge-example-python](https://github.com/kashishm/gauge-example-python) repository.
+
+- Selenium and REST API: This project shows an example of how to setup Gauge, Gauge Python and [Magento](https://magento.com/) to test REST API. For more details, Check out the [blog](https://angbaird.com/2016/11/09/selenium-and-rest-api-testing-with-gauge/) or [gauge-magento-test](https://github.com/angb/gauge-magento-test) repository.
+
+
 ## License
 
-The Gauge-Python is an open-sourced software licensed under the `MIT license`_.
+The Gauge-Python is an open-sourced software licensed under the `MIT license`.
 
 ## Copyright
 
