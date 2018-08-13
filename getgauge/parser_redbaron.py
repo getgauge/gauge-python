@@ -23,7 +23,7 @@ class RedbaronPythonFile(object):
             marker = "<---- here\n"
             marker_pos = msg.find(marker)
             if marker_pos > 0:
-                msg = msg[:marker_pos+len(marker)]
+                msg = msg[:marker_pos + len(marker)]
             logging.error("Failed to parse {}: {}".format(file_path, msg))
 
     def __init__(self, file_path, py_tree):
@@ -47,6 +47,7 @@ class RedbaronPythonFile(object):
                 }
             except AttributeError:
                 return {'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0}
+
         return calculate_span if lazy else calculate_span()
 
     def _iter_step_func_decorators(self):
@@ -67,7 +68,7 @@ class RedbaronPythonFile(object):
                 step = args[0].value.to_python()
             except (ValueError, SyntaxError):
                 pass
-            if isinstance(step, six.string_types+(list,)):
+            if isinstance(step, six.string_types + (list,)):
                 return step
             logging.error("Decorator step accepts either a string or a list of strings - %s",
                           self.file_path)
@@ -99,19 +100,24 @@ class RedbaronPythonFile(object):
         step.value = step.value.replace(old_text, new_text)
         return step_span, step.value
 
-    def _get_param_name(self, params, new_idx, old_idx):
-        if old_idx < 0:
-            return 'arg{}'.format(new_idx)
-        else:
-            return params[old_idx].name.value
+    def _get_param_name(self, param_nodes, i):
+        name = 'arg{}'.format(i)
+        if name not in [x.name.value for x in param_nodes]:
+            return name
+        return self._get_param_name(param_nodes, i + 1)
 
     def _move_params(self, params, move_param_from_idx):
         # If the move list is exactly same as current params
         # list then no need to create a new list.
         if list(range(len(params))) == move_param_from_idx:
             return params
-        return ', '.join(self._get_param_name(params, new, old)
-                         for (new, old) in enumerate(move_param_from_idx))
+        new_params = []
+        for (new_idx, old_idx) in enumerate(move_param_from_idx):
+            if old_idx < 0:
+                new_params.append(self._get_param_name(params, new_idx))
+            else:
+                new_params.append(params[old_idx].name.value)
+        return ', '.join(new_params)
 
     def refactor_step(self, old_text, new_text, move_param_from_idx):
         """
