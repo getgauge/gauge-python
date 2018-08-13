@@ -113,7 +113,7 @@ class ParsoPythonFile(object):
         for i, move_from in enumerate(move_param_from_idx):
             param = self._create_param_node(
                 new_param_nodes,
-                'arg{}'.format(i) if move_from < 0 else param_nodes[move_from+1].name.value,
+                self._get_param_name(param_nodes, i) if move_from < 0 else param_nodes[move_from + 1].name.value,
                 '' if i == 0 else prefix,
                 i >= len(move_param_from_idx) - 1
             )
@@ -152,3 +152,10 @@ class ParsoPythonFile(object):
     def get_code(self):
         """Returns current content of the tree."""
         return self.py_tree.get_code()
+
+    def _get_param_name(self, param_nodes, i):
+        name = 'arg{}'.format(i)
+        if name not in [x.name.value for x in param_nodes[1:-1]]:
+            return name
+        else:
+            return self._get_param_name(param_nodes, i + 1)
