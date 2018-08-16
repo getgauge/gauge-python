@@ -18,7 +18,7 @@ class RefactorTests(object):
         RefactorTests.path = os.path.join(tempfile.gettempdir(), 'step_impl.py')
         RefactorTests.file = open(RefactorTests.path, 'w')
         RefactorTests.file.write("""@step("Vowels in English language are <vowels>.")
-def assert_default_vowels(given_vowels):
+def assert_default_vowels(arg0):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)\n""")
         RefactorTests.file.close()
@@ -61,7 +61,7 @@ def assert_default_vowels(given_vowels):
                          response.refactorResponse.filesChanged)
 
         expected = """@step("Vowels in English language is <vowels> <bsdfdsf>.")
-def assert_default_vowels(given_vowels, arg1):
+def assert_default_vowels(arg0, arg1):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -97,7 +97,7 @@ def assert_default_vowels(given_vowels, arg1):
                          response.refactorResponse.filesChanged)
 
         expected = """@step("Vowels in English language is <vowels> <vowels!2_ab%$>.")
-def assert_default_vowels(given_vowels, arg1):
+def assert_default_vowels(arg0, arg1):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -133,7 +133,7 @@ def assert_default_vowels(given_vowels, arg1):
                          response.refactorResponse.filesChanged)
 
         expected = """@step("Vowels in English language is <vowels> <!%$>.")
-def assert_default_vowels(given_vowels, arg1):
+def assert_default_vowels(arg0, arg1):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -194,7 +194,7 @@ def assert_default_vowels():
                          response.refactorResponse.filesChanged)
 
         expected = """@step("Vowels in English language is <vowels>.")
-def assert_default_vowels(given_vowels):
+def assert_default_vowels(arg0):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -227,7 +227,47 @@ def assert_default_vowels(given_vowels):
                          response.refactorResponse.filesChanged)
 
         expected = """@step("Vowels in English language is <bsdfdsf>.")
-def assert_default_vowels(arg0):
+def assert_default_vowels(arg1):
+    Messages.write_message("Given vowels are {0}".format(given_vowels))
+    assert given_vowels == "".join(vowels)
+"""
+        self.assertEqual(expected, actual_data)
+
+    def test_processor_refactor_request_with_insert_param(self):
+        response = Message()
+        request = Message()
+        request.refactorRequest.saveChanges = True
+
+        request.refactorRequest.oldStepValue.stepValue = 'Vowels in English language are {}.'
+        request.refactorRequest.oldStepValue.parameters.append('vowels')
+        request.refactorRequest.oldStepValue.parameterizedStepValue = 'Vowels in English language are <vowels>.'
+
+        request.refactorRequest.newStepValue.stepValue = 'Vowels in English language is {} {}.'
+        request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is <a> <vowels>.'
+        request.refactorRequest.newStepValue.parameters.extend(['a', 'vowels'])
+        param1_position = ParameterPosition()
+        param1_position.oldPosition = -1
+        param1_position.newPosition = 0
+
+        param2_position = ParameterPosition()
+        param2_position.oldPosition = 0
+        param2_position.newPosition = 1
+        request.refactorRequest.paramPositions.extend([param1_position, param2_position])
+
+        processors[Message.RefactorRequest](request, response, None)
+
+        actual_data = self.getActualText()
+
+        self.assertEqual(Message.RefactorResponse, response.messageType)
+        self.assertEqual(True,
+                         response.refactorResponse.success,
+                         response.refactorResponse.error)
+
+        self.assertEqual([RefactorTests.path],
+                         response.refactorResponse.filesChanged)
+
+        expected = """@step("Vowels in English language is <a> <vowels>.")
+def assert_default_vowels(arg1, arg0):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -257,7 +297,7 @@ is <vowels> <bsdfdsf>.'
         processors[Message.RefactorRequest](request, response, None)
 
         expected = """@step("Vowels in English language is <vowels> <bsdfdsf>.")
-def assert_default_vowels(given_vowels, arg1):
+def assert_default_vowels(arg0, arg1):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -305,7 +345,7 @@ def assert_default_vowels(given_vowels, arg1):
         self.assertEqual([RefactorTests.path],
                          response.refactorResponse.filesChanged)
         expected = """@step("Vowels in English language is <vowels> <vowels!2_ab%$>.")
-def assert_default_vowels(given_vowels, arg1):
+def assert_default_vowels(arg0, arg1):
     Messages.write_message("Given vowels are {0}".format(given_vowels))
     assert given_vowels == "".join(vowels)
 """
@@ -313,7 +353,7 @@ def assert_default_vowels(given_vowels, arg1):
         self.assertEqual(old_content, self.getActualText())
         diff_contents = [diff.content for diff in response.refactorResponse.fileChanges[0].diffs]
         self.assertIn('"Vowels in English language is <vowels> <vowels!2_ab%$>."', diff_contents)
-        self.assertIn('given_vowels, arg1', diff_contents)
+        self.assertIn('arg0, arg1', diff_contents)
 
     def getActualText(self):
         _file = open(RefactorTests.path, 'r+')
