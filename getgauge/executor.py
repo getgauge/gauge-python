@@ -48,8 +48,9 @@ def _get_args(execution_info, hook):
 
 def _add_exception(e, response, continue_on_failure):
     if os.getenv('screenshot_on_failure') == 'true':
-        response.executionStatusResponse.executionResult.screenShot = registry.screenshot_provider()()
-        response.executionStatusResponse.executionResult.failureScreenshot = registry.screenshot_provider()()
+        screenshot = registry.screenshot_provider()()
+        response.executionStatusResponse.executionResult.screenShot = screenshot
+        response.executionStatusResponse.executionResult.failureScreenshot = screenshot
     response.executionStatusResponse.executionResult.failed = True
     message = e.__str__()
     if not message:
