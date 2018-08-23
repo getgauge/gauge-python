@@ -57,7 +57,7 @@ class MessagesStore:
 
     @staticmethod
     def write_message(message):
-        MessagesStore.__messages.append(message)
+        MessagesStore.__messages.append(str(message))
 
     @staticmethod
     def clear():
