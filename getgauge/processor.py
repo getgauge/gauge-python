@@ -1,6 +1,7 @@
 import logging
 import sys
 import os
+import traceback
 from os import path, environ
 from threading import Timer
 
@@ -267,6 +268,15 @@ def dispatch_messages(socket):
     while True:
         request = read_message(socket, Message())
         response = Message()
-        processors[request.messageType](request, response, socket)
+        
+        try:
+            processors[request.messageType](request, response, socket)
+        except Exception as e:
+            response = Message()
+            response.messageType = Message.ExecutionStatusResponse
+            response.executionStatusResponse.executionResult.failed = True
+            response.executionStatusResponse.executionResult.errorMessage = str(e)
+            response.executionStatusResponse.executionResult.stackTrace = traceback.format_exc()  
+
         if request.messageType != Message.CacheFileRequest:
             send_message(response, request, socket)
