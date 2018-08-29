@@ -4,7 +4,7 @@ Installation
 ------------
 
 
--  Before installing gauge-python, make sure Gauge ``v0.3.0`` or above is installed
+-  Before installing gauge-python, make sure `Gauge <https://www.gauge.org/get_started/>`_   ``v0.3.0`` or above is installed
 
    .. code:: sh
 
@@ -85,7 +85,7 @@ Verify installation
 
 Nightly Installation
 ~~~~~~~~~~~~~~~~~~~~
-- Download the plugin from Noghtly Releases_
+- Download the plugin from Nightly Releases_
 
     .. _Releases: https://bintray.com/gauge/gauge-python/Nightly
 
