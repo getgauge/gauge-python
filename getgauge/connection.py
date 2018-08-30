@@ -3,12 +3,14 @@ import socket
 import struct
 
 from google.protobuf.internal.encoder import _EncodeVarint
+from  logger import logger
 
 
 def connect():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
     s.connect(('127.0.0.1', int(os.environ['GAUGE_INTERNAL_PORT'])))
+    logger.info("Connected to 127.0.0.1:{}".format(int(os.environ['GAUGE_INTERNAL_PORT'])))
     return s
 
 
@@ -16,6 +18,7 @@ def read_message(s, msg):
     len_buf = _decode_varint(s)[0]
     msg_buf = _socket_read_n(s, len_buf)
     msg.ParseFromString(msg_buf)
+    logger.debug("read_message:{}".format(msg))
     return msg
 
 
@@ -23,6 +26,7 @@ def send_message(response, msg, s):
     response.messageId = msg.messageId
     s_response = response.SerializeToString()
     _EncodeVarint(s.sendall, len(s_response), False)
+    logger.debug("send_message:{}".format(response))
     s.sendall(s_response)
 
 
