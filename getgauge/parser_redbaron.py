@@ -4,12 +4,13 @@ from redbaron import RedBaron
 
 
 class RedbaronPythonFile(object):
+
     @staticmethod
     def parse(file_path, content=None):
         """
-        Create a PythonFile object with specified file_path and content. If content is None
-        then, it is loaded from the file_path method. Otherwise, file_path is only used for
-        reporting errors.
+        Create a PythonFile object with specified file_path and content.
+        If content is None then, it is loaded from the file_path method.
+        Otherwise, file_path is only used for reporting errors.
         """
         try:
             if content is None:
@@ -51,7 +52,7 @@ class RedbaronPythonFile(object):
         return calculate_span if lazy else calculate_span()
 
     def _iter_step_func_decorators(self):
-        """Find top level functions with step decorator in parsed file"""
+        """Find top level functions with step decorator in parsed file."""
         for node in self.py_tree:
             if node.type == 'def':
                 for decorator in node.decorators:
@@ -60,7 +61,9 @@ class RedbaronPythonFile(object):
                         break
 
     def _step_decorator_args(self, decorator):
-        """Get the arguments passed to step decorators converted to python objects"""
+        """
+        Get arguments passed to step decorators converted to python objects.
+        """
         args = decorator.call.value
         step = None
         if len(args) == 1:
@@ -70,21 +73,22 @@ class RedbaronPythonFile(object):
                 pass
             if isinstance(step, six.string_types + (list,)):
                 return step
-            logging.error("Decorator step accepts either a string or a list of strings - %s",
+            logging.error("Decorator step accepts either a string or a list of \
+                strings - %s",
                           self.file_path)
         else:
             logging.error("Decorator step accepts only one argument - %s",
                           self.file_path)
 
     def iter_steps(self):
-        """Iterate over steps in the parsed file"""
+        """Iterate over steps in the parsed file."""
         for func, decorator in self._iter_step_func_decorators():
             step = self._step_decorator_args(decorator)
             if step:
                 yield step, func.name, self._span_for_node(func, True)
 
     def _find_step_node(self, step_text):
-        """Find the ast node which contains the text"""
+        """Find the ast node which contains the text."""
         for func, decorator in self._iter_step_func_decorators():
             step = self._step_decorator_args(decorator)
             arg_node = decorator.call.value[0].value
@@ -121,9 +125,10 @@ class RedbaronPythonFile(object):
 
     def refactor_step(self, old_text, new_text, move_param_from_idx):
         """
-        Find the step with old_text and change it to new_text. The step function
-        parameters are also changed according to move_param_from_idx. Each entry in
-        this list should specify parameter position from old
+        Find the step with old_text and change it to new_text.
+        The step function parameters are also changed according
+        to move_param_from_idx.  Each entry in this list should
+        specify parameter position from old
         """
         diffs = []
         step, func = self._find_step_node(old_text)
@@ -139,5 +144,5 @@ class RedbaronPythonFile(object):
         return diffs
 
     def get_code(self):
-        """Returns current content of the tree."""
+        """Return current content of the tree."""
         return self.py_tree.dumps()
