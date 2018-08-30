@@ -5,10 +5,7 @@ import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from os import path
-
-
 import grpc
-
 from getgauge import connection, processor
 from getgauge import lsp_server
 from getgauge.impl_loader import copy_skel_files

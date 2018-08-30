@@ -9,3 +9,4 @@ grpcio
 protobuf>=3.5.2
 parso
 futures
+grpc
