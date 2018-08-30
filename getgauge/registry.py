@@ -78,7 +78,8 @@ class Registry(object):
             return _filter_hooks(tags, getattr(self, '__{}'.format(hook)))
 
         def add(self, func, tags=None):
-            getattr(self, '__{}'.format(hook)).append({'tags': tags, 'func': func})
+            getattr(self, '__{}'.format(hook)).append(
+                {'tags': tags, 'func': func})
 
         setattr(self.__class__, hook, get)
         setattr(self.__class__, 'add_{}'.format(hook), add)
@@ -87,7 +88,8 @@ class Registry(object):
     def add_step(self, step_text, func, file_name, span=None, has_alias=False, aliases=None):
         if not isinstance(step_text, list):
             parsed_step_text = _get_step_value(step_text)
-            info = StepInfo(step_text, parsed_step_text, func, file_name, span, has_alias, aliases)
+            info = StepInfo(step_text, parsed_step_text, func,
+                            file_name, span, has_alias, aliases)
             self.__steps_map.setdefault(parsed_step_text, []).append(info)
             return
         for text in step_text:
@@ -128,7 +130,8 @@ class Registry(object):
     def get_step_positions(self, file_name):
         positions = []
         for step, infos in self.__steps_map.items():
-            positions = positions + [{'stepValue': step, 'span': i.span} for i in infos if i.file_name == file_name]
+            positions = positions + [{'stepValue': step, 'span': i.span}
+                                     for i in infos if i.file_name == file_name]
         return positions
 
     def remove_steps(self, file_name):
@@ -172,9 +175,11 @@ def _take_screenshot():
         _file.close()
         return data
     except Exception as err:
-        logging.error("\nFailed to take screenshot using gauge_screenshot.\n{0}".format(err))
+        logging.error(
+            "\nFailed to take screenshot using gauge_screenshot.\n{0}".format(err))
     except:
-        logging.error("\nFailed to take screenshot using gauge_screenshot.\n{0}".format(sys.exc_info()[0]))
+        logging.error("\nFailed to take screenshot using gauge_screenshot.\n{0}".format(
+            sys.exc_info()[0]))
     return str.encode("")
 
 

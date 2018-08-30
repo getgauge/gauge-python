@@ -48,7 +48,8 @@ class RegistryTests(unittest.TestCase):
                                                          RuntimeError()))
 
     def test_Registry_add_step_definition_with_alias(self):
-        registry.add_step(['Say <hello> to <getgauge>.', 'Tell <hello> to <getgauge>.'], 'impl', '')
+        registry.add_step(['Say <hello> to <getgauge>.',
+                           'Tell <hello> to <getgauge>.'], 'impl', '')
 
         info1 = registry.get_info_for('Say {} to {}.')
         info2 = registry.get_info_for('Tell {} to {}.')
@@ -104,7 +105,8 @@ class RegistryTests(unittest.TestCase):
                  {'text': 'Step 1', 'func': 'func1', 'line': 3}]
 
         for info in infos:
-            registry.add_step(info['text'], info['func'], '', {'start': info['line']})
+            registry.add_step(info['text'], info['func'],
+                              '', {'start': info['line']})
 
         parsed_step_text = re.sub('<[^<]+?>', '{}', infos[0]['text'])
 
@@ -318,12 +320,15 @@ class RegistryTests(unittest.TestCase):
                  {'text': 'Step 1', 'func': 'func1', 'file_name': 'bar.py', 'span': {'start': 3}}]
 
         for info in infos:
-            registry.add_step(info['text'], info['func'], info['file_name'], info['span'])
+            registry.add_step(info['text'], info['func'],
+                              info['file_name'], info['span'])
 
         positions = registry.get_step_positions('foo.py')
 
-        self.assertIn({'stepValue': 'Say {} to {}', 'span': {'start': 1}}, positions)
-        self.assertNotIn({'stepValue': 'Step 1', 'span': {'start': 3}}, positions)
+        self.assertIn({'stepValue': 'Say {} to {}',
+                       'span': {'start': 1}}, positions)
+        self.assertNotIn(
+            {'stepValue': 'Step 1', 'span': {'start': 3}}, positions)
 
         positions = registry.get_step_positions('bar.py')
 

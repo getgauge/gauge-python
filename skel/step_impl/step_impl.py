@@ -24,8 +24,10 @@ def assert_default_vowels(given_vowels):
 
 @step("Almost all words have vowels <table>")
 def assert_words_vowel_count(table):
-    actual = [str(number_of_vowels(word)) for word in table.get_column_values_with_name("Word")]
-    expected = [str(count) for count in table.get_column_values_with_name("Vowel Count")]
+    actual = [str(number_of_vowels(word))
+              for word in table.get_column_values_with_name("Word")]
+    expected = [str(count)
+                for count in table.get_column_values_with_name("Vowel Count")]
     assert expected == actual
 
 

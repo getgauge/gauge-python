@@ -21,7 +21,7 @@ def get_impl_files():
     file_list = []
     for root, _, files in os.walk(step_impl_dir):
         for file in files:
-            if file.endswith('.py') and '__init__.py' != os.path.basename(file) :
+            if file.endswith('.py') and '__init__.py' != os.path.basename(file):
                 file_list.append(os.path.join(root, file))
     return file_list
 
