@@ -1,15 +1,16 @@
 import threading
-
 from getgauge import processor, validator, refactor
 from getgauge.messages import lsp_pb2_grpc
 from getgauge.messages.lsp_pb2 import Empty
-from getgauge.messages.messages_pb2 import Message, ImplementationFileGlobPatternResponse, StepNamesResponse, \
+from getgauge.messages.messages_pb2 import Message, \
+    ImplementationFileGlobPatternResponse, StepNamesResponse, \
     ImplementationFileListResponse
 from getgauge.registry import registry
 from getgauge.util import get_impl_files, get_step_impl_dir
 
 
 class LspServerHandler(lsp_pb2_grpc.lspServiceServicer):
+
     def __init__(self, server):
         self.server = server
         self.kill_event = threading.Event()
@@ -37,7 +38,8 @@ class LspServerHandler(lsp_pb2_grpc.lspServiceServicer):
 
     def ImplementStub(self, request, context):
         res = Message()
-        processor.stub_impl_response(request.codes, request.implementationFilePath, res)
+        processor.stub_impl_response(
+            request.codes, request.implementationFilePath, res)
         return res.fileDiff
 
     def ValidateStep(self, request, context):

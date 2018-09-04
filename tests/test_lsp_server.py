@@ -39,7 +39,8 @@ class RegistryTests(TestCase):
 
         res = handler.GetImplementationFiles(req, None)
 
-        self.assertEqual(os.path.basename(res.implementationFilePaths[0]), 'foo.py')
+        self.assertEqual(os.path.basename(
+            res.implementationFilePaths[0]), 'foo.py')
 
     def test_LspServerHandler_step_names(self):
         handler = LspServerHandler(None)
@@ -75,9 +76,11 @@ class RegistryTests(TestCase):
         def foo():
             pass
         ''')
-        step_value = ProtoStepValue(stepValue='foo', parameterizedStepValue='foo')
+        step_value = ProtoStepValue(
+            stepValue='foo', parameterizedStepValue='foo')
 
-        req = StepValidateRequest(stepText='foo', stepValue=step_value, numberOfParameters=0)
+        req = StepValidateRequest(
+            stepText='foo', stepValue=step_value, numberOfParameters=0)
         res = handler.ValidateStep(req, None)
         self.assertTrue(res.isValid)
 
@@ -97,10 +100,13 @@ class RegistryTests(TestCase):
         handler = LspServerHandler(None)
         self.load_content_steps("@step('foo')\ndef foo():\n\tpass\n")
 
-        req = StubImplementationCodeRequest(implementationFilePath='New File', codes=['add hello'])
+        req = StubImplementationCodeRequest(
+            implementationFilePath='New File', codes=['add hello'])
         res = handler.ImplementStub(req, None)
-        self.assertEqual(os.path.basename(res.filePath), 'step_implementation.py')
-        self.assertEqual(res.textDiffs[0].content, 'from getgauge.python import step\n\nadd hello')
+        self.assertEqual(os.path.basename(res.filePath),
+                         'step_implementation.py')
+        self.assertEqual(
+            res.textDiffs[0].content, 'from getgauge.python import step\n\nadd hello')
 
     def test_LspServerHandler_refactor(self):
         handler = LspServerHandler(None)
@@ -111,7 +117,8 @@ class RegistryTests(TestCase):
         def foo(vowels):
             print(vowels)
         ''')
-        self.fs.create_file(os.path.join(get_step_impl_dir(), 'foo.py'), contents=content)
+        self.fs.create_file(os.path.join(
+            get_step_impl_dir(), 'foo.py'), contents=content)
         loader.load_files(get_step_impl_dir())
 
         request = RefactorRequest()
@@ -134,7 +141,8 @@ class RegistryTests(TestCase):
         self.assertTrue(res.success)
         diff_contents = [diff.content for diff in res.fileChanges[0].diffs]
         self.assertIn("vowels, arg1", diff_contents)
-        self.assertIn("'Vowels in English language is <vowels> <bsdfdsf>.'", diff_contents)
+        self.assertIn(
+            "'Vowels in English language is <vowels> <bsdfdsf>.'", diff_contents)
 
     def test_LspServerHandler_cache_file(self):
         handler = LspServerHandler(None)
@@ -146,7 +154,8 @@ class RegistryTests(TestCase):
             print(vowels)
         ''')
 
-        self.assertTrue(registry.is_implemented('Vowels in English language are {}.'))
+        self.assertTrue(registry.is_implemented(
+            'Vowels in English language are {}.'))
 
         content = dedent('''\
         from getgauge.python import step
@@ -155,7 +164,8 @@ class RegistryTests(TestCase):
         def foo():
             pass
         ''')
-        req = CacheFileRequest(content=content, filePath='foo.py', status=CacheFileRequest.CHANGED)
+        req = CacheFileRequest(
+            content=content, filePath='foo.py', status=CacheFileRequest.CHANGED)
         handler.CacheFile(req, None)
 
         self.assertTrue(registry.is_implemented('get lost!'))

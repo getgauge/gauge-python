@@ -219,7 +219,8 @@ class CommonPythonFileTests(object):
         self.assertEqual(diffs, [
             (_span(1, 6, 1, 19), '"display hello"'),
         ])
-        self.assertEqual(pf.get_code(), content.replace('print hello', 'display hello'))
+        self.assertEqual(pf.get_code(), content.replace(
+            'print hello', 'display hello'))
 
     def test_refactor_step_only_step_text_in_list(self):
         content = dedent("""\
@@ -237,7 +238,8 @@ class CommonPythonFileTests(object):
         self.assertEqual(diffs, [
             (_span(3, 4, 3, 20), "'show <word>'"),
         ])
-        self.assertEqual(pf.get_code(), content.replace('display <word>', 'show <word>'))
+        self.assertEqual(pf.get_code(), content.replace(
+            'display <word>', 'show <word>'))
 
     def test_refactor_step_add_arg_in_empty(self):
         content = dedent("""\

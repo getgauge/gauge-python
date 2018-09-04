@@ -2,7 +2,6 @@ import ast
 import random
 import re
 import string
-
 from getgauge.messages.messages_pb2 import Message, StepValidateResponse
 from getgauge.registry import registry
 
@@ -14,11 +13,13 @@ def validate_step(request, response):
         response.stepValidateResponse.errorType = StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND
         response.stepValidateResponse.errorMessage = 'Step implementation not found'
         response.stepValidateResponse.isValid = False
-        response.stepValidateResponse.suggestion = _impl_suggestion(request.stepValue)
+        response.stepValidateResponse.suggestion = _impl_suggestion(
+            request.stepValue)
     elif registry.has_multiple_impls(request.stepText):
         response.stepValidateResponse.isValid = False
         response.stepValidateResponse.errorType = StepValidateResponse.DUPLICATE_STEP_IMPLEMENTATION
-        response.stepValidateResponse.suggestion = _duplicate_impl_suggestion(request)
+        response.stepValidateResponse.suggestion = _duplicate_impl_suggestion(
+            request)
 
 
 def _duplicate_impl_suggestion(request):
@@ -29,7 +30,8 @@ def _duplicate_impl_suggestion(request):
 
 
 def _impl_suggestion(step_value):
-    name = re.sub('\s*\{\}\s*', ' ', step_value.stepValue).strip().replace(' ', '_').lower()
+    name = re.sub('\s*\{\}\s*', ' ',
+                  step_value.stepValue).strip().replace(' ', '_').lower()
     return """@step("{}")
 def {}({}):
     assert False, "Add implementation code"
@@ -43,7 +45,8 @@ def _format_params(params):
 
 
 def _format_impl(impl):
-    lines = [l for l in impl.split('\n') if l.strip().startswith('def') or l.strip().startswith('@')]
+    lines = [l for l in impl.split('\n') if l.strip(
+    ).startswith('def') or l.strip().startswith('@')]
     return '\n'.join(lines) + '\n   ...\n'
 
 
@@ -53,7 +56,6 @@ def _is_valid(name, template='{} = None'):
         return True
     except:
         return False
-
 
 def _random_word(length=6):
     return ''.join(random.choice(string.ascii_lowercase) for _ in range(length))

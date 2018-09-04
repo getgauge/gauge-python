@@ -66,9 +66,11 @@ def _send_all_step_names(_request, response, _socket):
 def _execute_step(request, response, _socket):
     params = []
     for p in request.executeStepRequest.parameters:
-        params.append(Table(p.table) if p.parameterType in [Parameter.Table, Parameter.Special_Table] else p.value)
+        params.append(Table(p.table) if p.parameterType in [
+                      Parameter.Table, Parameter.Special_Table] else p.value)
     set_response_values(request, response)
-    impl = registry.get_info_for(request.executeStepRequest.parsedStepText).impl
+    impl = registry.get_info_for(
+        request.executeStepRequest.parsedStepText).impl
     execute_method(params, impl, response, registry.is_continue_on_failure)
 
 
@@ -82,70 +84,101 @@ def _execute_before_suite_hook(request, response, _socket, clear=True):
         registry.clear()
         load_impls(get_step_impl_dir())
     if environ.get('DEBUGGING'):
-        ptvsd.enable_attach('', address=('127.0.0.1', int(environ.get('DEBUG_PORT'))))
+        ptvsd.enable_attach('', address=(
+            '127.0.0.1', int(environ.get('DEBUG_PORT'))))
         logging.info(ATTACH_DEBUGGER_EVENT)
         t = Timer(int(environ.get("debugger_wait_time", 30)), handle_detached)
         t.start()
         ptvsd.wait_for_attach()
         t.cancel()
 
-    execution_info = create_execution_context_from(request.executionStartingRequest.currentExecutionInfo)
+    execution_info = create_execution_context_from(
+        request.executionStartingRequest.currentExecutionInfo)
     run_hook(request, response, registry.before_suite(), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(ScreenshotsStore.pending_screenshots())
+    response.executionStatusResponse.executionResult.message.extend(
+        MessagesStore.pending_messages())
+    response.executionStatusResponse.executionResult.screenshots.extend(
+        ScreenshotsStore.pending_screenshots())
 
 
 def _execute_after_suite_hook(request, response, _socket):
-    execution_info = create_execution_context_from(request.executionEndingRequest.currentExecutionInfo)
+    execution_info = create_execution_context_from(
+        request.executionEndingRequest.currentExecutionInfo)
     run_hook(request, response, registry.after_suite(), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(ScreenshotsStore.pending_screenshots())
+    response.executionStatusResponse.executionResult.message.extend(
+        MessagesStore.pending_messages())
+    response.executionStatusResponse.executionResult.screenshots.extend(
+        ScreenshotsStore.pending_screenshots())
 
 
 def _execute_before_spec_hook(request, response, _socket):
-    execution_info = create_execution_context_from(request.specExecutionStartingRequest.currentExecutionInfo)
-    run_hook(request, response, registry.before_spec(execution_info.specification.tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(ScreenshotsStore.pending_screenshots())
+    execution_info = create_execution_context_from(
+        request.specExecutionStartingRequest.currentExecutionInfo)
+    run_hook(request, response, registry.before_spec(
+        execution_info.specification.tags), execution_info)
+    response.executionStatusResponse.executionResult.message.extend(
+        MessagesStore.pending_messages())
+    response.executionStatusResponse.executionResult.screenshots.extend(
+        ScreenshotsStore.pending_screenshots())
 
 
 def _execute_after_spec_hook(request, response, _socket):
-    execution_info = create_execution_context_from(request.specExecutionEndingRequest.currentExecutionInfo)
-    run_hook(request, response, registry.after_spec(execution_info.specification.tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(ScreenshotsStore.pending_screenshots())
+    execution_info = create_execution_context_from(
+        request.specExecutionEndingRequest.currentExecutionInfo)
+    run_hook(request, response, registry.after_spec(
+        execution_info.specification.tags), execution_info)
+    response.executionStatusResponse.executionResult.message.extend(
+        MessagesStore.pending_messages())
+    response.executionStatusResponse.executionResult.screenshots.extend(
+        ScreenshotsStore.pending_screenshots())
 
 
 def _execute_before_scenario_hook(request, response, _socket):
-    execution_info = create_execution_context_from(request.scenarioExecutionStartingRequest.currentExecutionInfo)
-    tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
+    execution_info = create_execution_context_from(
+        request.scenarioExecutionStartingRequest.currentExecutionInfo)
+    tags = list(execution_info.scenario.tags) + \
+        list(execution_info.specification.tags)
     run_hook(request, response, registry.before_scenario(tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(ScreenshotsStore.pending_screenshots())
+    response.executionStatusResponse.executionResult.message.extend(
+        MessagesStore.pending_messages())
+    response.executionStatusResponse.executionResult.screenshots.extend(
+        ScreenshotsStore.pending_screenshots())
 
 
 def _execute_after_scenario_hook(request, response, _socket):
-    execution_info = create_execution_context_from(request.scenarioExecutionEndingRequest.currentExecutionInfo)
-    tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
+    execution_info = create_execution_context_from(
+        request.scenarioExecutionEndingRequest.currentExecutionInfo)
+    tags = list(execution_info.scenario.tags) + \
+        list(execution_info.specification.tags)
     run_hook(request, response, registry.after_scenario(tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(ScreenshotsStore.pending_screenshots())
+    response.executionStatusResponse.executionResult.message.extend(
+        MessagesStore.pending_messages())
+    response.executionStatusResponse.executionResult.screenshots.extend(
+        ScreenshotsStore.pending_screenshots())
 
 
 def _execute_before_step_hook(request, response, _socket):
-    execution_info = create_execution_context_from(request.stepExecutionStartingRequest.currentExecutionInfo)
-    tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
+    execution_info = create_execution_context_from(
+        request.stepExecutionStartingRequest.currentExecutionInfo)
+    tags = list(execution_info.scenario.tags) + \
+        list(execution_info.specification.tags)
     run_hook(request, response, registry.before_step(tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(ScreenshotsStore.pending_screenshots())
+    response.executionStatusResponse.executionResult.message.extend(
+        MessagesStore.pending_messages())
+    response.executionStatusResponse.executionResult.screenshots.extend(
+        ScreenshotsStore.pending_screenshots())
 
 
 def _execute_after_step_hook(request, response, _socket):
-    execution_info = create_execution_context_from(request.stepExecutionEndingRequest.currentExecutionInfo)
-    tags = list(execution_info.scenario.tags) + list(execution_info.specification.tags)
+    execution_info = create_execution_context_from(
+        request.stepExecutionEndingRequest.currentExecutionInfo)
+    tags = list(execution_info.scenario.tags) + \
+        list(execution_info.specification.tags)
     run_hook(request, response, registry.after_step(tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(ScreenshotsStore.pending_screenshots())
+    response.executionStatusResponse.executionResult.message.extend(
+        MessagesStore.pending_messages())
+    response.executionStatusResponse.executionResult.screenshots.extend(
+        ScreenshotsStore.pending_screenshots())
 
 
 def _init_scenario_data_store(request, response, _socket):
@@ -191,7 +224,8 @@ def _step_positions(request, response, _socket):
 def step_positions_response(file_path, response):
     positions = registry.get_step_positions(file_path)
     response.messageType = Message.StepPositionsResponse
-    response.stepPositionsResponse.stepPositions.extend([_create_pos(x) for x in positions])
+    response.stepPositionsResponse.stepPositions.extend(
+        [_create_pos(x) for x in positions])
 
 
 def _create_pos(p):
@@ -206,7 +240,8 @@ def _kill_runner(_request, _response, socket):
 def _get_impl_file_list(_request, response, _socket):
     response.messageType = Message.ImplementationFileListResponse
     files = get_impl_files()
-    response.implementationFileListResponse.implementationFilePaths.extend(files)
+    response.implementationFileListResponse.implementationFilePaths.extend(
+        files)
 
 
 def _get_stub_impl_content(request, response, _socket):
@@ -220,10 +255,13 @@ def stub_impl_response(codes, file_name, response):
     content = read_file_contents(file_name)
     prefix = ""
     if content is not None:
-        new_line_char = '\n' if len(content.strip().split('\n')) == len(content.split('\n')) else ''
+        new_line_char = '\n' if len(content.strip().split(
+            '\n')) == len(content.split('\n')) else ''
         last_line = len(content.split('\n'))
-        prefix = "from getgauge.python import step\n" if len(content.strip()) == 0 else new_line_char
-        span = Span(**{'start': last_line, 'startChar': 0, 'end': last_line, 'endChar': 0})
+        prefix = "from getgauge.python import step\n" if len(
+            content.strip()) == 0 else new_line_char
+        span = Span(**{'start': last_line, 'startChar': 0,
+                       'end': last_line, 'endChar': 0})
     else:
         file_name = get_file_name()
         prefix = "from getgauge.python import step\n"
@@ -268,15 +306,16 @@ def dispatch_messages(socket):
     while True:
         request = read_message(socket, Message())
         response = Message()
-        
+
         try:
             processors[request.messageType](request, response, socket)
         except Exception as e:
             response = Message()
             response.messageType = Message.ExecutionStatusResponse
             response.executionStatusResponse.executionResult.failed = True
-            response.executionStatusResponse.executionResult.errorMessage = str(e)
-            response.executionStatusResponse.executionResult.stackTrace = traceback.format_exc()  
+            response.executionStatusResponse.executionResult.errorMessage = str(
+                e)
+            response.executionStatusResponse.executionResult.stackTrace = traceback.format_exc()
 
         if request.messageType != Message.CacheFileRequest:
             send_message(response, request, socket)

@@ -10,25 +10,30 @@ _parser = parso.load_grammar()
 
 
 class ParsoPythonFile(object):
+
     @staticmethod
     def parse(file_path, content=None):
         """
-        Create a PythonFile object with specified file_path and content. If content is None
-        then, it is loaded from the file_path method. Otherwise, file_path is only used for
-        reporting errors.
+        Create a PythonFile object with specified file_path and content.
+        If content is None then, it is loaded from the file_path method.
+        Otherwise, file_path is only used for reporting errors.
         """
         try:
-            # Parso reads files in binary mode and converts to unicode using python_bytes_to_unicode()
-            # function. As a result, we no longer have information about original file encoding and
-            # output of module.get_content() can not be converted back to bytes. For now we can make a
-            # compromise by reading the file ourselves and passing content to parse() function.
+            # Parso reads files in binary mode and converts to unicode
+            # using python_bytes_to_unicode() function. As a result,
+            # we no longer have information about original file encoding and
+            # output of module.get_content() can't be converted back to bytes
+            # For now we can make a compromise by reading the file ourselves
+            # and passing content to parse() function.
             if content is None:
                 with open(file_path) as f:
                     content = f.read()
-            py_tree = _parser.parse(content, path=file_path, error_recovery=False)
+            py_tree = _parser.parse(
+                content, path=file_path, error_recovery=False)
             return ParsoPythonFile(file_path, py_tree)
         except parso.parser.ParserSyntaxError as ex:
-            logging.error("Failed to parse %s:%d '%s'", file_path, ex.error_leaf.line, ex.error_leaf.get_code())
+            logging.error("Failed to parse %s:%d '%s'", file_path,
+                          ex.error_leaf.line, ex.error_leaf.get_code())
 
     def __init__(self, file_path, py_tree):
         self.file_path = file_path
@@ -51,7 +56,10 @@ class ParsoPythonFile(object):
                     break
 
     def _step_decorator_args(self, decorator):
-        """Get the arguments passed to step decorators converted to python objects"""
+        """
+        Get the arguments passed to step decorators
+        converted to python objects.
+        """
         args = decorator.children[3:-2]
         step = None
         if len(args) == 1:
@@ -68,7 +76,7 @@ class ParsoPythonFile(object):
                           self.file_path, decorator.start_pos[0])
 
     def iter_steps(self):
-        """Iterate over steps in the parsed file"""
+        """Iterate over steps in the parsed file."""
         for func, decorator in self._iter_step_func_decorators():
             step = self._step_decorator_args(decorator)
             if step:
@@ -76,7 +84,7 @@ class ParsoPythonFile(object):
                 yield step, func.name.value, span
 
     def _find_step_node(self, step_text):
-        """Find the ast node which contains the text"""
+        """Find the ast node which contains the text."""
         for func, decorator in self._iter_step_func_decorators():
             step = self._step_decorator_args(decorator)
             arg_node = decorator.children[3]
@@ -97,7 +105,8 @@ class ParsoPythonFile(object):
         start_pos = parent[-1].end_pos[0], parent[-1].end_pos[1] + len(prefix)
         children = [parso.python.tree.Name(name, start_pos, prefix)]
         if not is_last:
-            children.append(parso.python.tree.Operator(',', children[-1].end_pos))
+            children.append(parso.python.tree.Operator(
+                ',', children[-1].end_pos))
         return parso.python.tree.Param(children, parent)
 
     def _move_param_nodes(self, param_nodes, move_param_from_idx):
@@ -109,16 +118,19 @@ class ParsoPythonFile(object):
             return param_nodes
         # Get the prefix from second parameter to use with new parameters
         prefix = param_nodes[2].name.prefix if num_params > 1 else ' '
-        new_param_nodes = [parso.python.tree.Operator('(', param_nodes[0].start_pos)]
+        new_param_nodes = [parso.python.tree.Operator(
+            '(', param_nodes[0].start_pos)]
         for i, move_from in enumerate(move_param_from_idx):
             param = self._create_param_node(
                 new_param_nodes,
-                self._get_param_name(param_nodes, i) if move_from < 0 else param_nodes[move_from + 1].name.value,
+                self._get_param_name(
+                    param_nodes, i) if move_from < 0 else param_nodes[move_from + 1].name.value,
                 '' if i == 0 else prefix,
                 i >= len(move_param_from_idx) - 1
             )
             new_param_nodes.append(param)
-        new_param_nodes.append(parso.python.tree.Operator(')', new_param_nodes[-1].end_pos))
+        new_param_nodes.append(parso.python.tree.Operator(
+            ')', new_param_nodes[-1].end_pos))
         # Change the parent to actual function
         for node in new_param_nodes:
             node.parent = param_nodes[0].parent
@@ -126,9 +138,9 @@ class ParsoPythonFile(object):
 
     def refactor_step(self, old_text, new_text, move_param_from_idx):
         """
-        Find the step with old_text and change it to new_text. The step function
-        parameters are also changed according to move_param_from_idx. Each entry in
-        this list should specify parameter position from old
+        Find the step with old_text and change it to new_text.The step function
+        parameters are also changed according to move_param_from_idx.
+        Each entry in this list should specify parameter position from old.
         """
         diffs = []
         step, func = self._find_step_node(old_text)
@@ -137,7 +149,8 @@ class ParsoPythonFile(object):
         step_diff = self._refactor_step_text(step, old_text, new_text)
         diffs.append(step_diff)
         params_list_node = func.children[2]
-        moved_params = self._move_param_nodes(params_list_node.children, move_param_from_idx)
+        moved_params = self._move_param_nodes(
+            params_list_node.children, move_param_from_idx)
         if params_list_node.children is not moved_params:
             # Record original parameter list span excluding braces
             params_span = self._span_from_pos(
@@ -150,7 +163,7 @@ class ParsoPythonFile(object):
         return diffs
 
     def get_code(self):
-        """Returns current content of the tree."""
+        """Return current content of the tree."""
         return self.py_tree.get_code()
 
     def _get_param_name(self, param_nodes, i):

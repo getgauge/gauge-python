@@ -1,18 +1,18 @@
 import sys
 import warnings
-
 from getgauge.registry import registry, MessagesStore, ScreenshotsStore
 
-try:
+if sys.version_info[0] is 3:
     from collections.abc import MutableMapping
-except ImportError:
+else:
     from collections import MutableMapping
 
 
 def step(step_text):
     def _step(func):
         f_code = sys._getframe().f_back.f_code
-        span = {'start': f_code.co_firstlineno, 'startChar': 0, 'end': 0, 'endChar': 0}
+        span = {'start': f_code.co_firstlineno,
+                'startChar': 0, 'end': 0, 'endChar': 0}
         registry.add_step(step_text, func, f_code.co_filename, span)
         return func
 
@@ -169,8 +169,10 @@ class Specification:
 
     def __str__(self):
         return "Specification: {{ name: {}, is_failing: {}, tags: {}, file_name: {} }}".format(self.name,
-                                                                                               str(self.is_failing),
-                                                                                               ", ".join(self.tags),
+                                                                                               str(
+                                                                                                   self.is_failing),
+                                                                                               ", ".join(
+                                                                                                   self.tags),
                                                                                                self.file_name)
 
     def __eq__(self, other):
@@ -245,7 +247,8 @@ class DictObject(dict):
         try:
             return self[name]
         except KeyError:
-            raise AttributeError("'{0}' object has no attribute '{1}'".format(self.__class__.__name__, name))
+            raise AttributeError("'{0}' object has no attribute '{1}'".format(
+                self.__class__.__name__, name))
 
     def __setattr__(self, name, value):
         self[name] = value
@@ -254,7 +257,8 @@ class DictObject(dict):
         try:
             del self[name]
         except KeyError:
-            raise AttributeError("'{0}' object has no attribute '{1}'".format(self.__class__.__name__, name))
+            raise AttributeError("'{0}' object has no attribute '{1}'".format(
+                self.__class__.__name__, name))
 
 
 class DataStoreContainer(object):
@@ -303,7 +307,8 @@ class DataStore:
 
 def _warn_datastore_deprecation(store_type):
     warnings.warn(
-        "'DataStoreFactory.{0}_data_store()' is deprecated in favour of 'data_store.{0}'".format(store_type),
+        "'DataStoreFactory.{0}_data_store()' is deprecated in favour of 'data_store.{0}'".format(
+            store_type),
         DeprecationWarning, stacklevel=3)
     warnings.simplefilter('default', DeprecationWarning)
 
