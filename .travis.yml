@@ -19,7 +19,7 @@ matrix:
 
 env:
   global:
-    - JAVA_HOME=/usr/lib/jvm/java-8-oracle
+    - JAVA_HOME=/usr/lib/jvm/default-java
     - TAGS="python"
     - GAUGE_TELEMETRY_ENABLE=false
     - GAUGE_PREFIX=/tmp
@@ -38,6 +38,7 @@ script:
   - gauge uninstall python
   - gauge install python -f "bin/gauge-python-$GAUGE_PYTHON_VERSION.zip"
   - pip install "dist/getgauge-$GAUGE_PYTHON_VERSION.tar.gz"
+  - gauge config gauge_repository_url  https://raw.githubusercontent.com/getgauge/gauge-nightly-repository/master/
   - gauge install html-report
   - gauge install xml-report
   - gauge install java
