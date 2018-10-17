@@ -20,7 +20,7 @@ from getgauge.util import get_step_impl_dir, get_impl_files, read_file_contents,
 from getgauge.validator import validate_step
 
 ATTACH_DEBUGGER_EVENT = 'Runner Ready for Debugging'
-
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
 def _validate_step(request, response, _socket):
     validate_step(request.stepValidateRequest, response)
