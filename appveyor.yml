@@ -58,9 +58,11 @@ build_script:
 
     gauge -v
 
-    echo "gauge_repository_url = https://raw.githubusercontent.com/getgauge/gauge-nightly-repository/master/" | Out-File "$env:Appdata\.gauge\config\gauge.properties" -Encoding utf8 -Append
+    gauge config gauge_repository_url  https://raw.githubusercontent.com/getgauge/gauge-nightly-repository/master/
 
     gauge install
+
+    gauge -v
 
     mvn -q clean install -Denv=ci-python -DinParallel=false -Dtags=python
 notifications:
