@@ -19,7 +19,7 @@ matrix:
 
 env:
   global:
-    - JAVA_HOME=/usr/lib/jvm/default-java
+    - JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
     - TAGS="python"
     - GAUGE_TELEMETRY_ENABLE=false
     - GAUGE_PREFIX=/tmp
