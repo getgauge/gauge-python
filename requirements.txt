@@ -3,7 +3,7 @@ pyfakefs
 redbaron
 coverage>=3.7.1
 twine
-ptvsd==3.0.0
+ptvsd==4.1.4
 grpcio-tools
 grpcio
 protobuf>=3.5.2

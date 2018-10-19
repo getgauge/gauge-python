@@ -48,7 +48,7 @@ def generate_package():
     print('Creating getgauge package.')
     create_setup_file()
     fnull = open(os.devnull, 'w')
-    call(['python', 'setup.py', 'sdist'], stdout=fnull, stderr=fnull)
+    call([sys.executable, 'setup.py', 'sdist'], stdout=fnull, stderr=fnull)
     fnull.close()
 
 
