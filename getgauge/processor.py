@@ -85,7 +85,7 @@ def _execute_before_suite_hook(request, response, _socket, clear=True):
     if environ.get('DEBUGGING'):
         ptvsd.enable_attach(address=(
             '127.0.0.1', int(environ.get('DEBUG_PORT'))))
-        logging.info(ATTACH_DEBUGGER_EVENT)
+        print(ATTACH_DEBUGGER_EVENT)
         t = Timer(int(environ.get("debugger_wait_time", 30)), handle_detached)
         t.start()
         ptvsd.wait_for_attach()
@@ -233,7 +233,9 @@ def _create_pos(p):
 
 def _kill_runner(_request, _response, socket):
     socket.close()
-    sys.exit()
+    # TODO: detach debugger and then close the main thread using `sys.exit()`.
+    # Currentyl ptvsd does not have a way to disable altough there is a todo for the same.
+    os._exit(0)
 
 
 def _get_impl_file_list(_request, response, _socket):

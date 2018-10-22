@@ -58,9 +58,6 @@ def _init_logger():
         f = '%(asctime)s.%(msecs)03d %(message)s'
         logging.basicConfig(stream=sys.stdout, format=f,
                             level=logging.DEBUG, datefmt='%H:%M:%S')
-    if os.getenv('DEBUGGING'):
-        logging.basicConfig(stream=sys.stdout,
-                            format='%(message)s', level=logging.DEBUG)
     else:
         logging.basicConfig(stream=sys.stdout,
                             format='%(message)s', level=logging.ERROR)
