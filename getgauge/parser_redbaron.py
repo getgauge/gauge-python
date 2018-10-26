@@ -1,6 +1,5 @@
 import six
 import logging
-import re
 from redbaron import RedBaron
 
 
