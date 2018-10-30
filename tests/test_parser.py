@@ -21,13 +21,14 @@ class CommonPythonFileTests(object):
 
     def test_can_parse_content_directly(self):
         content = dedent('''\
-        @step("print hello")
-        def print_hello():
-            print("hello")
+        class test:
+            @step("print hello")
+            def print_hello():
+                print("hello")
 
-        @step('print <hello>.')
-        def print_word(word):
-            print(word)
+            @step('print <hello>.')
+            def print_word(word):
+                print(word)
 
         ''')
         pf = self.parse(content)

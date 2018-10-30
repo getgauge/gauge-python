@@ -52,13 +52,12 @@ class RedbaronPythonFile(object):
         return calculate_span if lazy else calculate_span()
 
     def _iter_step_func_decorators(self):
-        """Find top level functions with step decorator in parsed file."""
-        for node in self.py_tree:
-            if node.type == 'def':
-                for decorator in node.decorators:
-                    if decorator.name.value == 'step':
-                        yield node, decorator
-                        break
+        """Find functions with step decorator in parsed file."""  
+        for node in self.py_tree.find_all('def'):
+            for decorator in node.decorators:
+                if decorator.name.value == 'step':
+                    yield node, decorator
+                    break
 
     def _step_decorator_args(self, decorator):
         """

@@ -48,8 +48,9 @@ class ParsoPythonFile(object):
         }
 
     def _iter_step_func_decorators(self):
-        """Find top level functions with step decorator in parsed file"""
-        for func in self.py_tree.iter_funcdefs():
+        """Find functions with step decorator in parsed file"""
+        func_defs = [func for func in self.py_tree.iter_funcdefs()] + [func for cls in self.py_tree.iter_classdefs() for func in cls.iter_funcdefs()]
+        for func in func_defs:
             for decorator in func.get_decorators():
                 if decorator.children[1].value == 'step':
                     yield func, decorator
