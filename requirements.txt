@@ -5,7 +5,7 @@ coverage>=3.7.1
 twine
 ptvsd==4.1.4
 grpcio-tools
-grpcio
+grpcio==1.15.0
 protobuf>=3.5.2
 parso
 futures
