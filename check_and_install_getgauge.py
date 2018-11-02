@@ -8,7 +8,7 @@ import json
 
 
 def get_version():
-    proc = Popen(['gauge', '-v', '--machine-readable'], stdout=PIPE, stderr=PIPE)
+    proc = Popen(['gauge', '-v', '--machine-readable'], stdout=PIPE, stderr=PIPE, shell=True)
     out, _ = proc.communicate()
     data = json.loads(str(out.decode()))
     for plugin in data['plugins']:
