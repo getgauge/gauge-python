@@ -105,7 +105,7 @@ def main():
     if len(sys.argv) < 2:
         print(usage)
     else:
-        exit_code = call(['coverage', 'run', '--source', 'getgauge', '-m', 'unittest', 'discover'])
+        exit_code = call([sys.executable, '-m', 'coverage', 'run', '--source', 'getgauge', '-m', 'unittest', 'discover'])
         if exit_code != 0:
             sys.exit(exit_code)
         elif sys.argv[1] == '--install':
