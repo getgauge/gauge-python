@@ -27,7 +27,9 @@ def install():
     call(['gauge', 'uninstall', 'python', '-v', get_version()])
     exit_code = call(['gauge', 'install', 'python', '-f', os.path.join(BIN, plugin_zip)])
     generate_package()
-    print('Install getgauge package using pip: \n\tpip install dist/*')
+    p = os.listdir("dist")[0]
+    print("Installing getgauge package using pip: \n\tpip install dist/{}".format(p))
+    call([sys.executable, "-m", "pip", "install", "dist/{}".format(p), "--upgrade", "--user"])
     sys.exit(exit_code)
 
 
