@@ -105,8 +105,7 @@ Options:
 
 def run_tests():
     pp = "PYTHONPATH"
-    os.environ.putenv(pp, "{0}{1}{2}".format(
-        os.environ.get(pp), os.pathsep, os.path.abspath(os.path.curdir)))
+    os.environ[pp] = "{0}{1}{2}".format( os.environ.get(pp), os.pathsep, os.path.abspath(os.path.curdir))
     test_dir = os.path.join(os.path.curdir, "tests")
     exit_code = 0
     for root, _, files in os.walk(test_dir):
