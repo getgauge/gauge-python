@@ -19,7 +19,7 @@ def run_hook(request, response, hooks, execution_info):
     set_response_values(request, response)
     for hook in hooks:
         args = _get_args(execution_info, hook)
-        execute_method(args, hook, response)
+        execute_method(args, hook.impl, response)
 
 
 def _false(func, exception): return False
@@ -40,10 +40,11 @@ def _current_time(): return int(round(time.time() * 1000))
 
 
 def _get_args(execution_info, hook):
+    params = [hook.instance] if hook.instance is not None else []
     if sys.version_info < (3, 3):
-        return [] if len(inspect.getargspec(hook).args) == 0 else [execution_info]
+        return params if len(inspect.getargspec(hook.impl).args) == 0 else params + [execution_info]
     else:
-        return [] if len(inspect.signature(hook).parameters) == 0 else [execution_info]
+        return params if len(inspect.signature(hook.impl).parameters) == 0 else params + [execution_info]
 
 
 def _add_exception(e, response, continue_on_failure):

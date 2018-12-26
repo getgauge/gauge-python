@@ -1,7 +1,6 @@
 six
 pyfakefs
 redbaron
-coverage>=3.7.1
 twine
 ptvsd==4.1.4
 grpcio-tools

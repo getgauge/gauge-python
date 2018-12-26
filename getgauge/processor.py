@@ -1,5 +1,4 @@
 import logging
-import sys
 import os
 import traceback
 from os import path, environ
@@ -20,6 +19,7 @@ from getgauge.util import get_step_impl_dir, get_impl_files, read_file_contents,
 from getgauge.validator import validate_step
 
 ATTACH_DEBUGGER_EVENT = 'Runner Ready for Debugging'
+
 
 def _validate_step(request, response, _socket):
     validate_step(request.stepValidateRequest, response)
@@ -66,11 +66,12 @@ def _execute_step(request, response, _socket):
     params = []
     for p in request.executeStepRequest.parameters:
         params.append(Table(p.table) if p.parameterType in [
-                      Parameter.Table, Parameter.Special_Table] else p.value)
+            Parameter.Table, Parameter.Special_Table] else p.value)
     set_response_values(request, response)
-    impl = registry.get_info_for(
-        request.executeStepRequest.parsedStepText).impl
-    execute_method(params, impl, response, registry.is_continue_on_failure)
+    info = registry.get_info_for(request.executeStepRequest.parsedStepText)
+    if info.instance is not None:
+        params = [info.instance] + params
+    execute_method(params, info.impl, response, registry.is_continue_on_failure)
 
 
 def handle_detached():
@@ -136,7 +137,7 @@ def _execute_before_scenario_hook(request, response, _socket):
     execution_info = create_execution_context_from(
         request.scenarioExecutionStartingRequest.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + \
-        list(execution_info.specification.tags)
+           list(execution_info.specification.tags)
     run_hook(request, response, registry.before_scenario(tags), execution_info)
     response.executionStatusResponse.executionResult.message.extend(
         MessagesStore.pending_messages())

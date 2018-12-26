@@ -3,6 +3,7 @@ import re
 import sys
 import tempfile
 import logging
+import inspect
 from subprocess import call
 
 
@@ -12,6 +13,7 @@ class StepInfo(object):
             aliases = []
         self.__step_text, self.__parsed_step_text, self.__impl = step_text, parsed_step_text, impl
         self.__file_name, self.__span, self.__has_alias = file_name, span, has_alias
+        self.__instance = None
         self.__aliases = aliases
 
     @property
@@ -25,6 +27,14 @@ class StepInfo(object):
     @property
     def impl(self):
         return self.__impl
+
+    @property
+    def instance(self):
+        return self.__instance
+
+    @instance.setter
+    def instance(self, value):
+        self.__instance = value
 
     @property
     def has_alias(self):
@@ -44,6 +54,32 @@ class StepInfo(object):
         if callable(self.__span):
             self.__span = self.__span()
         return self.__span
+
+
+class HookInfo(object):
+    def __init__(self, tags, impl, file_name):
+        self.__tags, self.__impl, self.__file_name = tags, impl, file_name
+        self.__instance = None
+
+    @property
+    def tags(self):
+        return self.__tags
+
+    @property
+    def impl(self):
+        return self.__impl
+
+    @property
+    def file_name(self):
+        return self.__file_name
+
+    @property
+    def instance(self):
+        return self.__instance
+
+    @instance.setter
+    def instance(self, value):
+        self.__instance = value
 
 
 class MessagesStore:
@@ -77,9 +113,10 @@ class Registry(object):
         def get(self, tags=None):
             return _filter_hooks(tags, getattr(self, '__{}'.format(hook)))
 
-        def add(self, func, tags=None):
+        def add(self, func=None, tags=None, file_name=""):
+            file_name = inspect.getabsfile(func) if file_name is None else file_name
             getattr(self, '__{}'.format(hook)).append(
-                {'tags': tags, 'func': func})
+                HookInfo(tags, func, file_name))
 
         setattr(self.__class__, hook, get)
         setattr(self.__class__, 'add_{}'.format(hook), add)
@@ -134,6 +171,20 @@ class Registry(object):
                                      for i in infos if i.file_name == file_name]
         return positions
 
+    def _get_all_hooks(self, file_name):
+        all_hooks = []
+        for hook in self.hooks:
+            all_hooks = all_hooks + \
+                        [h for h in getattr(self, "__{}".format(hook))
+                         if h.file_name == file_name]
+        return all_hooks
+
+    def get_all_methods_in(self, file_name):
+        methods = []
+        for _, infos in self.__steps_map.items():
+            methods = methods + [i for i in infos if i.file_name == file_name]
+        return methods + self._get_all_hooks(file_name)
+
     def remove_steps(self, file_name):
         new_map = {}
         for step, infos in self.__steps_map.items():
@@ -151,14 +202,14 @@ class Registry(object):
 def _filter_hooks(tags, hooks):
     filtered_hooks = []
     for hook in hooks:
-        hook_tags = hook['tags']
+        hook_tags = hook.tags
         if hook_tags is None:
-            filtered_hooks.append(hook['func'])
+            filtered_hooks.append(hook)
             continue
         for tag in tags:
             hook_tags = hook_tags.replace('<{}>'.format(tag), 'True')
         if eval(re.sub('<[^<]+?>', 'False', hook_tags)):
-            filtered_hooks.append(hook['func'])
+            filtered_hooks.append(hook)
     return filtered_hooks
 
 
