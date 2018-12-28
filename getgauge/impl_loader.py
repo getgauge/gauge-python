@@ -1,12 +1,14 @@
 import importlib
+import inspect
 import json
+import logging
 import py_compile
 import shutil
 import sys
 import traceback
-import logging
 from os import path
 
+from getgauge.registry import registry
 from getgauge.util import *
 
 project_root = get_project_root()
@@ -56,11 +58,23 @@ def _import_impl(step_impl_dir):
 def _import_file(file_path):
     rel_path = os.path.normpath(file_path.replace(project_root + os.path.sep, ''))
     try:
-        importlib.import_module(os.path.splitext(rel_path.replace(os.path.sep, '.'))[0])
+        module_name = os.path.splitext(rel_path.replace(os.path.sep, '.'))[0]
+        m = importlib.import_module(module_name)
+        # Get all classes in the imported module
+        classes = inspect.getmembers(m, lambda member: inspect.isclass(member) and member.__module__ == module_name)
+        if len(classes) > 0:
+            for c in classes:
+                update_step_resgistry_with_class(c[1](), file_path) # c[1]() will create a new instance of the class
     except:
         logging.error('Exception occurred while loading step implementations from file: {}.'.format(rel_path))
         logging.error(traceback.format_exc())
 
+# Inject instace in each class method (hook/step)
+def update_step_resgistry_with_class(instance, file_path):
+    for info in registry.get_all_methods_in(file_path):
+        class_methods = [x[0] for x in inspect.getmembers(instance, inspect.ismethod)]
+        if info.impl.__name__ in class_methods:
+            info.instance = instance
 
 def _get_version():
     json_data = open(PLUGIN_JSON).read()

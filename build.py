@@ -27,7 +27,9 @@ def install():
     call(['gauge', 'uninstall', 'python', '-v', get_version()])
     exit_code = call(['gauge', 'install', 'python', '-f', os.path.join(BIN, plugin_zip)])
     generate_package()
-    print('Install getgauge package using pip: \n\tpip install dist/*')
+    p = os.listdir("dist")[0]
+    print("Installing getgauge package using pip: \n\tpip install dist/{}".format(p))
+    call([sys.executable, "-m", "pip", "install", "dist/{}".format(p), "--upgrade", "--user"])
     sys.exit(exit_code)
 
 
@@ -97,15 +99,29 @@ Usage: python install.py --[option]
 Options:
     --test    :     runs unit tests.
     --install :     installs python plugin and generates the pip package
-    --dist    :     create zip and pip package (for nighties set NIGHTLY env true.)  
+    --dist    :     create zip and pip package (for nighties set NIGHTLY env true.)
 """
+
+
+def run_tests():
+    pp = "PYTHONPATH"
+    os.environ[pp] = "{0}{1}{2}".format( os.environ.get(pp), os.pathsep, os.path.abspath(os.path.curdir))
+    test_dir = os.path.join(os.path.curdir, "tests")
+    exit_code = 0
+    for root, _, files in os.walk(test_dir):
+        for item in files:
+            if item.startswith("test_") and item.endswith(".py"):
+                fileNamePath = str(os.path.join(root, item))
+                exit_code = call([sys.executable, fileNamePath]
+                                 ) if exit_code is 0 else exit_code
+    return exit_code
 
 
 def main():
     if len(sys.argv) < 2:
         print(usage)
     else:
-        exit_code = call([sys.executable, '-m', 'coverage', 'run', '--source', 'getgauge', '-m', 'unittest', 'discover'])
+        exit_code = run_tests()
         if exit_code != 0:
             sys.exit(exit_code)
         elif sys.argv[1] == '--install':
@@ -115,4 +131,5 @@ def main():
             generate_package()
 
 
-main()
+if __name__ == '__main__':
+    main()
