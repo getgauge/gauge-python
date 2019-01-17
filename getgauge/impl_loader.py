@@ -2,7 +2,6 @@ import importlib
 import inspect
 import json
 import logging
-import py_compile
 import shutil
 import sys
 import traceback
@@ -75,6 +74,7 @@ def update_step_resgistry_with_class(instance, file_path):
         class_methods = [x[0] for x in inspect.getmembers(instance, inspect.ismethod)]
         if info.impl.__name__ in class_methods:
             info.instance = instance
+
 
 def _get_version():
     json_data = open(PLUGIN_JSON).read()

@@ -114,7 +114,8 @@ class Registry(object):
             return _filter_hooks(tags, getattr(self, '__{}'.format(hook)))
 
         def add(self, func=None, tags=None, file_name=""):
-            file_name = inspect.getabsfile(func) if file_name is None else file_name
+            if not isinstance(func, str):
+                file_name = inspect.getsourcefile(func)
             getattr(self, '__{}'.format(hook)).append(
                 HookInfo(tags, func, file_name))
 
