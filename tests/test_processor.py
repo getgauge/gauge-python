@@ -641,6 +641,26 @@ class ProcessorTests(TestCase):
 
         self.assertEqual(registry.is_implemented('foo {}'), True)
 
+    def test_Processor_cache_file_with_create_status_when_file_is_cached(self):
+        request = Message()
+        response = Message()
+        self.load_content_steps('''\
+        from getgauge.python import step
+
+        @step('foo <bar>')
+        def foo():
+            pass
+        ''')
+
+        self.assertEqual(registry.is_implemented('foo {}'), True)
+
+        request.cacheFileRequest.filePath = 'foo.py'
+        request.cacheFileRequest.status = CacheFileRequest.CREATED
+        self.fs.create_file('foo.py')
+        processors[Message.CacheFileRequest](request, response, None)
+
+        self.assertEqual(registry.is_implemented('foo {}'), True)
+
     def test_Processor_cache_file_with_closed_status(self):
         request = Message()
         response = Message()

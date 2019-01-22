@@ -334,6 +334,12 @@ class RegistryTests(unittest.TestCase):
         self.assertTrue(registry.is_implemented('Step 1'))
         self.assertFalse(registry.has_multiple_impls('Step 1'))
 
+    def test_Registry_is_file_cached(self):
+        info = {'text': 'Say <hello> to <getgauge>', 'func': 'func', 'file_name': 'foo.py'}
+        registry.add_step(info['text'], info['func'], info['file_name'])
+
+        self.assertTrue(registry.is_file_cached(info['file_name']))
+
     def test_Registry_add_step_with_empty_arg(self):
         info = {'text': 'Step <>', 'func': 'func', 'file_name': 'foo.py'}
 
