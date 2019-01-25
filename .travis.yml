@@ -21,7 +21,7 @@ env:
   global:
     - JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
     - TAGS="python"
-    - GAUGE_TELEMETRY_ENABLE=false
+    - GAUGE_TELEMETRY_ENABLED=false
     - GAUGE_PREFIX=/tmp
 
 # command to install dependencies
