@@ -15,7 +15,7 @@ from getgauge.python import Table, create_execution_context_from, data_store
 from getgauge.refactor import refactor_step
 from getgauge.registry import registry, MessagesStore, ScreenshotsStore
 from getgauge.static_loader import reload_steps
-from getgauge.util import get_step_impl_dir, get_impl_files, read_file_contents, get_file_name
+from getgauge.util import get_step_impl_dirs, get_impl_files, read_file_contents, get_file_name
 from getgauge.validator import validate_step
 
 ATTACH_DEBUGGER_EVENT = 'Runner Ready for Debugging'
@@ -82,7 +82,7 @@ def handle_detached():
 def _execute_before_suite_hook(request, response, _socket, clear=True):
     if clear:
         registry.clear()
-        load_impls(get_step_impl_dir())
+        load_impls(get_step_impl_dirs())
     if environ.get('DEBUGGING'):
         ptvsd.enable_attach(address=(
             '127.0.0.1', int(environ.get('DEBUG_PORT'))))
@@ -275,8 +275,8 @@ def stub_impl_response(codes, file_name, response):
 
 
 def _glob_pattern(_request, response, _socket):
-    patterns = ["{}/**/*.py".format(get_step_impl_dir())]
-    return response.implementationFileGlobPatternResponse.globPatterns.extend(patterns)
+    patterns = [["{}/**/*.py".format(d)] for d in get_step_impl_dirs()]
+    return response.implementationFileGlobPatternResponse.globPatterns.extend([item for sublist in patterns for item in sublist])
 
 
 processors = {Message.ExecutionStarting: _execute_before_suite_hook,

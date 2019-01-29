@@ -11,7 +11,7 @@ from getgauge.registry import registry
 from getgauge.util import *
 
 project_root = get_project_root()
-impl_dir = get_step_impl_dir()
+impl_dirs = get_step_impl_dirs()
 env_dir = os.path.join(project_root, 'env', 'default')
 requirements_file = os.path.join(project_root, 'requirements.txt')
 sys.path.append(project_root)
@@ -21,13 +21,14 @@ PYTHON_PROPERTIES = 'python.properties'
 SKEL = 'skel'
 
 
-def load_impls(step_impl_dir=impl_dir):
+def load_impls(step_impl_dirs=impl_dirs):
     os.chdir(project_root)
-    if not os.path.isdir(step_impl_dir):
-        logging.error('Cannot import step implementations. Error: {} does not exist.'.format(step_impl_dir))
-        logging.error('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
-        return
-    _import_impl(step_impl_dir)
+    for impl_dir in step_impl_dirs:
+        if not os.path.isdir(impl_dir):
+            logging.error('Cannot import step implementations. Error: {} does not exist.'.format(step_impl_dirs))
+            logging.error('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
+            return
+        _import_impl(impl_dir)
 
 
 def copy_skel_files():
@@ -35,8 +36,8 @@ def copy_skel_files():
         logging.info('Initialising Gauge Python project')
         logging.info('create  {}'.format(env_dir))
         os.makedirs(env_dir)
-        logging.info('create  {}'.format(impl_dir))
-        shutil.copytree(os.path.join(SKEL, STEP_IMPL_DIR_NAME), impl_dir)
+        logging.info('create  {}'.format(impl_dirs[0]))
+        shutil.copytree(os.path.join(SKEL, STEP_IMPL_DIR_NAMES[0]), impl_dirs[0])
         logging.info('create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
         shutil.copy(os.path.join(SKEL, PYTHON_PROPERTIES), env_dir)
         open(requirements_file, 'w').write('getgauge==' + _get_version())
@@ -51,7 +52,7 @@ def _import_impl(step_impl_dir):
         if f.endswith('.py'):
             _import_file(file_path)
         elif path.isdir(file_path):
-            load_impls(file_path)
+            load_impls([file_path])
 
 
 def _import_file(file_path):

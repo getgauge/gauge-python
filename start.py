@@ -11,7 +11,7 @@ from getgauge import lsp_server
 from getgauge.impl_loader import copy_skel_files
 from getgauge.messages import lsp_pb2_grpc
 from getgauge.static_loader import load_files
-from getgauge.util import get_step_impl_dir
+from getgauge.util import get_step_impl_dirs
 
 PLUGIN_JSON = 'python.json'
 VERSION = 'version'
@@ -28,12 +28,10 @@ def main():
 
 
 def load_implementations():
-    d = get_step_impl_dir()
-    if path.exists(d):
-        load_files(d)
-    else:
-        logging.error(
-            'can not load implementations from {}. {} does not exist.'.format(d, d))
+    d = get_step_impl_dirs()
+    (logging.error('can not load implementations from {}. {} does not exist.'.format(impl_dir, impl_dir)) for impl_dir in d if not path.exists(impl_dir))
+    load_files(d)
+        
 
 
 def start():
