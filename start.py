@@ -32,7 +32,6 @@ def load_implementations():
     for impl_dir in d:
         if not path.exists(impl_dir):
             logging.error('can not load implementations from {}. {} does not exist.'.format(impl_dir, impl_dir))
-            return
     load_files(d)
         
 

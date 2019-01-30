@@ -2,7 +2,6 @@ import os
 
 PROJECT_ROOT_ENV = 'GAUGE_PROJECT_ROOT'
 STEP_IMPL_DIR_ENV = 'STEP_IMPL_DIR'
-STEP_IMPL_DIR_NAMES = os.getenv(STEP_IMPL_DIR_ENV).split(',') if os.getenv(STEP_IMPL_DIR_ENV) else ['step_impl']
 
 
 def get_project_root():
@@ -13,6 +12,7 @@ def get_project_root():
 
 
 def get_step_impl_dirs():
+    STEP_IMPL_DIR_NAMES = map(str.strip, os.getenv(STEP_IMPL_DIR_ENV).split(',')) if os.getenv(STEP_IMPL_DIR_ENV) else ['step_impl']
     return [os.path.join(get_project_root(), name) for name in STEP_IMPL_DIR_NAMES]
 
 
