@@ -210,7 +210,10 @@ def _cache_file(request, _response, _socket):
 def update_registry(file, status, content):
     if status == CacheFileRequest.CHANGED or status == CacheFileRequest.OPENED:
         reload_steps(file, content)
-    elif status == CacheFileRequest.CREATED or status == CacheFileRequest.CLOSED:
+    elif status == CacheFileRequest.CREATED:
+        if not registry.is_file_cached(file):
+            _load_from_disk(file)
+    elif status == CacheFileRequest.CLOSED:
         _load_from_disk(file)
     else:
         registry.remove_steps(file)

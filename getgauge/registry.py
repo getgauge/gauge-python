@@ -186,6 +186,12 @@ class Registry(object):
             methods = methods + [i for i in infos if i.file_name == file_name]
         return methods + self._get_all_hooks(file_name)
 
+    def is_file_cached(self, file_name):
+        for _, infos in self.__steps_map.items():
+            if any(i.file_name == file_name for i in infos):
+                return True
+        return False
+
     def remove_steps(self, file_name):
         new_map = {}
         for step, infos in self.__steps_map.items():
