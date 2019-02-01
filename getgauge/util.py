@@ -2,7 +2,6 @@ import os
 
 PROJECT_ROOT_ENV = 'GAUGE_PROJECT_ROOT'
 STEP_IMPL_DIR_ENV = 'STEP_IMPL_DIR'
-STEP_IMPL_DIR_NAME = os.getenv(STEP_IMPL_DIR_ENV) or 'step_impl'
 
 
 def get_project_root():
@@ -12,17 +11,19 @@ def get_project_root():
         return ""
 
 
-def get_step_impl_dir():
-    return os.path.join(get_project_root(), STEP_IMPL_DIR_NAME)
+def get_step_impl_dirs():
+    STEP_IMPL_DIR_NAMES = map(str.strip, os.getenv(STEP_IMPL_DIR_ENV).split(',')) if os.getenv(STEP_IMPL_DIR_ENV) else ['step_impl']
+    return [os.path.join(get_project_root(), name) for name in STEP_IMPL_DIR_NAMES]
 
 
 def get_impl_files():
-    step_impl_dir = get_step_impl_dir()
+    step_impl_dirs = get_step_impl_dirs()
     file_list = []
-    for root, _, files in os.walk(step_impl_dir):
-        for file in files:
-            if file.endswith('.py') and '__init__.py' != os.path.basename(file):
-                file_list.append(os.path.join(root, file))
+    for step_impl_dir in step_impl_dirs:
+        for root, _, files in os.walk(step_impl_dir):
+            for file in files:
+                if file.endswith('.py') and '__init__.py' != os.path.basename(file):
+                    file_list.append(os.path.join(root, file))
     return file_list
 
 
@@ -37,7 +38,7 @@ def read_file_contents(file_name):
 
 def get_file_name(prefix='', counter=0):
     name = 'step_implementation{}.py'.format(prefix)
-    file_name = os.path.join(get_step_impl_dir(), name)
+    file_name = os.path.join(get_step_impl_dirs()[0], name)
     if not os.path.exists(file_name):
         return file_name
     else:

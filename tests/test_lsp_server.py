@@ -9,7 +9,7 @@ from getgauge.lsp_server import LspServerHandler
 from getgauge.messages.messages_pb2 import *
 from getgauge.messages.spec_pb2 import ProtoStepValue
 from getgauge.registry import registry
-from getgauge.util import get_step_impl_dir
+from getgauge.util import get_step_impl_dirs
 from getgauge.parser import PythonFile
 
 
@@ -35,7 +35,7 @@ class RegistryTests(TestCase):
     def test_LspServerHandler_file_list(self):
         handler = LspServerHandler(None)
         req = ImplementationFileListRequest()
-        self.fs.create_file(os.path.join(get_step_impl_dir(), 'foo.py'))
+        self.fs.create_file(os.path.join(get_step_impl_dirs()[0], 'foo.py'))
 
         res = handler.GetImplementationFiles(req, None)
 
@@ -118,8 +118,8 @@ class RegistryTests(TestCase):
             print(vowels)
         ''')
         self.fs.create_file(os.path.join(
-            get_step_impl_dir(), 'foo.py'), contents=content)
-        loader.load_files(get_step_impl_dir())
+            get_step_impl_dirs()[0], 'foo.py'), contents=content)
+        loader.load_files(get_step_impl_dirs())
 
         request = RefactorRequest()
         request.saveChanges = False

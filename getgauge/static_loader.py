@@ -16,11 +16,11 @@ def reload_steps(file_path, content=None):
         load_steps(pf)
 
 
-def load_files(step_impl_dir):
-    for dirpath, dirs, files in os.walk(step_impl_dir):
-        py_files = (os.path.join(dirpath, f)
-                    for f in files if f.endswith('.py'))
-        for file_path in py_files:
-            pf = PythonFile.parse(file_path)
-            if pf:
-                load_steps(pf)
+def load_files(step_impl_dirs):
+    for step_impl_dir in step_impl_dirs: 
+        for dirpath, _, files in os.walk(step_impl_dir):
+                py_files = (os.path.join(dirpath, f) for f in files if f.endswith('.py'))
+                for file_path in py_files:
+                        pf = PythonFile.parse(file_path)
+                        if pf:
+                                load_steps(pf)

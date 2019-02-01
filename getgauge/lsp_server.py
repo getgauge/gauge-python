@@ -6,7 +6,7 @@ from getgauge.messages.messages_pb2 import Message, \
     ImplementationFileGlobPatternResponse, StepNamesResponse, \
     ImplementationFileListResponse
 from getgauge.registry import registry
-from getgauge.util import get_impl_files, get_step_impl_dir
+from getgauge.util import get_impl_files, get_step_impl_dirs
 
 
 class LspServerHandler(lsp_pb2_grpc.lspServiceServicer):
@@ -60,7 +60,8 @@ class LspServerHandler(lsp_pb2_grpc.lspServiceServicer):
 
     def GetGlobPatterns(self, request, context):
         res = ImplementationFileGlobPatternResponse()
-        res.globPatterns.extend(["{}/**/*.py".format(get_step_impl_dir())])
+        globPatterns = [["{}/**/*.py".format(d)] for d in get_step_impl_dirs()]
+        res.globPatterns.extend([item for sublist in globPatterns for item in sublist])
         return res
 
     def KillProcess(self, request, context):

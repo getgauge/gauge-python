@@ -16,3 +16,6 @@ class ValidateTests(unittest.TestCase):
 
     def test_format_params(self):
         self.assertEqual("a, b, arg3", _format_params(["a", "b", "2"]))
+
+if __name__ == '__main__':
+    unittest.main()        
