@@ -12,8 +12,11 @@ def get_project_root():
 
 
 def get_step_impl_dirs():
-    STEP_IMPL_DIR_NAMES = map(str.strip, os.getenv(STEP_IMPL_DIR_ENV).split(',')) if os.getenv(STEP_IMPL_DIR_ENV) else ['step_impl']
-    return [os.path.join(get_project_root(), name) for name in STEP_IMPL_DIR_NAMES]
+    step_impl_dir_names = map(str.strip, os.getenv(STEP_IMPL_DIR_ENV).split(',')) if os.getenv(STEP_IMPL_DIR_ENV) else ['step_impl']
+    full_path_dir_names = []
+    for name in step_impl_dir_names:
+        full_path_dir_names.append(name if name.startswith('/') else os.path.join(get_project_root(), name))
+    return full_path_dir_names
 
 
 def get_impl_files():
