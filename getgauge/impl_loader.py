@@ -28,7 +28,8 @@ def load_impls(step_impl_dirs=impl_dirs):
             logging.error('Cannot import step implementations. Error: {} does not exist.'.format(step_impl_dirs))
             logging.error('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
             return
-        _import_impl(impl_dir)
+        base_dir = project_root if impl_dir.startswith(project_root) else os.path.dirname(impl_dir)
+        _import_impl(base_dir, impl_dir)
 
 
 def copy_skel_files():
@@ -46,17 +47,17 @@ def copy_skel_files():
         sys.exit(1)
 
 
-def _import_impl(step_impl_dir):
+def _import_impl(base_dir, step_impl_dir):
     for f in os.listdir(step_impl_dir):
         file_path = os.path.join(step_impl_dir, f)
         if f.endswith('.py'):
-            _import_file(file_path)
+            _import_file(base_dir, file_path)
         elif path.isdir(file_path):
-            load_impls([file_path])
+            _import_impl(base_dir, file_path)
 
 
-def _import_file(file_path):
-    rel_path = os.path.normpath(file_path.replace(project_root + os.path.sep, ''))
+def _import_file(base_dir, file_path):
+    rel_path = os.path.normpath(file_path.replace(base_dir + os.path.sep, ''))
     try:
         module_name = os.path.splitext(rel_path.replace(os.path.sep, '.'))[0]
         m = importlib.import_module(module_name)
