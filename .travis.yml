@@ -44,5 +44,5 @@ script:
   - gauge install java
   - git clone git://github.com/getgauge/gauge-tests --depth 1 --recursive
   - cd gauge-tests
-  - sh starttests.sh python
+  - ./gradlew clean pythonFT
   - cd ../
