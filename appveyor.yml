@@ -64,7 +64,7 @@ build_script:
 
     gauge -v
 
-    gradlew.bat clean pythonFT
+    .\gradlew.bat clean pythonFT
 notifications:
 - provider: Webhook
   url: https://webhooks.gitter.im/e/68b514dcb2c08a6a5809
