@@ -52,9 +52,12 @@ class ParsoPythonFile(object):
         func_defs = [func for func in self.py_tree.iter_funcdefs()] + [func for cls in self.py_tree.iter_classdefs() for func in cls.iter_funcdefs()]
         for func in func_defs:
             for decorator in func.get_decorators():
-                if decorator.children[1].value == 'step':
-                    yield func, decorator
-                    break
+                try:
+                    if decorator.children[1].value == 'step':
+                        yield func, decorator
+                        break
+                except AttributeError:
+                        continue
 
     def _step_decorator_args(self, decorator):
         """

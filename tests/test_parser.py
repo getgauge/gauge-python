@@ -676,6 +676,37 @@ class ParsoPythonFileTests(unittest.TestCase, CommonPythonFileTests):
         self.assertEqual(step.start_pos, (7, 4))
         self.assertEqual(func.name.value, 'print_word')
 
+    def test_iter_steps_checks_step_decorator_with_other_attributes(self):
+        content = dedent('''\
+        class test:
+            def __init__(self,x):
+                self.x = x
+
+            @property
+            def x(self):
+                return self.__x
+
+            @x.setter
+            def x(self, x):
+                self.__x = x
+
+            @step("print hello")
+            def print_hello():
+                print("hello")
+
+            @step('print <hello>.')
+            def print_word(word):
+                print(word)
+
+        ''')
+        pf = self.parse(content)
+        self.assertIsNotNone(pf)
+        steps = list(pf.iter_steps())
+        self.assertEqual(len(steps), 2)
+        self.assertEqual(steps[0][0], "print hello")
+        self.assertEqual(steps[0][1], "print_hello")
+        self.assertSpanStart(steps[0][2], 13, 4)
+
 
 @unittest.skipIf(sys.hexversion > 0x3070000, "RedBaron does not support python 3.7")
 class RedBaronPythonFileTests(unittest.TestCase, CommonPythonFileTests):

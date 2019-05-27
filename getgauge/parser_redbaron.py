@@ -55,9 +55,12 @@ class RedbaronPythonFile(object):
         """Find functions with step decorator in parsed file."""  
         for node in self.py_tree.find_all('def'):
             for decorator in node.decorators:
-                if decorator.name.value == 'step':
-                    yield node, decorator
-                    break
+                try:
+                    if decorator.name.value == 'step':
+                        yield node, decorator
+                        break
+                except AttributeError:
+                    continue
 
     def _step_decorator_args(self, decorator):
         """
