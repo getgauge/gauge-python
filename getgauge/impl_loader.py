@@ -38,7 +38,7 @@ def copy_skel_files():
         logging.info('create  {}'.format(env_dir))
         os.makedirs(env_dir)
         logging.info('create  {}'.format(impl_dirs[0]))
-        shutil.copytree(os.path.join(SKEL), impl_dirs[0])
+        shutil.copytree(os.path.join(SKEL,path.basename(impl_dirs[0]) ), impl_dirs[0])
         logging.info('create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
         shutil.copy(os.path.join(SKEL, PYTHON_PROPERTIES), env_dir)
         f = open(requirements_file, 'w')
