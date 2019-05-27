@@ -5,9 +5,9 @@ import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from os import path
+
 import grpc
-from getgauge import connection, processor
-from getgauge import lsp_server
+from getgauge import connection, lsp_server, processor
 from getgauge.impl_loader import copy_skel_files
 from getgauge.messages import lsp_pb2_grpc
 from getgauge.static_loader import load_files
@@ -33,7 +33,7 @@ def load_implementations():
         if not path.exists(impl_dir):
             logging.error('can not load implementations from {}. {} does not exist.'.format(impl_dir, impl_dir))
     load_files(d)
-        
+
 
 
 def start():
