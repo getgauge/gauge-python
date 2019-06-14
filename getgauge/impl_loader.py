@@ -9,6 +9,7 @@ from os import path
 
 from getgauge.registry import registry
 from getgauge.util import *
+from getgauge.parser import PythonFile
 
 project_root = get_project_root()
 impl_dirs = get_step_impl_dirs()
@@ -67,7 +68,10 @@ def _import_file(base_dir, file_path):
         classes = inspect.getmembers(m, lambda member: inspect.isclass(member) and member.__module__ == module_name)
         if len(classes) > 0:
             for c in classes:
-                update_step_resgistry_with_class(c[1](), file_path) # c[1]() will create a new instance of the class
+                file = inspect.getfile(c[1])
+                # Create instance of step implementation class.
+                if _is_step_impl_class(file):
+                    update_step_resgistry_with_class(c[1](), file_path) # c[1]() will create a new instance of the class
     except:
         logging.error('Exception occurred while loading step implementations from file: {}.'.format(rel_path))
         logging.error(traceback.format_exc())
@@ -84,3 +88,6 @@ def _get_version():
     json_data = open(PLUGIN_JSON).read()
     data = json.loads(json_data)
     return data[VERSION]
+
+def _is_step_impl_class(file):
+    return len([ step for step in PythonFile.parse(file).iter_steps() ]) > 0
