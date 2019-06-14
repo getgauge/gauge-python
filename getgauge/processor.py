@@ -69,9 +69,7 @@ def _execute_step(request, response, _socket):
             Parameter.Table, Parameter.Special_Table] else p.value)
     set_response_values(request, response)
     info = registry.get_info_for(request.executeStepRequest.parsedStepText)
-    if info.instance is not None:
-        params = [info.instance] + params
-    execute_method(params, info.impl, response, registry.is_continue_on_failure)
+    execute_method(params, info, response, registry.is_continue_on_failure)
 
 
 def handle_detached():
