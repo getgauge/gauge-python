@@ -5,12 +5,11 @@ import logging
 import shutil
 import sys
 import traceback
+import re
 from os import path
 
 from getgauge.registry import registry
 from getgauge.util import *
-from getgauge.parser import PythonFile
-
 project_root = get_project_root()
 impl_dirs = get_step_impl_dirs()
 env_dir = os.path.join(project_root, 'env', 'default')
@@ -70,7 +69,7 @@ def _import_file(base_dir, file_path):
             for c in classes:
                 file = inspect.getfile(c[1])
                 # Create instance of step implementation class.
-                if _is_step_impl_class(file):
+                if _has_methods_with_gauge_decoratores(c[1]):
                     update_step_resgistry_with_class(c[1](), file_path) # c[1]() will create a new instance of the class
     except:
         logging.error('Exception occurred while loading step implementations from file: {}.'.format(rel_path))
@@ -89,5 +88,10 @@ def _get_version():
     data = json.loads(json_data)
     return data[VERSION]
 
-def _is_step_impl_class(file):
-    return len([ step for step in PythonFile.parse(file).iter_steps() ]) > 0
+def _has_methods_with_gauge_decoratores(klass):
+    foo = r"@(step|before_suite|after_suite|before_scenario|after_scenario|before_spec|after_spec|before_step|after_step|screenshot|custom_screen_grabber)"
+    sourcelines = inspect.getsourcelines(klass)[0]
+    for i,line in enumerate(sourcelines):
+        if re.match(foo, line.strip()) != None:
+            return True
+    return False
