@@ -46,8 +46,7 @@ def copy_skel_files():
         f.write('getgauge==' + _get_version())
         f.close()
     except:
-        logger.error('Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
-        sys.exit(1)
+        logger.fatal('Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
 
 
 def _import_impl(base_dir, step_impl_dir):
