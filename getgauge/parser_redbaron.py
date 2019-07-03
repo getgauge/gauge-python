@@ -1,5 +1,5 @@
 import six
-import logging
+from getgauge import logger
 from redbaron import RedBaron
 
 
@@ -25,7 +25,7 @@ class RedbaronPythonFile(object):
             marker_pos = msg.find(marker)
             if marker_pos > 0:
                 msg = msg[:marker_pos + len(marker)]
-            logging.error("Failed to parse {}: {}".format(file_path, msg))
+            logger.error("Failed to parse {}: {}".format(file_path, msg))
 
     def __init__(self, file_path, py_tree):
         self.file_path = file_path
@@ -75,11 +75,11 @@ class RedbaronPythonFile(object):
                 pass
             if isinstance(step, six.string_types + (list,)):
                 return step
-            logging.error("Decorator step accepts either a string or a list of \
+            logger.error("Decorator step accepts either a string or a list of \
                 strings - %s",
                           self.file_path)
         else:
-            logging.error("Decorator step accepts only one argument - %s",
+            logger.error("Decorator step accepts only one argument - %s",
                           self.file_path)
 
     def iter_steps(self):

@@ -1,4 +1,3 @@
-import logging
 import os
 import platform
 import sys
@@ -7,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from os import path
 
 import grpc
-from getgauge import connection, lsp_server, processor
+from getgauge import connection, logger, lsp_server, processor
 from getgauge.impl_loader import copy_skel_files
 from getgauge.messages import lsp_pb2_grpc
 from getgauge.static_loader import load_files
@@ -18,9 +17,9 @@ VERSION = 'version'
 
 
 def main():
-    _init_logger()
-    logging.info("Python: {}".format(platform.python_version()))
+    logger.info("Python: {}".format(platform.python_version()))
     if sys.argv[1] == "--init":
+        logger.debug("Initilizing gauge project.")
         copy_skel_files()
     else:
         load_implementations()
@@ -29,38 +28,31 @@ def main():
 
 def load_implementations():
     d = get_step_impl_dirs()
+    logger.debug("Loading step implemetations from {} dirs.".format(', '.join(d)))
     for impl_dir in d:
         if not path.exists(impl_dir):
-            logging.error('can not load implementations from {}. {} does not exist.'.format(impl_dir, impl_dir))
+            logger.error('can not load implementations from {}. {} does not exist.'.format(impl_dir, impl_dir))
     load_files(d)
 
 
 
 def start():
     if os.getenv('GAUGE_LSP_GRPC'):
+        logger.debug('Starting grpc server..')
         server = grpc.server(ThreadPoolExecutor(max_workers=1))
         p = server.add_insecure_port('127.0.0.1:0')
         handler = lsp_server.LspServerHandler(server)
         lsp_pb2_grpc.add_lspServiceServicer_to_server(handler, server)
-        logging.info('Listening on port:{}'.format(p))
+        logger.info('Listening on port:{}'.format(p))
         server.start()
         wait_thread = threading.Thread(
             name="listener", target=handler.wait_till_terminated)
         wait_thread.start()
         wait_thread.join()
     else:
+        logger.debug('Starting TCP server..')
         s = connection.connect()
         processor.dispatch_messages(s)
-
-
-def _init_logger():
-    if os.getenv('IS_DAEMON'):
-        f = '%(asctime)s.%(msecs)03d %(message)s'
-        logging.basicConfig(stream=sys.stdout, format=f,
-                            level=logging.DEBUG, datefmt='%H:%M:%S')
-    else:
-        logging.basicConfig(stream=sys.stdout,
-                            format='%(message)s', level=logging.ERROR)
 
 
 if __name__ == '__main__':

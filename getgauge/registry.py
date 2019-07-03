@@ -1,10 +1,11 @@
+import inspect
 import os
 import re
 import sys
 import tempfile
-import logging
-import inspect
 from subprocess import call
+
+from getgauge import logger
 
 
 class StepInfo(object):
@@ -233,10 +234,10 @@ def _take_screenshot():
         _file.close()
         return data
     except Exception as err:
-        logging.error(
+        logger.error(
             "\nFailed to take screenshot using gauge_screenshot.\n{0}".format(err))
     except:
-        logging.error("\nFailed to take screenshot using gauge_screenshot.\n{0}".format(
+        logger.error("\nFailed to take screenshot using gauge_screenshot.\n{0}".format(
             sys.exc_info()[0]))
     return str.encode("")
 
