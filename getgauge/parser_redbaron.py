@@ -52,7 +52,7 @@ class RedbaronPythonFile(object):
         return calculate_span if lazy else calculate_span()
 
     def _iter_step_func_decorators(self):
-        """Find functions with step decorator in parsed file."""  
+        """Find functions with step decorator in parsed file."""
         for node in self.py_tree.find_all('def'):
             for decorator in node.decorators:
                 try:
@@ -76,11 +76,9 @@ class RedbaronPythonFile(object):
             if isinstance(step, six.string_types + (list,)):
                 return step
             logger.error("Decorator step accepts either a string or a list of \
-                strings - %s",
-                          self.file_path)
+                strings - %s".format(self.file_path))
         else:
-            logger.error("Decorator step accepts only one argument - %s",
-                          self.file_path)
+            logger.error("Decorator step accepts only one argument - %s".format(self.file_path))
 
     def iter_steps(self):
         """Iterate over steps in the parsed file."""
