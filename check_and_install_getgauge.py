@@ -1,16 +1,11 @@
-import subprocess
 import sys
-import os
-import pkg_resources
-from distutils import version
-from subprocess import Popen, PIPE
 import json
+import pkg_resources
+from subprocess import check_output
 
 
 def get_version():
-    proc = Popen("gauge -v --machine-readable",
-                 stdout=PIPE, stderr=PIPE, shell=True)
-    out, _ = proc.communicate()
+    out = check_output(["gauge", "-v", "--machine-readable"])
     data = json.loads(str(out.decode()))
     for plugin in data['plugins']:
         if plugin['name'] == 'python':
@@ -25,25 +20,26 @@ def get_dev_getgauge_version(plugin_nightly_version):
 
 
 def install_getgauge(getgauge_version):
+    install_cmd = [sys.executable, "-m", "pip", "install", getgauge_version, "--user"]
     if "dev" in getgauge_version:
-        subprocess.call([sys.executable, "-m", "pip", "install", "--pre",
-                         getgauge_version, "--user"], stdout=open(os.devnull, 'wb'))
-    else:
-        subprocess.call([sys.executable, "-m", "pip", "install",
-                         getgauge_version, "--user"], stdout=open(os.devnull, 'wb'))
+        install_cmd.append("--pre")
+    check_output(install_cmd)
 
 
 def assert_versions():
     python_plugin_version = get_version()
-    expected_gauge_version = python_plugin_version
+    if not python_plugin_version:
+        print('The gauge python plugin is not installed!')
+        exit(1)
 
+    expected_gauge_version = python_plugin_version
     if "nightly" in python_plugin_version:
         expected_gauge_version = get_dev_getgauge_version(
             python_plugin_version)
 
     try:
         getgauge_version = pkg_resources.get_distribution('getgauge').version
-        if getgauge_version is not expected_gauge_version:
+        if getgauge_version != expected_gauge_version:
             install_getgauge("getgauge=="+expected_gauge_version)
     except pkg_resources.DistributionNotFound:
         install_getgauge("getgauge=="+expected_gauge_version)
