@@ -5,7 +5,7 @@ from subprocess import check_output
 
 
 def get_version():
-    out = check_output(["gauge", "-v", "--machine-readable"])
+    out = check_output(["gauge", "-v", "--machine-readable"],shell=True)
     data = json.loads(str(out.decode()))
     for plugin in data['plugins']:
         if plugin['name'] == 'python':
