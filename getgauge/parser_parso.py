@@ -1,8 +1,8 @@
 import ast
-import six
-import parso
-import logging
 
+import parso
+import six
+from getgauge import logger
 
 # Reuse parser for multiple invocations. This also prevents
 # problems with pyfakefs during testing for Python 3.7
@@ -32,8 +32,7 @@ class ParsoPythonFile(object):
                 content, path=file_path, error_recovery=False)
             return ParsoPythonFile(file_path, py_tree)
         except parso.parser.ParserSyntaxError as ex:
-            logging.error("Failed to parse %s:%d '%s'", file_path,
-                          ex.error_leaf.line, ex.error_leaf.get_code())
+            logger.error("Failed to parse {0}:{1} '{2}'".format(file_path, ex.error_leaf.line, ex.error_leaf.get_code()))
 
     def __init__(self, file_path, py_tree):
         self.file_path = file_path
@@ -73,11 +72,9 @@ class ParsoPythonFile(object):
                 pass
             if isinstance(step, six.string_types+(list,)):
                 return step
-            logging.error("Decorator step accepts either a string or a list of strings - %s:%d",
-                          self.file_path, decorator.start_pos[0])
+            logger.error("Decorator step accepts either a string or a list of strings - {1}:{0}".format(self.file_path, decorator.start_pos[0]))
         else:
-            logging.error("Decorator step accepts only one argument - %s:%d",
-                          self.file_path, decorator.start_pos[0])
+            logger.error("Decorator step accepts only one argument - {0}:{1}".format(self.file_path, decorator.start_pos[0]))
 
     def iter_steps(self):
         """Iterate over steps in the parsed file."""
