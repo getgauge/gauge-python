@@ -1,15 +1,16 @@
 import importlib
 import inspect
 import json
-import logging
+import re
 import shutil
 import sys
 import traceback
-import re
 from os import path
 
+from getgauge import logger
 from getgauge.registry import registry
 from getgauge.util import *
+
 project_root = get_project_root()
 impl_dirs = get_step_impl_dirs()
 env_dir = os.path.join(project_root, 'env', 'default')
@@ -25,8 +26,8 @@ def load_impls(step_impl_dirs=impl_dirs):
     os.chdir(project_root)
     for impl_dir in step_impl_dirs:
         if not os.path.isdir(impl_dir):
-            logging.error('Cannot import step implementations. Error: {} does not exist.'.format(step_impl_dirs))
-            logging.error('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
+            logger.error('Cannot import step implementations. Error: {} does not exist.'.format(step_impl_dirs))
+            logger.error('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
             return
         base_dir = project_root if impl_dir.startswith(project_root) else os.path.dirname(impl_dir)
         _import_impl(base_dir, impl_dir)
@@ -34,19 +35,18 @@ def load_impls(step_impl_dirs=impl_dirs):
 
 def copy_skel_files():
     try:
-        logging.info('Initialising Gauge Python project')
-        logging.info('create  {}'.format(env_dir))
+        logger.info('Initialising Gauge Python project')
+        logger.info('create  {}'.format(env_dir))
         os.makedirs(env_dir)
-        logging.info('create  {}'.format(impl_dirs[0]))
+        logger.info('create  {}'.format(impl_dirs[0]))
         shutil.copytree(os.path.join(SKEL,path.basename(impl_dirs[0]) ), impl_dirs[0])
-        logging.info('create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
+        logger.info('create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
         shutil.copy(os.path.join(SKEL, PYTHON_PROPERTIES), env_dir)
         f = open(requirements_file, 'w')
         f.write('getgauge==' + _get_version())
         f.close()
     except:
-        logging.error('Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
-        sys.exit(1)
+        logger.fatal('Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
 
 
 def _import_impl(base_dir, step_impl_dir):
@@ -72,8 +72,8 @@ def _import_file(base_dir, file_path):
                 if _has_methods_with_gauge_decoratores(c[1]):
                     update_step_resgistry_with_class(c[1](), file_path) # c[1]() will create a new instance of the class
     except:
-        logging.error('Exception occurred while loading step implementations from file: {}.'.format(rel_path))
-        logging.error(traceback.format_exc())
+        logger.error('Exception occurred while loading step implementations from file: {}.'.format(rel_path))
+        logger.error(traceback.format_exc())
 
 # Inject instace in each class method (hook/step)
 def update_step_resgistry_with_class(instance, file_path):
@@ -94,4 +94,3 @@ def _has_methods_with_gauge_decoratores(klass):
     for i,line in enumerate(sourcelines):
         if re.match(foo, line.strip()) != None:
             return True
-    return False

@@ -1,21 +1,22 @@
-import logging
 import os
 import traceback
-from os import path, environ
+from os import environ, path
 from threading import Timer
 
 import ptvsd
-
+from getgauge import logger
 from getgauge.connection import read_message, send_message
-from getgauge.executor import set_response_values, execute_method, run_hook
+from getgauge.executor import execute_method, run_hook, set_response_values
 from getgauge.impl_loader import load_impls
-from getgauge.messages.messages_pb2 import Message, StepPositionsResponse, TextDiff, CacheFileRequest
+from getgauge.messages.messages_pb2 import (CacheFileRequest, Message,
+                                            StepPositionsResponse, TextDiff)
 from getgauge.messages.spec_pb2 import Parameter, Span
 from getgauge.python import Table, create_execution_context_from, data_store
 from getgauge.refactor import refactor_step
-from getgauge.registry import registry, MessagesStore, ScreenshotsStore
+from getgauge.registry import MessagesStore, ScreenshotsStore, registry
 from getgauge.static_loader import reload_steps
-from getgauge.util import get_step_impl_dirs, get_impl_files, read_file_contents, get_file_name
+from getgauge.util import (get_file_name, get_impl_files, get_step_impl_dirs,
+                           read_file_contents)
 from getgauge.validator import validate_step
 
 ATTACH_DEBUGGER_EVENT = 'Runner Ready for Debugging'
@@ -73,7 +74,7 @@ def _execute_step(request, response, _socket):
 
 
 def handle_detached():
-    logging.info("No debugger attached. Stopping the execution.")
+    logger.info("No debugger attached. Stopping the execution.")
     os._exit(1)
 
 
