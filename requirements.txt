@@ -2,7 +2,7 @@ six
 pyfakefs==3.5.2
 redbaron
 twine
-ptvsd==4.1.4
+ptvsd==4.3.2
 grpcio-tools
 grpcio==1.15.0
 protobuf>=3.5.2
