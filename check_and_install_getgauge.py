@@ -1,11 +1,12 @@
-import sys
 import json
-import pkg_resources
+import sys
 from subprocess import check_output
+
+import pkg_resources
 
 
 def get_version():
-    out = check_output(["gauge", "-v", "--machine-readable"],shell=True)
+    out = check_output(["gauge -v --machine-readable"],shell=True)
     data = json.loads(str(out.decode()))
     for plugin in data['plugins']:
         if plugin['name'] == 'python':
@@ -23,7 +24,7 @@ def install_getgauge(getgauge_version):
     install_cmd = [sys.executable, "-m", "pip", "install", getgauge_version, "--user"]
     if "dev" in getgauge_version:
         install_cmd.append("--pre")
-    check_output(install_cmd)
+    check_output([" ".join(install_cmd)], shell=True)
 
 
 def assert_versions():
