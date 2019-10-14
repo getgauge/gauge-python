@@ -93,12 +93,8 @@ python build.py --install
 python build.py --dist
 ```
 
-This will create a .zip file in bin directory and a .tar.gz file in dist directory. The zip file can be uploaded to Github release and the .tar.gz file can be uploaded to PyPi
+This will create a .zip file in bin directory and a .tar.gz file in dist directory.
 
-##### Uploading to PyPI
-```
-twine upload dist/FILE_NAME
-```
 
 ##### Creating Nightly distributable
 ```
@@ -106,6 +102,23 @@ NIGHTLY=true python build.py --dist
 ```
 
 This will create the .zip nightly file and a .dev.DATE.tar.gz(PyPi pre release package) file.
+
+## Deployment
+
+Only contributors with push access can create a deployment.
+
+The deployment process is managed via Github Actions.
+
+Follow these steps to deploy gauge-python.
+
+* Create a Personal Access Token in Github with `repo:public_repo` scope (skip this step if you already have a PAT).
+* Run `GITHUB_TOKEN={Your token} sh release.sh` in `gauge-python` dir. This will trigger a deployment workflow on Github Actions. This workflow creates a release draft with all required assets and information.
+* Visit to the release draft, analyze and update the contents (remove unnecessary entries, mention Contributors, remove dependabot PR entries).
+* Publish the draft release.
+* Once the draft is published it will trigger another workflow on Github Actions, which will perform all the Post release tasks, In case of gauge-python it will upload the `getgauge` python packge to `PyPi`.
+* Once it's done please update the new release information in [gauge-repository](https://github.com/getgauge/gauge-repository/blob/master/python-install.json)
+* That's it. Now the release can be announced on the required community platforms (chat, google group etc.)
+
 
 ## Examples
 
