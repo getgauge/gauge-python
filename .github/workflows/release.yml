@@ -1,0 +1,27 @@
+name: release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release:
+    name: Deploy to PyPi
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      PYPI_USER: '${{ secrets.PYPI_USER }}'
+      PYPI_PASSWORD: '${{ secrets.PYPI_PASSWORD }}'
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+
+      - name: Upload PyPi package
+        run: |
+          pip install -r requirements.txt
+          python build.py --dist
+          python -m twine upload -u ${PYPI_USER} -p ${PYPI_PASSWORD} dist/getgauge*
