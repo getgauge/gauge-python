@@ -36,10 +36,7 @@ def install():
 def create_setup_file():
     tmpl = open("setup.tmpl", "r")
     setup = open("setup.py", "w+")
-    if bool(os.getenv("NIGHTLY")):
-        v = "{}.dev.{}".format(get_version(), str(date.today()).replace("-", ""))
-    else:
-        v = get_version()
+    v = get_version()
     setup.write(tmpl.read().format(v, "{\n\t\t':python_version == \"2.7\"': ['futures']\n\t}"))
     setup.close()
     tmpl.close()
@@ -99,7 +96,6 @@ Usage: python install.py --[option]
 Options:
     --test    :     runs unit tests.
     --install :     installs python plugin and generates the pip package
-    --dist    :     create zip and pip package (for nighties set NIGHTLY env true.)
 """
 
 

@@ -13,13 +13,6 @@ def get_version():
             return plugin['version']
     return ''
 
-
-def get_dev_getgauge_version(plugin_nightly_version):
-    refined_version = plugin_nightly_version.replace(
-        'nightly', '').replace('-', '')
-    return refined_version[:6] + "dev" + refined_version[6:]
-
-
 def install_getgauge(getgauge_version):
     install_cmd = [sys.executable, "-m", "pip", "install", getgauge_version, "--user"]
     if "dev" in getgauge_version:
@@ -34,9 +27,6 @@ def assert_versions():
         exit(1)
 
     expected_gauge_version = python_plugin_version
-    if "nightly" in python_plugin_version:
-        expected_gauge_version = get_dev_getgauge_version(
-            python_plugin_version)
 
     try:
         getgauge_version = pkg_resources.get_distribution('getgauge').version
