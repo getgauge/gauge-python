@@ -3,10 +3,10 @@ import sys
 import tempfile
 import unittest
 
+from getgauge import processor
+from getgauge.messages.messages_pb2 import Message, ParameterPosition
 from getgauge.parser import PythonFile
 from getgauge.registry import registry
-from getgauge.processor import processors
-from getgauge.messages.messages_pb2 import Message, ParameterPosition
 
 
 class RefactorTests(object):
@@ -49,7 +49,7 @@ def assert_default_vowels(arg0):
         param_position.newPosition = 1
         request.refactorRequest.paramPositions.extend([position, param_position])
 
-        processors[Message.RefactorRequest](request, response, None)
+        processor.refactor_step(request.refactorRequest, response, None)
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
@@ -85,7 +85,7 @@ def assert_default_vowels(arg0, arg1):
         param_position.newPosition = 1
         request.refactorRequest.paramPositions.extend([position, param_position])
 
-        processors[Message.RefactorRequest](request, response, None)
+        processor.refactor_step(request.refactorRequest, response, None)
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
@@ -121,7 +121,7 @@ def assert_default_vowels(arg0, arg1):
         param_position.newPosition = 1
         request.refactorRequest.paramPositions.extend([position, param_position])
 
-        processors[Message.RefactorRequest](request, response, None)
+        processor.refactor_step(request.refactorRequest, response, None)
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
@@ -148,7 +148,7 @@ def assert_default_vowels(arg0, arg1):
         request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is.'
         request.refactorRequest.newStepValue.stepValue = 'Vowels in English language is.'
 
-        processors[Message.RefactorRequest](request, response, None)
+        processor.refactor_step(request.refactorRequest, response, None)
 
         actual_data = self.getActualText()
 
@@ -181,7 +181,7 @@ def assert_default_vowels():
         position.newPosition = 0
         request.refactorRequest.paramPositions.extend([position])
 
-        processors[Message.RefactorRequest](request, response, None)
+        processor.refactor_step(request.refactorRequest, response, None)
 
         actual_data = self.getActualText()
 
@@ -214,7 +214,7 @@ def assert_default_vowels(arg0):
         param_position.newPosition = 0
         request.refactorRequest.paramPositions.extend([param_position])
 
-        processors[Message.RefactorRequest](request, response, None)
+        processor.refactor_step(request.refactorRequest, response, None)
 
         actual_data = self.getActualText()
 
@@ -254,7 +254,7 @@ def assert_default_vowels(arg1):
         param2_position.newPosition = 1
         request.refactorRequest.paramPositions.extend([param1_position, param2_position])
 
-        processors[Message.RefactorRequest](request, response, None)
+        processor.refactor_step(request.refactorRequest, response, None)
 
         actual_data = self.getActualText()
 
@@ -294,7 +294,7 @@ is <vowels> <bsdfdsf>.'
 
         old_content = self.getActualText()
 
-        processors[Message.RefactorRequest](request, response, None)
+        processor.refactor_step(request.refactorRequest, response, None)
 
         expected = """@step("Vowels in English language is <vowels> <bsdfdsf>.")
 def assert_default_vowels(arg0, arg1):
@@ -335,7 +335,7 @@ def assert_default_vowels(arg0, arg1):
 
         old_content = self.getActualText()
 
-        processors[Message.RefactorRequest](request, response, None)
+        processor.refactor_step(request.refactorRequest, response, None)
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
         self.assertEqual(True,
