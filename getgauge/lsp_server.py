@@ -1,10 +1,10 @@
 import threading
-from getgauge import processor, validator, refactor
+
+from getgauge import processor, refactor, validator
 from getgauge.messages import lsp_pb2_grpc
-from getgauge.messages.lsp_pb2 import Empty
-from getgauge.messages.messages_pb2 import Message, \
-    ImplementationFileGlobPatternResponse, StepNamesResponse, \
-    ImplementationFileListResponse
+from getgauge.messages.messages_pb2 import (
+    Empty, ImplementationFileGlobPatternResponse,
+    ImplementationFileListResponse, Message, StepNamesResponse)
 from getgauge.registry import registry
 from getgauge.util import get_impl_files, get_step_impl_dirs
 
