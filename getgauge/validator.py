@@ -2,6 +2,7 @@ import ast
 import random
 import re
 import string
+
 from getgauge.messages.messages_pb2 import Message, StepValidateResponse
 from getgauge.registry import registry
 
@@ -56,6 +57,7 @@ def _is_valid(name, template='{} = None'):
         return True
     except:
         return False
+
 
 def _random_word(length=6):
     return ''.join(random.choice(string.ascii_lowercase) for _ in range(length))

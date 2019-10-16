@@ -6,9 +6,9 @@ from concurrent.futures import ThreadPoolExecutor
 from os import path
 
 import grpc
-from getgauge import handlers, logger, lsp_server, processor
+from getgauge import handlers, logger, processor
 from getgauge.impl_loader import copy_skel_files
-from getgauge.messages import lsp_pb2_grpc, runner_pb2_grpc
+from getgauge.messages import runner_pb2_grpc
 from getgauge.static_loader import load_files
 from getgauge.util import get_step_impl_dirs
 
@@ -41,12 +41,8 @@ def start():
     logger.debug('Starting grpc server..')
     server = grpc.server(ThreadPoolExecutor(max_workers=1))
     p = server.add_insecure_port('127.0.0.1:0')
-    if os.getenv('GAUGE_LSP_GRPC'):
-        handler = lsp_server.LspServerHandler(server)
-        lsp_pb2_grpc.add_lspServiceServicer_to_server(handler, server)
-    else:
-        handler = handlers.RunnerServiceHandler(server)
-        runner_pb2_grpc.add_RunnerServicer_to_server(handler, server)
+    handler = handlers.RunnerServiceHandler(server)
+    runner_pb2_grpc.add_RunnerServicer_to_server(handler, server)
     logger.info('Listening on port:{}'.format(p))
     server.start()
     wait_thread = threading.Thread(
