@@ -1,17 +1,14 @@
 from os import path
-from socket import AF_INET, SOCK_STREAM, socket
 from textwrap import dedent
 from unittest import main
 
 from getgauge import processor
 from getgauge import static_loader as loader
-from getgauge.messages.messages_pb2 import (CacheFileRequest, Message,
-                                            StepValidateResponse, TextDiff)
+from getgauge.messages.messages_pb2 import *
 from getgauge.messages.spec_pb2 import Parameter, ProtoExecutionResult, Span
 from getgauge.parser import PythonFile
 from getgauge.python import data_store
 from getgauge.registry import registry
-# TODO: The latest version of pyfakefs have issues with python2. We should aim to get rid of it.
 from pyfakefs.fake_filesystem_unittest import TestCase
 
 
@@ -98,10 +95,10 @@ class ProcessorTests(TestCase):
         registry.add_step('Step 4', 'func1', '', {
                           'start': 5, 'startChar': 0, 'end': 6, 'endChar': 10})
         response = Message()
-        request = Message()
-        request.stepNameRequest.stepValue = 'Step {} with {}'
+        request = StepNameRequest()
+        request.stepValue = 'Step {} with {}'
 
-        processor.send_step_name(request, response)
+        processor.execute_step_name_request(request, response)
 
         self.assertEqual(Message.StepNameResponse, response.messageType)
         self.assertEqual(['Step <a> with <b>'],
@@ -110,10 +107,10 @@ class ProcessorTests(TestCase):
         self.assertEqual(False, response.stepNameResponse.hasAlias)
 
         response = Message()
-        request = Message()
-        request.stepNameRequest.stepValue = 'Step 4'
+        request = StepNameRequest()
+        request.stepValue = 'Step 4'
 
-        processor.send_step_name(request, response)
+        processor.execute_step_name_request(request, response)
 
         self.assertEqual(Message.StepNameResponse, response.messageType)
         self.assertEqual(['Step 4'], response.stepNameResponse.stepName)
@@ -124,10 +121,10 @@ class ProcessorTests(TestCase):
         registry.add_step(['Step 1', 'Step 2', 'Step 3'], 'func1', '',
                           {'start': 5, 'startChar': 0, 'end': 6, 'endChar': 10})
         response = Message()
-        request = Message()
-        request.stepNameRequest.stepValue = 'Step 1'
+        request = StepNameRequest()
+        request.stepValue = 'Step 1'
 
-        processor.send_step_name(request, response)
+        processor.execute_step_name_request(request, response)
         self.assertEqual(Message.StepNameResponse, response.messageType)
         self.assertTrue('Step 1' in response.stepNameResponse.stepName)
         self.assertTrue('Step 2' in response.stepNameResponse.stepName)
@@ -137,10 +134,10 @@ class ProcessorTests(TestCase):
 
     def test_Processor_step_name_request_with_unimplemented_step(self):
         response = Message()
-        request = Message()
-        request.stepNameRequest.stepValue = 'Step {} with {}'
+        request = StepNameRequest()
+        request.stepValue = 'Step {} with {}'
 
-        processor.send_step_name(request, response)
+        processor.execute_step_name_request(request, response)
 
         self.assertEqual(Message.StepNameResponse, response.messageType)
         self.assertEqual([], response.stepNameResponse.stepName)
@@ -153,8 +150,8 @@ class ProcessorTests(TestCase):
 
         response = Message()
 
-        request = Message()
-        request.stepValidateRequest.stepText = 'Step {} with {}'
+        request = StepValidateRequest()
+        request.stepText = 'Step {} with {}'
         processor.validate_step(request, response)
 
         self.assertEqual(Message.StepValidateResponse, response.messageType)
@@ -166,9 +163,9 @@ class ProcessorTests(TestCase):
 
         response = Message()
 
-        request = Message()
-        request.stepValidateRequest.stepText = 'Step2'
-        request.stepValidateRequest.stepValue.stepValue = 'Step2'
+        request = StepValidateRequest()
+        request.stepText = 'Step2'
+        request.stepValue.stepValue = 'Step2'
 
         processor.validate_step(request, response)
 
@@ -185,8 +182,8 @@ class ProcessorTests(TestCase):
 
         response = Message()
 
-        request = Message()
-        request.stepValidateRequest.stepText = 'Step {} with {}'
+        request = StepValidateRequest()
+        request.stepText = 'Step {} with {}'
 
         processor.validate_step(request, response)
 
@@ -200,8 +197,8 @@ class ProcessorTests(TestCase):
 
         response = Message()
 
-        request = Message()
-        request.executeStepRequest.parsedStepText = 'Step 4'
+        request = ExecuteStepRequest()
+        request.parsedStepText = 'Step 4'
 
         processor.execute_step(request, response)
 
@@ -219,13 +216,13 @@ class ProcessorTests(TestCase):
 
         response = Message()
 
-        request = Message()
-        request.executeStepRequest.parsedStepText = 'Step {} with {}'
+        request = ExecuteStepRequest()
+        request.parsedStepText = 'Step {} with {}'
         parameter = Parameter()
         parameter.value = 'param 1'
         parameter1 = Parameter()
         parameter1.value = 'param 2'
-        request.executeStepRequest.parameters.extend([parameter, parameter1])
+        request.parameters.extend([parameter, parameter1])
 
         processor.execute_step(request, response)
 
@@ -239,7 +236,7 @@ class ProcessorTests(TestCase):
 
     def test_Processor_failed_execute_step_request(self):
         response = Message()
-        request = Message()
+        request = ExecuteStepRequest()
 
         processor.execute_step(request, response)
 
@@ -261,8 +258,8 @@ class ProcessorTests(TestCase):
 
         response = Message()
 
-        request = Message()
-        request.executeStepRequest.parsedStepText = 'Step 4'
+        request = ExecuteStepRequest()
+        request.parsedStepText = 'Step 4'
 
         processor.execute_step(request, response)
 
@@ -282,7 +279,7 @@ class ProcessorTests(TestCase):
         registry.add_before_suite(impl1)
         registry.add_before_suite(impl2)
         response = Message()
-        request = Message()
+        request = ExecutionStartingRequest()
         processor.execute_before_suite_hook(request, response, False)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -293,7 +290,7 @@ class ProcessorTests(TestCase):
         registry.add_after_suite(impl1)
         registry.add_after_suite(impl2)
         response = Message()
-        request = Message()
+        request = ExecutionEndingRequest()
         processor.execute_after_suite_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -304,7 +301,7 @@ class ProcessorTests(TestCase):
         registry.add_before_spec(impl1)
         registry.add_before_spec(impl2)
         response = Message()
-        request = Message()
+        request = SpecExecutionEndingRequest()
         processor.execute_before_spec_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -315,7 +312,7 @@ class ProcessorTests(TestCase):
         registry.add_after_spec(impl1)
         registry.add_after_spec(impl2)
         response = Message()
-        request = Message()
+        request = SpecExecutionEndingRequest()
         processor.execute_after_spec_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -326,7 +323,7 @@ class ProcessorTests(TestCase):
         registry.add_before_scenario(impl1)
         registry.add_before_scenario(impl2)
         response = Message()
-        request = Message()
+        request = ScenarioExecutionStartingRequest()
         processor.execute_before_scenario_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -337,7 +334,7 @@ class ProcessorTests(TestCase):
         registry.add_after_scenario(impl1)
         registry.add_after_scenario(impl2)
         response = Message()
-        request = Message()
+        request = ScenarioExecutionEndingRequest()
         processor.execute_after_scenario_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -348,7 +345,7 @@ class ProcessorTests(TestCase):
         registry.add_before_step(impl1)
         registry.add_before_step(impl2)
         response = Message()
-        request = Message()
+        request = StepExecutionStartingRequest()
         processor.execute_before_step_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -359,7 +356,7 @@ class ProcessorTests(TestCase):
         registry.add_after_step(impl1)
         registry.add_after_step(impl2)
         response = Message()
-        request = Message()
+        request = StepExecutionEndingRequest()
         processor.execute_after_step_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -369,7 +366,7 @@ class ProcessorTests(TestCase):
     def test_Processor_failing_starting_execution_request(self):
         registry.add_before_suite(failing_impl)
         response = Message()
-        request = Message()
+        request = ExecutionStartingRequest()
         processor.execute_before_suite_hook(request, response, False)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -385,7 +382,7 @@ class ProcessorTests(TestCase):
     def test_Processor_failing_ending_execution_request(self):
         registry.add_after_suite(failing_impl)
         response = Message()
-        request = Message()
+        request = ExecutionEndingRequest()
         processor.execute_after_suite_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -401,7 +398,7 @@ class ProcessorTests(TestCase):
     def test_Processor_failing_spec_starting_execution_request(self):
         registry.add_before_spec(failing_impl)
         response = Message()
-        request = Message()
+        request = SpecExecutionStartingRequest()
         processor.execute_before_spec_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -417,7 +414,7 @@ class ProcessorTests(TestCase):
     def test_Processor_failing_spec_ending_execution_request(self):
         registry.add_after_spec(failing_impl)
         response = Message()
-        request = Message()
+        request = SpecExecutionEndingRequest()
         processor.execute_after_spec_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -433,7 +430,7 @@ class ProcessorTests(TestCase):
     def test_Processor_failing_scenario_starting_execution_request(self):
         registry.add_before_scenario(failing_impl)
         response = Message()
-        request = Message()
+        request = ScenarioExecutionStartingRequest()
         processor.execute_before_scenario_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -449,7 +446,7 @@ class ProcessorTests(TestCase):
     def test_Processor_failing_scenario_ending_execution_request(self):
         registry.add_after_scenario(failing_impl)
         response = Message()
-        request = Message()
+        request = ScenarioExecutionEndingRequest()
         processor.execute_after_scenario_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -465,7 +462,7 @@ class ProcessorTests(TestCase):
     def test_Processor_failing_step_starting_execution_request(self):
         registry.add_before_step(failing_impl)
         response = Message()
-        request = Message()
+        request = StepExecutionStartingRequest()
         processor.execute_before_step_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -481,7 +478,7 @@ class ProcessorTests(TestCase):
     def test_Processor_failing_step_ending_execution_request(self):
         registry.add_after_step(failing_impl)
         response = Message()
-        request = Message()
+        request = StepExecutionEndingRequest()
         processor.execute_after_step_hook(request, response)
 
         self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
@@ -498,9 +495,9 @@ class ProcessorTests(TestCase):
         registry.add_step('Step <a> with <b>', 'func', '')
         registry.add_step('Step <a> with <b>', 'func', '')
         response = Message()
-        request = Message()
-        request.refactorRequest.oldStepValue.stepValue = 'Step {} with {}'
-        request.refactorRequest.oldStepValue.parameterizedStepValue = 'Step <a> with <b>'
+        request = RefactorRequest()
+        request.oldStepValue.stepValue = 'Step {} with {}'
+        request.oldStepValue.parameterizedStepValue = 'Step <a> with <b>'
 
         processor.refactor(request, response)
 
@@ -516,8 +513,8 @@ class ProcessorTests(TestCase):
                           'start': 4, 'startChar': 0, 'end': 7, 'endChar': 10})
 
         response = Message()
-        request = Message()
-        request.stepPositionsRequest.filePath = 'foo.py'
+        request = StepPositionsRequest()
+        request.filePath = 'foo.py'
 
         processor._step_positions(request, response)
 
@@ -531,12 +528,12 @@ class ProcessorTests(TestCase):
         self.assertIn(('Step 1', 4), steps)
 
     def test_Processor_put_stub_impl_request(self):
-        request = Message()
+        request = StubImplementationCodeRequest()
         response = Message()
 
         codes = ["code1", "code2"]
-        request.stubImplementationCodeRequest.implementationFilePath = ""
-        request.stubImplementationCodeRequest.codes.extend(codes)
+        request.implementationFilePath = ""
+        request.codes.extend(codes)
 
         processor.get_stub_impl_content(request, response)
 
@@ -556,7 +553,7 @@ class ProcessorTests(TestCase):
             response.fileDiff.filePath), "step_implementation.py")
 
     def test_Processor_glob_pattern(self):
-        request = Message()
+        request = ImplementationFileGlobPatternRequest()
         response = Message()
 
         processor.glob_pattern(request, response)
@@ -565,7 +562,7 @@ class ProcessorTests(TestCase):
                          "step_impl/**/*.py"])
 
     def test_Processor_cache_file_with_opened_status(self):
-        request = Message()
+        request = CacheFileRequest()
         response = Message()
         self.load_content_steps('''\
         from getgauge.python import step
@@ -575,15 +572,15 @@ class ProcessorTests(TestCase):
             pass
         ''')
 
-        request.cacheFileRequest.filePath = 'foo.py'
-        request.cacheFileRequest.content = dedent('''\
+        request.filePath = 'foo.py'
+        request.content = dedent('''\
         from getgauge.python import step
 
         @step('foo <bar>')
         def foo():
             pass
         ''')
-        request.cacheFileRequest.status = CacheFileRequest.OPENED
+        request.status = CacheFileRequest.OPENED
 
         processor.cache_file(request, response)
 
@@ -591,7 +588,7 @@ class ProcessorTests(TestCase):
         self.assertEqual(registry.is_implemented('foo {}'), True)
 
     def test_Processor_cache_file_with_changed_status(self):
-        request = Message()
+        request = CacheFileRequest()
         response = Message()
         self.load_content_steps('''\
         from getgauge.python import step
@@ -601,15 +598,15 @@ class ProcessorTests(TestCase):
             pass
         ''')
 
-        request.cacheFileRequest.filePath = 'foo.py'
-        request.cacheFileRequest.content = dedent('''\
+        request.filePath = 'foo.py'
+        request.content = dedent('''\
         from getgauge.python import step
 
         @step('foo <bar>')
         def foo():
             pass
         ''')
-        request.cacheFileRequest.status = CacheFileRequest.CHANGED
+        request.status = CacheFileRequest.CHANGED
 
         processor.cache_file(request, response)
 
@@ -617,11 +614,11 @@ class ProcessorTests(TestCase):
         self.assertEqual(registry.is_implemented('foo {}'), True)
 
     def test_Processor_cache_file_with_create_status(self):
-        request = Message()
+        request = CacheFileRequest()
         response = Message()
 
-        request.cacheFileRequest.filePath = 'foo.py'
-        request.cacheFileRequest.status = CacheFileRequest.CREATED
+        request.filePath = 'foo.py'
+        request.status = CacheFileRequest.CREATED
         self.fs.create_file('foo.py', contents=dedent('''\
         from getgauge.python import step
 
@@ -634,7 +631,7 @@ class ProcessorTests(TestCase):
         self.assertEqual(registry.is_implemented('foo {}'), True)
 
     def test_Processor_cache_file_with_create_status_when_file_is_cached(self):
-        request = Message()
+        request = CacheFileRequest()
         response = Message()
         self.load_content_steps('''\
         from getgauge.python import step
@@ -646,15 +643,15 @@ class ProcessorTests(TestCase):
 
         self.assertEqual(registry.is_implemented('foo {}'), True)
 
-        request.cacheFileRequest.filePath = 'foo.py'
-        request.cacheFileRequest.status = CacheFileRequest.CREATED
+        request.filePath = 'foo.py'
+        request.status = CacheFileRequest.CREATED
         self.fs.create_file('foo.py')
         processor.cache_file(request, response)
 
         self.assertEqual(registry.is_implemented('foo {}'), True)
 
     def test_Processor_cache_file_with_closed_status(self):
-        request = Message()
+        request = CacheFileRequest()
         response = Message()
 
         self.load_content_steps('''\
@@ -665,8 +662,8 @@ class ProcessorTests(TestCase):
             pass
         ''')
 
-        request.cacheFileRequest.filePath = 'foo.py'
-        request.cacheFileRequest.status = CacheFileRequest.CLOSED
+        request.filePath = 'foo.py'
+        request.status = CacheFileRequest.CLOSED
         self.fs.create_file('foo.py', contents=dedent('''\
         from getgauge.python import step
 
@@ -680,7 +677,7 @@ class ProcessorTests(TestCase):
         self.assertEqual(registry.is_implemented('foo {}'), True)
 
     def test_Processor_cache_file_with_delete_status(self):
-        request = Message()
+        request = CacheFileRequest()
         response = Message()
         self.load_content_steps('''\
         from getgauge.python import step
@@ -690,8 +687,8 @@ class ProcessorTests(TestCase):
             pass
         ''')
 
-        request.cacheFileRequest.filePath = 'foo.py'
-        request.cacheFileRequest.status = CacheFileRequest.DELETED
+        request.filePath = 'foo.py'
+        request.status = CacheFileRequest.DELETED
 
         processor.cache_file(request, response)
 

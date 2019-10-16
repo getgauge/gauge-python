@@ -22,12 +22,12 @@ ATTACH_DEBUGGER_EVENT = 'Runner Ready for Debugging'
 
 
 def validate_step(request, response):
-    _validate_step(request.stepValidateRequest, response)
+    _validate_step(request, response)
 
 
-def send_step_name(request, response):
+def execute_step_name_request(request, response):
     response.messageType = Message.StepNameResponse
-    info = registry.get_info_for(request.stepNameRequest.stepValue)
+    info = registry.get_info_for(request.stepValue)
     step_name_response(info, response)
 
 
@@ -51,7 +51,7 @@ def step_name_response(info, response):
 def refactor(request, response):
     response.messageType = Message.RefactorResponse
     try:
-        refactor_step(request.refactorRequest, response)
+        refactor_step(request, response)
     except Exception as e:
         response.refactorResponse.success = False
         response.refactorResponse.error = 'Reason: {}'.format(e.__str__())
@@ -64,11 +64,11 @@ def send_all_step_names(_request, response):
 
 def execute_step(request, response):
     params = []
-    for p in request.executeStepRequest.parameters:
+    for p in request.parameters:
         params.append(Table(p.table) if p.parameterType in [
             Parameter.Table, Parameter.Special_Table] else p.value)
     set_response_values(request, response)
-    info = registry.get_info_for(request.executeStepRequest.parsedStepText)
+    info = registry.get_info_for(request.parsedStepText)
     execute_method(params, info, response, registry.is_continue_on_failure)
 
 
@@ -91,7 +91,7 @@ def execute_before_suite_hook(request, response, clear=True):
         t.cancel()
 
     execution_info = create_execution_context_from(
-        request.executionStartingRequest.currentExecutionInfo)
+        request.currentExecutionInfo)
     run_hook(request, response, registry.before_suite(), execution_info)
     response.executionStatusResponse.executionResult.message.extend(
         MessagesStore.pending_messages())
@@ -101,7 +101,7 @@ def execute_before_suite_hook(request, response, clear=True):
 
 def execute_after_suite_hook(request, response):
     execution_info = create_execution_context_from(
-        request.executionEndingRequest.currentExecutionInfo)
+        request.currentExecutionInfo)
     run_hook(request, response, registry.after_suite(), execution_info)
     response.executionStatusResponse.executionResult.message.extend(
         MessagesStore.pending_messages())
@@ -111,7 +111,7 @@ def execute_after_suite_hook(request, response):
 
 def execute_before_spec_hook(request, response):
     execution_info = create_execution_context_from(
-        request.specExecutionStartingRequest.currentExecutionInfo)
+        request.currentExecutionInfo)
     run_hook(request, response, registry.before_spec(
         execution_info.specification.tags), execution_info)
     response.executionStatusResponse.executionResult.message.extend(
@@ -122,7 +122,7 @@ def execute_before_spec_hook(request, response):
 
 def execute_after_spec_hook(request, response):
     execution_info = create_execution_context_from(
-        request.specExecutionEndingRequest.currentExecutionInfo)
+        request.currentExecutionInfo)
     run_hook(request, response, registry.after_spec(
         execution_info.specification.tags), execution_info)
     response.executionStatusResponse.executionResult.message.extend(
@@ -133,7 +133,7 @@ def execute_after_spec_hook(request, response):
 
 def execute_before_scenario_hook(request, response):
     execution_info = create_execution_context_from(
-        request.scenarioExecutionStartingRequest.currentExecutionInfo)
+        request.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + \
            list(execution_info.specification.tags)
     run_hook(request, response, registry.before_scenario(tags), execution_info)
@@ -145,7 +145,7 @@ def execute_before_scenario_hook(request, response):
 
 def execute_after_scenario_hook(request, response):
     execution_info = create_execution_context_from(
-        request.scenarioExecutionEndingRequest.currentExecutionInfo)
+        request.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + \
         list(execution_info.specification.tags)
     run_hook(request, response, registry.after_scenario(tags), execution_info)
@@ -157,7 +157,7 @@ def execute_after_scenario_hook(request, response):
 
 def execute_before_step_hook(request, response):
     execution_info = create_execution_context_from(
-        request.stepExecutionStartingRequest.currentExecutionInfo)
+        request.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + \
         list(execution_info.specification.tags)
     run_hook(request, response, registry.before_step(tags), execution_info)
@@ -169,7 +169,7 @@ def execute_before_step_hook(request, response):
 
 def execute_after_step_hook(request, response):
     execution_info = create_execution_context_from(
-        request.stepExecutionEndingRequest.currentExecutionInfo)
+        request.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + \
         list(execution_info.specification.tags)
     run_hook(request, response, registry.after_step(tags), execution_info)
@@ -200,9 +200,9 @@ def _load_from_disk(file_path):
 
 
 def cache_file(request, _response):
-    file = request.cacheFileRequest.filePath
-    status = request.cacheFileRequest.status
-    update_registry(file, status, request.cacheFileRequest.content)
+    file = request.filePath
+    status = request.status
+    update_registry(file, status, request.content)
 
 
 def update_registry(file, status, content):
@@ -218,7 +218,7 @@ def update_registry(file, status, content):
 
 
 def _step_positions(request, response):
-    file_path = request.stepPositionsRequest.filePath
+    file_path = request.filePath
     step_positions_response(file_path, response)
 
 
@@ -241,8 +241,8 @@ def _get_impl_file_list(_request, response):
 
 def get_stub_impl_content(request, response):
     response.messageType = Message.FileDiff
-    file_name = request.stubImplementationCodeRequest.implementationFilePath
-    codes = request.stubImplementationCodeRequest.codes
+    file_name = request.implementationFilePath
+    codes = request.codes
     stub_impl_response(codes, file_name, response)
 
 
