@@ -32,7 +32,7 @@ class RunnerServiceHandler(runner_pb2_grpc.RunnerServicer):
 
     def SpecExecutionStarting(self, request, context):
         res = Message()
-        processor._execute_before_spec_hook(request, res)
+        processor.execute_before_spec_hook(request, res)
         return res.executionStatusResponse
 
     def ScenarioDataStoreInit(self, request, context):
@@ -81,9 +81,7 @@ class RunnerServiceHandler(runner_pb2_grpc.RunnerServicer):
         return res
 
     def CacheFile(self, request, context):
-        file = request.filePath
-        status = request.status
-        processor.update_registry(file, status, request.content)
+        processor.cache_file(request, None)
         return Empty()
 
     def GetStepPositions(self, request, context):
