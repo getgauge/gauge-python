@@ -5,10 +5,10 @@ from threading import Timer
 
 import ptvsd
 from getgauge import logger
-from getgauge.executor import execute_method, run_hook, set_response_values
+from getgauge.executor import (create_execution_status_response,
+                               execute_method, run_hook)
 from getgauge.impl_loader import load_impls
-from getgauge.messages.messages_pb2 import (CacheFileRequest, Message,
-                                            StepPositionsResponse, TextDiff)
+from getgauge.messages.messages_pb2 import *
 from getgauge.messages.spec_pb2 import Parameter, Span
 from getgauge.python import Table, create_execution_context_from, data_store
 from getgauge.refactor import refactor_step
@@ -16,68 +16,74 @@ from getgauge.registry import MessagesStore, ScreenshotsStore, registry
 from getgauge.static_loader import reload_steps
 from getgauge.util import (get_file_name, get_impl_files, get_step_impl_dirs,
                            read_file_contents)
-from getgauge.validator import validate_step as _validate_step
+from getgauge.validator import validate_step
 
 ATTACH_DEBUGGER_EVENT = 'Runner Ready for Debugging'
 
 
-def validate_step(request, response):
-    _validate_step(request, response)
+def process_validate_step_request(request):
+    return validate_step(request)
 
 
-def execute_step_name_request(request, response):
-    response.messageType = Message.StepNameResponse
+def process_step_name_request(request):
+    response = StepNameResponse()
     info = registry.get_info_for(request.stepValue)
-    step_name_response(info, response)
-
-
-def step_name_response(info, response):
-    response.stepNameResponse.isStepPresent = False
+    response.isStepPresent = False
     if info.step_text is not None:
-        response.stepNameResponse.isStepPresent = True
+        response.isStepPresent = True
         if info.has_alias:
             for alias in info.aliases:
-                response.stepNameResponse.stepName.append(alias)
+                response.stepName.append(alias)
         else:
-            response.stepNameResponse.stepName.append(info.step_text)
-        response.stepNameResponse.fileName = info.file_name
-        response.stepNameResponse.span.start = info.span['start']
-        response.stepNameResponse.span.startChar = info.span['startChar']
-        response.stepNameResponse.span.end = info.span['end']
-        response.stepNameResponse.span.endChar = info.span['endChar']
-    response.stepNameResponse.hasAlias = info.has_alias
+            response.stepName.append(info.step_text)
+        response.fileName = info.file_name
+        response.span.start = info.span['start']
+        response.span.startChar = info.span['startChar']
+        response.span.end = info.span['end']
+        response.span.endChar = info.span['endChar']
+    response.hasAlias = info.has_alias
+    return response
 
 
-def refactor(request, response):
-    response.messageType = Message.RefactorResponse
+def process_refactor_request(request):
+    response = RefactorResponse()
     try:
         refactor_step(request, response)
     except Exception as e:
-        response.refactorResponse.success = False
-        response.refactorResponse.error = 'Reason: {}'.format(e.__str__())
+        response.success = False
+        response.error = 'Reason: {}'.format(e.__str__())
+    return response
 
 
-def send_all_step_names(_request, response):
-    response.messageType = Message.StepNamesResponse
-    response.stepNamesResponse.steps.extend(registry.steps())
+def process_step_names_request():
+    response = StepNamesResponse()
+    response.steps.extend(registry.steps())
+    return response
 
 
-def execute_step(request, response):
+def process_execute_step_request(request):
     params = []
     for p in request.parameters:
         params.append(Table(p.table) if p.parameterType in [
             Parameter.Table, Parameter.Special_Table] else p.value)
-    set_response_values(request, response)
+    response = create_execution_status_response()
     info = registry.get_info_for(request.parsedStepText)
     execute_method(params, info, response, registry.is_continue_on_failure)
+    return response
 
 
-def handle_detached():
+def _handle_detached():
     logger.info("No debugger attached. Stopping the execution.")
     os._exit(1)
 
 
-def execute_before_suite_hook(request, response, clear=True):
+def _add_message_and_screenshots(response):
+    response.executionResult.message.extend(MessagesStore.pending_messages())
+    response.executionResult.screenshots.extend(
+        ScreenshotsStore.pending_screenshots())
+
+
+def process_execution_starting_reqeust(request, clear=True):
     if clear:
         registry.clear()
         load_impls(get_step_impl_dirs())
@@ -85,113 +91,98 @@ def execute_before_suite_hook(request, response, clear=True):
         ptvsd.enable_attach(address=(
             '127.0.0.1', int(environ.get('DEBUG_PORT'))))
         print(ATTACH_DEBUGGER_EVENT)
-        t = Timer(int(environ.get("debugger_wait_time", 30)), handle_detached)
+        t = Timer(int(environ.get("debugger_wait_time", 30)), _handle_detached)
         t.start()
         ptvsd.wait_for_attach()
         t.cancel()
 
     execution_info = create_execution_context_from(
         request.currentExecutionInfo)
-    run_hook(request, response, registry.before_suite(), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(
-        MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(
-        ScreenshotsStore.pending_screenshots())
+    response = run_hook(request, registry.before_suite(), execution_info)
+    _add_message_and_screenshots(response)
+    return response
 
 
-def execute_after_suite_hook(request, response):
+def process_execution_ending_request(request):
     execution_info = create_execution_context_from(
         request.currentExecutionInfo)
-    run_hook(request, response, registry.after_suite(), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(
-        MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(
-        ScreenshotsStore.pending_screenshots())
+    response = run_hook(request, registry.after_suite(), execution_info)
+    _add_message_and_screenshots(response)
+    return response
 
 
-def execute_before_spec_hook(request, response):
+def process_spec_execution_starting_request(request):
     execution_info = create_execution_context_from(
         request.currentExecutionInfo)
-    run_hook(request, response, registry.before_spec(
+    response = run_hook(request, registry.before_spec(
         execution_info.specification.tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(
-        MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(
-        ScreenshotsStore.pending_screenshots())
+    _add_message_and_screenshots(response)
+    return response
 
 
-def execute_after_spec_hook(request, response):
+def process_spec_execution_ending_request(request):
     execution_info = create_execution_context_from(
         request.currentExecutionInfo)
-    run_hook(request, response, registry.after_spec(
+    response = run_hook(request, registry.after_spec(
         execution_info.specification.tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(
-        MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(
-        ScreenshotsStore.pending_screenshots())
+    _add_message_and_screenshots(response)
+    return response
 
 
-def execute_before_scenario_hook(request, response):
-    execution_info = create_execution_context_from(
-        request.currentExecutionInfo)
-    tags = list(execution_info.scenario.tags) + \
-           list(execution_info.specification.tags)
-    run_hook(request, response, registry.before_scenario(tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(
-        MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(
-        ScreenshotsStore.pending_screenshots())
-
-
-def execute_after_scenario_hook(request, response):
+def process_scenario_execution_starting_request(request):
     execution_info = create_execution_context_from(
         request.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + \
         list(execution_info.specification.tags)
-    run_hook(request, response, registry.after_scenario(tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(
-        MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(
-        ScreenshotsStore.pending_screenshots())
+    response = run_hook(
+        request, registry.before_scenario(tags), execution_info)
+    _add_message_and_screenshots(response)
+    return response
 
 
-def execute_before_step_hook(request, response):
+def process_scenario_execution_ending_request(request):
     execution_info = create_execution_context_from(
         request.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + \
         list(execution_info.specification.tags)
-    run_hook(request, response, registry.before_step(tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(
-        MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(
-        ScreenshotsStore.pending_screenshots())
+    response = run_hook(request, registry.after_scenario(tags), execution_info)
+    _add_message_and_screenshots(response)
+    return response
 
 
-def execute_after_step_hook(request, response):
+def process_step_execution_starting_request(request):
     execution_info = create_execution_context_from(
         request.currentExecutionInfo)
     tags = list(execution_info.scenario.tags) + \
         list(execution_info.specification.tags)
-    run_hook(request, response, registry.after_step(tags), execution_info)
-    response.executionStatusResponse.executionResult.message.extend(
-        MessagesStore.pending_messages())
-    response.executionStatusResponse.executionResult.screenshots.extend(
-        ScreenshotsStore.pending_screenshots())
+    response = run_hook(request, registry.before_step(tags), execution_info)
+    _add_message_and_screenshots(response)
+    return response
 
 
-def init_scenario_data_store(request, response):
+def process_step_execution_ending_request(request):
+    execution_info = create_execution_context_from(
+        request.currentExecutionInfo)
+    tags = list(execution_info.scenario.tags) + \
+        list(execution_info.specification.tags)
+    response = run_hook(request, registry.after_step(tags), execution_info)
+    _add_message_and_screenshots(response)
+    return response
+
+
+def process_scenario_data_store_init_request():
     data_store.scenario.clear()
-    set_response_values(request, response)
+    return create_execution_status_response()
 
 
-def init_spec_data_store(request, response):
+def process_spec_data_store_init_request():
     data_store.spec.clear()
-    set_response_values(request, response)
+    return create_execution_status_response()
 
 
-def init_suite_data_store(request, response):
+def process_suite_data_store_init_request():
     data_store.suite.clear()
-    set_response_values(request, response)
+    return create_execution_status_response()
 
 
 def _load_from_disk(file_path):
@@ -199,15 +190,11 @@ def _load_from_disk(file_path):
         reload_steps(file_path)
 
 
-def cache_file(request, _response):
+def process_cache_file_request(request):
     file = request.filePath
     status = request.status
-    update_registry(file, status, request.content)
-
-
-def update_registry(file, status, content):
     if status == CacheFileRequest.CHANGED or status == CacheFileRequest.OPENED:
-        reload_steps(file, content)
+        reload_steps(file, request.content)
     elif status == CacheFileRequest.CREATED:
         if not registry.is_file_cached(file):
             _load_from_disk(file)
@@ -215,38 +202,32 @@ def update_registry(file, status, content):
         _load_from_disk(file)
     else:
         registry.remove_steps(file)
+    return Empty()
 
 
-def _step_positions(request, response):
+def prceoss_step_positions_request(request):
     file_path = request.filePath
-    step_positions_response(file_path, response)
-
-
-def step_positions_response(file_path, response):
     positions = registry.get_step_positions(file_path)
-    response.messageType = Message.StepPositionsResponse
-    response.stepPositionsResponse.stepPositions.extend(
-        [_create_pos(x) for x in positions])
+    response = StepPositionsResponse()
+    response.stepPositions.extend([_create_pos(x) for x in positions])
+    return response
 
 
 def _create_pos(p):
     return StepPositionsResponse.StepPosition(**{'stepValue': p['stepValue'], 'span': Span(**p['span'])})
 
-def _get_impl_file_list(_request, response):
-    response.messageType = Message.ImplementationFileListResponse
+
+def process_impl_files_request():
     files = get_impl_files()
-    response.implementationFileListResponse.implementationFilePaths.extend(
-        files)
+    res = ImplementationFileListResponse()
+    res.implementationFilePaths.extend(files)
+    return res
 
 
-def get_stub_impl_content(request, response):
-    response.messageType = Message.FileDiff
+def process_stub_impl_request(request):
+    response = FileDiff()
     file_name = request.implementationFilePath
     codes = request.codes
-    stub_impl_response(codes, file_name, response)
-
-
-def stub_impl_response(codes, file_name, response):
     content = read_file_contents(file_name)
     prefix = ""
     if content is not None:
@@ -263,10 +244,14 @@ def stub_impl_response(codes, file_name, response):
         span = Span(**{'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0})
     codes = [prefix] + codes[:]
     textDiffs = [TextDiff(**{'span': span, 'content': '\n'.join(codes)})]
-    response.fileDiff.filePath = file_name
-    response.fileDiff.textDiffs.extend(textDiffs)
+    response.filePath = file_name
+    response.textDiffs.extend(textDiffs)
+    return response
 
 
-def glob_pattern(_request, response):
-    patterns = [["{}/**/*.py".format(d)] for d in get_step_impl_dirs()]
-    return response.implementationFileGlobPatternResponse.globPatterns.extend([item for sublist in patterns for item in sublist])
+def process_glob_pattern_request(request):
+    res = ImplementationFileGlobPatternResponse()
+    globPatterns = [["{}/**/*.py".format(d)] for d in get_step_impl_dirs()]
+    res.globPatterns.extend(
+        [item for sublist in globPatterns for item in sublist])
+    return res

@@ -7,20 +7,21 @@ from getgauge.messages.messages_pb2 import Message, StepValidateResponse
 from getgauge.registry import registry
 
 
-def validate_step(request, response):
-    response.messageType = Message.StepValidateResponse
-    response.stepValidateResponse.isValid = True
+def validate_step(request):
+    response = StepValidateResponse()
+    response.isValid = True
     if registry.is_implemented(request.stepText) is False:
-        response.stepValidateResponse.errorType = StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND
-        response.stepValidateResponse.errorMessage = 'Step implementation not found'
-        response.stepValidateResponse.isValid = False
-        response.stepValidateResponse.suggestion = _impl_suggestion(
+        response.errorType = StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND
+        response.errorMessage = 'Step implementation not found'
+        response.isValid = False
+        response.suggestion = _impl_suggestion(
             request.stepValue)
     elif registry.has_multiple_impls(request.stepText):
-        response.stepValidateResponse.isValid = False
-        response.stepValidateResponse.errorType = StepValidateResponse.DUPLICATE_STEP_IMPLEMENTATION
-        response.stepValidateResponse.suggestion = _duplicate_impl_suggestion(
+        response.isValid = False
+        response.errorType = StepValidateResponse.DUPLICATE_STEP_IMPLEMENTATION
+        response.suggestion = _duplicate_impl_suggestion(
             request)
+    return response
 
 
 def _duplicate_impl_suggestion(request):
