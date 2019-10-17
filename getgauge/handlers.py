@@ -1,12 +1,11 @@
+import os
+import sys
 import threading
 
-from getgauge import logger, processor, refactor, validator
+from getgauge import logger, processor
 from getgauge.messages import runner_pb2_grpc
-from getgauge.messages.messages_pb2 import (
-    Empty, ImplementationFileGlobPatternResponse,
-    ImplementationFileListResponse, Message, StepNamesResponse)
+from getgauge.messages.messages_pb2 import Empty
 from getgauge.registry import registry
-from getgauge.util import get_impl_files, get_step_impl_dirs
 
 
 class RunnerServiceHandler(runner_pb2_grpc.RunnerServicer):
@@ -16,118 +15,70 @@ class RunnerServiceHandler(runner_pb2_grpc.RunnerServicer):
         self.kill_event = threading.Event()
 
     def SuiteDataStoreInit(self, request, context):
-        res = Message()
-        processor.init_suite_data_store(request, res)
-        return res.executionStatusResponse
+        return processor.process_suite_data_store_init_request()
 
     def ExecutionStarting(self, request, context):
-        res = Message()
-        processor.execute_before_suite_hook(request, res)
-        return res.executionStatusResponse
+        return processor.process_execution_starting_reqeust(request)
 
     def SpecDataStoreInit(self, request, context):
-        res = Message()
-        processor.init_spec_data_store(request, res)
-        return res.executionStatusResponse
+        return processor.process_spec_data_store_init_request()
 
     def SpecExecutionStarting(self, request, context):
-        res = Message()
-        processor.execute_before_spec_hook(request, res)
-        return res.executionStatusResponse
+        return processor.process_spec_execution_starting_request(request)
 
     def ScenarioDataStoreInit(self, request, context):
-        res = Message()
-        processor.init_scenario_data_store(request, res)
-        return res.executionStatusResponse
+        return processor.process_scenario_data_store_init_request()
 
     def ScenarioExecutionStarting(self, request, context):
-        res = Message()
-        processor.execute_before_scenario_hook(request, res)
-        return res.executionStatusResponse
+        return processor.process_scenario_execution_starting_request(request)
 
     def StepExecutionStarting(self, request, context):
-        res = Message()
-        processor.execute_before_step_hook(request, res)
-        return res.executionStatusResponse
+        return processor.process_step_execution_starting_request(request)
 
     def ExecuteStep(self, request, context):
-        res = Message()
-        processor.execute_step(request, res)
-        return res.executionStatusResponse
+        return processor.process_execute_step_request(request)
 
     def StepExecutionEnding(self, request, context):
-        res = Message()
-        processor.execute_after_step_hook(request, res)
-        return res.executionStatusResponse
+        return processor.process_step_execution_ending_request(request)
 
     def ScenarioExecutionEnding(self, request, context):
-        res = Message()
-        processor.execute_after_scenario_hook(request, res)
-        return res.executionStatusResponse
+        return processor.process_scenario_execution_ending_request(request)
 
     def SpecExecutionEnding(self, request, context):
-        res = Message()
-        processor.execute_after_spec_hook(request, res)
-        return res.executionStatusResponse
+        return processor.process_spec_execution_ending_request(request)
 
     def ExecutionEnding(self, request, context):
-        res = Message()
-        processor.execute_after_suite_hook(request, res)
-        return res.executionStatusResponse
+        return processor.process_execution_ending_request(request)
 
     def GetStepNames(self, request, context):
-        res = StepNamesResponse()
-        res.steps.extend(registry.steps())
-        return res
+        return processor.process_step_names_request()
 
     def CacheFile(self, request, context):
-        processor.cache_file(request, None)
-        return Empty()
+        return processor.process_cache_file_request(request)
 
     def GetStepPositions(self, request, context):
-        res = Message()
-        processor.step_positions_response(request.filePath, res)
-        return res.stepPositionsResponse
+        return processor.prceoss_step_positions_request(request)
 
     def GetImplementationFiles(self, request, context):
-        res = ImplementationFileListResponse()
-        res.implementationFilePaths.extend(get_impl_files())
-        return res
+        return processor.process_impl_files_request()
 
     def ImplementStub(self, request, context):
-        res = Message()
-        processor.stub_impl_response(
-            request.codes, request.implementationFilePath, res)
-        return res.fileDiff
+        return processor.process_stub_impl_request(request)
 
     def ValidateStep(self, request, context):
-        res = Message()
-        validator.validate_step(request, res)
-        return res.stepValidateResponse
+        return processor.process_validate_step_request(request)
 
-    def Refactor(self, request, context, with_location=True):
-        res = Message()
-        refactor.refactor_step(request, res, with_location)
-        return res.refactorResponse
+    def Refactor(self, request, context):
+        return processor.process_refactor_request(request)
 
     def GetStepName(self, request, context):
-        res = Message()
-        info = registry.get_info_for(request.stepValue)
-        processor.step_name_response(info, res)
-        return res.stepNameResponse
+        return processor.process_step_name_request(request)
 
     def GetGlobPatterns(self, request, context):
-        res = ImplementationFileGlobPatternResponse()
-        globPatterns = [["{}/**/*.py".format(d)] for d in get_step_impl_dirs()]
-        res.globPatterns.extend(
-            [item for sublist in globPatterns for item in sublist])
-        return res
+        return processor.process_glob_pattern_request(request)
 
     def KillProcess(self, request, context):
+        logger.debug("KillProcessrequest received")
+        logger.debug("Stoping gRPC server")
         self.server.stop(0)
-        self.kill_event.set()
         return Empty()
-
-    def wait_till_terminated(self):
-        self.kill_event.wait()
-        exit(0)

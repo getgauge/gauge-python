@@ -34,16 +34,11 @@ class ProcessorTests(TestCase):
 
         self.assertNotEqual(0, len(data_store.suite))
 
-        response = Message()
-        processor.init_suite_data_store(None, response)
+        response = processor.process_suite_data_store_init_request()
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(False,
-                         response.executionStatusResponse.executionResult.failed)
-
-        self.assertEqual(0,
-                         response.executionStatusResponse.executionResult.executionTime)
-
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(False, response.executionResult.failed)
+        self.assertEqual(0, response.executionResult.executionTime)
         self.assertDictEqual({}, data_store.suite)
 
     def test_Processor_spec_data_store_init_request(self):
@@ -51,15 +46,11 @@ class ProcessorTests(TestCase):
 
         self.assertNotEqual(0, len(data_store.spec))
 
-        response = Message()
-        processor.init_spec_data_store(None, response)
+        response = processor.process_spec_data_store_init_request()
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(
-            False, response.executionStatusResponse.executionResult.failed)
-        self.assertEqual(
-            0, response.executionStatusResponse.executionResult.executionTime)
-
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(False, response.executionResult.failed)
+        self.assertEqual(0, response.executionResult.executionTime)
         self.assertDictEqual({}, data_store.spec)
 
     def test_Processor_scenario_data_store_init_request(self):
@@ -67,114 +58,98 @@ class ProcessorTests(TestCase):
 
         self.assertNotEqual(0, len(data_store.scenario))
 
-        response = Message()
-        processor.init_scenario_data_store(None, response)
+        response = processor.process_scenario_data_store_init_request()
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(
-            False, response.executionStatusResponse.executionResult.failed)
-        self.assertEqual(
-            0, response.executionStatusResponse.executionResult.executionTime)
-
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(False, response.executionResult.failed)
+        self.assertEqual(0, response.executionResult.executionTime)
         self.assertDictEqual({}, data_store.scenario)
 
     def test_Processor_step_names_request(self):
         registry.add_step('Step <a> with <b>', 'func', '')
         registry.add_step('Step 4', 'func1', '')
-        response = Message()
 
-        processor.send_all_step_names(None, response)
+        response = processor.process_step_names_request()
 
-        self.assertEqual(Message.StepNamesResponse, response.messageType)
-        self.assertEqual({'Step <a> with <b>', 'Step 4'},
-                         set(response.stepNamesResponse.steps))
+        self.assertTrue(isinstance(response, StepNamesResponse))
+        self.assertEqual({'Step <a> with <b>', 'Step 4'}, set(response.steps))
 
     def test_Processor_step_name_request(self):
         registry.add_step('Step <a> with <b>', 'func', '', {
                           'start': 1, 'startChar': 0, 'end': 3, 'endChar': 10})
         registry.add_step('Step 4', 'func1', '', {
                           'start': 5, 'startChar': 0, 'end': 6, 'endChar': 10})
-        response = Message()
         request = StepNameRequest()
         request.stepValue = 'Step {} with {}'
 
-        processor.execute_step_name_request(request, response)
-
-        self.assertEqual(Message.StepNameResponse, response.messageType)
-        self.assertEqual(['Step <a> with <b>'],
-                         response.stepNameResponse.stepName)
-        self.assertEqual(True, response.stepNameResponse.isStepPresent)
-        self.assertEqual(False, response.stepNameResponse.hasAlias)
-
-        response = Message()
+        response = processor.process_step_name_request(request)
+        self.assertTrue(isinstance(response, StepNameResponse))
+        self.assertEqual(['Step <a> with <b>'], response.stepName)
+        self.assertEqual(True, response.isStepPresent)
         request = StepNameRequest()
+        self.assertEqual(False, response.hasAlias)
+
         request.stepValue = 'Step 4'
+        response = processor.process_step_name_request(request)
 
-        processor.execute_step_name_request(request, response)
-
-        self.assertEqual(Message.StepNameResponse, response.messageType)
-        self.assertEqual(['Step 4'], response.stepNameResponse.stepName)
-        self.assertEqual(True, response.stepNameResponse.isStepPresent)
-        self.assertEqual(False, response.stepNameResponse.hasAlias)
+        self.assertTrue(isinstance(response, StepNameResponse))
+        self.assertEqual(['Step 4'], response.stepName)
+        self.assertEqual(True, response.isStepPresent)
+        self.assertEqual(False, response.hasAlias)
 
     def test_Processor_step_name_request_with_aliases(self):
         registry.add_step(['Step 1', 'Step 2', 'Step 3'], 'func1', '',
                           {'start': 5, 'startChar': 0, 'end': 6, 'endChar': 10})
-        response = Message()
         request = StepNameRequest()
         request.stepValue = 'Step 1'
 
-        processor.execute_step_name_request(request, response)
-        self.assertEqual(Message.StepNameResponse, response.messageType)
-        self.assertTrue('Step 1' in response.stepNameResponse.stepName)
-        self.assertTrue('Step 2' in response.stepNameResponse.stepName)
-        self.assertTrue('Step 3' in response.stepNameResponse.stepName)
-        self.assertEqual(True, response.stepNameResponse.isStepPresent)
-        self.assertEqual(True, response.stepNameResponse.hasAlias)
+        response = processor.process_step_name_request(request)
+
+        self.assertTrue(isinstance(response, StepNameResponse))
+        self.assertTrue('Step 1' in response.stepName)
+        self.assertTrue('Step 2' in response.stepName)
+        self.assertTrue('Step 3' in response.stepName)
+        self.assertEqual(True, response.isStepPresent)
+        self.assertEqual(True, response.hasAlias)
 
     def test_Processor_step_name_request_with_unimplemented_step(self):
-        response = Message()
         request = StepNameRequest()
         request.stepValue = 'Step {} with {}'
 
-        processor.execute_step_name_request(request, response)
+        response = processor.process_step_name_request(request)
 
-        self.assertEqual(Message.StepNameResponse, response.messageType)
-        self.assertEqual([], response.stepNameResponse.stepName)
-        self.assertEqual(False, response.stepNameResponse.isStepPresent)
-        self.assertEqual(False, response.stepNameResponse.hasAlias)
+        self.assertTrue(isinstance(response, StepNameResponse))
+        self.assertEqual([], response.stepName)
+        self.assertEqual(False, response.isStepPresent)
+        self.assertEqual(False, response.hasAlias)
 
     def test_Processor_valid_step_validate_request(self):
         registry.add_step('Step <a> with <b>', 'func', '')
         registry.add_step('Step 4', 'func1', '')
 
-        response = Message()
-
         request = StepValidateRequest()
         request.stepText = 'Step {} with {}'
-        processor.validate_step(request, response)
+        response = processor.process_validate_step_request(request)
 
-        self.assertEqual(Message.StepValidateResponse, response.messageType)
-        self.assertTrue(response.stepValidateResponse.isValid)
+        self.assertTrue(isinstance(response, StepValidateResponse))
+        self.assertTrue(response.isValid)
 
     def test_Processor_invalid_step_validate_request_when_no_impl_found(self):
         registry.add_step('Step <a> with <b>', 'func', '')
         registry.add_step('Step 4', 'func1', '')
 
-        response = Message()
-
         request = StepValidateRequest()
         request.stepText = 'Step2'
         request.stepValue.stepValue = 'Step2'
 
-        processor.validate_step(request, response)
+        response = processor.process_validate_step_request(request)
 
-        self.assertEqual(Message.StepValidateResponse, response.messageType)
-        self.assertFalse(response.stepValidateResponse.isValid)
+        self.assertTrue(isinstance(response, StepValidateResponse))
+        self.assertFalse(response.isValid)
         self.assertEqual(StepValidateResponse.STEP_IMPLEMENTATION_NOT_FOUND,
-                         response.stepValidateResponse.errorType)
+                         response.errorType)
         self.assertTrue('@step("")\ndef step2():\n    assert False, "Add implementation code"' in
-                        response.stepValidateResponse.suggestion)
+                        response.suggestion)
 
     def test_Processor_invalid_step_validate_request_when_duplicate_impl_found(self):
         registry.add_step('Step <a> with <b>', impl, '', {'start': 0})
@@ -185,36 +160,32 @@ class ProcessorTests(TestCase):
         request = StepValidateRequest()
         request.stepText = 'Step {} with {}'
 
-        processor.validate_step(request, response)
+        response = processor.process_validate_step_request(request)
 
-        self.assertEqual(Message.StepValidateResponse, response.messageType)
-        self.assertFalse(response.stepValidateResponse.isValid)
+        self.assertTrue(isinstance(response, StepValidateResponse))
+        self.assertFalse(response.isValid)
         self.assertEqual(StepValidateResponse.DUPLICATE_STEP_IMPLEMENTATION,
-                         response.stepValidateResponse.errorType)
+                         response.errorType)
 
     def test_Processor_execute_step_request(self):
         registry.add_step('Step 4', impl1, '')
 
-        response = Message()
-
         request = ExecuteStepRequest()
         request.parsedStepText = 'Step 4'
 
-        processor.execute_step(request, response)
+        response = processor.process_execute_step_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
         self.assertEqual(
-            False, response.executionStatusResponse.executionResult.failed)
+            False, response.executionResult.failed)
         self.assertEqual(
-            '', response.executionStatusResponse.executionResult.errorMessage)
+            '', response.executionResult.errorMessage)
         self.assertEqual(
-            '', response.executionStatusResponse.executionResult.stackTrace)
+            '', response.executionResult.stackTrace)
 
     def test_Processor_execute_step_request_with_param(self):
         registry.add_step('Step <a> with <b>', impl, '')
         registry.add_step('Step 4', 'func1', '')
-
-        response = Message()
 
         request = ExecuteStepRequest()
         request.parsedStepText = 'Step {} with {}'
@@ -224,318 +195,279 @@ class ProcessorTests(TestCase):
         parameter1.value = 'param 2'
         request.parameters.extend([parameter, parameter1])
 
-        processor.execute_step(request, response)
+        response = processor.process_execute_step_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
         self.assertEqual(
-            False, response.executionStatusResponse.executionResult.failed)
+            False, response.executionResult.failed)
         self.assertEqual(
-            '', response.executionStatusResponse.executionResult.errorMessage)
+            '', response.executionResult.errorMessage)
         self.assertEqual(
-            '', response.executionStatusResponse.executionResult.stackTrace)
+            '', response.executionResult.stackTrace)
 
     def test_Processor_failed_execute_step_request(self):
-        response = Message()
         request = ExecuteStepRequest()
 
-        processor.execute_step(request, response)
+        response = processor.process_execute_step_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
         self.assertEqual(
-            True, response.executionStatusResponse.executionResult.failed)
+            True, response.executionResult.failed)
         self.assertEqual(ProtoExecutionResult.ASSERTION,
-                         response.executionStatusResponse.executionResult.errorType)
+                         response.executionResult.errorType)
         self.assertNotEqual(
-            '', response.executionStatusResponse.executionResult.errorMessage)
+            '', response.executionResult.errorMessage)
         self.assertNotEqual(
-            '', response.executionStatusResponse.executionResult.stackTrace)
+            '', response.executionResult.stackTrace)
         self.assertEqual(
-            False, response.executionStatusResponse.executionResult.recoverableError)
+            False, response.executionResult.recoverableError)
 
     def test_Processor_failed_execute_step_request_with_continue_on_failure(self):
         registry.add_step('Step 4', failing_impl, '')
         registry.continue_on_failure(failing_impl, [IndexError])
 
-        response = Message()
-
         request = ExecuteStepRequest()
         request.parsedStepText = 'Step 4'
 
-        processor.execute_step(request, response)
+        response = processor.process_execute_step_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
         self.assertEqual(
-            True, response.executionStatusResponse.executionResult.failed)
+            True, response.executionResult.failed)
         self.assertEqual(ProtoExecutionResult.ASSERTION,
-                         response.executionStatusResponse.executionResult.errorType)
-        self.assertNotEqual(
-            '', response.executionStatusResponse.executionResult.errorMessage)
-        self.assertNotEqual(
-            '', response.executionStatusResponse.executionResult.stackTrace)
-        self.assertEqual(
-            True, response.executionStatusResponse.executionResult.recoverableError)
+                         response.executionResult.errorType)
+        self.assertNotEqual('', response.executionResult.errorMessage)
+        self.assertNotEqual('', response.executionResult.stackTrace)
+        self.assertEqual(True, response.executionResult.recoverableError)
 
     def test_Processor_starting_execution_request(self):
         registry.add_before_suite(impl1)
         registry.add_before_suite(impl2)
-        response = Message()
         request = ExecutionStartingRequest()
-        processor.execute_before_suite_hook(request, response, False)
+        response = processor.process_execution_starting_reqeust(request, False)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(
-            False, response.executionStatusResponse.executionResult.failed)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(False, response.executionResult.failed)
 
     def test_Processor_ending_execution_request(self):
         registry.add_after_suite(impl1)
         registry.add_after_suite(impl2)
-        response = Message()
         request = ExecutionEndingRequest()
-        processor.execute_after_suite_hook(request, response)
+        response = processor.process_execution_ending_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(
-            False, response.executionStatusResponse.executionResult.failed)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(False, response.executionResult.failed)
 
     def test_Processor_spec_starting_execution_request(self):
         registry.add_before_spec(impl1)
         registry.add_before_spec(impl2)
-        response = Message()
         request = SpecExecutionEndingRequest()
-        processor.execute_before_spec_hook(request, response)
+        response = processor.process_spec_execution_starting_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(
-            False, response.executionStatusResponse.executionResult.failed)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(False, response.executionResult.failed)
 
     def test_Processor_spec_ending_execution_request(self):
         registry.add_after_spec(impl1)
         registry.add_after_spec(impl2)
-        response = Message()
         request = SpecExecutionEndingRequest()
-        processor.execute_after_spec_hook(request, response)
+        response = processor.process_spec_execution_ending_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(
-            False, response.executionStatusResponse.executionResult.failed)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(False, response.executionResult.failed)
 
     def test_Processor_scenario_starting_execution_request(self):
         registry.add_before_scenario(impl1)
         registry.add_before_scenario(impl2)
-        response = Message()
         request = ScenarioExecutionStartingRequest()
-        processor.execute_before_scenario_hook(request, response)
+        response = processor.process_scenario_execution_starting_request(
+            request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(
-            False, response.executionStatusResponse.executionResult.failed)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(False, response.executionResult.failed)
 
     def test_Processor_scenario_ending_execution_request(self):
         registry.add_after_scenario(impl1)
         registry.add_after_scenario(impl2)
-        response = Message()
         request = ScenarioExecutionEndingRequest()
-        processor.execute_after_scenario_hook(request, response)
+        response = processor.process_scenario_execution_ending_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(
-            False, response.executionStatusResponse.executionResult.failed)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(False, response.executionResult.failed)
 
     def test_Processor_step_starting_execution_request(self):
         registry.add_before_step(impl1)
         registry.add_before_step(impl2)
-        response = Message()
         request = StepExecutionStartingRequest()
-        processor.execute_before_step_hook(request, response)
+        response = processor.process_step_execution_starting_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(
-            False, response.executionStatusResponse.executionResult.failed)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(False, response.executionResult.failed)
 
     def test_Processor_step_ending_execution_request(self):
         registry.add_after_step(impl1)
         registry.add_after_step(impl2)
-        response = Message()
         request = StepExecutionEndingRequest()
-        processor.execute_after_step_hook(request, response)
+        response = processor.process_step_execution_ending_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(
-            False, response.executionStatusResponse.executionResult.failed)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(False, response.executionResult.failed)
 
     def test_Processor_failing_starting_execution_request(self):
         registry.add_before_suite(failing_impl)
-        response = Message()
         request = ExecutionStartingRequest()
-        processor.execute_before_suite_hook(request, response, False)
+        response = processor.process_execution_starting_reqeust(
+            request, False)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(
-            True, response.executionStatusResponse.executionResult.failed)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(True, response.executionResult.failed)
         self.assertEqual(ProtoExecutionResult.ASSERTION,
-                         response.executionStatusResponse.executionResult.errorType)
+                         response.executionResult.errorType)
         self.assertEqual('list index out of range',
-                         response.executionStatusResponse.executionResult.errorMessage)
-        self.assertNotEqual(
-            '', response.executionStatusResponse.executionResult.stackTrace)
+                         response.executionResult.errorMessage)
+        self.assertNotEqual('', response.executionResult.stackTrace)
 
     def test_Processor_failing_ending_execution_request(self):
         registry.add_after_suite(failing_impl)
-        response = Message()
         request = ExecutionEndingRequest()
-        processor.execute_after_suite_hook(request, response)
-
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
-        self.assertEqual(
-            True, response.executionStatusResponse.executionResult.failed)
+        response = processor.process_execution_ending_request(request)
+        print(response)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
+        self.assertEqual(True, response.executionResult.failed)
         self.assertEqual(ProtoExecutionResult.ASSERTION,
-                         response.executionStatusResponse.executionResult.errorType)
+                         response.executionResult.errorType)
         self.assertEqual('list index out of range',
-                         response.executionStatusResponse.executionResult.errorMessage)
-        self.assertNotEqual(
-            '', response.executionStatusResponse.executionResult.stackTrace)
+                         response.executionResult.errorMessage)
+        self.assertNotEqual('', response.executionResult.stackTrace)
 
     def test_Processor_failing_spec_starting_execution_request(self):
         registry.add_before_spec(failing_impl)
-        response = Message()
         request = SpecExecutionStartingRequest()
-        processor.execute_before_spec_hook(request, response)
+        response = processor.process_spec_execution_starting_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
         self.assertEqual(
-            True, response.executionStatusResponse.executionResult.failed)
+            True, response.executionResult.failed)
         self.assertEqual(ProtoExecutionResult.ASSERTION,
-                         response.executionStatusResponse.executionResult.errorType)
+                         response.executionResult.errorType)
         self.assertEqual('list index out of range',
-                         response.executionStatusResponse.executionResult.errorMessage)
-        self.assertNotEqual(
-            '', response.executionStatusResponse.executionResult.stackTrace)
+                         response.executionResult.errorMessage)
+        self.assertNotEqual('', response.executionResult.stackTrace)
 
     def test_Processor_failing_spec_ending_execution_request(self):
         registry.add_after_spec(failing_impl)
-        response = Message()
         request = SpecExecutionEndingRequest()
-        processor.execute_after_spec_hook(request, response)
+        response = processor.process_spec_execution_ending_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
         self.assertEqual(
-            True, response.executionStatusResponse.executionResult.failed)
+            True, response.executionResult.failed)
         self.assertEqual(ProtoExecutionResult.ASSERTION,
-                         response.executionStatusResponse.executionResult.errorType)
+                         response.executionResult.errorType)
         self.assertEqual('list index out of range',
-                         response.executionStatusResponse.executionResult.errorMessage)
-        self.assertNotEqual(
-            '', response.executionStatusResponse.executionResult.stackTrace)
+                         response.executionResult.errorMessage)
+        self.assertNotEqual('', response.executionResult.stackTrace)
 
     def test_Processor_failing_scenario_starting_execution_request(self):
         registry.add_before_scenario(failing_impl)
-        response = Message()
         request = ScenarioExecutionStartingRequest()
-        processor.execute_before_scenario_hook(request, response)
+        response = processor.process_scenario_execution_starting_request(
+            request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
         self.assertEqual(
-            True, response.executionStatusResponse.executionResult.failed)
+            True, response.executionResult.failed)
         self.assertEqual(ProtoExecutionResult.ASSERTION,
-                         response.executionStatusResponse.executionResult.errorType)
+                         response.executionResult.errorType)
         self.assertEqual('list index out of range',
-                         response.executionStatusResponse.executionResult.errorMessage)
-        self.assertNotEqual(
-            '', response.executionStatusResponse.executionResult.stackTrace)
+                         response.executionResult.errorMessage)
+        self.assertNotEqual('', response.executionResult.stackTrace)
 
     def test_Processor_failing_scenario_ending_execution_request(self):
         registry.add_after_scenario(failing_impl)
-        response = Message()
         request = ScenarioExecutionEndingRequest()
-        processor.execute_after_scenario_hook(request, response)
+        response = processor.process_scenario_execution_ending_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
         self.assertEqual(
-            True, response.executionStatusResponse.executionResult.failed)
+            True, response.executionResult.failed)
         self.assertEqual(ProtoExecutionResult.ASSERTION,
-                         response.executionStatusResponse.executionResult.errorType)
+                         response.executionResult.errorType)
         self.assertEqual('list index out of range',
-                         response.executionStatusResponse.executionResult.errorMessage)
-        self.assertNotEqual(
-            '', response.executionStatusResponse.executionResult.stackTrace)
+                         response.executionResult.errorMessage)
+        self.assertNotEqual('', response.executionResult.stackTrace)
 
     def test_Processor_failing_step_starting_execution_request(self):
         registry.add_before_step(failing_impl)
-        response = Message()
         request = StepExecutionStartingRequest()
-        processor.execute_before_step_hook(request, response)
+        response = processor.process_step_execution_starting_request(request)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
         self.assertEqual(
-            True, response.executionStatusResponse.executionResult.failed)
+            True, response.executionResult.failed)
         self.assertEqual(ProtoExecutionResult.ASSERTION,
-                         response.executionStatusResponse.executionResult.errorType)
+                         response.executionResult.errorType)
         self.assertEqual('list index out of range',
-                         response.executionStatusResponse.executionResult.errorMessage)
-        self.assertNotEqual(
-            '', response.executionStatusResponse.executionResult.stackTrace)
+                         response.executionResult.errorMessage)
+        self.assertNotEqual('', response.executionResult.stackTrace)
 
     def test_Processor_failing_step_ending_execution_request(self):
         registry.add_after_step(failing_impl)
-        response = Message()
         request = StepExecutionEndingRequest()
-        processor.execute_after_step_hook(request, response)
+        response = processor.process_step_execution_ending_request(request,)
 
-        self.assertEqual(Message.ExecutionStatusResponse, response.messageType)
+        self.assertTrue(isinstance(response, ExecutionStatusResponse))
         self.assertEqual(
-            True, response.executionStatusResponse.executionResult.failed)
+            True, response.executionResult.failed)
         self.assertEqual(ProtoExecutionResult.ASSERTION,
-                         response.executionStatusResponse.executionResult.errorType)
+                         response.executionResult.errorType)
         self.assertEqual('list index out of range',
-                         response.executionStatusResponse.executionResult.errorMessage)
-        self.assertNotEqual(
-            '', response.executionStatusResponse.executionResult.stackTrace)
+                         response.executionResult.errorMessage)
+        self.assertNotEqual('', response.executionResult.stackTrace)
 
     def test_Processor_refactor_request_when_multiple_impl_found(self):
         registry.add_step('Step <a> with <b>', 'func', '')
         registry.add_step('Step <a> with <b>', 'func', '')
-        response = Message()
         request = RefactorRequest()
         request.oldStepValue.stepValue = 'Step {} with {}'
         request.oldStepValue.parameterizedStepValue = 'Step <a> with <b>'
 
-        processor.refactor(request, response)
+        response = processor.process_refactor_request(request)
 
-        self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(False, response.refactorResponse.success)
-        self.assertEqual('Reason: Multiple Implementation found for `Step <a> with <b>`',
-                         response.refactorResponse.error)
+        self.assertTrue(isinstance(response, RefactorResponse))
+        self.assertEqual(False, response.success)
+        self.assertEqual(
+            'Reason: Multiple Implementation found for `Step <a> with <b>`', response.error)
 
     def test_Processor_step_position_request(self):
+
         registry.add_step('Step <a> with <b>', 'func', 'foo.py',
                           {'start': 0, 'startChar': 0, 'end': 3, 'endChar': 10})
         registry.add_step('Step 1', 'func', 'foo.py', {
                           'start': 4, 'startChar': 0, 'end': 7, 'endChar': 10})
 
-        response = Message()
         request = StepPositionsRequest()
         request.filePath = 'foo.py'
 
-        processor._step_positions(request, response)
+        response = processor.prceoss_step_positions_request(request)
 
-        self.assertEqual(Message.StepPositionsResponse, response.messageType)
-        self.assertEqual('', response.refactorResponse.error)
+        self.assertTrue(isinstance(response, StepPositionsResponse))
+        self.assertEqual('', response.error)
 
         steps = [(p.stepValue, p.span.start)
-                 for p in response.stepPositionsResponse.stepPositions]
+                 for p in response.stepPositions]
 
         self.assertIn(('Step {} with {}', 0), steps)
         self.assertIn(('Step 1', 4), steps)
 
     def test_Processor_put_stub_impl_request(self):
         request = StubImplementationCodeRequest()
-        response = Message()
 
         codes = ["code1", "code2"]
         request.implementationFilePath = ""
         request.codes.extend(codes)
 
-        processor.get_stub_impl_content(request, response)
+        response = processor.process_stub_impl_request(request)
 
         expected_output_codes = dedent('''\
         from getgauge.python import step
@@ -547,23 +479,19 @@ class ProcessorTests(TestCase):
         expected_text_diff = TextDiff(
             **{'span': expected_span, 'content': expected_output_codes})
 
-        self.assertEqual(len(response.fileDiff.textDiffs), 1)
-        self.assertEqual(response.fileDiff.textDiffs[0], expected_text_diff)
+        self.assertEqual(len(response.textDiffs), 1)
+        self.assertEqual(response.textDiffs[0], expected_text_diff)
         self.assertEqual(path.basename(
-            response.fileDiff.filePath), "step_implementation.py")
+            response.filePath), "step_implementation.py")
 
     def test_Processor_glob_pattern(self):
         request = ImplementationFileGlobPatternRequest()
-        response = Message()
+        response = processor.process_glob_pattern_request(request)
 
-        processor.glob_pattern(request, response)
-
-        self.assertEqual(response.implementationFileGlobPatternResponse.globPatterns, [
-                         "step_impl/**/*.py"])
+        self.assertEqual(response.globPatterns, ["step_impl/**/*.py"])
 
     def test_Processor_cache_file_with_opened_status(self):
         request = CacheFileRequest()
-        response = Message()
         self.load_content_steps('''\
         from getgauge.python import step
 
@@ -582,14 +510,13 @@ class ProcessorTests(TestCase):
         ''')
         request.status = CacheFileRequest.OPENED
 
-        processor.cache_file(request, response)
+        processor.process_cache_file_request(request)
 
         self.assertEqual(registry.is_implemented('foo1'), False)
         self.assertEqual(registry.is_implemented('foo {}'), True)
 
     def test_Processor_cache_file_with_changed_status(self):
         request = CacheFileRequest()
-        response = Message()
         self.load_content_steps('''\
         from getgauge.python import step
 
@@ -608,14 +535,13 @@ class ProcessorTests(TestCase):
         ''')
         request.status = CacheFileRequest.CHANGED
 
-        processor.cache_file(request, response)
+        processor.process_cache_file_request(request)
 
         self.assertEqual(registry.is_implemented('foo1'), False)
         self.assertEqual(registry.is_implemented('foo {}'), True)
 
     def test_Processor_cache_file_with_create_status(self):
         request = CacheFileRequest()
-        response = Message()
 
         request.filePath = 'foo.py'
         request.status = CacheFileRequest.CREATED
@@ -626,13 +552,12 @@ class ProcessorTests(TestCase):
         def foo():
             pass
         '''))
-        processor.cache_file(request, response)
+        processor.process_cache_file_request(request)
 
         self.assertEqual(registry.is_implemented('foo {}'), True)
 
     def test_Processor_cache_file_with_create_status_when_file_is_cached(self):
         request = CacheFileRequest()
-        response = Message()
         self.load_content_steps('''\
         from getgauge.python import step
 
@@ -646,13 +571,12 @@ class ProcessorTests(TestCase):
         request.filePath = 'foo.py'
         request.status = CacheFileRequest.CREATED
         self.fs.create_file('foo.py')
-        processor.cache_file(request, response)
+        processor.process_cache_file_request(request)
 
         self.assertEqual(registry.is_implemented('foo {}'), True)
 
     def test_Processor_cache_file_with_closed_status(self):
         request = CacheFileRequest()
-        response = Message()
 
         self.load_content_steps('''\
         from getgauge.python import step
@@ -671,14 +595,13 @@ class ProcessorTests(TestCase):
         def foo():
             pass
         '''))
-        processor.cache_file(request, response)
+        processor.process_cache_file_request(request)
 
         self.assertEqual(registry.is_implemented('foo1'), False)
         self.assertEqual(registry.is_implemented('foo {}'), True)
 
     def test_Processor_cache_file_with_delete_status(self):
         request = CacheFileRequest()
-        response = Message()
         self.load_content_steps('''\
         from getgauge.python import step
 
@@ -690,7 +613,7 @@ class ProcessorTests(TestCase):
         request.filePath = 'foo.py'
         request.status = CacheFileRequest.DELETED
 
-        processor.cache_file(request, response)
+        processor.process_cache_file_request(request)
 
         self.assertEqual(registry.is_implemented('foo1'), False)
 

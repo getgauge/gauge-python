@@ -130,155 +130,199 @@ class RunnerServicer(object):
   pass
 
   def ValidateStep(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """ValidateStep is a RPC to validate a given step.
+
+    Accepts a StepValidateRequest message and returns a StepValidateResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def SuiteDataStoreInit(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """SuiteDataStoreInit is a RPC to initialize the suite level data store.
+
+    Accepts a Empty message and returns a ExecutionStatusResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def ExecutionStarting(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """ExecutionStarting is a RPC to tell runner to execute Suite level hooks.
+
+    Accepts a ExecutionStartingRequest message and returns a ExecutionStatusResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def SpecDataStoreInit(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """SpecDataStoreInit is a RPC to initialize the spec level data store.
+
+    Accepts a Empty message and returns a ExecutionStatusResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def SpecExecutionStarting(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """SpecExecutionStarting is a RPC to tell runner to execute spec level hooks.
+
+    Accepts a SpecExecutionStartingRequest message and returns a ExecutionStatusResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def ScenarioDataStoreInit(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """ScenarioDataStoreInit is a RPC to initialize the scenario level data store.
+
+    Accepts a Empty message and returns a ExecutionStatusResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def ScenarioExecutionStarting(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """ScenarioExecutionStarting is a RPC to tell runner to execute scenario level hooks.
+
+    Accepts a ScenarioExecutionStartingRequest message and returns a ExecutionStatusResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def StepExecutionStarting(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """StepExecutionStarting is a RPC to tell runner to execute step level hooks.
+
+    Accepts a StepExecutionStartingRequest message and returns a ExecutionStatusResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def ExecuteStep(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """ExecuteStep is a RPC to tell runner to execute a step .
+
+    Accepts a ExecuteStepRequest message and returns a ExecutionStatusResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def StepExecutionEnding(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """StepExecutionEnding is a RPC to tell runner to execute step level hooks.
+
+    Accepts a StepExecutionEndingRequest message and returns a ExecutionStatusResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def ScenarioExecutionEnding(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """ScenarioExecutionEnding is a RPC to tell runner to execute Scenario level hooks.
+
+    Accepts a ScenarioExecutionEndingRequest message and returns a ExecutionStatusResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def SpecExecutionEnding(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """SpecExecutionEnding is a RPC to tell runner to execute spec level hooks.
+
+    Accepts a SpecExecutionEndingRequest message and returns a ExecutionStatusResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def ExecutionEnding(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """ExecutionEnding is a RPC to tell runner to execute suite level hooks.
+
+    Accepts a ExecutionEndingRequest message and returns a ExecutionStatusResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def GetStepNames(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """GetStepNames is a RPC to get all the available steps from the runner.
+
+    Accepts a StepNamesRequest message and returns a StepNamesResponse
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def CacheFile(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """CacheFile is a RPC to tell runner to load/reload/unload a implementation file.
+
+    Accepts a CacheFileRequest message and returns a Empty message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def GetStepPositions(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """GetStepPositions is a RPC to get all availabe steps in file.
+
+    Accepts a StepPositionsRequest message and returns a StepPositionsResponse message
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def GetImplementationFiles(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """GetImplementationFiles is a RPC get all the existing implementaiton files.
+
+    Accepts a Empty and returns a ImplementationFileListResponse message.
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def ImplementStub(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """ValidateStep is a RPC to to ask ruuner to add a given implementation to given file.
+
+    Accepts a StubImplementationCodeRequest and returns a FileDiff message.
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def GetStepName(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """GetStepName is a RPC to get information about the given step.
+
+    Accepts a StepNameRequest message and returns a StepNameResponse message.
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def GetGlobPatterns(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """GetGlobPatterns is a RPC to get the file path pattern which needs to be cached.
+
+    Accepts a Empty message and returns a ImplementationFileGlobPatternResponse message.
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def Refactor(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """Refactor is a RPC to refactor a given step in implementation file.
+
+    Accepts a RefactorRequest message and returns a RefactorResponse message.
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def KillProcess(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """KillProcess is a RPC tell runnner to stop grpc server and kill the runner process.
+
+    Accepts a KillProcessRequest message and returns a Empty message.
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
