@@ -12,6 +12,7 @@ from getgauge.util import get_step_impl_dirs
 from pyfakefs.fake_filesystem_unittest import TestCase
 
 
+
 class RunnerServiceHandlerTests(TestCase):
     def setUp(self):
         registry.clear()
@@ -135,7 +136,7 @@ class RunnerServiceHandlerTests(TestCase):
         param_position.newPosition = 1
         request.paramPositions.extend([position, param_position])
 
-        res = handler.Refactor(request, None, False)
+        res = handler.Refactor(request, None)
 
         self.assertTrue(res.success)
         diff_contents = [diff.content for diff in res.fileChanges[0].diffs]

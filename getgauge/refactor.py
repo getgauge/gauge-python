@@ -1,10 +1,10 @@
-from getgauge.messages.messages_pb2 import TextDiff
+from getgauge.messages.messages_pb2 import RefactorResponse, TextDiff
 from getgauge.messages.spec_pb2 import Span
 from getgauge.parser import PythonFile
 from getgauge.registry import registry
 
 
-def refactor_step(request, response, with_location=True):
+def refactor_step(request, response):
     if registry.has_multiple_impls(request.oldStepValue.stepValue):
         raise Exception('Multiple Implementation found for `{}`'.format(
             request.oldStepValue.parameterizedStepValue
@@ -20,9 +20,9 @@ def refactor_step(request, response, with_location=True):
     if request.saveChanges:
         with open(info.file_name, 'w') as f:
             f.write(content)
-    response.refactorResponse.success = True
-    response.refactorResponse.filesChanged.append(info.file_name)
-    response.refactorResponse.fileChanges.add(
+    response.success = True
+    response.filesChanged.append(info.file_name)
+    response.fileChanges.add(
         fileName=info.file_name,
         fileContent=content,  # FIXME: Remove deprecated field
         diffs=[TextDiff(span=Span(**d[0]), content=d[1]) for d in diffs],
