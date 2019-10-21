@@ -1,18 +1,13 @@
-import os
-import sys
-import threading
 
 from getgauge import logger, processor
 from getgauge.messages import runner_pb2_grpc
 from getgauge.messages.messages_pb2 import Empty
-from getgauge.registry import registry
 
 
 class RunnerServiceHandler(runner_pb2_grpc.RunnerServicer):
 
     def __init__(self, server):
         self.server = server
-        self.kill_event = threading.Event()
 
     def SuiteDataStoreInit(self, request, context):
         return processor.process_suite_data_store_init_request()
