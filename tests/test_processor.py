@@ -1,3 +1,4 @@
+import os
 from os import path
 from textwrap import dedent
 from unittest import main
@@ -7,6 +8,8 @@ from getgauge import static_loader as loader
 from getgauge.messages.messages_pb2 import *
 from getgauge.messages.spec_pb2 import Parameter, ProtoExecutionResult, Span
 from getgauge.parser import PythonFile
+from getgauge.messages.spec_pb2 import ProtoStepValue
+from getgauge.util import get_step_impl_dirs
 from getgauge.python import data_store
 from getgauge.registry import registry
 from pyfakefs.fake_filesystem_unittest import TestCase
@@ -487,7 +490,6 @@ class ProcessorTests(TestCase):
     def test_Processor_glob_pattern(self):
         request = ImplementationFileGlobPatternRequest()
         response = processor.process_glob_pattern_request(request)
-
         self.assertEqual(response.globPatterns, ["step_impl/**/*.py"])
 
     def test_Processor_cache_file_with_opened_status(self):
@@ -616,6 +618,131 @@ class ProcessorTests(TestCase):
         processor.process_cache_file_request(request)
 
         self.assertEqual(registry.is_implemented('foo1'), False)
+
+    def test_Processor_process_impl_files_request(self):
+        self.fs.create_file(os.path.join(get_step_impl_dirs()[0], 'foo.py'))
+        res = processor.process_impl_files_request()
+        self.assertEqual(os.path.basename(
+            res.implementationFilePaths[0]), 'foo.py')
+
+    def test_Processor_process_step_names_request(self):
+        self.load_content_steps('''\
+        @step('foo')
+        def foo():
+            pass
+        ''')
+
+        res = processor.process_step_names_request()
+        self.assertEqual(res.steps, ['foo'])
+
+    def test_Processor_process_step_name_request(self):
+        self.load_content_steps('''\
+        @step('foo')
+        def foo():
+            pass
+        ''')
+
+        req = StepNameRequest(stepValue='foo')
+        res = processor.process_step_name_request(req)
+
+        self.assertTrue(res.isStepPresent)
+        self.assertEqual(res.fileName, 'foo.py')
+
+    def test_Processor_process_validate_step_request(self):
+        self.load_content_steps('''\
+        @step('foo')
+        def foo():
+            pass
+        ''')
+        step_value = ProtoStepValue(
+            stepValue='foo', parameterizedStepValue='foo')
+
+        req = StepValidateRequest(
+            stepText='foo', stepValue=step_value, numberOfParameters=0)
+        res = processor.process_validate_step_request(req)
+        self.assertTrue(res.isValid)
+
+    def test_Prcessor_process_step_positions_request(self):
+        self.load_content_steps('''\
+        @step('foo')
+        def foo():
+            pass
+        ''')
+
+        req = StepPositionsRequest(filePath='foo.py')
+        res = processor.prceoss_step_positions_request(req)
+        self.assertEqual(res.stepPositions[0].stepValue, 'foo')
+
+    def test_Processor_process_implement_stub_request(self):
+        self.load_content_steps("@step('foo')\ndef foo():\n\tpass\n")
+
+        req = StubImplementationCodeRequest(
+            implementationFilePath='New File', codes=['add hello'])
+        res = processor.process_stub_impl_request(req)
+        self.assertEqual(os.path.basename(res.filePath),
+                         'step_implementation.py')
+        self.assertEqual(
+            res.textDiffs[0].content, 'from getgauge.python import step\n\nadd hello')
+
+    def test_Processor_process_refactor_request(self):
+        content = dedent('''\
+        from getgauge.python import step
+
+        @step('Vowels in English language are <aeiou>.')
+        def foo(vowels):
+            print(vowels)
+        ''')
+        self.fs.create_file(os.path.join(
+            get_step_impl_dirs()[0], 'foo.py'), contents=content)
+        loader.load_files(get_step_impl_dirs())
+
+        request = RefactorRequest()
+        request.saveChanges = False
+        request.oldStepValue.stepValue = 'Vowels in English language are {}.'
+        request.oldStepValue.parameters.append('vowels')
+        request.newStepValue.parameterizedStepValue = 'Vowels in English language is <vowels> <bsdfdsf>.'
+        request.newStepValue.stepValue = 'Vowels in English language is {} {}.'
+        request.newStepValue.parameters.extend(['vowels', 'bsdfdsf'])
+        position = ParameterPosition()
+        position.oldPosition = 0
+        position.newPosition = 0
+        param_position = ParameterPosition()
+        param_position.oldPosition = -1
+        param_position.newPosition = 1
+        request.paramPositions.extend([position, param_position])
+
+        res = processor.process_refactor_request(request)
+
+        self.assertTrue(res.success)
+        diff_contents = [diff.content for diff in res.fileChanges[0].diffs]
+        self.assertIn("vowels, arg1", diff_contents)
+        self.assertIn(
+            "'Vowels in English language is <vowels> <bsdfdsf>.'", diff_contents)
+
+    def test_Processor_process_cache_file_request(self):
+        self.load_content_steps('''\
+        from getgauge.python import step
+
+        @step('Vowels in English language are <aeiou>.')
+        def foo(vowels):
+            print(vowels)
+        ''')
+
+        self.assertTrue(registry.is_implemented(
+            'Vowels in English language are {}.'))
+
+        content = dedent('''\
+        from getgauge.python import step
+
+        @step('get lost!')
+        def foo():
+            pass
+        ''')
+        req = CacheFileRequest(
+            content=content, filePath='foo.py', status=CacheFileRequest.CHANGED)
+        processor.process_cache_file_request(req)
+
+        self.assertTrue(registry.is_implemented('get lost!'))
 
 
 def impl(a, b):
