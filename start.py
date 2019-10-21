@@ -2,9 +2,11 @@ import os
 import platform
 import sys
 from concurrent.futures import ThreadPoolExecutor
-from os import path
+from os import environ, path
+from threading import Timer
 
 import grpc
+import ptvsd
 from getgauge import handlers, logger, processor
 from getgauge.impl_loader import copy_skel_files
 from getgauge.messages import runner_pb2_grpc
@@ -13,6 +15,7 @@ from getgauge.util import get_step_impl_dirs
 
 PLUGIN_JSON = 'python.json'
 VERSION = 'version'
+ATTACH_DEBUGGER_EVENT = 'Runner Ready for Debugging'
 
 
 def main():
@@ -36,7 +39,20 @@ def load_implementations():
     load_files(d)
 
 
+def _handle_detached():
+    logger.info("No debugger attached. Stopping the execution.")
+    os._exit(1)
+
+
 def start():
+    if environ.get('DEBUGGING'):
+        ptvsd.enable_attach(address=(
+            '127.0.0.1', int(environ.get('DEBUG_PORT'))))
+        print(ATTACH_DEBUGGER_EVENT)
+        t = Timer(int(environ.get("debugger_wait_time", 30)), _handle_detached)
+        t.start()
+        ptvsd.wait_for_attach()
+        t.cancel()
     logger.debug('Starting grpc server..')
     server = grpc.server(ThreadPoolExecutor(max_workers=1))
     p = server.add_insecure_port('127.0.0.1:0')
@@ -46,6 +62,7 @@ def start():
     server.start()
     server.wait_for_termination()
     os._exit(0)
+
 
 if __name__ == '__main__':
     main()
