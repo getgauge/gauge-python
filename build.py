@@ -3,9 +3,8 @@ import json
 import os
 import shutil
 import sys
-from subprocess import call
-
 from datetime import date
+from subprocess import call
 
 cwd = os.getcwd()
 
@@ -117,14 +116,16 @@ def main():
     if len(sys.argv) < 2:
         print(usage)
     else:
-        exit_code = run_tests()
-        if exit_code != 0:
-            sys.exit(exit_code)
-        elif sys.argv[1] == '--install':
-            install()
-        elif sys.argv[1] == '--dist':
+        if sys.argv[1] == '--dist':
             create_zip()
             generate_package()
+        else:
+            exit_code = run_tests()
+            if exit_code != 0:
+                sys.exit(exit_code)
+            elif sys.argv[1] == '--install':
+                install()
+
 
 
 if __name__ == '__main__':

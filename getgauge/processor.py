@@ -18,9 +18,6 @@ from getgauge.util import (get_file_name, get_impl_files, get_step_impl_dirs,
                            read_file_contents)
 from getgauge.validator import validate_step
 
-ATTACH_DEBUGGER_EVENT = 'Runner Ready for Debugging'
-
-
 def process_validate_step_request(request):
     return validate_step(request)
 
@@ -72,11 +69,6 @@ def process_execute_step_request(request):
     return response
 
 
-def _handle_detached():
-    logger.info("No debugger attached. Stopping the execution.")
-    os._exit(1)
-
-
 def _add_message_and_screenshots(response):
     response.executionResult.message.extend(MessagesStore.pending_messages())
     response.executionResult.screenshots.extend(
@@ -87,15 +79,6 @@ def process_execution_starting_reqeust(request, clear=True):
     if clear:
         registry.clear()
         load_impls(get_step_impl_dirs())
-    if environ.get('DEBUGGING'):
-        ptvsd.enable_attach(address=(
-            '127.0.0.1', int(environ.get('DEBUG_PORT'))))
-        print(ATTACH_DEBUGGER_EVENT)
-        t = Timer(int(environ.get("debugger_wait_time", 30)), _handle_detached)
-        t.start()
-        ptvsd.wait_for_attach()
-        t.cancel()
-
     execution_info = create_execution_context_from(
         request.currentExecutionInfo)
     response = run_hook(request, registry.before_suite(), execution_info)
