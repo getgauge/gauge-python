@@ -8,26 +8,27 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest] #, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v1
+
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Test
         run: |
           python build.py --test
 
   functional-tests:
     needs: test
-    env:
-      GAUGE_TELEMETRY_ENABLED: false
     name: FTs ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -47,24 +48,27 @@ jobs:
           go-version: 1.13
         id: go
 
-      - name: Clone gauge and build
+      - name: Clone gauge
         run: |
           git clone https://github.com/getgauge/gauge
+
+      - name: Build gauge
+        run: |
           cd gauge
-          go run build/make.go --verbose
+          go run -mod=vendor build/make.go --verbose
 
       - name: Install Gauge (windows)
         if: matrix.os == 'windows-latest'
         run: |
           cd gauge
-          go run build/make.go --install  --verbose
+          go run -mod=vendor build/make.go --install  --verbose
           echo "::add-path::C:\\Program Files\\gauge\\bin"
 
       - name: Install Gauge (linux)
         if: matrix.os != 'windows-latest'
         run: |
           cd gauge
-          go run build/make.go --install --prefix=/tmp/gauge --verbose
+          go run -mod=vendor build/make.go --install --prefix=/tmp/gauge --verbose
           echo "::add-path::/tmp/gauge/bin"
 
       - name: Install Python
@@ -92,8 +96,6 @@ jobs:
 
   lsp-tests:
     needs: test
-    env:
-      GAUGE_TELEMETRY_ENABLED: false
     name: LSP Tests ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
