@@ -14,8 +14,6 @@ jobs:
       PYPI_PASSWORD: '${{ secrets.PYPI_PASSWORD }}'
     steps:
       - uses: actions/checkout@v1
-        with:
-          ref: ${GITHUB_REF}
 
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
