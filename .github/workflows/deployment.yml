@@ -36,7 +36,7 @@ jobs:
           cd ..
 
           echo "---------------------------"
-          echo "Upadating release v$version"
+          echo "Updating release v$version"
           echo "---------------------------"
 
           echo -e "Gauge Python v$version\n\n" > desc.txt
