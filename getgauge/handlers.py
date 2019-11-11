@@ -1,3 +1,5 @@
+import threading
+import time
 
 from getgauge import logger, processor
 from getgauge.messages import runner_pb2_grpc
@@ -8,6 +10,7 @@ class RunnerServiceHandler(runner_pb2_grpc.RunnerServicer):
 
     def __init__(self, server):
         self.server = server
+        self.kill_event = threading.Event()
 
     def SuiteDataStoreInit(self, request, context):
         return processor.process_suite_data_store_init_request()
@@ -74,6 +77,11 @@ class RunnerServiceHandler(runner_pb2_grpc.RunnerServicer):
 
     def KillProcess(self, request, context):
         logger.debug("KillProcessrequest received")
-        logger.debug("Stoping gRPC server")
-        self.server.stop(0)
+        self.kill_event.set()
         return Empty()
+
+    def wait_for_kill_event(self):
+        self.kill_event.wait()
+        time.sleep(0.5)
+        self.server.stop(0)
+        exit(0)

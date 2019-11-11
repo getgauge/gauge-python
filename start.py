@@ -1,6 +1,7 @@
 import os
 import platform
 import sys
+import threading
 from concurrent.futures import ThreadPoolExecutor
 from os import environ, path
 from threading import Timer
@@ -60,7 +61,10 @@ def start():
     runner_pb2_grpc.add_RunnerServicer_to_server(handler, server)
     logger.info('Listening on port:{}'.format(p))
     server.start()
-    server.wait_for_termination()
+    t = threading.Thread(
+            name="listener", target=handler.wait_for_kill_event)
+    t.start()
+    t.join()
     os._exit(0)
 
 
