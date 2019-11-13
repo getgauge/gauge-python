@@ -5,7 +5,7 @@ on: [deployment]
 jobs:
   deploy:
     name: Create Draft with assets
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
     steps:
