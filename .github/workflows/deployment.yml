@@ -24,6 +24,9 @@ jobs:
           sudo chown root:root /
           sudo snap install hub --classic
           hub --version
+      - name: Install ruby
+        run: |
+          sudo snap install ruby --classic
       - name: update
         run: |
           cd bin
