@@ -20,12 +20,15 @@ jobs:
           pip install -r requirements.txt
           python build.py --dist
       - name: Install hub
-        run: brew install hub
+        run: |
+          sudo chown root:root /
+          sudo snap install hub --classic
+          hub --version
       - name: update
         run: |
           cd bin
           if [ -z "$version" ]; then
-            version=$(ls gauge-python* | head -1 | sed "s/\.[^\.]*$//" | sed "s/gauge-python-//" | sed | sed "s/-[a-z]*\.[a-z0-9_]*$//");
+            version=$(ls gauge-python* | head -1 | sed "s/\.[^\.]*$//" | sed "s/gauge-python-//" | sed "s/-[a-z]*\.[a-z0-9_]*$//");
           fi
 
           artifacts=()
