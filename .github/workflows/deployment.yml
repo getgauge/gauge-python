@@ -5,7 +5,7 @@ on: [deployment]
 jobs:
   deploy:
     name: Create Draft with assets
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
     steps:
@@ -20,13 +20,7 @@ jobs:
           pip install -r requirements.txt
           python build.py --dist
       - name: Install hub
-        run: |
-          sudo chown root:root /
-          sudo snap install hub --classic
-          hub --version
-      - name: Install ruby
-        run: |
-          sudo snap install ruby --classic
+        run: brew install hub
       - name: update
         run: |
           cd bin
