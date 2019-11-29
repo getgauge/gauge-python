@@ -10,7 +10,7 @@ import grpc
 import ptvsd
 from getgauge import handlers, logger, processor
 from getgauge.impl_loader import copy_skel_files
-from getgauge.messages import runner_pb2_grpc
+from getgauge.messages import services_pb2_grpc as spg
 from getgauge.static_loader import load_files
 from getgauge.util import get_step_impl_dirs
 
@@ -22,7 +22,7 @@ ATTACH_DEBUGGER_EVENT = 'Runner Ready for Debugging'
 def main():
     logger.info("Python: {}".format(platform.python_version()))
     if sys.argv[1] == "--init":
-        logger.debug("Initilizing gauge project.")
+        logger.debug("Initializing gauge project.")
         copy_skel_files()
     else:
         load_implementations()
@@ -32,7 +32,7 @@ def main():
 def load_implementations():
     d = get_step_impl_dirs()
     logger.debug(
-        "Loading step implemetations from {} dirs.".format(', '.join(d)))
+        "Loading step implementations from {} dirs.".format(', '.join(d)))
     for impl_dir in d:
         if not path.exists(impl_dir):
             logger.error('can not load implementations from {}. {} does not exist.'.format(
@@ -57,12 +57,14 @@ def start():
     logger.debug('Starting grpc server..')
     server = grpc.server(ThreadPoolExecutor(max_workers=1))
     p = server.add_insecure_port('127.0.0.1:0')
-    handler = handlers.RunnerServiceHandler(server)
-    runner_pb2_grpc.add_RunnerServicer_to_server(handler, server)
+    handler = handlers.GrpcServiceHandler(server)
+    spg.add_ValidatorServicer_to_server(handler, server)
+    spg.add_AuthoringServicer_to_server(handler, server)
+    spg.add_ExecutionServicer_to_server(handler, server)
+    spg.add_ProcessServicer_to_server(handler, server)
     logger.info('Listening on port:{}'.format(p))
     server.start()
-    t = threading.Thread(
-            name="listener", target=handler.wait_for_kill_event)
+    t = threading.Thread(name="listener", target=handler.wait_for_kill_event)
     t.start()
     t.join()
     os._exit(0)

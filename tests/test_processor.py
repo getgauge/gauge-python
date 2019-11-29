@@ -247,7 +247,7 @@ class ProcessorTests(TestCase):
         registry.add_before_suite(impl1)
         registry.add_before_suite(impl2)
         request = ExecutionStartingRequest()
-        response = processor.process_execution_starting_reqeust(request, False)
+        response = processor.process_execution_starting_request(request, False)
 
         self.assertTrue(isinstance(response, ExecutionStatusResponse))
         self.assertEqual(False, response.executionResult.failed)
@@ -319,7 +319,7 @@ class ProcessorTests(TestCase):
     def test_Processor_failing_starting_execution_request(self):
         registry.add_before_suite(failing_impl)
         request = ExecutionStartingRequest()
-        response = processor.process_execution_starting_reqeust(
+        response = processor.process_execution_starting_request(
             request, False)
 
         self.assertTrue(isinstance(response, ExecutionStatusResponse))
@@ -452,7 +452,7 @@ class ProcessorTests(TestCase):
         request = StepPositionsRequest()
         request.filePath = 'foo.py'
 
-        response = processor.prceoss_step_positions_request(request)
+        response = processor.process_step_positions_request(request)
 
         self.assertTrue(isinstance(response, StepPositionsResponse))
         self.assertEqual('', response.error)
@@ -670,7 +670,7 @@ class ProcessorTests(TestCase):
         ''')
 
         req = StepPositionsRequest(filePath='foo.py')
-        res = processor.prceoss_step_positions_request(req)
+        res = processor.process_step_positions_request(req)
         self.assertEqual(res.stepPositions[0].stepValue, 'foo')
 
     def test_Processor_process_implement_stub_request(self):

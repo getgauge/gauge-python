@@ -75,7 +75,7 @@ def _add_message_and_screenshots(response):
         ScreenshotsStore.pending_screenshots())
 
 
-def process_execution_starting_reqeust(request, clear=True):
+def process_execution_starting_request(request, clear=True):
     if clear:
         registry.clear()
         load_impls(get_step_impl_dirs())
@@ -188,7 +188,7 @@ def process_cache_file_request(request):
     return Empty()
 
 
-def prceoss_step_positions_request(request):
+def process_step_positions_request(request):
     file_path = request.filePath
     positions = registry.get_step_positions(file_path)
     response = StepPositionsResponse()

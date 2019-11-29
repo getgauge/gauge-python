@@ -50,7 +50,7 @@ jobs:
 
       - name: Clone gauge
         run: |
-          git clone https://github.com/getgauge/gauge
+          git clone --depth=1 https://github.com/getgauge/gauge
 
       - name: Build gauge
         run: |
@@ -122,7 +122,7 @@ jobs:
 
       - name: Clone gauge and build
         run: |
-          git clone https://github.com/getgauge/gauge
+          git clone --depth=1 https://github.com/getgauge/gauge
           cd gauge
           go run build/make.go --verbose
 
