@@ -69,7 +69,7 @@ class GrpcServiceHandler(sp.ExecutionServicer,
         return processor.process_step_positions_request(request)
 
     def GetImplementationFiles(self, request, context):
-        return processor.process_impl_files_request(request)
+        return processor.process_impl_files_request()
 
     def ImplementStub(self, request, context):
         return processor.process_stub_impl_request(request)
