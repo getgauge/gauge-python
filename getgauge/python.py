@@ -56,19 +56,23 @@ def after_step(obj=None):
 
 
 def screenshot(func):
-    _warn_screenshot_deprecation()
-    registry.set_screenshot_provider(func)
-    return func
-
-
-def custom_screen_grabber(func):
+    _warn_screenshot_deprecation('screenshot', 'file_based_screen_grabber')
     registry.set_screenshot_provider(func, False)
     return func
 
 
-def _warn_screenshot_deprecation():
+def custom_screen_grabber(func):
+    _warn_screenshot_deprecation('custom_screen_grabber', 'file_based_screen_grabber')
+    registry.set_screenshot_provider(func, False)
+    return func
+
+def file_based_screen_grabber(func):
+    registry.set_screenshot_provider(func, True)
+    return func
+
+def _warn_screenshot_deprecation(old_function, new_function):
     warnings.warn(
-        "'screenshot' is deprecated in favour of 'custom_screen_grabber'",
+        "'{0}' is deprecated in favour of '{1}'".format(old_function, new_function),
         DeprecationWarning, stacklevel=3)
     warnings.simplefilter('default', DeprecationWarning)
 
