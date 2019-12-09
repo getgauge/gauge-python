@@ -572,7 +572,7 @@ class ScreenshotsTests(TestCase):
             os.path.join(os.getenv("screenshots_dir"),
                          'this_file_does_not_exists.png')
         )
-        self.assertEqual(message, cm.exception.message)
+        self.assertEqual(message, cm.exception.__str__())
 
     def tearDown(self):
         registry.set_screenshot_provider(self.__old_screenshot_provider, self.__is_file_based_screenshot)
