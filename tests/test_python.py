@@ -6,6 +6,8 @@ from getgauge.python import (Messages, DataStore, DataStoreFactory, DictObject,
                              DataStoreContainer, data_store, Table, Specification,
                              Scenario, Step, ExecutionContext,
                              create_execution_context_from)
+import os
+import tempfile
 try:
     from collections.abc import MutableMapping
 except ImportError:
@@ -508,11 +510,14 @@ class DecoratorTests(TestCase):
 
 
 class ScreenshotsTests(TestCase):
+    def setUp(self):
+        os.environ["screenshots_dir"] = tempfile.mkdtemp()
 
     def test_pending_screenshots(self):
         ScreenshotsStore.capture()
         pending_screenshots = ScreenshotsStore.pending_screenshots()
-        self.assertEqual(['foo'], pending_screenshots)
+        self.assertEqual(1, len(pending_screenshots))
+        self.assertTrue(os.path.exists(os.path.join(os.getenv("screenshots_dir"), pending_screenshots[0])))
 
     def test_clear(self):
         ScreenshotsStore.capture()
@@ -523,12 +528,14 @@ class ScreenshotsTests(TestCase):
     def test_pending_screenshots_gives_only_those_screenshots_which_are_not_collected(self):
         ScreenshotsStore.capture()
         pending_screenshots = ScreenshotsStore.pending_screenshots()
-        self.assertEqual(['foo'], pending_screenshots)
+        self.assertEqual(1, len(pending_screenshots))
+        screenshot_file = pending_screenshots[0]
         pending_screenshots = ScreenshotsStore.pending_screenshots()
-        self.assertEqual([], pending_screenshots)
+        self.assertEqual(0, len(pending_screenshots))
         ScreenshotsStore.capture()
         pending_screenshots = ScreenshotsStore.pending_screenshots()
-        self.assertEqual(['foo'], pending_screenshots)
+        self.assertEqual(1, len(pending_screenshots))
+        self.assertNotEqual(screenshot_file, pending_screenshots[0])
 
 
 if __name__ == '__main__':

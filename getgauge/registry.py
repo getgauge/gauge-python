@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import tempfile
+from uuid import uuid1
 from subprocess import call
 
 from getgauge import logger
@@ -107,6 +108,7 @@ class Registry(object):
 
     def __init__(self):
         self.__screenshot_provider, self.__steps_map, self.__continue_on_failures = _take_screenshot, {}, {}
+        self.is_file_based_screenshot = True
         for hook in Registry.hooks:
             self.__def_hook(hook)
 
@@ -150,8 +152,9 @@ class Registry(object):
     def get_infos_for(self, step_text):
         return self.__steps_map.get(step_text)
 
-    def set_screenshot_provider(self, func):
+    def set_screenshot_provider(self, func, is_file_based):
         self.__screenshot_provider = func
+        self.is_file_based_screenshot = is_file_based
 
     def screenshot_provider(self):
         return self.__screenshot_provider
@@ -226,13 +229,11 @@ def _get_step_value(step_text):
 
 
 def _take_screenshot():
-    temp_file = os.path.join(tempfile.gettempdir(), 'screenshot.png')
+    temp_file_name = "screenshot-%s.png"%(uuid1().int)
+    temp_file = os.path.join(os.getenv('screenshots_dir'), temp_file_name)
     try:
         call(['gauge_screenshot', temp_file])
-        _file = open(temp_file, 'r+b')
-        data = _file.read()
-        _file.close()
-        return data
+        return temp_file_name
     except Exception as err:
         logger.error(
             "\nFailed to take screenshot using gauge_screenshot.\n{0}".format(err))
@@ -256,7 +257,20 @@ class ScreenshotsStore:
 
     @staticmethod
     def capture():
-        ScreenshotsStore.__screenshots.append(registry.screenshot_provider()())
+        screenshot = ScreenshotsStore.capture_to_file()
+        ScreenshotsStore.__screenshots.append(screenshot)
+
+    @staticmethod
+    def capture_to_file():
+        content = registry.screenshot_provider()()
+        if not registry.is_file_based_screenshot:
+            temp_file_name = "screenshot-%s.png"%(uuid1().int)
+            temp_file = os.path.join(os.getenv('screenshots_dir'), temp_file_name)
+            file = open(temp_file, "w")
+            file.write(content)
+            file.close()
+            content = temp_file_name
+        return content
 
     @staticmethod
     def clear():

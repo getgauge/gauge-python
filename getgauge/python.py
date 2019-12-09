@@ -62,7 +62,7 @@ def screenshot(func):
 
 
 def custom_screen_grabber(func):
-    registry.set_screenshot_provider(func)
+    registry.set_screenshot_provider(func, False)
     return func
 
 
