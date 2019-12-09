@@ -2,7 +2,6 @@ import inspect
 import os
 import re
 import sys
-import tempfile
 from uuid import uuid1
 from subprocess import call
 
@@ -262,15 +261,23 @@ class ScreenshotsStore:
 
     @staticmethod
     def capture_to_file():
-        content = registry.screenshot_provider()()
         if not registry.is_file_based_screenshot:
-            temp_file_name = "screenshot-%s.png"%(uuid1().int)
-            temp_file = os.path.join(os.getenv('screenshots_dir'), temp_file_name)
-            file = open(temp_file, "w")
+            screenshot_file = "screenshot-%s.png" % (uuid1().int)
+            screenshot_file_path = os.path.join(
+                os.getenv('screenshots_dir'), screenshot_file)
+            content = registry.screenshot_provider()()
+            file = open(screenshot_file_path, "w")
             file.write(content)
             file.close()
-            content = temp_file_name
-        return content
+            return screenshot_file
+        screenshot_file = registry.screenshot_provider()()
+        if(not os.path.isabs(screenshot_file)):
+            screenshot_file = os.path.join(
+                os.getenv("screenshots_dir"), screenshot_file)
+        if(not os.path.exists(screenshot_file)):
+            raise Exception(
+                "Screenshot file {0} does not exists.".format(screenshot_file))
+        return os.path.basename(screenshot_file)
 
     @staticmethod
     def clear():

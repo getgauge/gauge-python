@@ -6,6 +6,7 @@ from getgauge.python import (Messages, DataStore, DataStoreFactory, DictObject,
                              DataStoreContainer, data_store, Table, Specification,
                              Scenario, Step, ExecutionContext,
                              create_execution_context_from)
+from uuid import uuid1
 import os
 import tempfile
 try:
@@ -511,13 +512,16 @@ class DecoratorTests(TestCase):
 
 class ScreenshotsTests(TestCase):
     def setUp(self):
+        self.__old_screenshot_provider = registry.screenshot_provider()
+        self.__is_file_based_screenshot = registry.is_file_based_screenshot
         os.environ["screenshots_dir"] = tempfile.mkdtemp()
 
     def test_pending_screenshots(self):
         ScreenshotsStore.capture()
         pending_screenshots = ScreenshotsStore.pending_screenshots()
         self.assertEqual(1, len(pending_screenshots))
-        self.assertTrue(os.path.exists(os.path.join(os.getenv("screenshots_dir"), pending_screenshots[0])))
+        self.assertTrue(os.path.exists(os.path.join(
+            os.getenv("screenshots_dir"), pending_screenshots[0])))
 
     def test_clear(self):
         ScreenshotsStore.capture()
@@ -536,6 +540,42 @@ class ScreenshotsTests(TestCase):
         pending_screenshots = ScreenshotsStore.pending_screenshots()
         self.assertEqual(1, len(pending_screenshots))
         self.assertNotEqual(screenshot_file, pending_screenshots[0])
+
+    def test_capture_shoould_vefify_screenshot_file_for_file_based_custom_screenshot(self):
+        def returns_abs_path():
+            file = open(os.path.join(os.getenv("screenshots_dir"),
+                                     "screenshot{0}.png".format(uuid1())), "w")
+            file.write("screenshot data")
+            return file.name
+
+        def returns_base_ath():
+            file_name = "screenshot{0}.png".format(uuid1())
+            file = open(os.path.join(
+                os.getenv("screenshots_dir"), file_name), "w")
+            file.write("screenshot data")
+            return file_name
+        registry.set_screenshot_provider(returns_abs_path, True)
+        ScreenshotsStore.capture()
+        self.assertEqual(1, len(ScreenshotsStore.pending_screenshots()))
+
+        registry.set_screenshot_provider(returns_base_ath, True)
+        ScreenshotsStore.capture()
+        self.assertEqual(1, len(ScreenshotsStore.pending_screenshots()))
+
+    def test_capture_should_raise_exception_when_screenshot_file_does_not_exists(self):
+        def take_screenshot():
+            return "this_file_does_not_exists.png"
+        registry.set_screenshot_provider(take_screenshot, True)
+        with self.assertRaises(Exception) as cm:
+            ScreenshotsStore.capture()
+        message = "Screenshot file {0} does not exists.".format(
+            os.path.join(os.getenv("screenshots_dir"),
+                         'this_file_does_not_exists.png')
+        )
+        self.assertEqual(message, cm.exception.message)
+
+    def tearDown(self):
+        registry.set_screenshot_provider(self.__old_screenshot_provider, self.__is_file_based_screenshot)
 
 
 if __name__ == '__main__':
