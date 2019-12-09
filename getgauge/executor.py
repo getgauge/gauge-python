@@ -35,7 +35,7 @@ def execute_method(params, step, response, is_continue_on_failure=_false):
         _add_exception(e, response, is_continue_on_failure(step.impl, e))
     response.executionResult.executionTime = _current_time() - start
     response.executionResult.message.extend(MessagesStore.pending_messages())
-    response.executionResult.screenshots.extend(ScreenshotsStore.pending_screenshots())
+    response.executionResult.screenshotFiles.extend(ScreenshotsStore.pending_screenshots())
 
 
 def _current_time(): return int(round(time.time() * 1000))
@@ -54,9 +54,8 @@ def _get_args(params, hook_or_step):
 
 def _add_exception(e, response, continue_on_failure):
     if os.getenv('screenshot_on_failure') == 'true':
-        screenshot = registry.screenshot_provider()()
-        response.executionResult.screenShot = screenshot
-        response.executionResult.failureScreenshot = screenshot
+        screenshot = ScreenshotsStore.capture_to_file()
+        response.executionResult.failureScreenshotFile = screenshot
     response.executionResult.failed = True
     message = e.__str__()
     if not message:
@@ -67,4 +66,4 @@ def _add_exception(e, response, continue_on_failure):
     if continue_on_failure:
         response.executionResult.recoverableError = True
     response.executionResult.message.extend(MessagesStore.pending_messages())
-    response.executionResult.screenshots.extend(ScreenshotsStore.pending_screenshots())
+    response.executionResult.screenshotFiles.extend(ScreenshotsStore.pending_screenshots())
