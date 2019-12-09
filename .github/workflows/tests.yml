@@ -71,6 +71,13 @@ jobs:
           go run -mod=vendor build/make.go --install --prefix=/tmp/gauge --verbose
           echo "::add-path::/tmp/gauge/bin"
 
+      - name: Install html report
+        run: |
+          git clone --depth=1 https://github.com/getgauge/html-report
+          cd html-report
+          go run build/make.go
+          go run build/make.go --install
+
       - name: Install Python
         run: |
           pip install -r requirements.txt
