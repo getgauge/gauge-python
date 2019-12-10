@@ -542,40 +542,35 @@ class ScreenshotsTests(TestCase):
         self.assertNotEqual(screenshot_file, pending_screenshots[0])
 
     def test_capture_shoould_vefify_screenshot_file_for_file_based_custom_screenshot(self):
+        first_screenshot = os.path.join(
+            os.getenv("screenshots_dir"), "screenshot{0}.png".format(uuid1()))
+        second_screenshot = os.path.join(
+            os.getenv("screenshots_dir"), "screenshot{0}.png".format(uuid1()))
+
         def returns_abs_path():
-            file = open(os.path.join(os.getenv("screenshots_dir"),
-                                     "screenshot{0}.png".format(uuid1())), "w")
+            file = open(first_screenshot, "w")
             file.write("screenshot data")
+            file.close()
             return file.name
 
         def returns_base_ath():
-            file_name = "screenshot{0}.png".format(uuid1())
-            file = open(os.path.join(
-                os.getenv("screenshots_dir"), file_name), "w")
+            file = open(second_screenshot, "w")
             file.write("screenshot data")
-            return file_name
+            file.close()
+            return os.path.basename(file.name)
         registry.set_screenshot_provider(returns_abs_path, True)
         ScreenshotsStore.capture()
-        self.assertEqual(1, len(ScreenshotsStore.pending_screenshots()))
+        self.assertEqual([os.path.basename(first_screenshot)],
+                         ScreenshotsStore.pending_screenshots())
 
         registry.set_screenshot_provider(returns_base_ath, True)
         ScreenshotsStore.capture()
-        self.assertEqual(1, len(ScreenshotsStore.pending_screenshots()))
-
-    def test_capture_should_raise_exception_when_screenshot_file_does_not_exists(self):
-        def take_screenshot():
-            return "this_file_does_not_exists.png"
-        registry.set_screenshot_provider(take_screenshot, True)
-        with self.assertRaises(Exception) as cm:
-            ScreenshotsStore.capture()
-        message = "Screenshot file {0} does not exists.".format(
-            os.path.join(os.getenv("screenshots_dir"),
-                         'this_file_does_not_exists.png')
-        )
-        self.assertEqual(message, cm.exception.__str__())
+        self.assertEqual([os.path.basename(second_screenshot)],
+                         ScreenshotsStore.pending_screenshots())
 
     def tearDown(self):
-        registry.set_screenshot_provider(self.__old_screenshot_provider, self.__is_file_based_screenshot)
+        registry.set_screenshot_provider(
+            self.__old_screenshot_provider, self.__is_file_based_screenshot)
 
 
 if __name__ == '__main__':
