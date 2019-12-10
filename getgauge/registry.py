@@ -275,8 +275,7 @@ class ScreenshotsStore:
             screenshot_file = os.path.join(
                 os.getenv("screenshots_dir"), screenshot_file)
         if(not os.path.exists(screenshot_file)):
-            raise Exception(
-                "Screenshot file {0} does not exists.".format(screenshot_file))
+            logger.warning("Screenshot file {0} does not exists.".format(screenshot_file))
         return os.path.basename(screenshot_file)
 
     @staticmethod
