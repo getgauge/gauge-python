@@ -12,22 +12,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Test
         run: |
           python build.py --test
 
   functional-tests:
     needs: test
-    env:
-      GAUGE_TELEMETRY_ENABLED: false
     name: FTs ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -35,6 +36,7 @@ jobs:
         os: [windows-latest, ubuntu-latest]
     steps:
       - uses: actions/checkout@v1
+
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -46,77 +48,54 @@ jobs:
           go-version: 1.13
         id: go
 
-      - name: Build plugin
+      - name: Clone gauge
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          python build.py --dist
+          git clone --depth=1 https://github.com/getgauge/gauge
 
-      - name: Install gauge and (linux)
-        if: matrix.os != 'windows-latest'
+      - name: Build gauge
         run: |
-          git clone https://github.com/getgauge/gauge
           cd gauge
-          go run build/make.go --verbose
-          go run build/make.go --install --prefix=/tmp/gauge
+          go run -mod=vendor build/make.go --verbose
 
-      - name: Install gauge (windows)
+      - name: Install Gauge (windows)
         if: matrix.os == 'windows-latest'
         run: |
-          git clone https://github.com/getgauge/gauge
           cd gauge
-          go run build/make.go --verbose
-          go run build/make.go --install
+          go run -mod=vendor build/make.go --install  --verbose
+          echo "::add-path::C:\\Program Files\\gauge\\bin"
+
+      - name: Install Gauge (linux)
+        if: matrix.os != 'windows-latest'
+        run: |
+          cd gauge
+          go run -mod=vendor build/make.go --install --prefix=/tmp/gauge --verbose
+          echo "::add-path::/tmp/gauge/bin"
+
+      - name: Install Python
+        run: |
+          pip install -r requirements.txt
+          python build.py --install
+
+      - name: Prep FTs
+        run: |
+          git clone https://github.com/getgauge/gauge-tests
+          cd gauge-tests
+          gauge install
 
       - name: Install Python and Run FTs (linux)
         if: matrix.os != 'windows-latest'
         run: |
-          export PATH=${PATH}:/tmp/gauge/bin
-          export GAUGE_PYTHON_VERSION=$(cd bin; ls gauge-python-*.zip | sed "s/^gauge-python-\([^;]*\).zip/\1/")
-
-          gauge uninstall python
-          gauge install python -f "bin/gauge-python-${GAUGE_PYTHON_VERSION}.zip"
-
-          pip install "dist/getgauge-${GAUGE_PYTHON_VERSION}.tar.gz"
-
-          export TAGS="python"
-          git clone https://github.com/getgauge/gauge-tests
           cd gauge-tests
-          gauge install
-
           ./gradlew clean pythonFT
 
-      - name: Install Python (windows)
+      - name: Install Python and Run FTs (windows)
         if: matrix.os == 'windows-latest'
         run: |
-          set PATH="C:\\Program Files\\gauge\\bin";%PATH%
-
-          gauge uninstall python
-          cd bin
-          for %%f in (gauge-python*) do gauge install python -f "%%f"
-          cd ..
-
-          cd dist
-          for %%f in (getgauge*) do pip install "%%f" --upgrade
-          cd ..
-
-          set TAGS="python"
-          git clone https://github.com/getgauge/gauge-tests
           cd gauge-tests
-          gauge install
-
-      - name: Run FTs (windwos)
-        if: matrix.os == 'windows-latest'
-        run: |
-          ${env:PATH} += ";C:\Program Files\gauge\bin"
-          cd gauge-tests
-          .\gradlew.bat clean jsFT
-        shell: pwsh
+          .\gradlew.bat clean pythonFT
 
   lsp-tests:
     needs: test
-    env:
-      GAUGE_TELEMETRY_ENABLED: false
     name: LSP Tests ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -124,6 +103,7 @@ jobs:
         os: [windows-latest, ubuntu-latest]
     steps:
       - uses: actions/checkout@v1
+
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -131,6 +111,8 @@ jobs:
 
       - name: Use Node.js
         uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
 
       - name: Set up Go 1.13
         uses: actions/setup-go@v1
@@ -138,73 +120,51 @@ jobs:
           go-version: 1.13
         id: go
 
-      - name: Build plugin
+      - name: Clone gauge and build
         run: |
-          python -m pip install --upgrade pip
+          git clone --depth=1 https://github.com/getgauge/gauge
+          cd gauge
+          go run build/make.go --verbose
+
+      - name: Install Gauge (windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          cd gauge
+          go run build/make.go --install  --verbose
+          echo "::add-path::C:\\Program Files\\gauge\\bin"
+
+      - name: Install Gauge (linux)
+        if: matrix.os != 'windows-latest'
+        run: |
+          cd gauge
+          go run build/make.go --install --prefix=/tmp/gauge --verbose
+          echo "::add-path::/tmp/gauge/bin"
+
+      - name: Prep gauge-js
+        run: |
+          git clone https://github.com/getgauge/gauge-js.git
+          cd gauge-js
+          npm install
+        shell: bash
+
+      - name: Install gauge-js
+        run: |
+          cd gauge-js
+          npm run installPlugin
+
+      - name: Install Python
+        run: |
           pip install -r requirements.txt
-          python build.py --dist
+          python build.py --install
 
-      - name: Install gauge and (linux)
-        if: matrix.os != 'windows-latest'
+      - name: Prep LSP tests
         run: |
-          git clone https://github.com/getgauge/gauge
-          cd gauge
-          go run build/make.go --verbose
-          go run build/make.go --install --prefix=/tmp/gauge
-
-      - name: Install Python (linux)
-        if: matrix.os != 'windows-latest'
-        run: |
-          export PATH=${PATH}:/tmp/gauge/bin
-          export GAUGE_PYTHON_VERSION=$(cd bin; ls gauge-python-*.zip | sed "s/^gauge-python-\([^;]*\).zip/\1/")
-
-          gauge uninstall python
-          gauge install python -f "bin/gauge-python-${GAUGE_PYTHON_VERSION}.zip"
-
-          pip install "dist/getgauge-${GAUGE_PYTHON_VERSION}.tar.gz"
-
-      - name: Run LSP tests (linux)
-        if: matrix.os != 'windows-latest'
-        run: |
-          export PATH=${PATH}:/tmp/gauge/bin
-          export TAGS="python"
           git clone https://github.com/getgauge/gauge-lsp-tests
           cd gauge-lsp-tests
-          gauge install
           npm install
+          gauge install
 
+      - name: Run LSP tests
+        run: |
+          cd gauge-lsp-tests
           gauge run --tags='!knownIssue & (actions_on_project_load | actions_on_file_edit)' --env=python-wd
-
-      - name: Install gauge (windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          git clone https://github.com/getgauge/gauge
-          cd gauge
-          go run build/make.go --verbose
-          go run build/make.go --install
-
-
-      - name: Install Python (windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          set PATH="C:\\Program Files\\gauge\\bin";%PATH%
-
-          gauge uninstall python
-          cd bin
-          for %%f in (gauge-python*) do gauge install python -f "%%f"
-          cd ..
-
-          cd dist
-          for %%f in (getgauge*) do pip install "%%f" --upgrade
-          cd ..
-
-      - name: Run LSP tests (windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          set PATH="C:\\Program Files\\gauge\\bin";%PATH%
-          set TAGS="python"
-          git clone https://github.com/getgauge/gauge-lsp-tests
-          cd gauge-lsp-tests
-          gauge install
-          npm install
-          gauge run --tags="!knownIssue & (actions_on_project_load | actions_on_file_edit)" --env=python-wd
