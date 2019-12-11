@@ -228,11 +228,10 @@ def _get_step_value(step_text):
 
 
 def _take_screenshot():
-    temp_file_name = "screenshot-%s.png"%(uuid1().int)
-    temp_file = os.path.join(os.getenv('screenshots_dir'), temp_file_name)
+    temp_file = _uniqe_screenshot_file()
     try:
         call(['gauge_screenshot', temp_file])
-        return temp_file_name
+        return os.path.basename(temp_file)
     except Exception as err:
         logger.error(
             "\nFailed to take screenshot using gauge_screenshot.\n{0}".format(err))
@@ -262,18 +261,15 @@ class ScreenshotsStore:
     @staticmethod
     def capture_to_file():
         if not registry.is_file_based_screenshot:
-            screenshot_file = "screenshot-%s.png" % (uuid1().int)
-            screenshot_file_path = os.path.join(
-                os.getenv('screenshots_dir'), screenshot_file)
+            screenshot_file = _uniqe_screenshot_file()
             content = registry.screenshot_provider()()
-            file = open(screenshot_file_path, "w")
+            file = open(screenshot_file, "w")
             file.write(content)
             file.close()
-            return screenshot_file
+            return os.path.basename(screenshot_file)
         screenshot_file = registry.screenshot_provider()()
         if(not os.path.isabs(screenshot_file)):
-            screenshot_file = os.path.join(
-                os.getenv("screenshots_dir"), screenshot_file)
+            screenshot_file = os.path.join(_screenshots_dir(), screenshot_file)
         if(not os.path.exists(screenshot_file)):
             logger.warning("Screenshot file {0} does not exists.".format(screenshot_file))
         return os.path.basename(screenshot_file)
@@ -281,3 +277,9 @@ class ScreenshotsStore:
     @staticmethod
     def clear():
         ScreenshotsStore.__screenshots = []
+
+def _uniqe_screenshot_file():
+    return os.path.join(_screenshots_dir(), "screenshot-{0}.png".format(uuid1().int))
+
+def _screenshots_dir():
+    return os.getenv('screenshots_dir')
