@@ -513,7 +513,7 @@ class DecoratorTests(TestCase):
 class ScreenshotsTests(TestCase):
     def setUp(self):
         self.__old_screenshot_provider = registry.screenshot_provider()
-        self.__is_file_based_screenshot = registry.is_file_based_screenshot
+        self.__is_screenshot_writer  = registry.is_screenshot_writer
         os.environ["screenshots_dir"] = tempfile.mkdtemp()
 
     def test_pending_screenshots(self):
@@ -570,7 +570,7 @@ class ScreenshotsTests(TestCase):
 
     def tearDown(self):
         registry.set_screenshot_provider(
-            self.__old_screenshot_provider, self.__is_file_based_screenshot)
+            self.__old_screenshot_provider, self.__is_screenshot_writer)
 
 
 if __name__ == '__main__':

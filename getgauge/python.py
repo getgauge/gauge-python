@@ -56,17 +56,17 @@ def after_step(obj=None):
 
 
 def screenshot(func):
-    _warn_screenshot_deprecation('screenshot', 'file_based_screen_grabber')
+    _warn_screenshot_deprecation('screenshot', 'custom_screenshot_writer')
     registry.set_screenshot_provider(func, False)
     return func
 
 
 def custom_screen_grabber(func):
-    _warn_screenshot_deprecation('custom_screen_grabber', 'file_based_screen_grabber')
+    _warn_screenshot_deprecation('custom_screen_grabber', 'custom_screenshot_writer')
     registry.set_screenshot_provider(func, False)
     return func
 
-def file_based_screen_grabber(func):
+def custom_screenshot_writer(func):
     registry.set_screenshot_provider(func, True)
     return func
 
