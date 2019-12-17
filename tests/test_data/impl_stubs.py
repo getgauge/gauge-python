@@ -87,4 +87,4 @@ def after_suite2():
 
 @custom_screen_grabber
 def take_screenshot():
-    return "foo"
+    return bytearray("foo", "utf-8")

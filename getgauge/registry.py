@@ -263,7 +263,7 @@ class ScreenshotsStore:
         if not registry.is_screenshot_writer:
             screenshot_file = _uniqe_screenshot_file()
             content = registry.screenshot_provider()()
-            file = open(screenshot_file, "w")
+            file = open(screenshot_file, "wb")
             file.write(content)
             file.close()
             return os.path.basename(screenshot_file)
