@@ -548,16 +548,10 @@ class ScreenshotsTests(TestCase):
             os.getenv("screenshots_dir"), "screenshot{0}.png".format(uuid1()))
 
         def returns_abs_path():
-            file = open(first_screenshot, "w")
-            file.write("screenshot data")
-            file.close()
-            return file.name
+            return first_screenshot
 
         def returns_base_ath():
-            file = open(second_screenshot, "w")
-            file.write("screenshot data")
-            file.close()
-            return os.path.basename(file.name)
+            return os.path.basename(second_screenshot)
         registry.set_screenshot_provider(returns_abs_path, True)
         ScreenshotsStore.capture()
         self.assertEqual([os.path.basename(first_screenshot)],
