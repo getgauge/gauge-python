@@ -107,7 +107,7 @@ class Registry(object):
 
     def __init__(self):
         self.__screenshot_provider, self.__steps_map, self.__continue_on_failures = _take_screenshot, {}, {}
-        self.is_file_based_screenshot = True
+        self.is_screenshot_writer = True
         for hook in Registry.hooks:
             self.__def_hook(hook)
 
@@ -151,9 +151,9 @@ class Registry(object):
     def get_infos_for(self, step_text):
         return self.__steps_map.get(step_text)
 
-    def set_screenshot_provider(self, func, is_file_based):
+    def set_screenshot_provider(self, func, is_writer):
         self.__screenshot_provider = func
-        self.is_file_based_screenshot = is_file_based
+        self.is_screenshot_writer = is_writer
 
     def screenshot_provider(self):
         return self.__screenshot_provider
@@ -260,7 +260,7 @@ class ScreenshotsStore:
 
     @staticmethod
     def capture_to_file():
-        if not registry.is_file_based_screenshot:
+        if not registry.is_screenshot_writer:
             screenshot_file = _uniqe_screenshot_file()
             content = registry.screenshot_provider()()
             file = open(screenshot_file, "w")
