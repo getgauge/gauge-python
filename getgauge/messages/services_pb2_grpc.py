@@ -3,7 +3,7 @@ import getgauge.messages.messages_pb2 as messages__pb2
 import grpc
 
 
-class ExecutionStub(object):
+class RunnerStub(object):
   # missing associated documentation comment in .proto file
   pass
 
@@ -13,71 +13,130 @@ class ExecutionStub(object):
     Args:
       channel: A grpc.Channel.
     """
+    self.ValidateStep = channel.unary_unary(
+        '/gauge.messages.Runner/ValidateStep',
+        request_serializer=messages__pb2.StepValidateRequest.SerializeToString,
+        response_deserializer=messages__pb2.StepValidateResponse.FromString,
+        )
     self.InitializeSuiteDataStore = channel.unary_unary(
-        '/gauge.messages.Execution/InitializeSuiteDataStore',
+        '/gauge.messages.Runner/InitializeSuiteDataStore',
         request_serializer=messages__pb2.Empty.SerializeToString,
         response_deserializer=messages__pb2.ExecutionStatusResponse.FromString,
         )
     self.StartExecution = channel.unary_unary(
-        '/gauge.messages.Execution/StartExecution',
+        '/gauge.messages.Runner/StartExecution',
         request_serializer=messages__pb2.ExecutionStartingRequest.SerializeToString,
         response_deserializer=messages__pb2.ExecutionStatusResponse.FromString,
         )
     self.InitializeSpecDataStore = channel.unary_unary(
-        '/gauge.messages.Execution/InitializeSpecDataStore',
+        '/gauge.messages.Runner/InitializeSpecDataStore',
         request_serializer=messages__pb2.Empty.SerializeToString,
         response_deserializer=messages__pb2.ExecutionStatusResponse.FromString,
         )
     self.StartSpecExecution = channel.unary_unary(
-        '/gauge.messages.Execution/StartSpecExecution',
+        '/gauge.messages.Runner/StartSpecExecution',
         request_serializer=messages__pb2.SpecExecutionStartingRequest.SerializeToString,
         response_deserializer=messages__pb2.ExecutionStatusResponse.FromString,
         )
     self.InitializeScenarioDataStore = channel.unary_unary(
-        '/gauge.messages.Execution/InitializeScenarioDataStore',
+        '/gauge.messages.Runner/InitializeScenarioDataStore',
         request_serializer=messages__pb2.Empty.SerializeToString,
         response_deserializer=messages__pb2.ExecutionStatusResponse.FromString,
         )
     self.StartScenarioExecution = channel.unary_unary(
-        '/gauge.messages.Execution/StartScenarioExecution',
+        '/gauge.messages.Runner/StartScenarioExecution',
         request_serializer=messages__pb2.ScenarioExecutionStartingRequest.SerializeToString,
         response_deserializer=messages__pb2.ExecutionStatusResponse.FromString,
         )
     self.StartStepExecution = channel.unary_unary(
-        '/gauge.messages.Execution/StartStepExecution',
+        '/gauge.messages.Runner/StartStepExecution',
         request_serializer=messages__pb2.StepExecutionStartingRequest.SerializeToString,
         response_deserializer=messages__pb2.ExecutionStatusResponse.FromString,
         )
     self.ExecuteStep = channel.unary_unary(
-        '/gauge.messages.Execution/ExecuteStep',
+        '/gauge.messages.Runner/ExecuteStep',
         request_serializer=messages__pb2.ExecuteStepRequest.SerializeToString,
         response_deserializer=messages__pb2.ExecutionStatusResponse.FromString,
         )
     self.FinishStepExecution = channel.unary_unary(
-        '/gauge.messages.Execution/FinishStepExecution',
+        '/gauge.messages.Runner/FinishStepExecution',
         request_serializer=messages__pb2.StepExecutionEndingRequest.SerializeToString,
         response_deserializer=messages__pb2.ExecutionStatusResponse.FromString,
         )
     self.FinishScenarioExecution = channel.unary_unary(
-        '/gauge.messages.Execution/FinishScenarioExecution',
+        '/gauge.messages.Runner/FinishScenarioExecution',
         request_serializer=messages__pb2.ScenarioExecutionEndingRequest.SerializeToString,
         response_deserializer=messages__pb2.ExecutionStatusResponse.FromString,
         )
     self.FinishSpecExecution = channel.unary_unary(
-        '/gauge.messages.Execution/FinishSpecExecution',
+        '/gauge.messages.Runner/FinishSpecExecution',
         request_serializer=messages__pb2.SpecExecutionEndingRequest.SerializeToString,
         response_deserializer=messages__pb2.ExecutionStatusResponse.FromString,
         )
     self.FinishExecution = channel.unary_unary(
-        '/gauge.messages.Execution/FinishExecution',
+        '/gauge.messages.Runner/FinishExecution',
         request_serializer=messages__pb2.ExecutionEndingRequest.SerializeToString,
         response_deserializer=messages__pb2.ExecutionStatusResponse.FromString,
         )
+    self.CacheFile = channel.unary_unary(
+        '/gauge.messages.Runner/CacheFile',
+        request_serializer=messages__pb2.CacheFileRequest.SerializeToString,
+        response_deserializer=messages__pb2.Empty.FromString,
+        )
+    self.GetStepName = channel.unary_unary(
+        '/gauge.messages.Runner/GetStepName',
+        request_serializer=messages__pb2.StepNameRequest.SerializeToString,
+        response_deserializer=messages__pb2.StepNameResponse.FromString,
+        )
+    self.GetGlobPatterns = channel.unary_unary(
+        '/gauge.messages.Runner/GetGlobPatterns',
+        request_serializer=messages__pb2.Empty.SerializeToString,
+        response_deserializer=messages__pb2.ImplementationFileGlobPatternResponse.FromString,
+        )
+    self.GetStepNames = channel.unary_unary(
+        '/gauge.messages.Runner/GetStepNames',
+        request_serializer=messages__pb2.StepNamesRequest.SerializeToString,
+        response_deserializer=messages__pb2.StepNamesResponse.FromString,
+        )
+    self.GetStepPositions = channel.unary_unary(
+        '/gauge.messages.Runner/GetStepPositions',
+        request_serializer=messages__pb2.StepPositionsRequest.SerializeToString,
+        response_deserializer=messages__pb2.StepPositionsResponse.FromString,
+        )
+    self.GetImplementationFiles = channel.unary_unary(
+        '/gauge.messages.Runner/GetImplementationFiles',
+        request_serializer=messages__pb2.Empty.SerializeToString,
+        response_deserializer=messages__pb2.ImplementationFileListResponse.FromString,
+        )
+    self.ImplementStub = channel.unary_unary(
+        '/gauge.messages.Runner/ImplementStub',
+        request_serializer=messages__pb2.StubImplementationCodeRequest.SerializeToString,
+        response_deserializer=messages__pb2.FileDiff.FromString,
+        )
+    self.Refactor = channel.unary_unary(
+        '/gauge.messages.Runner/Refactor',
+        request_serializer=messages__pb2.RefactorRequest.SerializeToString,
+        response_deserializer=messages__pb2.RefactorResponse.FromString,
+        )
+    self.Kill = channel.unary_unary(
+        '/gauge.messages.Runner/Kill',
+        request_serializer=messages__pb2.KillProcessRequest.SerializeToString,
+        response_deserializer=messages__pb2.Empty.FromString,
+        )
 
 
-class ExecutionServicer(object):
+class RunnerServicer(object):
   # missing associated documentation comment in .proto file
   pass
+
+  def ValidateStep(self, request, context):
+    """ValidateStep is a RPC to validate a given step.
+
+    Accepts a StepValidateRequest message and returns a StepValidateResponse message
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
   def InitializeSuiteDataStore(self, request, context):
     """SuiteDataStoreInit is a RPC to initialize the suite level data store.
@@ -187,131 +246,6 @@ class ExecutionServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-
-def add_ExecutionServicer_to_server(servicer, server):
-  rpc_method_handlers = {
-      'InitializeSuiteDataStore': grpc.unary_unary_rpc_method_handler(
-          servicer.InitializeSuiteDataStore,
-          request_deserializer=messages__pb2.Empty.FromString,
-          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
-      ),
-      'StartExecution': grpc.unary_unary_rpc_method_handler(
-          servicer.StartExecution,
-          request_deserializer=messages__pb2.ExecutionStartingRequest.FromString,
-          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
-      ),
-      'InitializeSpecDataStore': grpc.unary_unary_rpc_method_handler(
-          servicer.InitializeSpecDataStore,
-          request_deserializer=messages__pb2.Empty.FromString,
-          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
-      ),
-      'StartSpecExecution': grpc.unary_unary_rpc_method_handler(
-          servicer.StartSpecExecution,
-          request_deserializer=messages__pb2.SpecExecutionStartingRequest.FromString,
-          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
-      ),
-      'InitializeScenarioDataStore': grpc.unary_unary_rpc_method_handler(
-          servicer.InitializeScenarioDataStore,
-          request_deserializer=messages__pb2.Empty.FromString,
-          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
-      ),
-      'StartScenarioExecution': grpc.unary_unary_rpc_method_handler(
-          servicer.StartScenarioExecution,
-          request_deserializer=messages__pb2.ScenarioExecutionStartingRequest.FromString,
-          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
-      ),
-      'StartStepExecution': grpc.unary_unary_rpc_method_handler(
-          servicer.StartStepExecution,
-          request_deserializer=messages__pb2.StepExecutionStartingRequest.FromString,
-          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
-      ),
-      'ExecuteStep': grpc.unary_unary_rpc_method_handler(
-          servicer.ExecuteStep,
-          request_deserializer=messages__pb2.ExecuteStepRequest.FromString,
-          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
-      ),
-      'FinishStepExecution': grpc.unary_unary_rpc_method_handler(
-          servicer.FinishStepExecution,
-          request_deserializer=messages__pb2.StepExecutionEndingRequest.FromString,
-          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
-      ),
-      'FinishScenarioExecution': grpc.unary_unary_rpc_method_handler(
-          servicer.FinishScenarioExecution,
-          request_deserializer=messages__pb2.ScenarioExecutionEndingRequest.FromString,
-          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
-      ),
-      'FinishSpecExecution': grpc.unary_unary_rpc_method_handler(
-          servicer.FinishSpecExecution,
-          request_deserializer=messages__pb2.SpecExecutionEndingRequest.FromString,
-          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
-      ),
-      'FinishExecution': grpc.unary_unary_rpc_method_handler(
-          servicer.FinishExecution,
-          request_deserializer=messages__pb2.ExecutionEndingRequest.FromString,
-          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
-      ),
-  }
-  generic_handler = grpc.method_handlers_generic_handler(
-      'gauge.messages.Execution', rpc_method_handlers)
-  server.add_generic_rpc_handlers((generic_handler,))
-
-
-class AuthoringStub(object):
-  # missing associated documentation comment in .proto file
-  pass
-
-  def __init__(self, channel):
-    """Constructor.
-
-    Args:
-      channel: A grpc.Channel.
-    """
-    self.CacheFile = channel.unary_unary(
-        '/gauge.messages.Authoring/CacheFile',
-        request_serializer=messages__pb2.CacheFileRequest.SerializeToString,
-        response_deserializer=messages__pb2.Empty.FromString,
-        )
-    self.GetStepName = channel.unary_unary(
-        '/gauge.messages.Authoring/GetStepName',
-        request_serializer=messages__pb2.StepNameRequest.SerializeToString,
-        response_deserializer=messages__pb2.StepNameResponse.FromString,
-        )
-    self.GetGlobPatterns = channel.unary_unary(
-        '/gauge.messages.Authoring/GetGlobPatterns',
-        request_serializer=messages__pb2.Empty.SerializeToString,
-        response_deserializer=messages__pb2.ImplementationFileGlobPatternResponse.FromString,
-        )
-    self.GetStepNames = channel.unary_unary(
-        '/gauge.messages.Authoring/GetStepNames',
-        request_serializer=messages__pb2.StepNamesRequest.SerializeToString,
-        response_deserializer=messages__pb2.StepNamesResponse.FromString,
-        )
-    self.GetStepPositions = channel.unary_unary(
-        '/gauge.messages.Authoring/GetStepPositions',
-        request_serializer=messages__pb2.StepPositionsRequest.SerializeToString,
-        response_deserializer=messages__pb2.StepPositionsResponse.FromString,
-        )
-    self.GetImplementationFiles = channel.unary_unary(
-        '/gauge.messages.Authoring/GetImplementationFiles',
-        request_serializer=messages__pb2.Empty.SerializeToString,
-        response_deserializer=messages__pb2.ImplementationFileListResponse.FromString,
-        )
-    self.ImplementStub = channel.unary_unary(
-        '/gauge.messages.Authoring/ImplementStub',
-        request_serializer=messages__pb2.StubImplementationCodeRequest.SerializeToString,
-        response_deserializer=messages__pb2.FileDiff.FromString,
-        )
-    self.Refactor = channel.unary_unary(
-        '/gauge.messages.Authoring/Refactor',
-        request_serializer=messages__pb2.RefactorRequest.SerializeToString,
-        response_deserializer=messages__pb2.RefactorResponse.FromString,
-        )
-
-
-class AuthoringServicer(object):
-  # missing associated documentation comment in .proto file
-  pass
-
   def CacheFile(self, request, context):
     """CacheFile is a RPC to tell runner to load/reload/unload a implementation file.
 
@@ -384,9 +318,83 @@ class AuthoringServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def Kill(self, request, context):
+    """Kill is a RPC tell plugin to stop grpc server and kill the plugin process.
 
-def add_AuthoringServicer_to_server(servicer, server):
+    Accepts a KillProcessRequest message and returns a Empty message.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+
+def add_RunnerServicer_to_server(servicer, server):
   rpc_method_handlers = {
+      'ValidateStep': grpc.unary_unary_rpc_method_handler(
+          servicer.ValidateStep,
+          request_deserializer=messages__pb2.StepValidateRequest.FromString,
+          response_serializer=messages__pb2.StepValidateResponse.SerializeToString,
+      ),
+      'InitializeSuiteDataStore': grpc.unary_unary_rpc_method_handler(
+          servicer.InitializeSuiteDataStore,
+          request_deserializer=messages__pb2.Empty.FromString,
+          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
+      ),
+      'StartExecution': grpc.unary_unary_rpc_method_handler(
+          servicer.StartExecution,
+          request_deserializer=messages__pb2.ExecutionStartingRequest.FromString,
+          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
+      ),
+      'InitializeSpecDataStore': grpc.unary_unary_rpc_method_handler(
+          servicer.InitializeSpecDataStore,
+          request_deserializer=messages__pb2.Empty.FromString,
+          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
+      ),
+      'StartSpecExecution': grpc.unary_unary_rpc_method_handler(
+          servicer.StartSpecExecution,
+          request_deserializer=messages__pb2.SpecExecutionStartingRequest.FromString,
+          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
+      ),
+      'InitializeScenarioDataStore': grpc.unary_unary_rpc_method_handler(
+          servicer.InitializeScenarioDataStore,
+          request_deserializer=messages__pb2.Empty.FromString,
+          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
+      ),
+      'StartScenarioExecution': grpc.unary_unary_rpc_method_handler(
+          servicer.StartScenarioExecution,
+          request_deserializer=messages__pb2.ScenarioExecutionStartingRequest.FromString,
+          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
+      ),
+      'StartStepExecution': grpc.unary_unary_rpc_method_handler(
+          servicer.StartStepExecution,
+          request_deserializer=messages__pb2.StepExecutionStartingRequest.FromString,
+          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
+      ),
+      'ExecuteStep': grpc.unary_unary_rpc_method_handler(
+          servicer.ExecuteStep,
+          request_deserializer=messages__pb2.ExecuteStepRequest.FromString,
+          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
+      ),
+      'FinishStepExecution': grpc.unary_unary_rpc_method_handler(
+          servicer.FinishStepExecution,
+          request_deserializer=messages__pb2.StepExecutionEndingRequest.FromString,
+          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
+      ),
+      'FinishScenarioExecution': grpc.unary_unary_rpc_method_handler(
+          servicer.FinishScenarioExecution,
+          request_deserializer=messages__pb2.ScenarioExecutionEndingRequest.FromString,
+          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
+      ),
+      'FinishSpecExecution': grpc.unary_unary_rpc_method_handler(
+          servicer.FinishSpecExecution,
+          request_deserializer=messages__pb2.SpecExecutionEndingRequest.FromString,
+          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
+      ),
+      'FinishExecution': grpc.unary_unary_rpc_method_handler(
+          servicer.FinishExecution,
+          request_deserializer=messages__pb2.ExecutionEndingRequest.FromString,
+          response_serializer=messages__pb2.ExecutionStatusResponse.SerializeToString,
+      ),
       'CacheFile': grpc.unary_unary_rpc_method_handler(
           servicer.CacheFile,
           request_deserializer=messages__pb2.CacheFileRequest.FromString,
@@ -427,15 +435,20 @@ def add_AuthoringServicer_to_server(servicer, server):
           request_deserializer=messages__pb2.RefactorRequest.FromString,
           response_serializer=messages__pb2.RefactorResponse.SerializeToString,
       ),
+      'Kill': grpc.unary_unary_rpc_method_handler(
+          servicer.Kill,
+          request_deserializer=messages__pb2.KillProcessRequest.FromString,
+          response_serializer=messages__pb2.Empty.SerializeToString,
+      ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
-      'gauge.messages.Authoring', rpc_method_handlers)
+      'gauge.messages.Runner', rpc_method_handlers)
   server.add_generic_rpc_handlers((generic_handler,))
 
 
-class ResultStub(object):
-  # missing associated documentation comment in .proto file
-  pass
+class ReporterStub(object):
+  """Reporter services is meant for reporting plugins, or others plugins which are interested the live events
+  """
 
   def __init__(self, channel):
     """Constructor.
@@ -443,16 +456,133 @@ class ResultStub(object):
     Args:
       channel: A grpc.Channel.
     """
+    self.NotifyExecutionStarting = channel.unary_unary(
+        '/gauge.messages.Reporter/NotifyExecutionStarting',
+        request_serializer=messages__pb2.ExecutionStartingRequest.SerializeToString,
+        response_deserializer=messages__pb2.Empty.FromString,
+        )
+    self.NotifySpecExecutionStarting = channel.unary_unary(
+        '/gauge.messages.Reporter/NotifySpecExecutionStarting',
+        request_serializer=messages__pb2.SpecExecutionStartingRequest.SerializeToString,
+        response_deserializer=messages__pb2.Empty.FromString,
+        )
+    self.NotifyScenarioExecutionStarting = channel.unary_unary(
+        '/gauge.messages.Reporter/NotifyScenarioExecutionStarting',
+        request_serializer=messages__pb2.ScenarioExecutionStartingRequest.SerializeToString,
+        response_deserializer=messages__pb2.Empty.FromString,
+        )
+    self.NotifyStepExecutionStarting = channel.unary_unary(
+        '/gauge.messages.Reporter/NotifyStepExecutionStarting',
+        request_serializer=messages__pb2.StepExecutionStartingRequest.SerializeToString,
+        response_deserializer=messages__pb2.Empty.FromString,
+        )
+    self.NotifyStepExecutionEnding = channel.unary_unary(
+        '/gauge.messages.Reporter/NotifyStepExecutionEnding',
+        request_serializer=messages__pb2.StepExecutionEndingRequest.SerializeToString,
+        response_deserializer=messages__pb2.Empty.FromString,
+        )
+    self.NotifyScenarioExecutionEnding = channel.unary_unary(
+        '/gauge.messages.Reporter/NotifyScenarioExecutionEnding',
+        request_serializer=messages__pb2.ScenarioExecutionEndingRequest.SerializeToString,
+        response_deserializer=messages__pb2.Empty.FromString,
+        )
+    self.NotifySpecExecutionEnding = channel.unary_unary(
+        '/gauge.messages.Reporter/NotifySpecExecutionEnding',
+        request_serializer=messages__pb2.SpecExecutionEndingRequest.SerializeToString,
+        response_deserializer=messages__pb2.Empty.FromString,
+        )
+    self.NotifyExecutionEnding = channel.unary_unary(
+        '/gauge.messages.Reporter/NotifyExecutionEnding',
+        request_serializer=messages__pb2.ExecutionEndingRequest.SerializeToString,
+        response_deserializer=messages__pb2.Empty.FromString,
+        )
     self.NotifySuiteResult = channel.unary_unary(
-        '/gauge.messages.Result/NotifySuiteResult',
+        '/gauge.messages.Reporter/NotifySuiteResult',
         request_serializer=messages__pb2.SuiteExecutionResult.SerializeToString,
+        response_deserializer=messages__pb2.Empty.FromString,
+        )
+    self.Kill = channel.unary_unary(
+        '/gauge.messages.Reporter/Kill',
+        request_serializer=messages__pb2.KillProcessRequest.SerializeToString,
         response_deserializer=messages__pb2.Empty.FromString,
         )
 
 
-class ResultServicer(object):
-  # missing associated documentation comment in .proto file
-  pass
+class ReporterServicer(object):
+  """Reporter services is meant for reporting plugins, or others plugins which are interested the live events
+  """
+
+  def NotifyExecutionStarting(self, request, context):
+    """NotifyExecutionStarting is a RPC to tell plugins that the execution has started.
+
+    Accepts a ExecutionStartingRequest message and returns a Empty message
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def NotifySpecExecutionStarting(self, request, context):
+    """NotifySpecExecutionStarting is a RPC to tell plugins that the specification execution has started.
+
+    Accepts a SpecExecutionStartingRequest message and returns a Empty message
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def NotifyScenarioExecutionStarting(self, request, context):
+    """NotifyScenarioExecutionStarting is a RPC to tell plugins that the scenario execution has started.
+
+    Accepts a ScenarioExecutionStartingRequest message and returns a Empty message
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def NotifyStepExecutionStarting(self, request, context):
+    """NotifyStepExecutionStarting is a RPC to tell plugins that the step execution has started.
+
+    Accepts a StepExecutionStartingRequest message and returns a Empty message
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def NotifyStepExecutionEnding(self, request, context):
+    """NotifyStepExecutionEnding is a RPC to tell plugins that the step execution has finished.
+
+    Accepts a StepExecutionStartingRequest message and returns a Empty message
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def NotifyScenarioExecutionEnding(self, request, context):
+    """NotifyScenarioExecutionEnding is a RPC to tell plugins that the scenario execution has finished.
+
+    Accepts a ScenarioExecutionEndingRequest message and returns a Empty message
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def NotifySpecExecutionEnding(self, request, context):
+    """NotifySpecExecutionEnding is a RPC to tell plugins that the specification execution has finished.
+
+    Accepts a SpecExecutionStartingRequest message and returns a Empty message
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def NotifyExecutionEnding(self, request, context):
+    """NotifyExecutionEnding is a RPC to tell plugins that the execution has finished.
+
+    Accepts a ExecutionEndingRequest message and returns a Empty message
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
   def NotifySuiteResult(self, request, context):
     """NotifySuiteResult is a RPC to tell about the end result of execution
@@ -462,85 +592,6 @@ class ResultServicer(object):
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
-
-
-def add_ResultServicer_to_server(servicer, server):
-  rpc_method_handlers = {
-      'NotifySuiteResult': grpc.unary_unary_rpc_method_handler(
-          servicer.NotifySuiteResult,
-          request_deserializer=messages__pb2.SuiteExecutionResult.FromString,
-          response_serializer=messages__pb2.Empty.SerializeToString,
-      ),
-  }
-  generic_handler = grpc.method_handlers_generic_handler(
-      'gauge.messages.Result', rpc_method_handlers)
-  server.add_generic_rpc_handlers((generic_handler,))
-
-
-class ValidatorStub(object):
-  # missing associated documentation comment in .proto file
-  pass
-
-  def __init__(self, channel):
-    """Constructor.
-
-    Args:
-      channel: A grpc.Channel.
-    """
-    self.ValidateStep = channel.unary_unary(
-        '/gauge.messages.Validator/ValidateStep',
-        request_serializer=messages__pb2.StepValidateRequest.SerializeToString,
-        response_deserializer=messages__pb2.StepValidateResponse.FromString,
-        )
-
-
-class ValidatorServicer(object):
-  # missing associated documentation comment in .proto file
-  pass
-
-  def ValidateStep(self, request, context):
-    """ValidateStep is a RPC to validate a given step.
-
-    Accepts a StepValidateRequest message and returns a StepValidateResponse message
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-
-def add_ValidatorServicer_to_server(servicer, server):
-  rpc_method_handlers = {
-      'ValidateStep': grpc.unary_unary_rpc_method_handler(
-          servicer.ValidateStep,
-          request_deserializer=messages__pb2.StepValidateRequest.FromString,
-          response_serializer=messages__pb2.StepValidateResponse.SerializeToString,
-      ),
-  }
-  generic_handler = grpc.method_handlers_generic_handler(
-      'gauge.messages.Validator', rpc_method_handlers)
-  server.add_generic_rpc_handlers((generic_handler,))
-
-
-class ProcessStub(object):
-  # missing associated documentation comment in .proto file
-  pass
-
-  def __init__(self, channel):
-    """Constructor.
-
-    Args:
-      channel: A grpc.Channel.
-    """
-    self.Kill = channel.unary_unary(
-        '/gauge.messages.Process/Kill',
-        request_serializer=messages__pb2.KillProcessRequest.SerializeToString,
-        response_deserializer=messages__pb2.Empty.FromString,
-        )
-
-
-class ProcessServicer(object):
-  # missing associated documentation comment in .proto file
-  pass
 
   def Kill(self, request, context):
     """Kill is a RPC tell plugin to stop grpc server and kill the plugin process.
@@ -552,8 +603,53 @@ class ProcessServicer(object):
     raise NotImplementedError('Method not implemented!')
 
 
-def add_ProcessServicer_to_server(servicer, server):
+def add_ReporterServicer_to_server(servicer, server):
   rpc_method_handlers = {
+      'NotifyExecutionStarting': grpc.unary_unary_rpc_method_handler(
+          servicer.NotifyExecutionStarting,
+          request_deserializer=messages__pb2.ExecutionStartingRequest.FromString,
+          response_serializer=messages__pb2.Empty.SerializeToString,
+      ),
+      'NotifySpecExecutionStarting': grpc.unary_unary_rpc_method_handler(
+          servicer.NotifySpecExecutionStarting,
+          request_deserializer=messages__pb2.SpecExecutionStartingRequest.FromString,
+          response_serializer=messages__pb2.Empty.SerializeToString,
+      ),
+      'NotifyScenarioExecutionStarting': grpc.unary_unary_rpc_method_handler(
+          servicer.NotifyScenarioExecutionStarting,
+          request_deserializer=messages__pb2.ScenarioExecutionStartingRequest.FromString,
+          response_serializer=messages__pb2.Empty.SerializeToString,
+      ),
+      'NotifyStepExecutionStarting': grpc.unary_unary_rpc_method_handler(
+          servicer.NotifyStepExecutionStarting,
+          request_deserializer=messages__pb2.StepExecutionStartingRequest.FromString,
+          response_serializer=messages__pb2.Empty.SerializeToString,
+      ),
+      'NotifyStepExecutionEnding': grpc.unary_unary_rpc_method_handler(
+          servicer.NotifyStepExecutionEnding,
+          request_deserializer=messages__pb2.StepExecutionEndingRequest.FromString,
+          response_serializer=messages__pb2.Empty.SerializeToString,
+      ),
+      'NotifyScenarioExecutionEnding': grpc.unary_unary_rpc_method_handler(
+          servicer.NotifyScenarioExecutionEnding,
+          request_deserializer=messages__pb2.ScenarioExecutionEndingRequest.FromString,
+          response_serializer=messages__pb2.Empty.SerializeToString,
+      ),
+      'NotifySpecExecutionEnding': grpc.unary_unary_rpc_method_handler(
+          servicer.NotifySpecExecutionEnding,
+          request_deserializer=messages__pb2.SpecExecutionEndingRequest.FromString,
+          response_serializer=messages__pb2.Empty.SerializeToString,
+      ),
+      'NotifyExecutionEnding': grpc.unary_unary_rpc_method_handler(
+          servicer.NotifyExecutionEnding,
+          request_deserializer=messages__pb2.ExecutionEndingRequest.FromString,
+          response_serializer=messages__pb2.Empty.SerializeToString,
+      ),
+      'NotifySuiteResult': grpc.unary_unary_rpc_method_handler(
+          servicer.NotifySuiteResult,
+          request_deserializer=messages__pb2.SuiteExecutionResult.FromString,
+          response_serializer=messages__pb2.Empty.SerializeToString,
+      ),
       'Kill': grpc.unary_unary_rpc_method_handler(
           servicer.Kill,
           request_deserializer=messages__pb2.KillProcessRequest.FromString,
@@ -561,5 +657,5 @@ def add_ProcessServicer_to_server(servicer, server):
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
-      'gauge.messages.Process', rpc_method_handlers)
+      'gauge.messages.Reporter', rpc_method_handlers)
   server.add_generic_rpc_handlers((generic_handler,))
