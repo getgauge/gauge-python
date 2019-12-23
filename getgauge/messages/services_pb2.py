@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='gauge.messages',
   syntax='proto3',
   serialized_options=_b('\n\026com.thoughtworks.gauge\252\002\016Gauge.Messages'),
-  serialized_pb=_b('\n\x0eservices.proto\x12\x0egauge.messages\x1a\x0emessages.proto2\xe1\t\n\tExecution\x12Z\n\x18InitializeSuiteDataStore\x12\x15.gauge.messages.Empty\x1a\'.gauge.messages.ExecutionStatusResponse\x12\x63\n\x0eStartExecution\x12(.gauge.messages.ExecutionStartingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12Y\n\x17InitializeSpecDataStore\x12\x15.gauge.messages.Empty\x1a\'.gauge.messages.ExecutionStatusResponse\x12k\n\x12StartSpecExecution\x12,.gauge.messages.SpecExecutionStartingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12]\n\x1bInitializeScenarioDataStore\x12\x15.gauge.messages.Empty\x1a\'.gauge.messages.ExecutionStatusResponse\x12s\n\x16StartScenarioExecution\x12\x30.gauge.messages.ScenarioExecutionStartingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12k\n\x12StartStepExecution\x12,.gauge.messages.StepExecutionStartingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12Z\n\x0b\x45xecuteStep\x12\".gauge.messages.ExecuteStepRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12j\n\x13\x46inishStepExecution\x12*.gauge.messages.StepExecutionEndingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12r\n\x17\x46inishScenarioExecution\x12..gauge.messages.ScenarioExecutionEndingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12j\n\x13\x46inishSpecExecution\x12*.gauge.messages.SpecExecutionEndingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12\x62\n\x0f\x46inishExecution\x12&.gauge.messages.ExecutionEndingRequest\x1a\'.gauge.messages.ExecutionStatusResponse2\xc4\x05\n\tAuthoring\x12\x44\n\tCacheFile\x12 .gauge.messages.CacheFileRequest\x1a\x15.gauge.messages.Empty\x12P\n\x0bGetStepName\x12\x1f.gauge.messages.StepNameRequest\x1a .gauge.messages.StepNameResponse\x12_\n\x0fGetGlobPatterns\x12\x15.gauge.messages.Empty\x1a\x35.gauge.messages.ImplementationFileGlobPatternResponse\x12S\n\x0cGetStepNames\x12 .gauge.messages.StepNamesRequest\x1a!.gauge.messages.StepNamesResponse\x12_\n\x10GetStepPositions\x12$.gauge.messages.StepPositionsRequest\x1a%.gauge.messages.StepPositionsResponse\x12_\n\x16GetImplementationFiles\x12\x15.gauge.messages.Empty\x1a..gauge.messages.ImplementationFileListResponse\x12X\n\rImplementStub\x12-.gauge.messages.StubImplementationCodeRequest\x1a\x18.gauge.messages.FileDiff\x12M\n\x08Refactor\x12\x1f.gauge.messages.RefactorRequest\x1a .gauge.messages.RefactorResponse2Z\n\x06Result\x12P\n\x11NotifySuiteResult\x12$.gauge.messages.SuiteExecutionResult\x1a\x15.gauge.messages.Empty2f\n\tValidator\x12Y\n\x0cValidateStep\x12#.gauge.messages.StepValidateRequest\x1a$.gauge.messages.StepValidateResponse2L\n\x07Process\x12\x41\n\x04Kill\x12\".gauge.messages.KillProcessRequest\x1a\x15.gauge.messages.EmptyB)\n\x16\x63om.thoughtworks.gauge\xaa\x02\x0eGauge.Messagesb\x06proto3')
+  serialized_pb=_b('\n\x0eservices.proto\x12\x0egauge.messages\x1a\x0emessages.proto2\xb5\x10\n\x06Runner\x12Y\n\x0cValidateStep\x12#.gauge.messages.StepValidateRequest\x1a$.gauge.messages.StepValidateResponse\x12Z\n\x18InitializeSuiteDataStore\x12\x15.gauge.messages.Empty\x1a\'.gauge.messages.ExecutionStatusResponse\x12\x63\n\x0eStartExecution\x12(.gauge.messages.ExecutionStartingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12Y\n\x17InitializeSpecDataStore\x12\x15.gauge.messages.Empty\x1a\'.gauge.messages.ExecutionStatusResponse\x12k\n\x12StartSpecExecution\x12,.gauge.messages.SpecExecutionStartingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12]\n\x1bInitializeScenarioDataStore\x12\x15.gauge.messages.Empty\x1a\'.gauge.messages.ExecutionStatusResponse\x12s\n\x16StartScenarioExecution\x12\x30.gauge.messages.ScenarioExecutionStartingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12k\n\x12StartStepExecution\x12,.gauge.messages.StepExecutionStartingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12Z\n\x0b\x45xecuteStep\x12\".gauge.messages.ExecuteStepRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12j\n\x13\x46inishStepExecution\x12*.gauge.messages.StepExecutionEndingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12r\n\x17\x46inishScenarioExecution\x12..gauge.messages.ScenarioExecutionEndingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12j\n\x13\x46inishSpecExecution\x12*.gauge.messages.SpecExecutionEndingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12\x62\n\x0f\x46inishExecution\x12&.gauge.messages.ExecutionEndingRequest\x1a\'.gauge.messages.ExecutionStatusResponse\x12\x44\n\tCacheFile\x12 .gauge.messages.CacheFileRequest\x1a\x15.gauge.messages.Empty\x12P\n\x0bGetStepName\x12\x1f.gauge.messages.StepNameRequest\x1a .gauge.messages.StepNameResponse\x12_\n\x0fGetGlobPatterns\x12\x15.gauge.messages.Empty\x1a\x35.gauge.messages.ImplementationFileGlobPatternResponse\x12S\n\x0cGetStepNames\x12 .gauge.messages.StepNamesRequest\x1a!.gauge.messages.StepNamesResponse\x12_\n\x10GetStepPositions\x12$.gauge.messages.StepPositionsRequest\x1a%.gauge.messages.StepPositionsResponse\x12_\n\x16GetImplementationFiles\x12\x15.gauge.messages.Empty\x1a..gauge.messages.ImplementationFileListResponse\x12X\n\rImplementStub\x12-.gauge.messages.StubImplementationCodeRequest\x1a\x18.gauge.messages.FileDiff\x12M\n\x08Refactor\x12\x1f.gauge.messages.RefactorRequest\x1a .gauge.messages.RefactorResponse\x12\x41\n\x04Kill\x12\".gauge.messages.KillProcessRequest\x1a\x15.gauge.messages.Empty2\xaf\x07\n\x08Reporter\x12Z\n\x17NotifyExecutionStarting\x12(.gauge.messages.ExecutionStartingRequest\x1a\x15.gauge.messages.Empty\x12\x62\n\x1bNotifySpecExecutionStarting\x12,.gauge.messages.SpecExecutionStartingRequest\x1a\x15.gauge.messages.Empty\x12j\n\x1fNotifyScenarioExecutionStarting\x12\x30.gauge.messages.ScenarioExecutionStartingRequest\x1a\x15.gauge.messages.Empty\x12\x62\n\x1bNotifyStepExecutionStarting\x12,.gauge.messages.StepExecutionStartingRequest\x1a\x15.gauge.messages.Empty\x12^\n\x19NotifyStepExecutionEnding\x12*.gauge.messages.StepExecutionEndingRequest\x1a\x15.gauge.messages.Empty\x12\x66\n\x1dNotifyScenarioExecutionEnding\x12..gauge.messages.ScenarioExecutionEndingRequest\x1a\x15.gauge.messages.Empty\x12^\n\x19NotifySpecExecutionEnding\x12*.gauge.messages.SpecExecutionEndingRequest\x1a\x15.gauge.messages.Empty\x12V\n\x15NotifyExecutionEnding\x12&.gauge.messages.ExecutionEndingRequest\x1a\x15.gauge.messages.Empty\x12P\n\x11NotifySuiteResult\x12$.gauge.messages.SuiteExecutionResult\x1a\x15.gauge.messages.Empty\x12\x41\n\x04Kill\x12\".gauge.messages.KillProcessRequest\x1a\x15.gauge.messages.EmptyB)\n\x16\x63om.thoughtworks.gauge\xaa\x02\x0eGauge.Messagesb\x06proto3')
   ,
   dependencies=[messages__pb2.DESCRIPTOR,])
 
@@ -33,19 +33,28 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 DESCRIPTOR._options = None
 
-_EXECUTION = _descriptor.ServiceDescriptor(
-  name='Execution',
-  full_name='gauge.messages.Execution',
+_RUNNER = _descriptor.ServiceDescriptor(
+  name='Runner',
+  full_name='gauge.messages.Runner',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
   serialized_start=51,
-  serialized_end=1300,
+  serialized_end=2152,
   methods=[
   _descriptor.MethodDescriptor(
-    name='InitializeSuiteDataStore',
-    full_name='gauge.messages.Execution.InitializeSuiteDataStore',
+    name='ValidateStep',
+    full_name='gauge.messages.Runner.ValidateStep',
     index=0,
+    containing_service=None,
+    input_type=messages__pb2._STEPVALIDATEREQUEST,
+    output_type=messages__pb2._STEPVALIDATERESPONSE,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='InitializeSuiteDataStore',
+    full_name='gauge.messages.Runner.InitializeSuiteDataStore',
+    index=1,
     containing_service=None,
     input_type=messages__pb2._EMPTY,
     output_type=messages__pb2._EXECUTIONSTATUSRESPONSE,
@@ -53,8 +62,8 @@ _EXECUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='StartExecution',
-    full_name='gauge.messages.Execution.StartExecution',
-    index=1,
+    full_name='gauge.messages.Runner.StartExecution',
+    index=2,
     containing_service=None,
     input_type=messages__pb2._EXECUTIONSTARTINGREQUEST,
     output_type=messages__pb2._EXECUTIONSTATUSRESPONSE,
@@ -62,8 +71,8 @@ _EXECUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='InitializeSpecDataStore',
-    full_name='gauge.messages.Execution.InitializeSpecDataStore',
-    index=2,
+    full_name='gauge.messages.Runner.InitializeSpecDataStore',
+    index=3,
     containing_service=None,
     input_type=messages__pb2._EMPTY,
     output_type=messages__pb2._EXECUTIONSTATUSRESPONSE,
@@ -71,8 +80,8 @@ _EXECUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='StartSpecExecution',
-    full_name='gauge.messages.Execution.StartSpecExecution',
-    index=3,
+    full_name='gauge.messages.Runner.StartSpecExecution',
+    index=4,
     containing_service=None,
     input_type=messages__pb2._SPECEXECUTIONSTARTINGREQUEST,
     output_type=messages__pb2._EXECUTIONSTATUSRESPONSE,
@@ -80,8 +89,8 @@ _EXECUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='InitializeScenarioDataStore',
-    full_name='gauge.messages.Execution.InitializeScenarioDataStore',
-    index=4,
+    full_name='gauge.messages.Runner.InitializeScenarioDataStore',
+    index=5,
     containing_service=None,
     input_type=messages__pb2._EMPTY,
     output_type=messages__pb2._EXECUTIONSTATUSRESPONSE,
@@ -89,8 +98,8 @@ _EXECUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='StartScenarioExecution',
-    full_name='gauge.messages.Execution.StartScenarioExecution',
-    index=5,
+    full_name='gauge.messages.Runner.StartScenarioExecution',
+    index=6,
     containing_service=None,
     input_type=messages__pb2._SCENARIOEXECUTIONSTARTINGREQUEST,
     output_type=messages__pb2._EXECUTIONSTATUSRESPONSE,
@@ -98,8 +107,8 @@ _EXECUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='StartStepExecution',
-    full_name='gauge.messages.Execution.StartStepExecution',
-    index=6,
+    full_name='gauge.messages.Runner.StartStepExecution',
+    index=7,
     containing_service=None,
     input_type=messages__pb2._STEPEXECUTIONSTARTINGREQUEST,
     output_type=messages__pb2._EXECUTIONSTATUSRESPONSE,
@@ -107,8 +116,8 @@ _EXECUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='ExecuteStep',
-    full_name='gauge.messages.Execution.ExecuteStep',
-    index=7,
+    full_name='gauge.messages.Runner.ExecuteStep',
+    index=8,
     containing_service=None,
     input_type=messages__pb2._EXECUTESTEPREQUEST,
     output_type=messages__pb2._EXECUTIONSTATUSRESPONSE,
@@ -116,8 +125,8 @@ _EXECUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='FinishStepExecution',
-    full_name='gauge.messages.Execution.FinishStepExecution',
-    index=8,
+    full_name='gauge.messages.Runner.FinishStepExecution',
+    index=9,
     containing_service=None,
     input_type=messages__pb2._STEPEXECUTIONENDINGREQUEST,
     output_type=messages__pb2._EXECUTIONSTATUSRESPONSE,
@@ -125,8 +134,8 @@ _EXECUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='FinishScenarioExecution',
-    full_name='gauge.messages.Execution.FinishScenarioExecution',
-    index=9,
+    full_name='gauge.messages.Runner.FinishScenarioExecution',
+    index=10,
     containing_service=None,
     input_type=messages__pb2._SCENARIOEXECUTIONENDINGREQUEST,
     output_type=messages__pb2._EXECUTIONSTATUSRESPONSE,
@@ -134,8 +143,8 @@ _EXECUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='FinishSpecExecution',
-    full_name='gauge.messages.Execution.FinishSpecExecution',
-    index=10,
+    full_name='gauge.messages.Runner.FinishSpecExecution',
+    index=11,
     containing_service=None,
     input_type=messages__pb2._SPECEXECUTIONENDINGREQUEST,
     output_type=messages__pb2._EXECUTIONSTATUSRESPONSE,
@@ -143,32 +152,17 @@ _EXECUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='FinishExecution',
-    full_name='gauge.messages.Execution.FinishExecution',
-    index=11,
+    full_name='gauge.messages.Runner.FinishExecution',
+    index=12,
     containing_service=None,
     input_type=messages__pb2._EXECUTIONENDINGREQUEST,
     output_type=messages__pb2._EXECUTIONSTATUSRESPONSE,
     serialized_options=None,
   ),
-])
-_sym_db.RegisterServiceDescriptor(_EXECUTION)
-
-DESCRIPTOR.services_by_name['Execution'] = _EXECUTION
-
-
-_AUTHORING = _descriptor.ServiceDescriptor(
-  name='Authoring',
-  full_name='gauge.messages.Authoring',
-  file=DESCRIPTOR,
-  index=1,
-  serialized_options=None,
-  serialized_start=1303,
-  serialized_end=2011,
-  methods=[
   _descriptor.MethodDescriptor(
     name='CacheFile',
-    full_name='gauge.messages.Authoring.CacheFile',
-    index=0,
+    full_name='gauge.messages.Runner.CacheFile',
+    index=13,
     containing_service=None,
     input_type=messages__pb2._CACHEFILEREQUEST,
     output_type=messages__pb2._EMPTY,
@@ -176,8 +170,8 @@ _AUTHORING = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='GetStepName',
-    full_name='gauge.messages.Authoring.GetStepName',
-    index=1,
+    full_name='gauge.messages.Runner.GetStepName',
+    index=14,
     containing_service=None,
     input_type=messages__pb2._STEPNAMEREQUEST,
     output_type=messages__pb2._STEPNAMERESPONSE,
@@ -185,8 +179,8 @@ _AUTHORING = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='GetGlobPatterns',
-    full_name='gauge.messages.Authoring.GetGlobPatterns',
-    index=2,
+    full_name='gauge.messages.Runner.GetGlobPatterns',
+    index=15,
     containing_service=None,
     input_type=messages__pb2._EMPTY,
     output_type=messages__pb2._IMPLEMENTATIONFILEGLOBPATTERNRESPONSE,
@@ -194,8 +188,8 @@ _AUTHORING = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='GetStepNames',
-    full_name='gauge.messages.Authoring.GetStepNames',
-    index=3,
+    full_name='gauge.messages.Runner.GetStepNames',
+    index=16,
     containing_service=None,
     input_type=messages__pb2._STEPNAMESREQUEST,
     output_type=messages__pb2._STEPNAMESRESPONSE,
@@ -203,8 +197,8 @@ _AUTHORING = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='GetStepPositions',
-    full_name='gauge.messages.Authoring.GetStepPositions',
-    index=4,
+    full_name='gauge.messages.Runner.GetStepPositions',
+    index=17,
     containing_service=None,
     input_type=messages__pb2._STEPPOSITIONSREQUEST,
     output_type=messages__pb2._STEPPOSITIONSRESPONSE,
@@ -212,8 +206,8 @@ _AUTHORING = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='GetImplementationFiles',
-    full_name='gauge.messages.Authoring.GetImplementationFiles',
-    index=5,
+    full_name='gauge.messages.Runner.GetImplementationFiles',
+    index=18,
     containing_service=None,
     input_type=messages__pb2._EMPTY,
     output_type=messages__pb2._IMPLEMENTATIONFILELISTRESPONSE,
@@ -221,8 +215,8 @@ _AUTHORING = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='ImplementStub',
-    full_name='gauge.messages.Authoring.ImplementStub',
-    index=6,
+    full_name='gauge.messages.Runner.ImplementStub',
+    index=19,
     containing_service=None,
     input_type=messages__pb2._STUBIMPLEMENTATIONCODEREQUEST,
     output_type=messages__pb2._FILEDIFF,
@@ -230,88 +224,130 @@ _AUTHORING = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='Refactor',
-    full_name='gauge.messages.Authoring.Refactor',
-    index=7,
+    full_name='gauge.messages.Runner.Refactor',
+    index=20,
     containing_service=None,
     input_type=messages__pb2._REFACTORREQUEST,
     output_type=messages__pb2._REFACTORRESPONSE,
     serialized_options=None,
   ),
-])
-_sym_db.RegisterServiceDescriptor(_AUTHORING)
-
-DESCRIPTOR.services_by_name['Authoring'] = _AUTHORING
-
-
-_RESULT = _descriptor.ServiceDescriptor(
-  name='Result',
-  full_name='gauge.messages.Result',
-  file=DESCRIPTOR,
-  index=2,
-  serialized_options=None,
-  serialized_start=2013,
-  serialized_end=2103,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='NotifySuiteResult',
-    full_name='gauge.messages.Result.NotifySuiteResult',
-    index=0,
-    containing_service=None,
-    input_type=messages__pb2._SUITEEXECUTIONRESULT,
-    output_type=messages__pb2._EMPTY,
-    serialized_options=None,
-  ),
-])
-_sym_db.RegisterServiceDescriptor(_RESULT)
-
-DESCRIPTOR.services_by_name['Result'] = _RESULT
-
-
-_VALIDATOR = _descriptor.ServiceDescriptor(
-  name='Validator',
-  full_name='gauge.messages.Validator',
-  file=DESCRIPTOR,
-  index=3,
-  serialized_options=None,
-  serialized_start=2105,
-  serialized_end=2207,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='ValidateStep',
-    full_name='gauge.messages.Validator.ValidateStep',
-    index=0,
-    containing_service=None,
-    input_type=messages__pb2._STEPVALIDATEREQUEST,
-    output_type=messages__pb2._STEPVALIDATERESPONSE,
-    serialized_options=None,
-  ),
-])
-_sym_db.RegisterServiceDescriptor(_VALIDATOR)
-
-DESCRIPTOR.services_by_name['Validator'] = _VALIDATOR
-
-
-_PROCESS = _descriptor.ServiceDescriptor(
-  name='Process',
-  full_name='gauge.messages.Process',
-  file=DESCRIPTOR,
-  index=4,
-  serialized_options=None,
-  serialized_start=2209,
-  serialized_end=2285,
-  methods=[
   _descriptor.MethodDescriptor(
     name='Kill',
-    full_name='gauge.messages.Process.Kill',
-    index=0,
+    full_name='gauge.messages.Runner.Kill',
+    index=21,
     containing_service=None,
     input_type=messages__pb2._KILLPROCESSREQUEST,
     output_type=messages__pb2._EMPTY,
     serialized_options=None,
   ),
 ])
-_sym_db.RegisterServiceDescriptor(_PROCESS)
+_sym_db.RegisterServiceDescriptor(_RUNNER)
 
-DESCRIPTOR.services_by_name['Process'] = _PROCESS
+DESCRIPTOR.services_by_name['Runner'] = _RUNNER
+
+
+_REPORTER = _descriptor.ServiceDescriptor(
+  name='Reporter',
+  full_name='gauge.messages.Reporter',
+  file=DESCRIPTOR,
+  index=1,
+  serialized_options=None,
+  serialized_start=2155,
+  serialized_end=3098,
+  methods=[
+  _descriptor.MethodDescriptor(
+    name='NotifyExecutionStarting',
+    full_name='gauge.messages.Reporter.NotifyExecutionStarting',
+    index=0,
+    containing_service=None,
+    input_type=messages__pb2._EXECUTIONSTARTINGREQUEST,
+    output_type=messages__pb2._EMPTY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='NotifySpecExecutionStarting',
+    full_name='gauge.messages.Reporter.NotifySpecExecutionStarting',
+    index=1,
+    containing_service=None,
+    input_type=messages__pb2._SPECEXECUTIONSTARTINGREQUEST,
+    output_type=messages__pb2._EMPTY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='NotifyScenarioExecutionStarting',
+    full_name='gauge.messages.Reporter.NotifyScenarioExecutionStarting',
+    index=2,
+    containing_service=None,
+    input_type=messages__pb2._SCENARIOEXECUTIONSTARTINGREQUEST,
+    output_type=messages__pb2._EMPTY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='NotifyStepExecutionStarting',
+    full_name='gauge.messages.Reporter.NotifyStepExecutionStarting',
+    index=3,
+    containing_service=None,
+    input_type=messages__pb2._STEPEXECUTIONSTARTINGREQUEST,
+    output_type=messages__pb2._EMPTY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='NotifyStepExecutionEnding',
+    full_name='gauge.messages.Reporter.NotifyStepExecutionEnding',
+    index=4,
+    containing_service=None,
+    input_type=messages__pb2._STEPEXECUTIONENDINGREQUEST,
+    output_type=messages__pb2._EMPTY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='NotifyScenarioExecutionEnding',
+    full_name='gauge.messages.Reporter.NotifyScenarioExecutionEnding',
+    index=5,
+    containing_service=None,
+    input_type=messages__pb2._SCENARIOEXECUTIONENDINGREQUEST,
+    output_type=messages__pb2._EMPTY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='NotifySpecExecutionEnding',
+    full_name='gauge.messages.Reporter.NotifySpecExecutionEnding',
+    index=6,
+    containing_service=None,
+    input_type=messages__pb2._SPECEXECUTIONENDINGREQUEST,
+    output_type=messages__pb2._EMPTY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='NotifyExecutionEnding',
+    full_name='gauge.messages.Reporter.NotifyExecutionEnding',
+    index=7,
+    containing_service=None,
+    input_type=messages__pb2._EXECUTIONENDINGREQUEST,
+    output_type=messages__pb2._EMPTY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='NotifySuiteResult',
+    full_name='gauge.messages.Reporter.NotifySuiteResult',
+    index=8,
+    containing_service=None,
+    input_type=messages__pb2._SUITEEXECUTIONRESULT,
+    output_type=messages__pb2._EMPTY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='Kill',
+    full_name='gauge.messages.Reporter.Kill',
+    index=9,
+    containing_service=None,
+    input_type=messages__pb2._KILLPROCESSREQUEST,
+    output_type=messages__pb2._EMPTY,
+    serialized_options=None,
+  ),
+])
+_sym_db.RegisterServiceDescriptor(_REPORTER)
+
+DESCRIPTOR.services_by_name['Reporter'] = _REPORTER
 
 # @@protoc_insertion_point(module_scope)
