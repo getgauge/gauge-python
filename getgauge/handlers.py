@@ -8,10 +8,7 @@ from getgauge.messages.messages_pb2 import Empty
 kill_event = threading.Event()
 
 
-class GrpcServiceHandler(sp.ExecutionServicer,
-                              sp.AuthoringServicer,
-                              sp.ValidatorServicer,
-                              sp.ProcessServicer):
+class GrpcServiceHandler(sp.RunnerServicer):
 
     def __init__(self, server):
         self.server = server
