@@ -514,14 +514,14 @@ class ScreenshotsTests(TestCase):
     def setUp(self):
         self.__old_screenshot_provider = registry.screenshot_provider()
         self.__is_screenshot_writer  = registry.is_screenshot_writer
-        os.environ["screenshots_dir"] = tempfile.mkdtemp()
+        os.environ["gauge_screenshots_dir"] = tempfile.mkdtemp()
 
     def test_pending_screenshots(self):
         ScreenshotsStore.capture()
         pending_screenshots = ScreenshotsStore.pending_screenshots()
         self.assertEqual(1, len(pending_screenshots))
         self.assertTrue(os.path.exists(os.path.join(
-            os.getenv("screenshots_dir"), pending_screenshots[0])))
+            os.getenv("gauge_screenshots_dir"), pending_screenshots[0])))
 
     def test_clear(self):
         ScreenshotsStore.capture()
@@ -543,9 +543,9 @@ class ScreenshotsTests(TestCase):
 
     def test_capture_shoould_vefify_screenshot_file_for_file_based_custom_screenshot(self):
         first_screenshot = os.path.join(
-            os.getenv("screenshots_dir"), "screenshot{0}.png".format(uuid1()))
+            os.getenv("gauge_screenshots_dir"), "screenshot{0}.png".format(uuid1()))
         second_screenshot = os.path.join(
-            os.getenv("screenshots_dir"), "screenshot{0}.png".format(uuid1()))
+            os.getenv("gauge_screenshots_dir"), "screenshot{0}.png".format(uuid1()))
 
         def returns_abs_path():
             return first_screenshot

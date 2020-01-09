@@ -282,4 +282,4 @@ def _uniqe_screenshot_file():
     return os.path.join(_screenshots_dir(), "screenshot-{0}.png".format(uuid1().int))
 
 def _screenshots_dir():
-    return os.getenv('screenshots_dir')
+    return os.getenv('gauge_screenshots_dir')
