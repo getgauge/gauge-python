@@ -34,7 +34,6 @@ gauge run specs
 ### Useful links
 
 - [User Docs](https://docs.gauge.org)
-- [Setup Guide](https://gauge-python.readthedocs.io/en/latest/contributing.html#development-guide)
 
 ### Alternate Installation options
 
