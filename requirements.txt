@@ -1,5 +1,5 @@
 six
-pyfakefs==3.7.1
+pyfakefs==4.0.1
 redbaron
 twine
 ptvsd==4.3.2
