@@ -1,33 +1,43 @@
-name: Deploy
+name: Release on PR Merge
 
-on: [deployment]
+on: deployment
 
 jobs:
   deploy:
-    name: Create Draft with assets
-    runs-on: macos-latest
+    if: github.event.deployment.environment == 'production'
+    runs-on: ubuntu-latest
     env:
-      GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      GITHUB_TOKEN: '${{ secrets.GAUGEBOT_GITHUB_TOKEN }}'
+      PYPI_USER: '${{ secrets.PYPI_USER }}'
+      PYPI_PASSWORD: '${{ secrets.PYPI_PASSWORD }}'
+      CI: true
+
     steps:
       - uses: actions/checkout@v1
+      - uses: geertvdc/setup-hub@master
 
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
+
+      - name: Setup git
+        run: |
+          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
+          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
+
       - name: Build artifacts
         run: |
           pip install -r requirements.txt
           python build.py --dist
-      - name: Install hub
-        run: brew install hub
-      - name: update
+
+      - name: release
         run: |
           cd bin
           if [ -z "$version" ]; then
             version=$(ls gauge-python* | head -1 | sed "s/\.[^\.]*$//" | sed "s/gauge-python-//" | sed "s/-[a-z]*\.[a-z0-9_]*$//");
           fi
-
+          echo "::set-env name=VERSION::$version"
           artifacts=()
           dir=`pwd`
           for i in `ls`; do
@@ -41,12 +51,12 @@ jobs:
 
           echo -e "Gauge Python v$version\n\n" > desc.txt
 
-          release_description=$(ruby -e "$(curl -sSfL https://github.com/getgauge/gauge/raw/master/build/create_release_text.rb)" gauge-python getgauge)
+          release_description=$(ruby -e "$(curl -sSfL https://github.com/getgauge/gauge/raw/master/build/create_release_text.rb)" getgauge gauge-python)
 
           echo "$release_description" >> desc.txt
 
           echo "Creating new draft for release v$version"
-          hub release create -d -F ./desc.txt "v$version"
+          hub release create -F ./desc.txt "v$version"
 
           rm -rf desc.txt
 
@@ -71,3 +81,18 @@ jobs:
         with:
           state: 'failure'
           token: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Upload PyPi package
+        run: |
+          python -m twine upload -u ${PYPI_USER} -p ${PYPI_PASSWORD} dist/getgauge*
+
+
+      - name: Update metadata in gauge-repository
+        run: |
+          git clone https://github.com/getgauge/gauge-repository.git
+          cd gauge-repository
+          python update_metadata.py python $VERSION
+          commit_message=$(echo -e "Update python to v$VERSION")
+          git add python-install.json
+          git commit -m "$commit_message"
+          git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/getgauge/gauge-repository.git" master
