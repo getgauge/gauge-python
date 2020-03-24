@@ -7,7 +7,7 @@ from os import environ, path
 from threading import Timer
 
 import grpc
-import ptvsd
+import debugpy
 from getgauge import handlers, logger, processor
 from getgauge.impl_loader import copy_skel_files
 from getgauge.messages import services_pb2_grpc as spg
@@ -47,12 +47,11 @@ def _handle_detached():
 
 def start():
     if environ.get('DEBUGGING'):
-        ptvsd.enable_attach(address=(
-            '127.0.0.1', int(environ.get('DEBUG_PORT'))))
+        debugpy.listen(('127.0.0.1', int(environ.get('DEBUG_PORT'))))
         print(ATTACH_DEBUGGER_EVENT)
         t = Timer(int(environ.get("debugger_wait_time", 30)), _handle_detached)
         t.start()
-        ptvsd.wait_for_attach()
+        debugpy.wait_for_client()
         t.cancel()
     logger.debug('Starting grpc server..')
     server = grpc.server(ThreadPoolExecutor(max_workers=1))
