@@ -4,7 +4,7 @@ redbaron
 twine
 ptvsd==4.3.2
 grpcio-tools
-grpcio==1.25.0
+grpcio==1.28.1
 protobuf>=3.5.2
 parso
 futures
