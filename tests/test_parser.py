@@ -44,6 +44,22 @@ class CommonPythonFileTests(object):
         pf = self.parse(content)
         self.assertIsNone(pf)
 
+    def test_can_parse_chinese_content_directly(self):
+        content = dedent('''\
+        class test:
+            @step("打印你好")
+            def print_hello():
+                print("hello")
+
+            @step('打印 <hello>.')
+            def print_word(word):
+                print(word)
+
+        ''')
+        pf = self.parse(content)
+        self.assertIsNotNone(pf)
+        self.assertEqual(pf.get_code(), content)
+
     def test_iter_steps_loads_steps_from_content(self):
         content = dedent('''\
         @step("print hello")
