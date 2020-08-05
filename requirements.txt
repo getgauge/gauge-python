@@ -1,10 +1,10 @@
 six
-pyfakefs==4.0.2
+pyfakefs==4.1.0
 redbaron
 twine
 debugpy
-grpcio-tools==1.25.0
-grpcio==1.25.0
+grpcio-tools
+grpcio==1.30.0
 protobuf>=3.5.2
 parso
 futures

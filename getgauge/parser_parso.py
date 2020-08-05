@@ -26,7 +26,7 @@ class ParsoPythonFile(object):
             # For now we can make a compromise by reading the file ourselves
             # and passing content to parse() function.
             if content is None:
-                with open(file_path) as f:
+                with open(file_path, encoding='utf-8') as f:
                     content = f.read()
             py_tree = _parser.parse(
                 content, path=file_path, error_recovery=False)
