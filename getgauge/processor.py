@@ -3,7 +3,6 @@ import traceback
 from os import environ, path
 from threading import Timer
 
-import ptvsd
 from getgauge import logger
 from getgauge.executor import (create_execution_status_response,
                                execute_method, run_hook)
