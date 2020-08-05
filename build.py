@@ -108,7 +108,7 @@ def run_tests():
             if item.startswith("test_") and item.endswith(".py"):
                 fileNamePath = str(os.path.join(root, item))
                 exit_code = call([sys.executable, fileNamePath]
-                                 ) if exit_code is 0 else exit_code
+                                 ) if exit_code == 0 else exit_code
     return exit_code
 
 
