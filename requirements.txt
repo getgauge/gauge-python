@@ -4,7 +4,7 @@ redbaron
 twine
 debugpy
 grpcio-tools
-grpcio==1.32.0
+grpcio==1.33.1
 protobuf>=3.5.2
 parso
 futures
