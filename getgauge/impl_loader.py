@@ -72,8 +72,7 @@ def _import_file(base_dir, file_path):
                 if _has_methods_with_gauge_decoratores(c[1]):
                     update_step_resgistry_with_class(c[1](), file_path) # c[1]() will create a new instance of the class
     except:
-        logger.error('Exception occurred while loading step implementations from file: {}.'.format(rel_path))
-        logger.error(traceback.format_exc())
+        logger.fatal('Exception occurred while loading step implementations from file: {}.\n'.format(rel_path, traceback.format_exc()))
 
 # Inject instace in each class method (hook/step)
 def update_step_resgistry_with_class(instance, file_path):
