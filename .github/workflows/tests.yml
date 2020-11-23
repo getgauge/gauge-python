@@ -67,14 +67,14 @@ jobs:
         run: |
           cd gauge
           go run -mod=vendor build/make.go --install  --verbose
-          echo "::add-path::C:\\Program Files\\gauge\\bin"
+          echo "C:\\Program Files\\gauge\\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Install Gauge (linux)
         if: matrix.os != 'windows-latest'
         run: |
           cd gauge
           go run -mod=vendor build/make.go --install --prefix=/tmp/gauge --verbose
-          echo "::add-path::/tmp/gauge/bin"
+          echo "/tmp/gauge/bin" >> $GITHUB_PATH
 
       - name: Install html report
         run: |
@@ -143,14 +143,14 @@ jobs:
         run: |
           cd gauge
           go run build/make.go --install  --verbose
-          echo "::add-path::C:\\Program Files\\gauge\\bin"
+          echo "C:\\Program Files\\gauge\\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Install Gauge (linux)
         if: matrix.os != 'windows-latest'
         run: |
           cd gauge
           go run build/make.go --install --prefix=/tmp/gauge --verbose
-          echo "::add-path::/tmp/gauge/bin"
+          echo "/tmp/gauge/bin" >> $GITHUB_PATH
 
       - name: Prep gauge-js
         run: |
