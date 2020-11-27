@@ -2,7 +2,7 @@ from unittest import TestCase, main
 
 from getgauge.messages.messages_pb2 import Message
 from getgauge.registry import registry, MessagesStore, ScreenshotsStore
-from getgauge.python import (Messages, DataStore, DataStoreFactory, DictObject,
+from getgauge.python import (Messages, DataStore, DictObject,
                              DataStoreContainer, data_store, Table, Specification,
                              Scenario, Step, ExecutionContext,
                              create_execution_context_from)
@@ -139,38 +139,6 @@ class DataStoreTests(TestCase):
         self.assertFalse(proxy.is_present('d'))
         self.assertFalse(proxy2.is_present('c'))
         self.assertFalse(proxy2.is_present('d'))
-
-
-class DataStoreFactoryTests(TestCase):
-    def test_data_store_factory(self):
-        scenario_data_store = DataStoreFactory.scenario_data_store()
-        spec_data_store = DataStoreFactory.spec_data_store()
-        suite_data_store = DataStoreFactory.suite_data_store()
-
-        store = DataStore()
-
-        self.assertEqual(store, scenario_data_store)
-        self.assertEqual(store, spec_data_store)
-        self.assertEqual(store, suite_data_store)
-
-    def test_data_store_factory_as_proxy(self):
-        stores = [
-            (data_store.scenario, DataStoreFactory.scenario_data_store()),
-            (data_store.spec, DataStoreFactory.spec_data_store()),
-            (data_store.suite, DataStoreFactory.suite_data_store()),
-        ]
-        for (store, proxy) in stores:
-            store['a'] = 'alpha'
-            self.assertTrue(proxy.is_present('a'))
-            self.assertEqual(proxy.get('a'), store['a'])
-
-            proxy.put('b', 'beta')
-            self.assertIn('b', store)
-            self.assertEqual(store['b'], proxy.get('b'))
-
-            proxy.clear()
-            self.assertDictEqual(store, {})
-
 
 class DictObjectTests(TestCase):
     def test_attribute_access(self):
