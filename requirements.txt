@@ -1,4 +1,3 @@
-six
 pyfakefs==4.3.2
 redbaron
 twine
@@ -6,5 +5,3 @@ debugpy
 grpcio-tools
 grpcio==1.34.0
 protobuf>=3.5.2
-parso
-futures

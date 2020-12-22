@@ -5,16 +5,16 @@ import unittest
 
 from getgauge import processor
 from getgauge.messages.messages_pb2 import Message, ParameterPosition
-from getgauge.parser import PythonFile
 from getgauge.registry import registry
 
 
-class RefactorTests(object):
+class RefactorTests(unittest.TestCase):
     file = None
     data = None
     path = ''
 
     def setUp(self):
+        self.preservesNewlines = True
         RefactorTests.path = os.path.join(tempfile.gettempdir(), 'step_impl.py')
         RefactorTests.file = open(RefactorTests.path, 'w')
         RefactorTests.file.write("""@step("Vowels in English language are <vowels>.")
@@ -364,23 +364,3 @@ def assert_default_vowels(arg0, arg1):
         _file.close()
         return actual_data
 
-
-@unittest.skipIf(sys.hexversion > 0x3070000, "RedBaron does not support python 3.7")
-class RedBaron_RefactorTests(unittest.TestCase, RefactorTests):
-    def setUp(self):
-        PythonFile.select_python_parser('redbaron')
-        RefactorTests.setUp(self)
-
-    def tearDown(self):
-        RefactorTests.tearDown(self)
-        PythonFile.select_python_parser()
-
-
-class Parso_RefactorTests(unittest.TestCase, RefactorTests):
-    def setUp(self):
-        PythonFile.select_python_parser('parso')
-        RefactorTests.setUp(self)
-
-    def tearDown(self):
-        RefactorTests.tearDown(self)
-        PythonFile.select_python_parser()
