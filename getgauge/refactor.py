@@ -1,6 +1,6 @@
 from getgauge.messages.messages_pb2 import RefactorResponse, TextDiff
 from getgauge.messages.spec_pb2 import Span
-from getgauge.parser import PythonFile
+from getgauge.parser import Parser
 from getgauge.registry import registry
 
 
@@ -10,7 +10,7 @@ def refactor_step(request, response):
             request.oldStepValue.parameterizedStepValue
         ))
     info = registry.get_info_for(request.oldStepValue.stepValue)
-    impl_file = PythonFile.parse(info.file_name)
+    impl_file = Parser.parse(info.file_name)
     diffs = impl_file.refactor_step(
         info.step_text,
         request.newStepValue.parameterizedStepValue,

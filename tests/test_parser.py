@@ -1,18 +1,20 @@
-import six
 import sys
 import unittest
 from textwrap import dedent
-from getgauge.parser import ParsoPythonFile, RedbaronPythonFile
+from getgauge.parser import Parser
 
 
 def _span(start, startChar, end, endChar):
     return locals()
 
 
-class CommonPythonFileTests(object):
-    def parse(self, content, file_path='foo.py'):
-        raise NotImplementedError
+class ParserTests(unittest.TestCase):
+    def setUp(self):
+        self.preservesNewlines = False
 
+    def parse(self, content, file_path='foo.py'):
+        return Parser.parse(file_path, content)
+    
     def assertSpanStart(self, actualSpan, expectedStartLine, expectedStartChar):
         if callable(actualSpan):
             actualSpan = actualSpan()
@@ -647,90 +649,6 @@ class CommonPythonFileTests(object):
         def mul({}):
             assert z == a * b * c
         """).format(expectedArgs))
-
-
-class ParsoPythonFileTests(unittest.TestCase, CommonPythonFileTests):
-    def parse(self, content, file_path='foo.py'):
-        return ParsoPythonFile.parse(file_path, content)
-
-    def setUp(self):
-        self.preservesNewlines = True
-
-    def test_find_step_node_can_find_step(self):
-        content = dedent("""\
-        @step('print hello')
-        def print_hello():
-            print("hello")
-        """)
-        pf = self.parse(content)
-        self.assertIsNotNone(pf)
-        step, func = pf._find_step_node('print hello')
-        self.assertEqual(step.start_pos, (1, 6))
-        self.assertEqual(func.name.value, 'print_hello')
-
-    def test_find_step_node_can_find_step_within_multiple(self):
-        content = dedent("""\
-        @step(["print hello", "display hello"])
-        def print_hello():
-            print("hello")
-
-        @step([
-            "print <word>",
-            'display <word>',
-        ])
-        def print_word(word):
-            print(word)
-        """)
-        pf = self.parse(content)
-        self.assertIsNotNone(pf)
-
-        step, func = pf._find_step_node('display hello')
-        self.assertEqual(step.start_pos, (1, 22))
-        self.assertEqual(func.name.value, 'print_hello')
-
-        step, func = pf._find_step_node('display <word>')
-        self.assertEqual(step.start_pos, (7, 4))
-        self.assertEqual(func.name.value, 'print_word')
-
-    def test_iter_steps_checks_step_decorator_with_other_attributes(self):
-        content = dedent('''\
-        class test:
-            def __init__(self,x):
-                self.x = x
-
-            @property
-            def x(self):
-                return self.__x
-
-            @x.setter
-            def x(self, x):
-                self.__x = x
-
-            @step("print hello")
-            def print_hello():
-                print("hello")
-
-            @step('print <hello>.')
-            def print_word(word):
-                print(word)
-
-        ''')
-        pf = self.parse(content)
-        self.assertIsNotNone(pf)
-        steps = list(pf.iter_steps())
-        self.assertEqual(len(steps), 2)
-        self.assertEqual(steps[0][0], "print hello")
-        self.assertEqual(steps[0][1], "print_hello")
-        self.assertSpanStart(steps[0][2], 13, 4)
-
-
-@unittest.skipIf(sys.hexversion > 0x3070000, "RedBaron does not support python 3.7")
-class RedBaronPythonFileTests(unittest.TestCase, CommonPythonFileTests):
-    def parse(self, content, file_path='foo.py'):
-        return RedbaronPythonFile.parse(file_path, content)
-
-    def setUp(self):
-        self.preservesNewlines = False
 
 
 if __name__ == '__main__':

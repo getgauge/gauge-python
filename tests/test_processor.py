@@ -7,7 +7,7 @@ from getgauge import processor
 from getgauge import static_loader as loader
 from getgauge.messages.messages_pb2 import *
 from getgauge.messages.spec_pb2 import Parameter, ProtoExecutionResult, Span
-from getgauge.parser import PythonFile
+from getgauge.parser import Parser
 from getgauge.messages.spec_pb2 import ProtoStepValue
 from getgauge.util import get_step_impl_dirs
 from getgauge.python import data_store
@@ -28,7 +28,7 @@ class ProcessorTests(TestCase):
 
     def load_content_steps(self, content):
         content = dedent(content)
-        pf = PythonFile.parse("foo.py", content)
+        pf = Parser.parse("foo.py", content)
         self.assertIsNotNone(pf)
         loader.load_steps(pf)
 

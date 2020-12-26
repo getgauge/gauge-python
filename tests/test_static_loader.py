@@ -2,11 +2,11 @@ import sys
 import unittest
 from textwrap import dedent
 from getgauge.registry import registry
-from getgauge.parser import PythonFile
+from getgauge.parser import Parser
 from getgauge.static_loader import load_steps, reload_steps
 
 
-class StaticLoaderTests(object):
+class StaticLoaderTests(unittest.TestCase):
     def setUp(self):
         registry.clear()
 
@@ -22,7 +22,7 @@ class StaticLoaderTests(object):
             print(word)
 
         """)
-        load_steps(PythonFile.parse("foo.py", content))
+        load_steps(Parser.parse("foo.py", content))
 
         self.assertTrue(registry.is_implemented("print hello"))
         self.assertTrue(registry.is_implemented("print {}."))
@@ -41,7 +41,7 @@ class StaticLoaderTests(object):
             print(word)
 
         """)
-        load_steps(PythonFile.parse("foo.py", content))
+        load_steps(Parser.parse("foo.py", content))
 
         self.assertTrue(registry.is_implemented("print hello"))
         self.assertTrue(registry.is_implemented("print {}."))
@@ -59,7 +59,7 @@ class StaticLoaderTests(object):
             print("hello")
 
         """)
-        load_steps(PythonFile.parse("foo.py", content))
+        load_steps(Parser.parse("foo.py", content))
         self.assertTrue(registry.has_multiple_impls("print hello"))
 
     def test_loader_populates_registry_for_with_aliases(self):
@@ -70,7 +70,7 @@ class StaticLoaderTests(object):
 
         """)
 
-        load_steps(PythonFile.parse("foo.py", content))
+        load_steps(Parser.parse("foo.py", content))
 
         self.assertTrue(registry.is_implemented("say hello"))
         self.assertTrue(registry.get_info_for("say hello").has_alias)
@@ -81,7 +81,7 @@ class StaticLoaderTests(object):
             def printf():
                 print("hello")
             """)
-        load_steps(PythonFile.parse("foo.py", content))
+        load_steps(Parser.parse("foo.py", content))
 
         self.assertTrue(registry.is_implemented("print hello"))
 
@@ -102,7 +102,7 @@ class StaticLoaderTests(object):
             def printf(arg1):
                 print(arg1)
             """)
-        load_steps(PythonFile.parse("foo.py", content))
+        load_steps(Parser.parse("foo.py", content))
 
         self.assertTrue(registry.is_implemented("print hello {}"))
 
@@ -112,7 +112,7 @@ class StaticLoaderTests(object):
             def printf(arg1):
                 print(arg1)
             """)
-        load_steps(PythonFile.parse("foo.py", content))
+        load_steps(Parser.parse("foo.py", content))
 
         self.assertTrue(registry.is_implemented("print hello {}"))
 
@@ -123,7 +123,7 @@ class StaticLoaderTests(object):
             def printf(arg1):
                 print(arg1)
             """)
-        load_steps(PythonFile.parse("foo.py", content))
+        load_steps(Parser.parse("foo.py", content))
 
         self.assertFalse(registry.is_implemented("print hello {}"))
 
@@ -133,32 +133,12 @@ class StaticLoaderTests(object):
             def printf(arg1):
                 print(arg1)
             """)
-        load_steps(PythonFile.parse("foo.py", content))
+        load_steps(Parser.parse("foo.py", content))
 
         self.assertFalse(registry.is_implemented("print hello {}"))
 
-
-@unittest.skipIf(sys.hexversion > 0x3070000, "RedBaron does not support python 3.7")
-class RedBaron_StaticLoaderTests(unittest.TestCase, StaticLoaderTests):
-    def setUp(self):
-        PythonFile.select_python_parser('redbaron')
-        StaticLoaderTests.setUp(self)
-
     def tearDown(self):
-        PythonFile.select_python_parser()
-
-
-class Parso_StaticLoaderTests(unittest.TestCase, StaticLoaderTests):
-    def setUp(self):
-        PythonFile.select_python_parser('parso')
-        StaticLoaderTests.setUp(self)
-
-    def tearDown(self):
-        PythonFile.select_python_parser()
-
-
-def tearDown(self):
-    registry.clear()
+        registry.clear()
 
 
 if __name__ == '__main__':

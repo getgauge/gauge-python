@@ -1,6 +1,6 @@
 import os
 from getgauge.registry import registry
-from getgauge.parser import PythonFile
+from getgauge.parser import Parser
 
 
 def load_steps(python_file):
@@ -10,7 +10,7 @@ def load_steps(python_file):
 
 
 def reload_steps(file_path, content=None):
-    pf = PythonFile.parse(file_path, content)
+    pf = Parser.parse(file_path, content)
     if pf:
         registry.remove_steps(file_path)
         load_steps(pf)
@@ -21,6 +21,6 @@ def load_files(step_impl_dirs):
         for dirpath, _, files in os.walk(step_impl_dir):
                 py_files = (os.path.join(dirpath, f) for f in files if f.endswith('.py'))
                 for file_path in py_files:
-                        pf = PythonFile.parse(file_path)
+                        pf = Parser.parse(file_path)
                         if pf:
                                 load_steps(pf)
