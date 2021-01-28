@@ -103,7 +103,7 @@ Follow these steps to deploy gauge-python.
 
 ## Examples
 
-- Selenium: This project serves as an example for writing automation using Gauge. It uses selenium and various Gauge/Gauge-Python features. For more details, Check out the [gauge-example-python](https://github.com/kashishm/gauge-example-python) repository.
+- Selenium: This project serves as an example for writing automation using Gauge. It uses selenium and various Gauge/Gauge-Python features. For more details, Check out the [gauge-example-python](https://github.com/getgauge-examples/python-selenium) repository.
 
 - Selenium and REST API: This project shows an example of how to setup Gauge, Gauge Python and [Magento](https://magento.com/) to test REST API. For more details, Check out the [blog](https://angbaird.com/2016/11/09/selenium-and-rest-api-testing-with-gauge/) or [gauge-magento-test](https://github.com/angb/gauge-magento-test) repository.
 
