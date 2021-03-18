@@ -1,7 +1,7 @@
-pyfakefs==4.3.2
+pyfakefs==4.4.0
 redbaron
 twine
 debugpy
-grpcio-tools==1.36.1
+grpcio-tools
 grpcio==1.36.1
 protobuf>=3.5.2
