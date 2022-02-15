@@ -1,4 +1,4 @@
-pyfakefs==4.5.4
+pyfakefs==4.5.5
 redbaron
 twine
 debugpy
