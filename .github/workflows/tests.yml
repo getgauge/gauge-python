@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    name: UTs ${{ matrix.os }} ${{ matrix.python-version }}
+    name: UTs ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
