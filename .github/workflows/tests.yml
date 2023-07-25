@@ -87,7 +87,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           cd gauge-tests
-          .\gradlew.bat clean pythonFT
+          .\gradlew.bat clean pythonFT -PinParallel=false
 
   lsp-tests:
     needs: test
