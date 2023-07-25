@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import messages_pb2 as messages__pb2
+import getgauge.messages.messages_pb2 as messages__pb2
 
 
 class RunnerStub(object):
