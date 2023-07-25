@@ -13,7 +13,7 @@ class Parser(object):
         """
         try:
             if content is None:
-                with open(file_path) as f:
+                with open(file_path, encoding='utf-8') as f:
                     content = f.read()
             py_tree = RedBaron(content)
             return Parser(file_path, py_tree)
