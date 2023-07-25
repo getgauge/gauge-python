@@ -1,39 +1,39 @@
 {
-    "id": "python",
-    "version": "0.3.18",
-    "description": "Python support for gauge",
-    "run": {
-        "windows": [
-            "start.bat",
-            "--start"
-        ],
-        "linux": [
-            "./start.sh",
-            "--start"
-        ],
-        "darwin": [
-            "./start.sh",
-            "--start"
-        ]
-    },
-    "init": {
-        "windows": [
-            "start.bat",
-            "--init"
-        ],
-        "linux": [
-            "./start.sh",
-            "--init"
-        ],
-        "darwin": [
-            "./start.sh",
-            "--init"
-        ]
-    },
-    "gaugeVersionSupport": {
-        "minimum": "1.0.7",
-        "maximum": ""
-    },
-    "lspLangId": "python",
-    "gRPCSupport": true
+  "id": "python",
+  "version": "0.4.0",
+  "description": "Python support for gauge",
+  "run": {
+    "windows": [
+      "start.bat",
+      "--start"
+    ],
+    "linux": [
+      "./start.sh",
+      "--start"
+    ],
+    "darwin": [
+      "./start.sh",
+      "--start"
+    ]
+  },
+  "init": {
+    "windows": [
+      "start.bat",
+      "--init"
+    ],
+    "linux": [
+      "./start.sh",
+      "--init"
+    ],
+    "darwin": [
+      "./start.sh",
+      "--init"
+    ]
+  },
+  "gaugeVersionSupport": {
+    "minimum": "1.0.7",
+    "maximum": ""
+  },
+  "lspLangId": "python",
+  "gRPCSupport": true
 }
