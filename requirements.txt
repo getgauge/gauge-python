@@ -3,7 +3,7 @@ baron==0.10.1
 bleach==6.0.0
 certifi==2023.7.22
 charset-normalizer==3.2.0
-debugpy==1.6.7
+debugpy==1.6.7.post1
 docutils==0.20.1
 grpcio==1.56.2
 grpcio-tools==1.56.2
