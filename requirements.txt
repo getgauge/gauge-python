@@ -18,7 +18,7 @@ pkginfo==1.9.6
 protobuf==4.24.2
 pyfakefs==5.2.3
 Pygments==2.16.1
-readme-renderer==40.0
+readme-renderer==41.0
 redbaron==0.9.2
 requests==2.31.0
 requests-toolbelt==1.0.0
