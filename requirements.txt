@@ -6,7 +6,7 @@ charset-normalizer==3.2.0
 debugpy==1.6.7.post1
 docutils==0.20.1
 grpcio==1.56.2
-grpcio-tools==1.56.2
+grpcio-tools==1.58.0
 idna==3.4
 importlib-metadata==6.8.0
 jaraco.classes==3.3.0
