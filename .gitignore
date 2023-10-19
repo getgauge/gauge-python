@@ -7,7 +7,7 @@ bin/
 logs/
 dist/
 MANIFEST
-gauge.egg-info/
+getgauge.egg-info/
 htmlcov/
 .coverage
 install.sh
