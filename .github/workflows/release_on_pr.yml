@@ -8,8 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: '${{ secrets.GAUGEBOT_GITHUB_TOKEN }}'
-      PYPI_USER: '${{ secrets.PYPI_USER }}'
-      PYPI_PASSWORD: '${{ secrets.PYPI_PASSWORD }}'
       CI: true
 
     steps:
@@ -66,8 +64,10 @@ jobs:
           token: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: Upload PyPi package
+        env:
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-          python -m twine upload -u ${PYPI_USER} -p ${PYPI_PASSWORD} dist/getgauge*
+          python -m twine upload --non-interactive dist/getgauge*
 
 
       - name: Update metadata in gauge-repository
