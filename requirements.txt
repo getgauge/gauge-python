@@ -3,13 +3,13 @@ baron==0.10.1
 bleach==6.1.0
 certifi==2024.2.2
 charset-normalizer==3.3.2
-debugpy==1.8.0
+debugpy==1.8.1
 docutils==0.20.1
 grpcio==1.60.1
 grpcio-tools==1.60.1
 idna==3.6
 importlib-metadata==7.0.1
-jaraco.classes==3.3.0
+jaraco.classes==3.3.1
 keyring==24.3.0
 markdown-it-py==3.0.0
 mdurl==0.1.2
@@ -26,7 +26,7 @@ rfc3986==2.0.0
 rich==13.7.0
 rply==0.7.8
 six==1.16.0
-twine==4.0.2
+twine==5.0.0
 urllib3==2.2.0
 webencodings==0.5.1
 zipp==3.17.0
