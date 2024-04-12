@@ -7,7 +7,7 @@ debugpy==1.8.1
 docutils==0.20.1
 grpcio==1.62.1
 grpcio-tools==1.62.1
-idna==3.6
+idna==3.7
 importlib-metadata==7.1.0
 jaraco.classes==3.4.0
 keyring==25.1.0
