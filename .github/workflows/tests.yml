@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.8, 3.11]
+        python-version: [3.8, 3.12]
 
     steps:
       - uses: actions/checkout@v4
@@ -37,18 +37,19 @@ jobs:
 
   functional-tests:
     needs: test
-    name: FTs ${{ matrix.os }}
+    name: FTs ${{ matrix.os }} ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
+        python-version: [3.8, 3.12]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python 3.8
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.8'
+          python-version: '${{ matrix.python-version }}'
           cache: 'pip' # caching pip dependencies
 
       - name: Set up Go
@@ -92,18 +93,19 @@ jobs:
 
   lsp-tests:
     needs: test
-    name: LSP Tests ${{ matrix.os }}
+    name: LSP Tests ${{ matrix.os }} ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
+        python-version: [3.8, 3.12]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python 3.8
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.8'
+          python-version: '${{ matrix.python-version }}'
           cache: 'pip' # caching pip dependencies
 
       - name: Set up Nodejs

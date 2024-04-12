@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='getgauge',
@@ -6,21 +6,16 @@ setup(
     version='{0}',
     description='Enables Python support for Gauge',
     author='Gauge Team',
-    author_email='getgauge@outlook.com',
+    author_email='getgauge@googlegroups.com',
     url='https://github.com/getgauge/gauge-python',
     download_url='https://github.com/getgauge/gauge-python/archive/v{0}.zip',
     keywords=['testing', 'gauge', 'gauge-python', 'getgauge', 'automation'],
     license='MIT',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3 :: Only',
     ],
     install_requires=['redBaron', 'debugpy', 'grpcio>=1.39.0', 'protobuf>=3.5.2'],
     extras_require={1},
