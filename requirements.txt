@@ -5,8 +5,8 @@ certifi==2024.2.2
 charset-normalizer==3.3.2
 debugpy==1.8.1
 docutils==0.20.1
-grpcio==1.62.1
-grpcio-tools==1.62.1
+grpcio==1.62.2
+grpcio-tools==1.62.2
 idna==3.7
 importlib-metadata==7.1.0
 jaraco.classes==3.4.0
