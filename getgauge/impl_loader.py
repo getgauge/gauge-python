@@ -62,6 +62,12 @@ def _import_file(base_dir, file_path):
     rel_path = os.path.normpath(file_path.replace(base_dir + os.path.sep, ''))
     try:
         module_name = os.path.splitext(rel_path.replace(os.path.sep, '.'))[0]
+        # Resolve relative imports
+        if module_name.startswith('.'):
+            for _ in range(file_path.count('..')):
+                base_dir = os.path.dirname(base_dir).replace("/", os.path.sep).replace("\\", os.path.sep)
+            sys.path.append(base_dir)
+            module_name = module_name.lstrip('.')
         m = importlib.import_module(module_name)
         # Get all classes in the imported module
         classes = inspect.getmembers(m, lambda member: inspect.isclass(member) and member.__module__ == module_name)
