@@ -6,6 +6,7 @@ import shutil
 import sys
 import traceback
 from os import path
+from contextlib import contextmanager
 
 from getgauge import logger
 from getgauge.registry import registry
@@ -57,6 +58,14 @@ def _import_impl(base_dir, step_impl_dir):
         elif path.isdir(file_path):
             _import_impl(base_dir, file_path)
 
+@contextmanager
+def temporary_sys_path(path):
+    original_sys_path = sys.path[:]
+    sys.path.append(path)
+    try:
+        yield
+    finally:
+        sys.path = original_sys_path
 
 def _import_file(base_dir, file_path):
     rel_path = os.path.normpath(file_path.replace(base_dir + os.path.sep, ''))
@@ -64,11 +73,14 @@ def _import_file(base_dir, file_path):
         module_name = os.path.splitext(rel_path.replace(os.path.sep, '.'))[0]
         # Resolve relative imports
         if module_name.startswith('.'):
+            # Handle multi-level relative imports
             for _ in range(file_path.count('..')):
                 base_dir = os.path.dirname(base_dir).replace("/", os.path.sep).replace("\\", os.path.sep)
-            sys.path.append(base_dir)
             module_name = module_name.lstrip('.')
-        m = importlib.import_module(module_name)
+            with temporary_sys_path(base_dir):
+                m = importlib.import_module(module_name)
+        else:
+            m = importlib.import_module(module_name)
         # Get all classes in the imported module
         classes = inspect.getmembers(m, lambda member: inspect.isclass(member) and member.__module__ == module_name)
         if len(classes) > 0:
