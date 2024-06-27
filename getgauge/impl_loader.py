@@ -17,6 +17,7 @@ impl_dirs = get_step_impl_dirs()
 env_dir = os.path.join(project_root, 'env', 'default')
 requirements_file = os.path.join(project_root, 'requirements.txt')
 sys.path.append(project_root)
+temporary_sys_path = []
 PLUGIN_JSON = 'python.json'
 VERSION = 'version'
 PYTHON_PROPERTIES = 'python.properties'
@@ -31,6 +32,12 @@ def load_impls(step_impl_dirs=impl_dirs):
             logger.error('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
             return
         base_dir = project_root if impl_dir.startswith(project_root) else os.path.dirname(impl_dir)
+        # Handle multi-level relative imports
+        for _ in range(impl_dir.count('..')):
+            base_dir = os.path.dirname(base_dir).replace("/", os.path.sep).replace("\\", os.path.sep)
+        # Add temporary sys path for relative imports that is not already added
+        if '..' in impl_dir and base_dir not in temporary_sys_path:
+            temporary_sys_path.append(base_dir)
         _import_impl(base_dir, impl_dir)
 
 
@@ -59,9 +66,9 @@ def _import_impl(base_dir, step_impl_dir):
             _import_impl(base_dir, file_path)
 
 @contextmanager
-def temporary_sys_path(path):
+def use_temporary_sys_path():
     original_sys_path = sys.path[:]
-    sys.path.append(path)
+    sys.path.extend(temporary_sys_path)
     try:
         yield
     finally:
@@ -71,13 +78,9 @@ def _import_file(base_dir, file_path):
     rel_path = os.path.normpath(file_path.replace(base_dir + os.path.sep, ''))
     try:
         module_name = os.path.splitext(rel_path.replace(os.path.sep, '.'))[0]
-        # Resolve relative imports
-        if module_name.startswith('.'):
-            # Handle multi-level relative imports
-            for _ in range(file_path.count('..')):
-                base_dir = os.path.dirname(base_dir).replace("/", os.path.sep).replace("\\", os.path.sep)
-            module_name = module_name.lstrip('.')
-            with temporary_sys_path(base_dir):
+        # Use temporary sys path for relative imports
+        if '..' in file_path:
+            with use_temporary_sys_path():
                 m = importlib.import_module(module_name)
         else:
             m = importlib.import_module(module_name)
