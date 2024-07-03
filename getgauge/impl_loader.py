@@ -97,7 +97,7 @@ def _import_file(base_dir, file_path):
 
 # Inject instace in each class method (hook/step)
 def update_step_resgistry_with_class(instance, file_path):
-    # Resole the absolute path from relative path
+    # Resolve the absolute path from relative path
     file_path = os.path.abspath(file_path) if '..' in file_path else file_path
     for info in registry.get_all_methods_in(file_path):
         class_methods = [x[0] for x in inspect.getmembers(instance, inspect.ismethod)]
