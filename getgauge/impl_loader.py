@@ -99,11 +99,12 @@ def _import_file(base_dir, file_path):
 def update_step_resgistry_with_class(instance, file_path):
     # Resolve the absolute path from relative path
     file_path = os.path.abspath(file_path) if '..' in file_path else file_path
-    for info in registry.get_all_methods_in(file_path):
+    method_list = registry.get_all_methods_in(file_path)
+    for info in method_list:
         class_methods = [x[0] for x in inspect.getmembers(instance, inspect.ismethod)]
         if info.impl.__name__ in class_methods:
             info.instance = instance
-
+    return method_list
 
 def _get_version():
     json_data = open(PLUGIN_JSON).read()
