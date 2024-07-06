@@ -91,17 +91,20 @@ def _import_file(base_dir, file_path):
                 file = inspect.getfile(c[1])
                 # Create instance of step implementation class.
                 if _has_methods_with_gauge_decoratores(c[1]):
-                    update_step_resgistry_with_class(c[1](), file_path) # c[1]() will create a new instance of the class
+                    update_step_registry_with_class(c[1](), file_path) # c[1]() will create a new instance of the class
     except:
         logger.fatal('Exception occurred while loading step implementations from file: {}.\n{}'.format(rel_path, traceback.format_exc()))
 
 # Inject instace in each class method (hook/step)
-def update_step_resgistry_with_class(instance, file_path):
-    for info in registry.get_all_methods_in(file_path):
+def update_step_registry_with_class(instance, file_path):
+    # Resolve the absolute path from relative path
+    file_path = os.path.abspath(file_path) if '..' in file_path else file_path
+    method_list = registry.get_all_methods_in(file_path)
+    for info in method_list:
         class_methods = [x[0] for x in inspect.getmembers(instance, inspect.ismethod)]
         if info.impl.__name__ in class_methods:
             info.instance = instance
-
+    return method_list
 
 def _get_version():
     json_data = open(PLUGIN_JSON).read()
