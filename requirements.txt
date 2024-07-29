@@ -8,7 +8,7 @@ docutils==0.21.2
 grpcio==1.64.1
 grpcio-tools==1.64.1
 idna==3.7
-importlib-metadata==8.0.0
+importlib-metadata==8.2.0
 jaraco.classes==3.4.0
 keyring==25.2.1
 markdown-it-py==3.0.0
