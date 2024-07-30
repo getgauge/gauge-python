@@ -2,7 +2,7 @@ import json
 import sys
 from subprocess import check_output
 
-import pkg_resources
+from importlib.metadata import version, PackageNotFoundError
 
 
 def get_version():
@@ -29,10 +29,10 @@ def assert_versions():
     expected_gauge_version = python_plugin_version
 
     try:
-        getgauge_version = pkg_resources.get_distribution('getgauge').version
+        getgauge_version = version('getgauge')
         if getgauge_version != expected_gauge_version:
             install_getgauge("getgauge=="+expected_gauge_version)
-    except pkg_resources.DistributionNotFound:
+    except PackageNotFoundError:
         install_getgauge("getgauge=="+expected_gauge_version)
 
 
