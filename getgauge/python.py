@@ -2,7 +2,7 @@ import sys
 import warnings
 from getgauge.registry import registry, MessagesStore, ScreenshotsStore
 
-if sys.version_info[0] is 3:
+if sys.version_info[0] == 3:
     from collections.abc import MutableMapping
 else:
     from collections import MutableMapping
