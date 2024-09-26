@@ -297,19 +297,20 @@ class SpecificationTests(TestCase):
         name = 'NAME'
         file_name = 'FILE_NAME'
         tags = ['TAGS']
-        specification = Specification(name, file_name, False, tags)
+        specification = Specification(name, file_name, False, False, tags)
 
         self.assertEqual(specification.name, name)
         self.assertEqual(specification.file_name, file_name)
-        self.assertEqual(specification.is_failing, False)
+        self.assertFalse(specification.is_failing)
+        self.assertFalse(specification.is_skipping)
         self.assertEqual(specification.tags, tags)
 
     def test_Specification_equality(self):
         name = 'NAME'
         file_name = 'FILE_NAME'
         tags = ['TAGS']
-        specification = Specification(name, file_name, False, tags)
-        specification1 = Specification(name, file_name, False, tags)
+        specification = Specification(name, file_name, False, False, tags)
+        specification1 = Specification(name, file_name, False, False, tags)
 
         self.assertEqual(specification, specification1)
 
@@ -318,17 +319,18 @@ class ScenarioTests(TestCase):
     def test_Scenario(self):
         name = 'NAME3'
         tags = ['TAGS']
-        scenario = Scenario(name, False, tags)
+        scenario = Scenario(name, False, False, tags)
 
         self.assertEqual(scenario.name, name)
-        self.assertEqual(scenario.is_failing, False)
+        self.assertFalse(scenario.is_failing)
+        self.assertFalse(scenario.is_skipping)
         self.assertEqual(scenario.tags, tags)
 
     def test_Scenario_equality(self):
         name = 'NAME2'
         tags = ['TAGS']
-        scenario = Scenario(name, False, tags)
-        scenario1 = Scenario(name, False, tags)
+        scenario = Scenario(name, False, False, tags)
+        scenario1 = Scenario(name, False, False, tags)
 
         self.assertEqual(scenario, scenario1)
 
@@ -336,15 +338,16 @@ class ScenarioTests(TestCase):
 class StepTests(TestCase):
     def test_Step(self):
         name = 'NAME1'
-        step = Step(name, False)
+        step = Step(name, False, False)
 
         self.assertEqual(step.text, name)
-        self.assertEqual(step.is_failing, False)
+        self.assertFalse(step.is_failing)
+        self.assertFalse(step.is_skipping)
 
     def test_Step_equality(self):
         name = 'NAME1'
-        step = Step(name, False)
-        step1 = Step(name, False)
+        step = Step(name, False, False)
+        step1 = Step(name, False, False)
 
         self.assertEqual(step, step1)
 
@@ -354,7 +357,7 @@ class ExecutionContextTests(TestCase):
         name = 'NAME'
         file_name = 'FILE_NAME'
         tags = ['TAGS']
-        specification = Specification(name, file_name, False, tags)
+        specification = Specification(name, file_name, False, False, tags)
         scenario = Scenario(name, False, tags)
         step = Step(name, False)
 
@@ -367,7 +370,7 @@ class ExecutionContextTests(TestCase):
         name = 'NAME'
         file_name = 'FILE_NAME'
         tags = ['TAGS']
-        specification = Specification(name, file_name, False, tags)
+        specification = Specification(name, file_name, False, False, tags)
         scenario = Scenario(name, False, tags)
         step = Step(name, False)
 
@@ -390,21 +393,27 @@ class ExecutionContextTests(TestCase):
         message.executionStartingRequest.\
             currentExecutionInfo.currentSpec.isFailed = True
         message.executionStartingRequest.\
+            currentExecutionInfo.currentSpec.isSkipped = False
+        message.executionStartingRequest.\
             currentExecutionInfo.currentScenario.name = scenario_name
         message.executionStartingRequest.\
             currentExecutionInfo.currentScenario.isFailed = False
         message.executionStartingRequest.\
+            currentExecutionInfo.currentScenario.isSkipped = False
+        message.executionStartingRequest.\
             currentExecutionInfo.currentStep.step.actualStepText = step_name
         message.executionStartingRequest.\
             currentExecutionInfo.currentStep.isFailed = True
+        message.executionStartingRequest.\
+            currentExecutionInfo.currentStep.isSkipped = False
         message.executionStartingRequest. \
             currentExecutionInfo.currentStep.errorMessage = "Error"
         message.executionStartingRequest. \
             currentExecutionInfo.currentStep.stackTrace = "stack trace"
 
-        specification = Specification(spec_name, spec_file_name, True, [])
-        scenario = Scenario(scenario_name, False, [])
-        step = Step(step_name, True, "Error", "stack trace")
+        specification = Specification(spec_name, spec_file_name, True, False, [])
+        scenario = Scenario(scenario_name, False, False, [])
+        step = Step(step_name, True, False, "Error", "stack trace")
 
         context = ExecutionContext(specification, scenario, step)
 

@@ -149,10 +149,11 @@ class ExecutionContext:
 
 
 class Specification:
-    def __init__(self, name, file_name, is_failing, tags):
+    def __init__(self, name, file_name, is_failing, is_skipping, tags):
         self.__name = name
         self.__file_name = file_name
         self.__is_failing = is_failing
+        self.__is_skipping = is_skipping
         self.__tags = tags
 
     @property
@@ -168,25 +169,26 @@ class Specification:
         return self.__is_failing
 
     @property
+    def is_skipping(self):
+        return self.__is_skipping
+
+    @property
     def tags(self):
         return self.__tags
 
     def __str__(self):
-        return "Specification: {{ name: {}, is_failing: {}, tags: {}, file_name: {} }}".format(self.name,
-                                                                                               str(
-                                                                                                   self.is_failing),
-                                                                                               ", ".join(
-                                                                                                   self.tags),
-                                                                                               self.file_name)
+        s = "Specification: {{ name: {}, is_failing: {}, is_skipping: {}, tags: {}, file_name: {} }}"
+        return s.format(self.name, str(self.is_failing), str(self.is_skipping), ", ".join(self.tags), self.file_name)
 
     def __eq__(self, other):
         return self.__str__() == other.__str__()
 
 
 class Scenario:
-    def __init__(self, name, is_failing, tags):
+    def __init__(self, name, is_failing, is_skipping, tags):
         self.__name = name
         self.__is_failing = is_failing
+        self.__is_skipping = is_skipping
         self.__tags = tags
 
     @property
@@ -198,23 +200,28 @@ class Scenario:
         return self.__is_failing
 
     @property
+    def is_skipping(self):
+        return self.__is_skipping
+
+    @property
     def tags(self):
         return self.__tags
 
     def __str__(self):
-        return "Scenario: {{ name: {}, is_failing: {}, tags: {} }}".format(self.name, str(self.is_failing),
-                                                                           ", ".join(self.tags))
+        s = "Scenario: {{ name: {}, is_failing: {}, is_skipping: {}, tags: {} }}"
+        return s.format(self.name, str(self.is_failing), str(self.is_skipping),", ".join(self.tags))
 
     def __eq__(self, other):
         return self.__str__() == other.__str__()
 
 
 class Step:
-    def __init__(self, text, is_failing, message="", stacktrace=""):
+    def __init__(self, text, is_failing, is_skipping, message="", stacktrace=""):
         self.__stacktrace = stacktrace
         self.__error_message = message
         self.__text = text
         self.__is_failing = is_failing
+        self.__is_skipping = is_skipping
 
     @property
     def text(self):
@@ -225,6 +232,10 @@ class Step:
         return self.__is_failing
 
     @property
+    def is_skipping(self):
+        return self.__is_skipping
+
+    @property
     def error_message(self):
         return self.__error_message
 
@@ -233,8 +244,8 @@ class Step:
         return self.__stacktrace
 
     def __str__(self):
-        s = "Step: {{ text: {}, is_failing: {}, error_message: {}, stacktrace: {} }}"
-        return s.format(self.text, str(self.is_failing), str(self.error_message), str(self.stacktrace))
+        s = "Step: {{ text: {}, is_failing: {}, is_skipping: {}, error_message: {}, stacktrace: {} }}"
+        return s.format(self.text, str(self.is_failing), str(self.is_skipping), str(self.error_message), str(self.stacktrace))
 
     def __eq__(self, other):
         return self.__str__() == other.__str__()
@@ -341,11 +352,13 @@ class DataStoreFactory:
 def create_execution_context_from(current_execution_info):
     return ExecutionContext(
         Specification(current_execution_info.currentSpec.name, current_execution_info.currentSpec.fileName,
-                      current_execution_info.currentSpec.isFailed, current_execution_info.currentSpec.tags),
+                      current_execution_info.currentSpec.isFailed, current_execution_info.currentSpec.isSkipped,
+                      current_execution_info.currentSpec.tags),
         Scenario(current_execution_info.currentScenario.name, current_execution_info.currentScenario.isFailed,
-                 current_execution_info.currentScenario.tags),
+                 current_execution_info.currentSpec.isSkipped, current_execution_info.currentScenario.tags),
         Step(current_execution_info.currentStep.step.actualStepText, current_execution_info.currentStep.isFailed,
-             current_execution_info.currentStep.errorMessage, current_execution_info.currentStep.stackTrace)
+             current_execution_info.currentSpec.isSkipped, current_execution_info.currentStep.errorMessage,
+             current_execution_info.currentStep.stackTrace)
     )
 
 
