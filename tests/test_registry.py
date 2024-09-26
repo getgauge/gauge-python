@@ -16,8 +16,12 @@ class RegistryTests(unittest.TestCase):
         for info in infos:
             registry.add_step(info['text'], info['func'], '')
 
-        self.assertEqual([info['text'] for info in infos].sort(),
-                         registry.steps().sort())
+        registry.steps().sort()
+
+        info_text = [info['text'] for info in infos]
+        info_text.sort()
+
+        self.assertEqual(info_text, registry.steps())
 
         for info in infos:
             parsed_step_text = re.sub('<[^<]+?>', '{}', info['text'])
@@ -28,24 +32,19 @@ class RegistryTests(unittest.TestCase):
         registry.add_step('Step 1', 'func', '')
         registry.continue_on_failure('func', [RuntimeError])
 
-        self.assertEqual(True,
-                         registry.is_continue_on_failure('func',
-                                                         RuntimeError()))
+        self.assertTrue(registry.is_continue_on_failure('func', RuntimeError()))
 
     def test_Registry_add_step_definition_with_continue_on_failure_for_different_exceptions(self):
         registry.add_step('Step 1', 'func', '')
         registry.continue_on_failure('func', [RuntimeError])
 
-        self.assertEqual(False,
-                         registry.is_continue_on_failure('func', IndexError()))
+        self.assertFalse(registry.is_continue_on_failure('func', IndexError()))
 
     def test_Registry_add_step_definition_with_parent_class_continue_on_failure(self):
         registry.add_step('Step 1', 'func', '')
         registry.continue_on_failure('func', [Exception])
 
-        self.assertEqual(True,
-                         registry.is_continue_on_failure('func',
-                                                         RuntimeError()))
+        self.assertTrue(registry.is_continue_on_failure('func', RuntimeError()))
 
     def test_Registry_add_step_definition_with_alias(self):
         registry.add_step(['Say <hello> to <getgauge>.',
@@ -54,8 +53,8 @@ class RegistryTests(unittest.TestCase):
         info1 = registry.get_info_for('Say {} to {}.')
         info2 = registry.get_info_for('Tell {} to {}.')
 
-        self.assertEqual(info1.has_alias, True)
-        self.assertEqual(info2.has_alias, True)
+        self.assertTrue(info1.has_alias)
+        self.assertTrue(info2.has_alias)
 
     def test_Registry_get_step_info(self):
         infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func'},
@@ -72,7 +71,7 @@ class RegistryTests(unittest.TestCase):
 
         self.assertEqual('Step 1', registry.get_info_for('Step 1').step_text)
 
-        self.assertEqual(None, registry.get_info_for('Step21').step_text)
+        self.assertIsNone(registry.get_info_for('Step21').step_text)
 
     def test_Registry_is_step_implemented(self):
         infos = [{'text': 'Say <hello> to <getgauge>', 'func': 'func'},
