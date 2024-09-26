@@ -53,9 +53,7 @@ def assert_default_vowels(arg0):
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True,
-                         response.refactorResponse.success,
-                         response.refactorResponse.error)
+        self.assertTrue(response.refactorResponse.success, response.refactorResponse.error)
 
         self.assertEqual([RefactorTests.path],
                          response.refactorResponse.filesChanged)
@@ -89,9 +87,7 @@ def assert_default_vowels(arg0, arg1):
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True,
-                         response.refactorResponse.success,
-                         response.refactorResponse.error)
+        self.assertTrue(response.refactorResponse.success, response.refactorResponse.error)
 
         self.assertEqual([RefactorTests.path],
                          response.refactorResponse.filesChanged)
@@ -125,9 +121,7 @@ def assert_default_vowels(arg0, arg1):
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True,
-                         response.refactorResponse.success,
-                         response.refactorResponse.error)
+        self.assertTrue(response.refactorResponse.success, response.refactorResponse.error)
 
         self.assertEqual([RefactorTests.path],
                          response.refactorResponse.filesChanged)
@@ -153,9 +147,7 @@ def assert_default_vowels(arg0, arg1):
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True,
-                         response.refactorResponse.success,
-                         response.refactorResponse.error)
+        self.assertTrue(response.refactorResponse.success, response.refactorResponse.error)
 
         self.assertEqual([RefactorTests.path],
                          response.refactorResponse.filesChanged)
@@ -186,9 +178,7 @@ def assert_default_vowels():
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True,
-                         response.refactorResponse.success,
-                         response.refactorResponse.error)
+        self.assertTrue(response.refactorResponse.success, response.refactorResponse.error)
 
         self.assertEqual([RefactorTests.path],
                          response.refactorResponse.filesChanged)
@@ -219,9 +209,7 @@ def assert_default_vowels(arg0):
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True,
-                         response.refactorResponse.success,
-                         response.refactorResponse.error)
+        self.assertTrue(response.refactorResponse.success, response.refactorResponse.error)
 
         self.assertEqual([RefactorTests.path],
                          response.refactorResponse.filesChanged)
@@ -259,9 +247,7 @@ def assert_default_vowels(arg1):
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True,
-                         response.refactorResponse.success,
-                         response.refactorResponse.error)
+        self.assertTrue(response.refactorResponse.success, response.refactorResponse.error)
 
         self.assertEqual([RefactorTests.path],
                          response.refactorResponse.filesChanged)
@@ -303,9 +289,7 @@ def assert_default_vowels(arg0, arg1):
 """
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True,
-                         response.refactorResponse.success,
-                         response.refactorResponse.error)
+        self.assertTrue(response.refactorResponse.success, response.refactorResponse.error)
 
         self.assertEqual([RefactorTests.path],
                          response.refactorResponse.filesChanged)
@@ -338,9 +322,7 @@ def assert_default_vowels(arg0, arg1):
         processor.refactor_step(request.refactorRequest, response, None)
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
-        self.assertEqual(True,
-                         response.refactorResponse.success,
-                         response.refactorResponse.error)
+        self.assertTrue(response.refactorResponse.success, response.refactorResponse.error)
 
         self.assertEqual([RefactorTests.path],
                          response.refactorResponse.filesChanged)

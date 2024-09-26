@@ -301,7 +301,7 @@ class SpecificationTests(TestCase):
 
         self.assertEqual(specification.name, name)
         self.assertEqual(specification.file_name, file_name)
-        self.assertEqual(specification.is_failing, False)
+        self.assertFalse(specification.is_failing)
         self.assertEqual(specification.tags, tags)
 
     def test_Specification_equality(self):
@@ -321,7 +321,7 @@ class ScenarioTests(TestCase):
         scenario = Scenario(name, False, tags)
 
         self.assertEqual(scenario.name, name)
-        self.assertEqual(scenario.is_failing, False)
+        self.assertFalse(scenario.is_failing)
         self.assertEqual(scenario.tags, tags)
 
     def test_Scenario_equality(self):
@@ -339,7 +339,7 @@ class StepTests(TestCase):
         step = Step(name, False)
 
         self.assertEqual(step.text, name)
-        self.assertEqual(step.is_failing, False)
+        self.assertFalse(step.is_failing)
 
     def test_Step_equality(self):
         name = 'NAME1'
@@ -427,10 +427,10 @@ class DecoratorTests(TestCase):
         step1 = registry.get_info_for('Step 1').impl
         step2 = registry.get_info_for('Step 2').impl
 
-        self.assertEqual(
-            registry.is_continue_on_failure(step1, RuntimeError()), False)
-        self.assertEqual(
-            registry.is_continue_on_failure(step2, RuntimeError()), True)
+        self.assertFalse(
+            registry.is_continue_on_failure(step1, RuntimeError()))
+        self.assertTrue(
+            registry.is_continue_on_failure(step2, RuntimeError()))
 
     def test_before_step_decorator(self):
         funcs = registry.before_step()
