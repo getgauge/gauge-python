@@ -4,6 +4,7 @@ import sys
 import time
 import traceback
 
+from getgauge.exceptions import SkipScenarioException
 from getgauge.messages.messages_pb2 import ExecutionStatusResponse, Message
 from getgauge.messages.spec_pb2 import ProtoExecutionResult
 from getgauge.registry import MessagesStore, ScreenshotsStore, registry
@@ -31,6 +32,8 @@ def execute_method(params, step, response, is_continue_on_failure=_false):
     try:
         params = _get_args(params, step)
         step.impl(*params)
+    except SkipScenarioException:
+        response.executionResult.skipScenario = True
     except Exception as e:
         _add_exception(e, response, is_continue_on_failure(step.impl, e))
     response.executionResult.executionTime = _current_time() - start

@@ -268,9 +268,9 @@ class ScreenshotsStore:
                 file.close()
             return os.path.basename(screenshot_file)
         screenshot_file = registry.screenshot_provider()()
-        if (not os.path.isabs(screenshot_file)):
+        if not os.path.isabs(screenshot_file):
             screenshot_file = os.path.join(_screenshots_dir(), screenshot_file)
-        if (not os.path.exists(screenshot_file)):
+        if not os.path.exists(screenshot_file):
             logger.warning(
                 "Screenshot file {0} does not exists.".format(screenshot_file))
         return os.path.basename(screenshot_file)

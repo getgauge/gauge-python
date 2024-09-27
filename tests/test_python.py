@@ -65,11 +65,11 @@ class DataStoreTests(TestCase):
         for value in values:
             store.put(value, value)
 
-        for value in values:
-            store.put(value, values[value])
+        for key, value in values.items():
+            store.put(key, value)
 
-        for value in values:
-            self.assertEqual(store.get(value), values[value])
+        for key, value in values.items():
+            self.assertEqual(store.get(key), value)
 
     def test_data_store_clear(self):
         store = DataStore()
@@ -81,8 +81,8 @@ class DataStoreTests(TestCase):
         for value in values:
             store.put(value, value)
 
-        for value in values:
-            store.put(value, values[value])
+        for key, value in values.items():
+            store.put(key, value)
 
         for value in values:
             self.assertTrue(store.is_present(value))
@@ -243,7 +243,7 @@ class TableTests(TestCase):
             self.assertEqual(row, table[expected_rows.index(row)])
 
         for row in table:
-            self.assertTrue(expected_rows.__contains__(row))
+            self.assertIn(row, expected_rows)
 
         with self.assertRaises(IndexError):
             table.get_row(5)
@@ -272,7 +272,7 @@ class TableTests(TestCase):
 
         proto_table = ProtoTable({'headers': {'cells': headers}, 'rows': rows})
 
-        table = Table(proto_table).__str__()
+        table = str(Table(proto_table))
 
         self.assertEqual(table, """|Word  |Vowel Count|
 |------|-----------|
@@ -288,7 +288,7 @@ class TableTests(TestCase):
 
         proto_table = ProtoTable({'headers': {'cells': headers}, 'rows': rows})
 
-        table = Table(proto_table).__str__()
+        table = str(Table(proto_table))
 
         self.assertEqual(table, """|Word|Vowel Count|
 |----|-----------|""")
