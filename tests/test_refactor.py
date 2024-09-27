@@ -1,5 +1,4 @@
 import os
-import sys
 import tempfile
 import unittest
 
@@ -49,7 +48,7 @@ def assert_default_vowels(arg0):
         param_position.newPosition = 1
         request.refactorRequest.paramPositions.extend([position, param_position])
 
-        processor.refactor_step(request.refactorRequest, response, None)
+        processor.refactor_step(request.refactorRequest, response)
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
@@ -83,7 +82,7 @@ def assert_default_vowels(arg0, arg1):
         param_position.newPosition = 1
         request.refactorRequest.paramPositions.extend([position, param_position])
 
-        processor.refactor_step(request.refactorRequest, response, None)
+        processor.refactor_step(request.refactorRequest, response)
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
@@ -117,7 +116,7 @@ def assert_default_vowels(arg0, arg1):
         param_position.newPosition = 1
         request.refactorRequest.paramPositions.extend([position, param_position])
 
-        processor.refactor_step(request.refactorRequest, response, None)
+        processor.refactor_step(request.refactorRequest, response)
         actual_data = self.getActualText()
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
@@ -142,7 +141,7 @@ def assert_default_vowels(arg0, arg1):
         request.refactorRequest.newStepValue.parameterizedStepValue = 'Vowels in English language is.'
         request.refactorRequest.newStepValue.stepValue = 'Vowels in English language is.'
 
-        processor.refactor_step(request.refactorRequest, response, None)
+        processor.refactor_step(request.refactorRequest, response)
 
         actual_data = self.getActualText()
 
@@ -173,7 +172,7 @@ def assert_default_vowels():
         position.newPosition = 0
         request.refactorRequest.paramPositions.extend([position])
 
-        processor.refactor_step(request.refactorRequest, response, None)
+        processor.refactor_step(request.refactorRequest, response)
 
         actual_data = self.getActualText()
 
@@ -204,7 +203,7 @@ def assert_default_vowels(arg0):
         param_position.newPosition = 0
         request.refactorRequest.paramPositions.extend([param_position])
 
-        processor.refactor_step(request.refactorRequest, response, None)
+        processor.refactor_step(request.refactorRequest, response)
 
         actual_data = self.getActualText()
 
@@ -242,7 +241,7 @@ def assert_default_vowels(arg1):
         param2_position.newPosition = 1
         request.refactorRequest.paramPositions.extend([param1_position, param2_position])
 
-        processor.refactor_step(request.refactorRequest, response, None)
+        processor.refactor_step(request.refactorRequest, response)
 
         actual_data = self.getActualText()
 
@@ -280,7 +279,7 @@ is <vowels> <bsdfdsf>.'
 
         old_content = self.getActualText()
 
-        processor.refactor_step(request.refactorRequest, response, None)
+        processor.refactor_step(request.refactorRequest, response)
 
         expected = """@step("Vowels in English language is <vowels> <bsdfdsf>.")
 def assert_default_vowels(arg0, arg1):
@@ -319,7 +318,7 @@ def assert_default_vowels(arg0, arg1):
 
         old_content = self.getActualText()
 
-        processor.refactor_step(request.refactorRequest, response, None)
+        processor.refactor_step(request.refactorRequest, response)
 
         self.assertEqual(Message.RefactorResponse, response.messageType)
         self.assertTrue(response.refactorResponse.success, response.refactorResponse.error)
@@ -345,4 +344,3 @@ def assert_default_vowels(arg0, arg1):
         _file.write(RefactorTests.data)
         _file.close()
         return actual_data
-

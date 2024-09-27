@@ -1,14 +1,15 @@
-from unittest import TestCase, main
-
-from getgauge.messages.messages_pb2 import Message
-from getgauge.registry import registry, MessagesStore, ScreenshotsStore
-from getgauge.python import (Messages, DataStore, DictObject,
-                             DataStoreContainer, data_store, Table, Specification,
-                             Scenario, Step, ExecutionContext,
-                             create_execution_context_from)
-from uuid import uuid1
 import os
 import tempfile
+from unittest import TestCase, main
+from uuid import uuid1
+
+from getgauge.messages.messages_pb2 import Message
+from getgauge.python import (DataStore, DataStoreContainer, DictObject,
+                             ExecutionContext, Messages, Scenario,
+                             Specification, Step, Table,
+                             create_execution_context_from, data_store)
+from getgauge.registry import MessagesStore, ScreenshotsStore, registry
+
 try:
     from collections.abc import MutableMapping
 except ImportError:
@@ -64,11 +65,11 @@ class DataStoreTests(TestCase):
         for value in values:
             store.put(value, value)
 
-        for value in values:
-            store.put(value, values[value])
+        for key, value in values.items():
+            store.put(key, value)
 
-        for value in values:
-            self.assertEqual(store.get(value), values[value])
+        for key, value in values.items():
+            self.assertEqual(store.get(key), value)
 
     def test_data_store_clear(self):
         store = DataStore()
@@ -80,8 +81,8 @@ class DataStoreTests(TestCase):
         for value in values:
             store.put(value, value)
 
-        for value in values:
-            store.put(value, values[value])
+        for key, value in values.items():
+            store.put(key, value)
 
         for value in values:
             self.assertTrue(store.is_present(value))
@@ -139,6 +140,7 @@ class DataStoreTests(TestCase):
         self.assertFalse(proxy.is_present('d'))
         self.assertFalse(proxy2.is_present('c'))
         self.assertFalse(proxy2.is_present('d'))
+
 
 class DictObjectTests(TestCase):
     def test_attribute_access(self):
@@ -241,7 +243,7 @@ class TableTests(TestCase):
             self.assertEqual(row, table[expected_rows.index(row)])
 
         for row in table:
-            self.assertTrue(expected_rows.__contains__(row))
+            self.assertIn(row, expected_rows)
 
         with self.assertRaises(IndexError):
             table.get_row(5)
@@ -270,7 +272,7 @@ class TableTests(TestCase):
 
         proto_table = ProtoTable({'headers': {'cells': headers}, 'rows': rows})
 
-        table = Table(proto_table).__str__()
+        table = str(Table(proto_table))
 
         self.assertEqual(table, """|Word  |Vowel Count|
 |------|-----------|
@@ -286,7 +288,7 @@ class TableTests(TestCase):
 
         proto_table = ProtoTable({'headers': {'cells': headers}, 'rows': rows})
 
-        table = Table(proto_table).__str__()
+        table = str(Table(proto_table))
 
         self.assertEqual(table, """|Word|Vowel Count|
 |----|-----------|""")
@@ -481,7 +483,7 @@ class DecoratorTests(TestCase):
 class ScreenshotsTests(TestCase):
     def setUp(self):
         self.__old_screenshot_provider = registry.screenshot_provider()
-        self.__is_screenshot_writer  = registry.is_screenshot_writer
+        self.__is_screenshot_writer = registry.is_screenshot_writer
         os.environ["gauge_screenshots_dir"] = tempfile.mkdtemp()
 
     def test_pending_screenshots(self):

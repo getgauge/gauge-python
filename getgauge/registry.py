@@ -2,8 +2,8 @@ import inspect
 import os
 import re
 import sys
-from uuid import uuid1
 from subprocess import call
+from uuid import uuid1
 
 from getgauge import logger
 
@@ -218,13 +218,13 @@ def _filter_hooks(tags, hooks):
             continue
         for tag in tags:
             hook_tags = hook_tags.replace('<{}>'.format(tag), 'True')
-        if eval(re.sub('<[^<]+?>', 'False', hook_tags)):
+        if eval(re.sub(r'<[^<]+?>', 'False', hook_tags)):
             filtered_hooks.append(hook)
     return filtered_hooks
 
 
 def _get_step_value(step_text):
-    return re.sub('(<.*?>)', '{}', step_text)
+    return re.sub(r'(<.*?>)', '{}', step_text)
 
 
 def _take_screenshot():
@@ -263,23 +263,26 @@ class ScreenshotsStore:
         if not registry.is_screenshot_writer:
             screenshot_file = _uniqe_screenshot_file()
             content = registry.screenshot_provider()()
-            file = open(screenshot_file, "wb")
-            file.write(content)
-            file.close()
+            with open(screenshot_file, "wb") as file:
+                file.write(content)
+                file.close()
             return os.path.basename(screenshot_file)
         screenshot_file = registry.screenshot_provider()()
-        if(not os.path.isabs(screenshot_file)):
+        if not os.path.isabs(screenshot_file):
             screenshot_file = os.path.join(_screenshots_dir(), screenshot_file)
-        if(not os.path.exists(screenshot_file)):
-            logger.warning("Screenshot file {0} does not exists.".format(screenshot_file))
+        if not os.path.exists(screenshot_file):
+            logger.warning(
+                "Screenshot file {0} does not exists.".format(screenshot_file))
         return os.path.basename(screenshot_file)
 
     @staticmethod
     def clear():
         ScreenshotsStore.__screenshots = []
 
+
 def _uniqe_screenshot_file():
     return os.path.join(_screenshots_dir(), "screenshot-{0}.png".format(uuid1().int))
+
 
 def _screenshots_dir():
     return os.getenv('gauge_screenshots_dir')
