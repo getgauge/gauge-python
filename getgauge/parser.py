@@ -1,5 +1,6 @@
-from getgauge import logger
 from redbaron import RedBaron
+
+from getgauge import logger
 
 
 class Parser(object):
@@ -77,7 +78,8 @@ class Parser(object):
             logger.error("Decorator step accepts either a string or a list of \
                 strings - {0}".format(self.file_path))
         else:
-            logger.error("Decorator step accepts only one argument - {0}".format(self.file_path))
+            logger.error(
+                "Decorator step accepts only one argument - {0}".format(self.file_path))
 
     def iter_steps(self):
         """Iterate over steps in the parsed file."""
@@ -93,7 +95,7 @@ class Parser(object):
             arg_node = decorator.call.value[0].value
             if step == step_text:
                 return arg_node, func
-            elif isinstance(step, list) and step_text in step:
+            if isinstance(step, list) and step_text in step:
                 step_node = arg_node[step.index(step_text)]
                 return step_node, func
         return None, None

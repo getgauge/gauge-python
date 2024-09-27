@@ -1,14 +1,15 @@
-from unittest import TestCase, main
-
-from getgauge.messages.messages_pb2 import Message
-from getgauge.registry import registry, MessagesStore, ScreenshotsStore
-from getgauge.python import (Messages, DataStore, DictObject,
-                             DataStoreContainer, data_store, Table, Specification,
-                             Scenario, Step, ExecutionContext,
-                             create_execution_context_from)
-from uuid import uuid1
 import os
 import tempfile
+from unittest import TestCase, main
+from uuid import uuid1
+
+from getgauge.messages.messages_pb2 import Message
+from getgauge.python import (DataStore, DataStoreContainer, DictObject,
+                             ExecutionContext, Messages, Scenario,
+                             Specification, Step, Table,
+                             create_execution_context_from, data_store)
+from getgauge.registry import MessagesStore, ScreenshotsStore, registry
+
 try:
     from collections.abc import MutableMapping
 except ImportError:
@@ -139,6 +140,7 @@ class DataStoreTests(TestCase):
         self.assertFalse(proxy.is_present('d'))
         self.assertFalse(proxy2.is_present('c'))
         self.assertFalse(proxy2.is_present('d'))
+
 
 class DictObjectTests(TestCase):
     def test_attribute_access(self):
@@ -297,7 +299,7 @@ class SpecificationTests(TestCase):
         name = 'NAME'
         file_name = 'FILE_NAME'
         tags = ['TAGS']
-        specification = Specification(name, file_name, False, False, tags)
+        specification = Specification(name, file_name, False, tags)
 
         self.assertEqual(specification.name, name)
         self.assertEqual(specification.file_name, file_name)
@@ -308,8 +310,8 @@ class SpecificationTests(TestCase):
         name = 'NAME'
         file_name = 'FILE_NAME'
         tags = ['TAGS']
-        specification = Specification(name, file_name, False, False, tags)
-        specification1 = Specification(name, file_name, False, False, tags)
+        specification = Specification(name, file_name, False, tags)
+        specification1 = Specification(name, file_name, False, tags)
 
         self.assertEqual(specification, specification1)
 
@@ -318,7 +320,7 @@ class ScenarioTests(TestCase):
     def test_Scenario(self):
         name = 'NAME3'
         tags = ['TAGS']
-        scenario = Scenario(name, False, False, tags)
+        scenario = Scenario(name, False, tags)
 
         self.assertEqual(scenario.name, name)
         self.assertFalse(scenario.is_failing)
@@ -327,8 +329,8 @@ class ScenarioTests(TestCase):
     def test_Scenario_equality(self):
         name = 'NAME2'
         tags = ['TAGS']
-        scenario = Scenario(name, False, False, tags)
-        scenario1 = Scenario(name, False, False, tags)
+        scenario = Scenario(name, False, tags)
+        scenario1 = Scenario(name, False, tags)
 
         self.assertEqual(scenario, scenario1)
 
@@ -336,15 +338,15 @@ class ScenarioTests(TestCase):
 class StepTests(TestCase):
     def test_Step(self):
         name = 'NAME1'
-        step = Step(name, False, False)
+        step = Step(name, False)
 
         self.assertEqual(step.text, name)
         self.assertFalse(step.is_failing)
 
     def test_Step_equality(self):
         name = 'NAME1'
-        step = Step(name, False, False)
-        step1 = Step(name, False, False)
+        step = Step(name, False)
+        step1 = Step(name, False)
 
         self.assertEqual(step, step1)
 
@@ -354,7 +356,7 @@ class ExecutionContextTests(TestCase):
         name = 'NAME'
         file_name = 'FILE_NAME'
         tags = ['TAGS']
-        specification = Specification(name, file_name, False, False, tags)
+        specification = Specification(name, file_name, False, tags)
         scenario = Scenario(name, False, tags)
         step = Step(name, False)
 
@@ -367,7 +369,7 @@ class ExecutionContextTests(TestCase):
         name = 'NAME'
         file_name = 'FILE_NAME'
         tags = ['TAGS']
-        specification = Specification(name, file_name, False, False, tags)
+        specification = Specification(name, file_name, False, tags)
         scenario = Scenario(name, False, tags)
         step = Step(name, False)
 
@@ -390,27 +392,21 @@ class ExecutionContextTests(TestCase):
         message.executionStartingRequest.\
             currentExecutionInfo.currentSpec.isFailed = True
         message.executionStartingRequest.\
-            currentExecutionInfo.currentSpec.isSkipped = False
-        message.executionStartingRequest.\
             currentExecutionInfo.currentScenario.name = scenario_name
         message.executionStartingRequest.\
             currentExecutionInfo.currentScenario.isFailed = False
         message.executionStartingRequest.\
-            currentExecutionInfo.currentScenario.isSkipped = False
-        message.executionStartingRequest.\
             currentExecutionInfo.currentStep.step.actualStepText = step_name
         message.executionStartingRequest.\
             currentExecutionInfo.currentStep.isFailed = True
-        message.executionStartingRequest.\
-            currentExecutionInfo.currentStep.isSkipped = False
         message.executionStartingRequest. \
             currentExecutionInfo.currentStep.errorMessage = "Error"
         message.executionStartingRequest. \
             currentExecutionInfo.currentStep.stackTrace = "stack trace"
 
-        specification = Specification(spec_name, spec_file_name, True, False, [])
-        scenario = Scenario(scenario_name, False, False, [])
-        step = Step(step_name, True, False, "Error", "stack trace")
+        specification = Specification(spec_name, spec_file_name, True, [])
+        scenario = Scenario(scenario_name, False, [])
+        step = Step(step_name, True, "Error", "stack trace")
 
         context = ExecutionContext(specification, scenario, step)
 
@@ -487,7 +483,7 @@ class DecoratorTests(TestCase):
 class ScreenshotsTests(TestCase):
     def setUp(self):
         self.__old_screenshot_provider = registry.screenshot_provider()
-        self.__is_screenshot_writer  = registry.is_screenshot_writer
+        self.__is_screenshot_writer = registry.is_screenshot_writer
         os.environ["gauge_screenshots_dir"] = tempfile.mkdtemp()
 
     def test_pending_screenshots(self):

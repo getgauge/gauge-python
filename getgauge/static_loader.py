@@ -1,12 +1,13 @@
-import os
-from getgauge.registry import registry
+import glob
+
 from getgauge.parser import Parser
+from getgauge.registry import registry
 
 
-def load_steps(python_file):
-    for funcStep in python_file.iter_steps():
-        registry.add_step(funcStep[0], funcStep[1],
-                          python_file.file_path, funcStep[2])
+def load_steps(python_file: Parser):
+    for func_step in python_file.iter_steps():
+        registry.add_step(func_step[0], func_step[1],
+                          python_file.file_path, func_step[2])
 
 
 def reload_steps(file_path, content=None):
@@ -18,9 +19,7 @@ def reload_steps(file_path, content=None):
 
 def load_files(step_impl_dirs):
     for step_impl_dir in step_impl_dirs:
-        for dirpath, _, files in os.walk(step_impl_dir):
-                py_files = (os.path.join(dirpath, f) for f in files if f.endswith('.py'))
-                for file_path in py_files:
-                        pf = Parser.parse(file_path)
-                        if pf:
-                                load_steps(pf)
+        for file_path in glob.glob(f"{step_impl_dir}/**/*.py", recursive=True):
+            pf = Parser.parse(file_path)
+            if pf:
+                load_steps(pf)
