@@ -179,8 +179,8 @@ class Registry(object):
         all_hooks = []
         for hook in self.hooks:
             all_hooks = all_hooks + \
-                [h for h in getattr(self, "__{}".format(hook))
-                 if h.file_name == file_name]
+                        [h for h in getattr(self, "__{}".format(hook))
+                         if h.file_name == file_name]
         return all_hooks
 
     def get_all_methods_in(self, file_name):

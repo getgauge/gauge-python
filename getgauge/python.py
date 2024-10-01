@@ -1,6 +1,5 @@
 import sys
 import warnings
-
 from getgauge.registry import MessagesStore, ScreenshotsStore, registry
 
 if sys.version_info[0] == 3:
@@ -63,8 +62,7 @@ def screenshot(func):
 
 
 def custom_screen_grabber(func):
-    _warn_screenshot_deprecation(
-        'custom_screen_grabber', 'custom_screenshot_writer')
+    _warn_screenshot_deprecation('custom_screen_grabber', 'custom_screenshot_writer')
     registry.set_screenshot_provider(func, False)
     return func
 
@@ -76,8 +74,7 @@ def custom_screenshot_writer(func):
 
 def _warn_screenshot_deprecation(old_function, new_function):
     warnings.warn(
-        "'{0}' is deprecated in favour of '{1}'".format(
-            old_function, new_function),
+        "'{0}' is deprecated in favour of '{1}'".format(old_function, new_function),
         DeprecationWarning, stacklevel=3)
     warnings.simplefilter('default', DeprecationWarning)
 
