@@ -5,9 +5,9 @@ import time
 import traceback
 
 from getgauge.exceptions import SkipScenarioException
-from getgauge.messages.messages_pb2 import ExecutionStatusResponse, Message
+from getgauge.messages.messages_pb2 import ExecutionStatusResponse
 from getgauge.messages.spec_pb2 import ProtoExecutionResult
-from getgauge.registry import MessagesStore, ScreenshotsStore, registry
+from getgauge.registry import MessagesStore, ScreenshotsStore
 
 
 def create_execution_status_response():
@@ -24,7 +24,8 @@ def run_hook(request, hooks, execution_info):
     return response
 
 
-def _false(func, exception): return False
+def _false(func, exception):
+    return False
 
 
 def execute_method(params, step, response, is_continue_on_failure=_false):
@@ -32,8 +33,9 @@ def execute_method(params, step, response, is_continue_on_failure=_false):
     try:
         params = _get_args(params, step)
         step.impl(*params)
-    except SkipScenarioException:
+    except SkipScenarioException as e:
         response.executionResult.skipScenario = True
+        MessagesStore.write_message(str(e))
     except Exception as e:
         _add_exception(e, response, is_continue_on_failure(step.impl, e))
     response.executionResult.executionTime = _current_time() - start
@@ -41,7 +43,8 @@ def execute_method(params, step, response, is_continue_on_failure=_false):
     response.executionResult.screenshotFiles.extend(ScreenshotsStore.pending_screenshots())
 
 
-def _current_time(): return int(round(time.time() * 1000))
+def _current_time():
+    return int(round(time.time() * 1000))
 
 
 def _get_args(params, hook_or_step):
@@ -60,7 +63,7 @@ def _add_exception(e, response, continue_on_failure):
         screenshot = ScreenshotsStore.capture_to_file()
         response.executionResult.failureScreenshotFile = screenshot
     response.executionResult.failed = True
-    message = e.__str__()
+    message = str(e)
     if not message:
         message = "Exception occurred"
     response.executionResult.errorMessage = message
