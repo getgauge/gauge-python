@@ -93,7 +93,7 @@ class Parser(object):
             arg_node = decorator.call.value[0].value
             if step == step_text:
                 return arg_node, func
-            elif isinstance(step, list) and step_text in step:
+            if isinstance(step, list) and step_text in step:
                 step_node = arg_node[step.index(step_text)]
                 return step_node, func
         return None, None

@@ -66,9 +66,11 @@ def custom_screen_grabber(func):
     registry.set_screenshot_provider(func, False)
     return func
 
+
 def custom_screenshot_writer(func):
     registry.set_screenshot_provider(func, True)
     return func
+
 
 def _warn_screenshot_deprecation(old_function, new_function):
     warnings.warn(
@@ -172,12 +174,8 @@ class Specification:
         return self.__tags
 
     def __str__(self):
-        return "Specification: {{ name: {}, is_failing: {}, tags: {}, file_name: {} }}".format(self.name,
-                                                                                               str(
-                                                                                                   self.is_failing),
-                                                                                               ", ".join(
-                                                                                                   self.tags),
-                                                                                               self.file_name)
+        s = "Specification: {{ name: {}, is_failing: {}, tags: {}, file_name: {} }}"
+        return s.format(self.name, str(self.is_failing), ", ".join(self.tags), self.file_name)
 
     def __eq__(self, other):
         return self.__str__() == other.__str__()
@@ -202,8 +200,8 @@ class Scenario:
         return self.__tags
 
     def __str__(self):
-        return "Scenario: {{ name: {}, is_failing: {}, tags: {} }}".format(self.name, str(self.is_failing),
-                                                                           ", ".join(self.tags))
+        s = "Scenario: {{ name: {}, is_failing: {}, tags: {} }}"
+        return s.format(self.name, str(self.is_failing), ", ".join(self.tags))
 
     def __eq__(self, other):
         return self.__str__() == other.__str__()
