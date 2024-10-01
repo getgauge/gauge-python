@@ -2,7 +2,7 @@ from getgauge import logger
 from redbaron import RedBaron
 
 
-class Parser():
+class Parser(object):
 
     @staticmethod
     def parse(file_path, content=None):

@@ -1,6 +1,6 @@
 import sys
 import warnings
-from getgauge.registry import MessagesStore, ScreenshotsStore, registry
+from getgauge.registry import registry, MessagesStore, ScreenshotsStore
 
 if sys.version_info[0] == 3:
     from collections.abc import MutableMapping
