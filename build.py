@@ -41,12 +41,9 @@ def install():
 def create_setup_file():
     with open("setup.tmpl", "r", encoding="utf-8") as tmpl:
         tmpl_content = tmpl.read()
-        tmpl.close()
     with open("setup.py", "w+", encoding="utf-8") as setup:
         v = get_version()
-        setup.write(tmpl_content.format(
-            v, "{\n\t\t':python_version == \"2.7\"': ['futures']\n\t}"))
-        setup.close()
+        setup.write(tmpl_content.format(v))
 
 
 def generate_package():
@@ -55,7 +52,6 @@ def generate_package():
     create_setup_file()
     with open(os.devnull, 'w', encoding="utf-8") as fnull:
         call([sys.executable, 'setup.py', 'sdist'], stdout=fnull, stderr=fnull)
-        fnull.close()
 
 
 def create_zip():
