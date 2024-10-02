@@ -94,7 +94,7 @@ def copy(src, dest):
 
 
 usage = """
-Usage: python install.py --[option]
+Usage: python build.py --[option]
 
 Options:
     --test    :     runs unit tests.
