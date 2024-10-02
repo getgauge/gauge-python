@@ -15,15 +15,17 @@ class RefactorTests(unittest.TestCase):
     def setUp(self):
         self.preservesNewlines = True
         RefactorTests.path = os.path.join(tempfile.gettempdir(), 'step_impl.py')
-        RefactorTests.file = open(RefactorTests.path, 'w')
-        RefactorTests.file.write("""@step("Vowels in English language are <vowels>.")
-def assert_default_vowels(arg0):
-    Messages.write_message("Given vowels are {0}".format(given_vowels))
-    assert given_vowels == "".join(vowels)\n""")
-        RefactorTests.file.close()
-        RefactorTests.file = open(RefactorTests.path, 'r')
-        RefactorTests.data = RefactorTests.file.read()
-        RefactorTests.file.close()
+        with open(RefactorTests.path, 'w', encoding="utf-8") as refactor_file:
+            RefactorTests.file = refactor_file
+            RefactorTests.file.write("""@step("Vowels in English language are <vowels>.")
+    def assert_default_vowels(arg0):
+        Messages.write_message("Given vowels are {0}".format(given_vowels))
+        assert given_vowels == "".join(vowels)\n""")
+
+        with open(RefactorTests.path, 'r', encoding="utf-8") as refactor_file:
+            RefactorTests.file = refactor_file
+            RefactorTests.data = RefactorTests.file.read()
+
         registry.add_step('Vowels in English language are <vowels>.', None,
                           RefactorTests.path)
 
@@ -337,10 +339,9 @@ def assert_default_vowels(arg0, arg1):
         self.assertIn('arg0, arg1', diff_contents)
 
     def getActualText(self):
-        _file = open(RefactorTests.path, 'r+')
-        actual_data = _file.read()
-        _file.seek(0)
-        _file.truncate()
-        _file.write(RefactorTests.data)
-        _file.close()
+        with open(RefactorTests.path, 'r+', encoding="utf-8") as _file:
+            actual_data = _file.read()
+            _file.seek(0)
+            _file.truncate()
+            _file.write(RefactorTests.data)
         return actual_data

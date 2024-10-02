@@ -265,7 +265,6 @@ class ScreenshotsStore:
             content = registry.screenshot_provider()()
             with open(screenshot_file, "wb") as file:
                 file.write(content)
-                file.close()
             return os.path.basename(screenshot_file)
         screenshot_file = registry.screenshot_provider()()
         if not os.path.isabs(screenshot_file):

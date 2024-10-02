@@ -36,7 +36,6 @@ def read_file_contents(file_name):
     if os.path.isfile(file_name):
         with open(file_name, "r", encoding="utf-8") as f:
             content = f.read().replace('\r\n', '\n')
-            f.close()
         return content
     return None
 
