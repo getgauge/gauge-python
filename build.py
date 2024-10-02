@@ -1,9 +1,11 @@
 # /usr/bin/env python
+
+import glob
 import json
 import os
 import shutil
 import sys
-from datetime import date
+from pathlib import Path
 from subprocess import call
 
 cwd = os.getcwd()
@@ -20,6 +22,8 @@ BIN = os.path.join(cwd, 'bin')
 
 DEPLOY = os.path.join(cwd, 'deploy')
 
+ROOT_DIR = Path(__file__).resolve().parent
+
 
 def install():
     plugin_zip = create_zip()
@@ -28,29 +32,26 @@ def install():
                       os.path.join(BIN, plugin_zip)])
     generate_package()
     p = os.listdir("dist")[0]
-    print("Installing getgauge package using pip: \n\tpip install dist/{}".format(p))
+    print(f"Installing getgauge package using pip: \n\tpip install dist/{p}")
     call([sys.executable, "-m", "pip", "install",
-          "dist/{}".format(p), "--upgrade", "--user"])
+         f"dist/{p}", "--upgrade", "--user"])
     sys.exit(exit_code)
 
 
 def create_setup_file():
-    tmpl = open("setup.tmpl", "r")
-    setup = open("setup.py", "w+")
-    v = get_version()
-    setup.write(tmpl.read().format(
-        v, "{\n\t\t':python_version == \"2.7\"': ['futures']\n\t}"))
-    setup.close()
-    tmpl.close()
+    with open("setup.tmpl", "r", encoding="utf-8") as tmpl:
+        tmpl_content = tmpl.read()
+    with open("setup.py", "w+", encoding="utf-8") as setup:
+        v = get_version()
+        setup.write(tmpl_content.format(v))
 
 
 def generate_package():
     shutil.rmtree('dist', True)
     print('Creating getgauge package.')
     create_setup_file()
-    fnull = open(os.devnull, 'w')
-    call([sys.executable, 'setup.py', 'sdist'], stdout=fnull, stderr=fnull)
-    fnull.close()
+    with open(os.devnull, 'w', encoding="utf-8") as fnull:
+        call([sys.executable, 'setup.py', 'sdist'], stdout=fnull, stderr=fnull)
 
 
 def create_zip():
@@ -64,15 +65,15 @@ def create_zip():
     if os.path.exists(BIN):
         shutil.rmtree(BIN)
     os.mkdir(BIN)
-    plugin_zip = '{0}.zip'.format(output_file)
+    plugin_zip = f"{output_file}.zip"
     shutil.move(plugin_zip, BIN)
     print('Zip file created.')
     return plugin_zip
 
 
 def get_version():
-    json_data = open(PLUGIN_JSON).read()
-    data = json.loads(json_data)
+    with open(PLUGIN_JSON, "r", encoding="utf-8") as json_data:
+        data = json.loads(json_data.read())
     return data[VERSION]
 
 
@@ -93,7 +94,7 @@ def copy(src, dest):
 
 
 usage = """
-Usage: python install.py --[option]
+Usage: python build.py --[option]
 
 Options:
     --test    :     runs unit tests.
@@ -103,16 +104,11 @@ Options:
 
 def run_tests():
     pp = "PYTHONPATH"
-    os.environ[pp] = "{0}{1}{2}".format(os.environ.get(
-        pp), os.pathsep, os.path.abspath(os.path.curdir))
-    test_dir = os.path.join(os.path.curdir, "tests")
+    os.environ[pp] = str(ROOT_DIR)
     exit_code = 0
-    for root, _, files in os.walk(test_dir):
-        for item in files:
-            if item.startswith("test_") and item.endswith(".py"):
-                fileNamePath = str(os.path.join(root, item))
-                exit_code = call([sys.executable, fileNamePath]
-                                 ) if exit_code == 0 else exit_code
+    for file_name_path in glob.glob(f"{ROOT_DIR}/tests/**/test_*.py", recursive=True):
+        exit_code = call([sys.executable, file_name_path]
+                         ) if exit_code == 0 else exit_code
     return exit_code
 
 
