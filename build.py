@@ -102,13 +102,17 @@ Options:
 """
 
 
-def run_tests():
+def run_tests() -> int:
     pp = "PYTHONPATH"
     os.environ[pp] = str(ROOT_DIR)
     exit_code = 0
-    for file_name_path in glob.glob(f"{ROOT_DIR}/tests/**/test_*.py", recursive=True):
-        exit_code = call([sys.executable, file_name_path]
-                         ) if exit_code == 0 else exit_code
+    all_python_test_files = glob.glob(f"{ROOT_DIR}/tests/**/test_*.py", recursive=True)
+    for i, file_name_path in enumerate(all_python_test_files):
+        command = ["coverage", "run", file_name_path]
+        exit_code = call(command) if exit_code == 0 else exit_code
+        # Keep coverage files
+        os.rename(".coverage", f".coverage.{i}")
+    call(["coverage", "combine"])
     return exit_code
 
 

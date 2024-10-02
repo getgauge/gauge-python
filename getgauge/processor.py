@@ -1,9 +1,5 @@
-import os
-import traceback
-from os import environ, path
-from threading import Timer
+from os import path
 
-from getgauge import logger
 from getgauge.executor import (create_execution_status_response,
                                execute_method, run_hook)
 from getgauge.impl_loader import load_impls
@@ -16,6 +12,7 @@ from getgauge.static_loader import reload_steps
 from getgauge.util import (get_file_name, get_impl_files, get_step_impl_dirs,
                            read_file_contents)
 from getgauge.validator import validate_step
+
 
 def process_validate_step_request(request):
     return validate_step(request)
@@ -47,7 +44,7 @@ def process_refactor_request(request):
         refactor_step(request, response)
     except Exception as e:
         response.success = False
-        response.error = 'Reason: {}'.format(e.__str__())
+        response.error = f"Reason: {e}"
     return response
 
 
@@ -175,7 +172,7 @@ def _load_from_disk(file_path):
 def process_cache_file_request(request):
     file = request.filePath
     status = request.status
-    if status == CacheFileRequest.CHANGED or status == CacheFileRequest.OPENED:
+    if status in [CacheFileRequest.CHANGED, CacheFileRequest.OPENED]:
         reload_steps(file, request.content)
     elif status == CacheFileRequest.CREATED:
         if not registry.is_file_cached(file):
@@ -225,15 +222,15 @@ def process_stub_impl_request(request):
         prefix = "from getgauge.python import step\n"
         span = Span(**{'start': 0, 'startChar': 0, 'end': 0, 'endChar': 0})
     codes = [prefix] + codes[:]
-    textDiffs = [TextDiff(**{'span': span, 'content': '\n'.join(codes)})]
+    text_diffs = [TextDiff(**{'span': span, 'content': '\n'.join(codes)})]
     response.filePath = file_name
-    response.textDiffs.extend(textDiffs)
+    response.textDiffs.extend(text_diffs)
     return response
 
 
 def process_glob_pattern_request(request):
     res = ImplementationFileGlobPatternResponse()
-    globPatterns = [["{}/**/*.py".format(d)] for d in get_step_impl_dirs()]
+    glob_patterns = [[f"{d}/**/*.py"] for d in get_step_impl_dirs()]
     res.globPatterns.extend(
-        [item for sublist in globPatterns for item in sublist])
+        [item for sublist in glob_patterns for item in sublist])
     return res

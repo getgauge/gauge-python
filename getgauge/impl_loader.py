@@ -1,16 +1,17 @@
 import importlib
 import inspect
 import json
+import os
 import re
 import shutil
 import sys
 import traceback
-from os import path
 from contextlib import contextmanager
+from os import path
 
 from getgauge import logger
 from getgauge.registry import registry
-from getgauge.util import *
+from getgauge.util import get_project_root, get_step_impl_dirs
 
 project_root = get_project_root()
 impl_dirs = get_step_impl_dirs()
@@ -50,9 +51,8 @@ def copy_skel_files():
         shutil.copytree(os.path.join(SKEL,path.basename(impl_dirs[0]) ), impl_dirs[0])
         logger.info('create  {}'.format(os.path.join(env_dir, PYTHON_PROPERTIES)))
         shutil.copy(os.path.join(SKEL, PYTHON_PROPERTIES), env_dir)
-        f = open(requirements_file, 'w')
-        f.write('getgauge==' + _get_version())
-        f.close()
+        with open(requirements_file, 'w', encoding="utf-8") as f:
+            f.write('getgauge==' + _get_version())
     except:
         logger.fatal('Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
 
@@ -95,10 +95,10 @@ def _import_file(base_dir, file_path):
     except:
         logger.fatal('Exception occurred while loading step implementations from file: {}.\n{}'.format(rel_path, traceback.format_exc()))
 
-# Inject instace in each class method (hook/step)
+# Inject instance in each class method (hook/step)
 def update_step_registry_with_class(instance, file_path):
     # Resolve the absolute path from relative path
-    file_path = os.path.abspath(file_path) if '..' in file_path else file_path
+    file_path = os.path.abspath(file_path) if str(file_path).startswith("..") else file_path
     method_list = registry.get_all_methods_in(file_path)
     for info in method_list:
         class_methods = [x[0] for x in inspect.getmembers(instance, inspect.ismethod)]
@@ -107,13 +107,14 @@ def update_step_registry_with_class(instance, file_path):
     return method_list
 
 def _get_version():
-    json_data = open(PLUGIN_JSON).read()
-    data = json.loads(json_data)
+    with open(PLUGIN_JSON, "r", encoding="utf-8") as json_data:
+        data = json.loads(json_data.read())
     return data[VERSION]
 
-def _has_methods_with_gauge_decoratores(klass):
-    foo = r"@(step|before_suite|after_suite|before_scenario|after_scenario|before_spec|after_spec|before_step|after_step|screenshot|custom_screen_grabber)"
+def _has_methods_with_gauge_decoratores(klass) -> bool:
+    gauge_decorator_pattern = r"@(step|before_suite|after_suite|before_scenario|after_scenario|before_spec|after_spec|before_step|after_step|screenshot|custom_screen_grabber)"
     sourcelines = inspect.getsourcelines(klass)[0]
-    for i,line in enumerate(sourcelines):
-        if re.match(foo, line.strip()) != None:
+    for line in sourcelines:
+        if re.match(gauge_decorator_pattern, line.strip()) is not None:
             return True
+    return False
