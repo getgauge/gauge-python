@@ -1,4 +1,5 @@
-from getgauge.messages.messages_pb2 import RefactorResponse, TextDiff
+from getgauge.exceptions import MultipleImplementationFoundException
+from getgauge.messages.messages_pb2 import TextDiff
 from getgauge.messages.spec_pb2 import Span
 from getgauge.parser import Parser
 from getgauge.registry import registry
@@ -6,7 +7,7 @@ from getgauge.registry import registry
 
 def refactor_step(request, response):
     if registry.has_multiple_impls(request.oldStepValue.stepValue):
-        raise Exception('Multiple Implementation found for `{}`'.format(
+        raise MultipleImplementationFoundException('Multiple Implementation found for `{}`'.format(
             request.oldStepValue.parameterizedStepValue
         ))
     info = registry.get_info_for(request.oldStepValue.stepValue)
@@ -18,7 +19,7 @@ def refactor_step(request, response):
     )
     content = impl_file.get_code()
     if request.saveChanges:
-        with open(info.file_name, 'w') as f:
+        with open(info.file_name, 'w', encoding="utf-8") as f:
             f.write(content)
     response.success = True
     response.filesChanged.append(info.file_name)
@@ -31,6 +32,6 @@ def refactor_step(request, response):
 
 def _new_parameter_positions(request):
     moved_pos = list(range(len(request.paramPositions)))
-    for index, position in enumerate(request.paramPositions):
+    for position in request.paramPositions:
         moved_pos[position.newPosition] = position.oldPosition
     return moved_pos
