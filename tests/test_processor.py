@@ -5,6 +5,7 @@ from unittest import main
 
 from getgauge import processor
 from getgauge import static_loader as loader
+from getgauge.exceptions import SkipScenarioException
 from getgauge.messages.messages_pb2 import *
 from getgauge.messages.spec_pb2 import Parameter, ProtoExecutionResult, Span
 from getgauge.parser import Parser
@@ -183,6 +184,8 @@ class ProcessorTests(TestCase):
             '', response.executionResult.errorMessage)
         self.assertEqual(
             '', response.executionResult.stackTrace)
+        self.assertFalse(response.executionResult.skipScenario)
+        self.assertEqual([], response.executionResult.message)
 
     def test_Processor_execute_step_request_with_param(self):
         registry.add_step('Step <a> with <b>', impl, '')
@@ -204,6 +207,8 @@ class ProcessorTests(TestCase):
             '', response.executionResult.errorMessage)
         self.assertEqual(
             '', response.executionResult.stackTrace)
+        self.assertFalse(response.executionResult.skipScenario)
+        self.assertEqual([], response.executionResult.message)
 
     def test_Processor_failed_execute_step_request(self):
         request = ExecuteStepRequest()
@@ -219,6 +224,8 @@ class ProcessorTests(TestCase):
         self.assertNotEqual(
             '', response.executionResult.stackTrace)
         self.assertFalse(response.executionResult.recoverableError)
+        self.assertFalse(response.executionResult.skipScenario)
+        self.assertEqual([], response.executionResult.message)
 
     def test_Processor_failed_execute_step_request_with_continue_on_failure(self):
         registry.add_step('Step 4', failing_impl, '')
@@ -236,6 +243,25 @@ class ProcessorTests(TestCase):
         self.assertNotEqual('', response.executionResult.errorMessage)
         self.assertNotEqual('', response.executionResult.stackTrace)
         self.assertTrue(response.executionResult.recoverableError)
+        self.assertFalse(response.executionResult.skipScenario)
+        self.assertEqual([], response.executionResult.message)
+
+    def test_Processor_failed_execute_step_request_with_programmatic_skip(self):
+        registry.add_step('Skipped Step', skipped_impl, '')
+
+        request = ExecuteStepRequest()
+        request.parsedStepText = 'Skipped Step'
+
+        response = processor.process_execute_step_request(request)
+
+        self.assertIsInstance(response, ExecutionStatusResponse)
+        self.assertFalse(response.executionResult.failed)
+        self.assertEqual(
+            '', response.executionResult.errorMessage)
+        self.assertEqual(
+            '', response.executionResult.stackTrace)
+        self.assertTrue(response.executionResult.skipScenario)
+        self.assertEqual(['Step programmatically skipped'], response.executionResult.message)
 
     def test_Processor_starting_execution_request(self):
         registry.add_before_suite(impl1)
@@ -747,6 +773,9 @@ def impl2(context):
 
 def failing_impl():
     print([][1])
+
+def skipped_impl():
+    raise SkipScenarioException("Step programmatically skipped")
 
 
 if __name__ == '__main__':
