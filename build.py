@@ -28,15 +28,18 @@ ROOT_DIR = Path(__file__).resolve().parent
 def install():
     plugin_zip = create_zip()
     call(['gauge', 'uninstall', 'python', '-v', get_version()])
-    exit_code = call(['gauge', 'install', 'python', '-f',
-                      os.path.join(BIN, plugin_zip)])
+    exit_code = call(['gauge', 'install', 'python', '-f', os.path.join(BIN, plugin_zip)])
     generate_package()
     p = os.listdir("dist")[0]
     print(f"Installing getgauge package using pip: \n\tpip install dist/{p}")
-    call([sys.executable, "-m", "pip", "install",
-         f"dist/{p}", "--upgrade", "--user"])
+    install_cmd = [sys.executable, "-m", "pip", "install", f"dist/{p}", "--upgrade"]
+    if not in_venv():
+        install_cmd.append("--user")
+    call(install_cmd)
     sys.exit(exit_code)
 
+def in_venv():
+    return sys.prefix != sys.base_prefix
 
 def create_setup_file():
     with open("setup.tmpl", "r", encoding="utf-8") as tmpl:

@@ -14,11 +14,15 @@ def get_version():
     return ''
 
 def install_getgauge(getgauge_version):
-    install_cmd = [sys.executable, "-m", "pip", "install", getgauge_version, "--user"]
+    install_cmd = [sys.executable, "-m", "pip", "install", getgauge_version]
+    if not in_venv():
+        install_cmd.append("--user")
     if "dev" in getgauge_version:
         install_cmd.append("--pre")
     check_output([" ".join(install_cmd)], shell=True)
 
+def in_venv():
+    return sys.prefix != sys.base_prefix
 
 def assert_versions():
     python_plugin_version = get_version()
