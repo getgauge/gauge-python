@@ -14,8 +14,8 @@ keyring==25.5.0
 markdown-it-py==3.0.0
 mdurl==0.1.2
 more-itertools==10.5.0
-pkginfo==1.10.0
-protobuf==5.28.3
+pkginfo==1.11.2
+protobuf==5.29.0
 pyfakefs==5.7.1
 Pygments==2.18.0
 readme-renderer==44.0
@@ -27,7 +27,7 @@ rich==13.9.4
 rply==0.7.8
 setuptools==75.6.0
 six==1.16.0
-twine==5.1.1
+twine==6.0.1
 urllib3==2.2.3
 webencodings==0.5.1
 zipp==3.21.0
