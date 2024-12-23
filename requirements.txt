@@ -15,7 +15,7 @@ markdown-it-py==3.0.0
 mdurl==0.1.2
 more-itertools==10.5.0
 pkginfo==1.12.0
-protobuf==5.29.1
+protobuf==5.29.2
 pyfakefs==5.7.3
 Pygments==2.18.0
 readme-renderer==44.0
@@ -28,7 +28,7 @@ rply==0.7.8
 setuptools==75.6.0
 six==1.17.0
 twine==6.0.1
-urllib3==2.2.3
+urllib3==2.3.0
 webencodings==0.5.1
 zipp==3.21.0
 coverage==7.6.9
