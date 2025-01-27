@@ -5,10 +5,10 @@ certifi==2024.12.14
 charset-normalizer==3.4.1
 debugpy==1.8.12
 docutils==0.21.2
-grpcio==1.69.0
-grpcio-tools==1.69.0
+grpcio==1.70.0
+grpcio-tools==1.70.0
 idna==3.10
-importlib-metadata==8.5.0
+importlib-metadata==8.6.1
 jaraco.classes==3.4.0
 keyring==25.6.0
 markdown-it-py==3.0.0
@@ -27,7 +27,7 @@ rich==13.9.4
 rply==0.7.8
 setuptools==75.8.0
 six==1.17.0
-twine==6.0.1
+twine==6.1.0
 urllib3==2.3.0
 webencodings==0.5.1
 zipp==3.21.0
