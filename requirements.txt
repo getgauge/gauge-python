@@ -1,7 +1,7 @@
 appdirs==1.4.4
 baron==0.10.1
 bleach==6.2.0
-certifi==2024.12.14
+certifi==2025.1.31
 charset-normalizer==3.4.1
 debugpy==1.8.12
 docutils==0.21.2
