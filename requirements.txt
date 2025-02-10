@@ -31,4 +31,4 @@ twine==6.1.0
 urllib3==2.3.0
 webencodings==0.5.1
 zipp==3.21.0
-coverage==7.6.10
+coverage==7.6.11
