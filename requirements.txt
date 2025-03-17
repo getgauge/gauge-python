@@ -16,7 +16,7 @@ mdurl==0.1.2
 more-itertools==10.6.0
 pkginfo==1.12.1.2
 protobuf==5.29.3
-pyfakefs==5.7.4
+pyfakefs==5.8.0
 Pygments==2.19.1
 readme-renderer==44.0
 redbaron==0.9.2
@@ -31,4 +31,4 @@ twine==6.1.0
 urllib3==2.3.0
 webencodings==0.5.1
 zipp==3.21.0
-coverage==7.6.12
+coverage==7.7.0
