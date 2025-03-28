@@ -98,6 +98,7 @@ def _import_file(base_dir, file_path):
 # Inject instance in each class method (hook/step)
 def update_step_registry_with_class(instance, file_path):
     # Resolve the absolute path from relative path
+    # Note: relative path syntax ".." can appear in between the file_path too like "<Project_Root>/../../Other_Project/src/step_impl/file.py"
     file_path = os.path.abspath(file_path) if ".." in str(file_path) else file_path
     method_list = registry.get_all_methods_in(file_path)
     for info in method_list:
