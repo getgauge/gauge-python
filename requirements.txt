@@ -3,7 +3,7 @@ baron==0.10.1
 bleach==6.2.0
 certifi==2025.1.31
 charset-normalizer==3.4.1
-debugpy==1.8.13
+debugpy==1.8.14
 docutils==0.21.2
 grpcio==1.70.0
 grpcio-tools==1.70.0
@@ -28,7 +28,7 @@ rply==0.7.8
 setuptools==78.1.0
 six==1.17.0
 twine==6.1.0
-urllib3==2.3.0
+urllib3==2.4.0
 webencodings==0.5.1
 zipp==3.21.0
 coverage==7.8.0
