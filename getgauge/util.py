@@ -16,8 +16,8 @@ def get_step_impl_dirs():
     full_path_dir_names = []
     for name in step_impl_dir_names:
         name = name.replace("/", os.path.sep).replace("\\", os.path.sep)
-        imple_dir = name if os.path.isabs(name) else os.path.join(get_project_root(), name)
-        full_path_dir_names.append(imple_dir)
+        impl_dir = name if os.path.isabs(name) else os.path.join(get_project_root(), name)
+        full_path_dir_names.append(impl_dir)
     return full_path_dir_names
 
 

@@ -172,7 +172,7 @@ class Registry(object):
         positions = []
         for step, infos in self.__steps_map.items():
             positions = positions + [{'stepValue': step, 'span': i.span}
-                                     for i in infos if i.file_name == file_name]
+                                     for i in infos if str(i.file_name).lower() == str(file_name).lower()]
         return positions
 
     def _get_all_hooks(self, file_name):
@@ -180,18 +180,20 @@ class Registry(object):
         for hook in self.hooks:
             all_hooks = all_hooks + \
                         [h for h in getattr(self, "__{}".format(hook))
-                         if h.file_name == file_name]
+                         if str(h.file_name).lower() == str(file_name).lower()]
         return all_hooks
 
     def get_all_methods_in(self, file_name):
         methods = []
         for _, infos in self.__steps_map.items():
-            methods = methods + [i for i in infos if i.file_name == file_name]
+            # Using relative paths may lead to different spelling of the C drive (lower or capital C)
+            methods = methods + [i for i in infos if str(i.file_name).lower() == str(file_name).lower()]
         return methods + self._get_all_hooks(file_name)
 
     def is_file_cached(self, file_name):
         for _, infos in self.__steps_map.items():
-            if any(i.file_name == file_name for i in infos):
+            # Using relative paths may lead to different spelling of the C drive (lower or capital C)
+            if any(str(i.file_name).lower() == str(file_name).lower() for i in infos):
                 return True
         return False
 

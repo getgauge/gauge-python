@@ -98,8 +98,10 @@ def copy(src, dest):
 
 usage = """
 Usage: python build.py --[option]
+Example: python build.py --test --install
 
 Options:
+    --dist    :     creates the distributable.
     --test    :     runs unit tests.
     --install :     installs python plugin and generates the pip package
 """
@@ -123,15 +125,15 @@ def main():
     if len(sys.argv) < 2:
         print(usage)
     else:
-        if sys.argv[1] == '--dist':
+        if '--dist' in sys.argv:
             create_zip()
             generate_package()
-        else:
+        if '--test' in sys.argv:
             exit_code = run_tests()
             if exit_code != 0:
                 sys.exit(exit_code)
-            elif sys.argv[1] == '--install':
-                install()
+        if '--install' in sys.argv:
+            install()
 
 
 if __name__ == '__main__':
