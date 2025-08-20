@@ -1,3 +1,4 @@
+import glob
 import importlib
 import inspect
 import json
@@ -58,12 +59,8 @@ def copy_skel_files():
 
 
 def _import_impl(base_dir, step_impl_dir):
-    for f in os.listdir(step_impl_dir):
-        file_path = os.path.join(step_impl_dir, f)
-        if f.endswith('.py'):
-            _import_file(base_dir, file_path)
-        elif path.isdir(file_path):
-            _import_impl(base_dir, file_path)
+    for python_file in glob.glob(f"{step_impl_dir}/**/*.py", recursive=True):
+        _import_file(base_dir, python_file)
 
 @contextmanager
 def use_temporary_sys_path():
@@ -88,15 +85,17 @@ def _import_file(base_dir, file_path):
         classes = inspect.getmembers(m, lambda member: inspect.isclass(member) and member.__module__ == module_name)
         if len(classes) > 0:
             for c in classes:
-                file = inspect.getfile(c[1])
-                # Create instance of step implementation class.
-                if _has_methods_with_gauge_decoratores(c[1]):
-                    update_step_registry_with_class(c[1](), file_path) # c[1]() will create a new instance of the class
+                class_obj = c[1]
+                if _has_methods_with_gauge_decoratores(class_obj):
+                    update_step_registry_with_class(
+                        instance=class_obj(), # class_obj() will create a new instance of the class
+                        file_path=file_path
+                    )
     except:
         logger.fatal('Exception occurred while loading step implementations from file: {}.\n{}'.format(rel_path, traceback.format_exc()))
 
-# Inject instance in each class method (hook/step)
 def update_step_registry_with_class(instance, file_path):
+    """ Inject instance in each class method (hook/step) """
     # Resolve the absolute path from relative path
     # Note: relative path syntax ".." can appear in between the file_path too like "<Project_Root>/../../Other_Project/src/step_impl/file.py"
     file_path = os.path.abspath(file_path) if ".." in str(file_path) else file_path

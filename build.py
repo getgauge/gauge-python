@@ -115,8 +115,9 @@ def run_tests() -> int:
     for i, file_name_path in enumerate(all_python_test_files):
         command = ["coverage", "run", file_name_path]
         exit_code = call(command) if exit_code == 0 else exit_code
-        # Keep coverage files
-        os.rename(".coverage", f".coverage.{i}")
+        if Path(".coverage").is_file():
+            # Keep coverage files
+            os.rename(".coverage", f".coverage.{i}")
     call(["coverage", "combine"])
     return exit_code
 

@@ -14,9 +14,9 @@ def get_project_root():
 def get_step_impl_dirs():
     step_impl_dir_names = map(str.strip, os.getenv(STEP_IMPL_DIR_ENV).split(',')) if os.getenv(STEP_IMPL_DIR_ENV) else ['step_impl']
     full_path_dir_names = []
-    for name in step_impl_dir_names:
-        name = name.replace("/", os.path.sep).replace("\\", os.path.sep)
-        impl_dir = name if os.path.isabs(name) else os.path.join(get_project_root(), name)
+    for dir_name in step_impl_dir_names:
+        dir_name = dir_name.replace("/", os.path.sep).replace("\\", os.path.sep)
+        impl_dir = dir_name if os.path.isabs(dir_name) else os.path.join(get_project_root(), dir_name)
         full_path_dir_names.append(impl_dir)
     return full_path_dir_names
 

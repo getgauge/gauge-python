@@ -2,6 +2,7 @@ import inspect
 import os
 import re
 import sys
+from pathlib import Path
 from subprocess import call
 from uuid import uuid1
 
@@ -172,35 +173,33 @@ class Registry(object):
         positions = []
         for step, infos in self.__steps_map.items():
             positions = positions + [{'stepValue': step, 'span': i.span}
-                                     for i in infos if str(i.file_name).lower() == str(file_name).lower()]
+                                     for i in infos if paths_equal(i.file_name, file_name)]
         return positions
 
     def _get_all_hooks(self, file_name):
         all_hooks = []
         for hook in self.hooks:
             all_hooks = all_hooks + \
-                        [h for h in getattr(self, "__{}".format(hook))
-                         if str(h.file_name).lower() == str(file_name).lower()]
+                [h for h in getattr(self, "__{}".format(hook))
+                 if paths_equal(h.file_name, file_name)]
         return all_hooks
 
     def get_all_methods_in(self, file_name):
         methods = []
         for _, infos in self.__steps_map.items():
-            # Using relative paths may lead to different spelling of the C drive (lower or capital C)
-            methods = methods + [i for i in infos if str(i.file_name).lower() == str(file_name).lower()]
+            methods = methods + [i for i in infos if paths_equal(i.file_name, file_name)]
         return methods + self._get_all_hooks(file_name)
 
     def is_file_cached(self, file_name):
         for _, infos in self.__steps_map.items():
-            # Using relative paths may lead to different spelling of the C drive (lower or capital C)
-            if any(str(i.file_name).lower() == str(file_name).lower() for i in infos):
+            if any(Path(i.file_name).resolve() == Path(file_name).resolve() for i in infos):
                 return True
         return False
 
     def remove_steps(self, file_name):
         new_map = {}
         for step, infos in self.__steps_map.items():
-            filtered_info = [i for i in infos if i.file_name != file_name]
+            filtered_info = [i for i in infos if not paths_equal(i.file_name, file_name)]
             if len(filtered_info) > 0:
                 new_map[step] = filtered_info
         self.__steps_map = new_map
@@ -209,6 +208,17 @@ class Registry(object):
         self.__steps_map, self.__continue_on_failures = {}, {}
         for hook in Registry.hooks:
             setattr(self, '__{}'.format(hook), [])
+
+
+def paths_equal(p1: str | Path, p2: str | Path) -> bool:
+    """
+    Compare two paths in a cross-platform safe way.
+    On Windows: case-insensitive, slash-insensitive.
+    On Linux/macOS: case-sensitive.
+    """
+    p1 = Path(p1).resolve()
+    p2 = Path(p2).resolve()
+    return os.path.normcase(str(p1)) == os.path.normcase(str(p2))
 
 
 def _filter_hooks(tags, hooks):
