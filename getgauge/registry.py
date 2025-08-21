@@ -4,6 +4,7 @@ import re
 import sys
 from pathlib import Path
 from subprocess import call
+from typing import Union
 from uuid import uuid1
 
 from getgauge import logger
@@ -210,7 +211,7 @@ class Registry(object):
             setattr(self, '__{}'.format(hook), [])
 
 
-def paths_equal(p1: str | Path, p2: str | Path) -> bool:
+def paths_equal(p1: Union[str, Path], p2: Union[str, Path]) -> bool:
     """
     Compare two paths in a cross-platform safe way.
     On Windows: case-insensitive, slash-insensitive.
