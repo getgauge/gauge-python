@@ -374,7 +374,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(3, len(registry.get_all_methods_in("foo.py")))
         self.assertEqual(2, len(registry.get_all_methods_in("bar.py")))
 
-    @unittest.skipIf(sys.platform == "darwin", "Fails on macOS due to case sensitivity")
+    @unittest.skipIf(not sys.platform.startswith("win"), "Test is designed to cover Windows like paths")
     def test_Registry_get_all_methods_in_should_handle_paths_case_sensitive(self):
         lower_c_drive = 'c:/random/path/foo.py'
         upper_c_drive = 'C:/random/path/foo.py'
@@ -390,7 +390,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(2, len(registry.get_all_methods_in(lower_c_drive)))
         self.assertEqual(2, len(registry.get_all_methods_in(upper_c_drive)))
 
-    @unittest.skipIf(sys.platform.startswith("win"), "Fails on macOS due to case sensitivity")
+    @unittest.skipIf(sys.platform.startswith("win"), "Fails on Windows due to case sensitivity")
     def test_Registry_get_all_methods_in_should_handle_paths_case_sensitive_on_mac(self):
         path1 = '/random/path/foo.py'
         path2 = '/random/PATH/foo.py'
