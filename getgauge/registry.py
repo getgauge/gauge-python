@@ -130,8 +130,9 @@ class Registry(object):
     def add_step(self, step_text, func, file_name, span=None, has_alias=False, aliases=None):
         if not isinstance(step_text, list):
             parsed_step_text = _get_step_value(step_text)
+            normalized_file_path = os.path.normcase(str(Path(file_name)))
             info = StepInfo(step_text, parsed_step_text, func,
-                            file_name, span, has_alias, aliases)
+                            normalized_file_path, span, has_alias, aliases)
             self.__steps_map.setdefault(parsed_step_text, []).append(info)
             return
         for text in step_text:
@@ -193,7 +194,7 @@ class Registry(object):
 
     def is_file_cached(self, file_name):
         for _, infos in self.__steps_map.items():
-            if any(Path(i.file_name).resolve() == Path(file_name).resolve() for i in infos):
+            if any(paths_equal(i.file_name, file_name) for i in infos):
                 return True
         return False
 
