@@ -1,4 +1,5 @@
 import re
+import sys
 import unittest
 
 from getgauge.registry import Registry
@@ -160,9 +161,12 @@ class RegistryTests(unittest.TestCase):
             registry.add_before_spec(info['func'], info['tags'])
 
         self.assertEqual([info1['func']], [i.impl for i in registry.before_spec([])])
-        self.assertEqual([x['func'] for x in infos], [i.impl for i in registry.before_spec(['A', 'b'])])
-        self.assertEqual([info1['func'], info3['func']], [i.impl for i in registry.before_spec(['A', 'b', 'c'])])
-        self.assertEqual([info1['func'], info3['func']], [i.impl for i in registry.before_spec(['A'])])
+        self.assertEqual([x['func'] for x in infos], [
+                         i.impl for i in registry.before_spec(['A', 'b'])])
+        self.assertEqual([info1['func'], info3['func']], [
+                         i.impl for i in registry.before_spec(['A', 'b', 'c'])])
+        self.assertEqual([info1['func'], info3['func']], [
+                         i.impl for i in registry.before_spec(['A'])])
         self.assertEqual([info1['func']], [i.impl for i in registry.before_spec(['A', 'c'])])
 
     def test_Registry_after_spec_with_tags(self):
@@ -176,9 +180,12 @@ class RegistryTests(unittest.TestCase):
             registry.add_after_spec(info['func'], info['tags'])
 
         self.assertEqual([info1['func']], [i.impl for i in registry.after_spec([])])
-        self.assertEqual([x['func'] for x in infos], [i.impl for i in registry.after_spec(['A', 'b'])])
-        self.assertEqual([info1['func'], info3['func']], [i.impl for i in registry.after_spec(['A', 'b', 'c'])])
-        self.assertEqual([info1['func'], info3['func']], [i.impl for i in registry.after_spec(['A'])])
+        self.assertEqual([x['func'] for x in infos], [
+                         i.impl for i in registry.after_spec(['A', 'b'])])
+        self.assertEqual([info1['func'], info3['func']], [
+                         i.impl for i in registry.after_spec(['A', 'b', 'c'])])
+        self.assertEqual([info1['func'], info3['func']], [
+                         i.impl for i in registry.after_spec(['A'])])
         self.assertEqual([info1['func']], [i.impl for i in registry.after_spec(['A', 'c'])])
 
     def test_Registry_before_scenario(self):
@@ -269,9 +276,12 @@ class RegistryTests(unittest.TestCase):
             registry.add_before_step(info['func'], info['tags'])
 
         self.assertEqual([info1['func']], [i.impl for i in registry.before_step([])])
-        self.assertEqual([x['func'] for x in infos], [i.impl for i in registry.before_step(['A', 'b'])])
-        self.assertEqual([info1['func'], info3['func']], [i.impl for i in registry.before_step(['A', 'b', 'c'])])
-        self.assertEqual([info1['func'], info3['func']], [i.impl for i in registry.before_step(['A'])])
+        self.assertEqual([x['func'] for x in infos], [
+                         i.impl for i in registry.before_step(['A', 'b'])])
+        self.assertEqual([info1['func'], info3['func']], [
+                         i.impl for i in registry.before_step(['A', 'b', 'c'])])
+        self.assertEqual([info1['func'], info3['func']], [
+                         i.impl for i in registry.before_step(['A'])])
         self.assertEqual([info1['func']], [i.impl for i in registry.before_step(['A', 'c'])])
 
     def test_Registry_after_step_with_tags(self):
@@ -286,9 +296,12 @@ class RegistryTests(unittest.TestCase):
             registry.add_after_step(info['func'], info['tags'])
 
         self.assertEqual([info1['func']], [i.impl for i in registry.after_step([])])
-        self.assertEqual([x['func'] for x in infos], [i.impl for i in registry.after_step(['A', 'b'])])
-        self.assertEqual([info1['func'], info3['func']], [i.impl for i in registry.after_step(['A', 'b', 'c'])])
-        self.assertEqual([info1['func'], info3['func']], [i.impl for i in registry.after_step(['A'])])
+        self.assertEqual([x['func'] for x in infos], [
+                         i.impl for i in registry.after_step(['A', 'b'])])
+        self.assertEqual([info1['func'], info3['func']], [
+                         i.impl for i in registry.after_step(['A', 'b', 'c'])])
+        self.assertEqual([info1['func'], info3['func']], [
+                         i.impl for i in registry.after_step(['A'])])
         self.assertEqual([info1['func']], [i.impl for i in registry.after_step(['A', 'c'])])
 
     def test_Registry__step_positions_of_a_given_file(self):
@@ -361,6 +374,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(3, len(registry.get_all_methods_in("foo.py")))
         self.assertEqual(2, len(registry.get_all_methods_in("bar.py")))
 
+    @unittest.skipIf(sys.platform == "darwin", "Fails on macOS due to case sensitivity")
     def test_Registry_get_all_methods_in_should_handle_paths_case_sensitive(self):
         lower_c_drive = 'c:/random/path/foo.py'
         upper_c_drive = 'C:/random/path/foo.py'
@@ -375,6 +389,22 @@ class RegistryTests(unittest.TestCase):
         """ Note: we should find both steps regardless the different spelling as the path is in fact equal! """
         self.assertEqual(2, len(registry.get_all_methods_in(lower_c_drive)))
         self.assertEqual(2, len(registry.get_all_methods_in(upper_c_drive)))
+
+    @unittest.skipIf(sys.platform.startswith("win"), "Fails on macOS due to case sensitivity")
+    def test_Registry_get_all_methods_in_should_handle_paths_case_sensitive_on_mac(self):
+        path1 = '/random/path/foo.py'
+        path2 = '/random/PATH/foo.py'
+
+        step_infos = [
+            {'text': 'Foo', 'func': 'func1', 'file_name': path1},
+            {'text': 'Foo <>', 'func': 'func2', 'file_name': path2}
+        ]
+        for info in step_infos:
+            registry.add_step(info['text'], info['func'], info['file_name'])
+
+        """ Note: since the paths are in fact different, they should be treated as different paths! """
+        self.assertEqual(1, len(registry.get_all_methods_in(path1)))
+        self.assertEqual(1, len(registry.get_all_methods_in(path2)))
 
     def tearDown(self):
         global registry

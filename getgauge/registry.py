@@ -130,9 +130,8 @@ class Registry(object):
     def add_step(self, step_text, func, file_name, span=None, has_alias=False, aliases=None):
         if not isinstance(step_text, list):
             parsed_step_text = _get_step_value(step_text)
-            normalized_file_path = os.path.normcase(str(Path(file_name)))
             info = StepInfo(step_text, parsed_step_text, func,
-                            normalized_file_path, span, has_alias, aliases)
+                            file_name, span, has_alias, aliases)
             self.__steps_map.setdefault(parsed_step_text, []).append(info)
             return
         for text in step_text:
@@ -220,7 +219,11 @@ def paths_equal(p1: Union[str, Path], p2: Union[str, Path]) -> bool:
     """
     p1 = Path(p1).resolve()
     p2 = Path(p2).resolve()
-    return os.path.normcase(str(p1)) == os.path.normcase(str(p2))
+    if sys.platform.startswith("win"):
+        # As Windows is case-insensitive, we can use 'normcase' to compare paths!
+        return os.path.normcase(str(p1)) == os.path.normcase(str(p2))
+    # Mac (and others) allows to use case-sensitive files/folders!
+    return p1 == p2
 
 
 def _filter_hooks(tags, hooks):
