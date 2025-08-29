@@ -113,6 +113,9 @@ class Registry(object):
         for hook in Registry.hooks:
             self.__def_hook(hook)
 
+    def get_steps_map(self):
+        return self.__steps_map
+
     def __def_hook(self, hook):
         def get(self, tags=None):
             return _filter_hooks(tags, getattr(self, '__{}'.format(hook)))
@@ -185,7 +188,7 @@ class Registry(object):
                  if paths_equal(h.file_name, file_name)]
         return all_hooks
 
-    def get_all_methods_in(self, file_name):
+    def get_all_methods_in(self, file_name: str):
         methods = []
         for _, infos in self.__steps_map.items():
             methods = methods + [i for i in infos if paths_equal(i.file_name, file_name)]
@@ -212,18 +215,8 @@ class Registry(object):
 
 
 def paths_equal(p1: Union[str, Path], p2: Union[str, Path]) -> bool:
-    """
-    Compare two paths in a cross-platform safe way.
-    On Windows: case-insensitive, slash-insensitive.
-    On Linux/macOS: case-sensitive.
-    """
-    p1 = Path(p1).resolve()
-    p2 = Path(p2).resolve()
-    if sys.platform.startswith("win"):
-        # As Windows is case-insensitive, we can use 'normcase' to compare paths!
-        return os.path.normcase(str(p1)) == os.path.normcase(str(p2))
-    # Mac (and others) allows to use case-sensitive files/folders!
-    return p1 == p2
+    """ Normalize paths in order to compare them. """
+    return os.path.normcase(str(p1)) == os.path.normcase(str(p2))
 
 
 def _filter_hooks(tags, hooks):

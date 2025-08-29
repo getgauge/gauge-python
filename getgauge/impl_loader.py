@@ -9,6 +9,8 @@ import sys
 import traceback
 from contextlib import contextmanager
 from os import path
+from pathlib import Path
+from typing import Optional
 
 from getgauge import logger
 from getgauge.registry import registry
@@ -19,28 +21,34 @@ impl_dirs = get_step_impl_dirs()
 env_dir = os.path.join(project_root, 'env', 'default')
 requirements_file = os.path.join(project_root, 'requirements.txt')
 sys.path.append(project_root)
-temporary_sys_path = []
+
 PLUGIN_JSON = 'python.json'
 VERSION = 'version'
 PYTHON_PROPERTIES = 'python.properties'
 SKEL = 'skel'
 
 
-def load_impls(step_impl_dirs=impl_dirs):
+def load_impls(step_impl_dirs=impl_dirs, project_root=project_root):
+    """ project_root can be overwritten in tests! """
+
     os.chdir(project_root)
+
     for impl_dir in step_impl_dirs:
-        if not os.path.isdir(impl_dir):
-            logger.error('Cannot import step implementations. Error: {} does not exist.'.format(step_impl_dirs))
+
+        resolved_impl_dir = Path(impl_dir).resolve()
+        if not resolved_impl_dir.is_dir():
+            logger.error('Cannot import step implementations. Error: {} does not exist.'.format(impl_dir))
             logger.error('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
             return
-        base_dir = project_root if impl_dir.startswith(project_root) else os.path.dirname(impl_dir)
-        # Handle multi-level relative imports
-        for _ in range(impl_dir.count('..')):
-            base_dir = os.path.dirname(base_dir).replace("/", os.path.sep).replace("\\", os.path.sep)
-        # Add temporary sys path for relative imports that is not already added
-        if '..' in impl_dir and base_dir not in temporary_sys_path:
-            temporary_sys_path.append(base_dir)
-        _import_impl(base_dir, impl_dir)
+
+        base_dir = os.path.commonpath([project_root, f"{resolved_impl_dir}"])
+        logger.debug("Base directory '{}' of '{}'".format(base_dir, resolved_impl_dir))
+
+        temporary_sys_path = None
+        if project_root != base_dir:
+            temporary_sys_path = base_dir
+
+        _import_impl(base_dir, resolved_impl_dir, temporary_sys_path)
 
 
 def copy_skel_files():
@@ -58,29 +66,33 @@ def copy_skel_files():
         logger.fatal('Exception occurred while copying skel files.\n{}.'.format(traceback.format_exc()))
 
 
-def _import_impl(base_dir, step_impl_dir):
-    for python_file in glob.glob(f"{step_impl_dir}/**/*.py", recursive=True):
-        _import_file(base_dir, python_file)
+def _import_impl(base_dir: str, absolute_step_impl_dir: str, temporary_sys_path: Optional[str]):
+    for python_file in glob.glob(f"{absolute_step_impl_dir}/**/*.py", recursive=True):
+        relative_path = Path(python_file).relative_to(base_dir)
+        module_name = ".".join(relative_path.parts).replace(".py", "")
+        _import_file(module_name, python_file, temporary_sys_path)
 
 @contextmanager
-def use_temporary_sys_path():
+def use_temporary_sys_path(temporary_sys_path: str):
     original_sys_path = sys.path[:]
-    sys.path.extend(temporary_sys_path)
+    sys.path.append(temporary_sys_path)
     try:
         yield
     finally:
         sys.path = original_sys_path
 
-def _import_file(base_dir, file_path):
-    rel_path = os.path.normpath(file_path.replace(base_dir + os.path.sep, ''))
+def _import_file(module_name: str, file_path: str, temporary_sys_path: Optional[str]):
     try:
-        module_name = os.path.splitext(rel_path.replace(os.path.sep, '.'))[0]
+        logger.debug('Import module {} with path {}'.format(module_name, file_path))
+
         # Use temporary sys path for relative imports
-        if '..' in file_path:
-            with use_temporary_sys_path():
+        if temporary_sys_path is not None:
+            logger.debug('Import module {} using temporary sys path {}'.format(module_name, temporary_sys_path))
+            with use_temporary_sys_path(temporary_sys_path):
                 m = importlib.import_module(module_name)
         else:
             m = importlib.import_module(module_name)
+
         # Get all classes in the imported module
         classes = inspect.getmembers(m, lambda member: inspect.isclass(member) and member.__module__ == module_name)
         if len(classes) > 0:
@@ -92,13 +104,10 @@ def _import_file(base_dir, file_path):
                         file_path=file_path
                     )
     except:
-        logger.fatal('Exception occurred while loading step implementations from file: {}.\n{}'.format(rel_path, traceback.format_exc()))
+        logger.fatal('Exception occurred while loading step implementations from file: {}.\n{}'.format(file_path, traceback.format_exc()))
 
-def update_step_registry_with_class(instance, file_path):
+def update_step_registry_with_class(instance, file_path: str):
     """ Inject instance in each class method (hook/step) """
-    # Resolve the absolute path from relative path
-    # Note: relative path syntax ".." can appear in between the file_path too like "<Project_Root>/../../Other_Project/src/step_impl/file.py"
-    file_path = os.path.abspath(file_path) if ".." in str(file_path) else file_path
     method_list = registry.get_all_methods_in(file_path)
     for info in method_list:
         class_methods = [x[0] for x in inspect.getmembers(instance, inspect.ismethod)]
