@@ -8,7 +8,6 @@ import shutil
 import sys
 import traceback
 from contextlib import contextmanager
-from importlib import util as importlib_util
 from os import path
 from pathlib import Path
 from typing import Optional
@@ -31,21 +30,22 @@ SKEL = 'skel'
 
 def load_impls(step_impl_dirs=impl_dirs, project_root=project_root):
     """ project_root can be overwritten in tests! """
+
     os.chdir(project_root)
-    logger.debug('Project root: {}'.format(project_root))
+
     for impl_dir in step_impl_dirs:
+
         resolved_impl_dir = Path(impl_dir).resolve()
         if not resolved_impl_dir.is_dir():
             logger.error('Cannot import step implementations. Error: {} does not exist.'.format(impl_dir))
             logger.error('Make sure `STEP_IMPL_DIR` env var is set to a valid directory path.')
             return
 
-        base_dir = project_root if str(resolved_impl_dir).startswith(project_root) else os.path.dirname(resolved_impl_dir)
+        base_dir = os.path.commonpath([project_root, f"{resolved_impl_dir}"])
+        logger.debug("Base directory '{}' of '{}'".format(base_dir, resolved_impl_dir))
 
-        # Add temporary sys path for imports outside the project root
         temporary_sys_path = None
-        if base_dir != project_root:
-            logger.debug('Found different base directory compared to the project root: {}'.format(base_dir, f"{resolved_impl_dir}"))
+        if project_root != base_dir:
             temporary_sys_path = base_dir
 
         _import_impl(base_dir, resolved_impl_dir, temporary_sys_path)
@@ -68,10 +68,8 @@ def copy_skel_files():
 
 def _import_impl(base_dir: str, absolute_step_impl_dir: str, temporary_sys_path: Optional[str]):
     for python_file in glob.glob(f"{absolute_step_impl_dir}/**/*.py", recursive=True):
-        if python_file.endswith("__init__.py"):
-            continue
-        relative_path = os.path.normpath(python_file.replace(base_dir + os.path.sep, ''))
-        module_name = os.path.splitext(relative_path.replace(os.path.sep, '.'))[0]
+        relative_path = Path(python_file).relative_to(base_dir)
+        module_name = ".".join(relative_path.parts).replace(".py", "")
         _import_file(module_name, python_file, temporary_sys_path)
 
 @contextmanager
