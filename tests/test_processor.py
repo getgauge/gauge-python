@@ -354,7 +354,7 @@ class ProcessorTests(TestCase):
         registry.add_after_suite(failing_impl)
         request = ExecutionEndingRequest()
         response = processor.process_execution_ending_request(request)
-        print(response)
+
         self.assertIsInstance(response, ExecutionStatusResponse)
         self.assertTrue(response.executionResult.failed)
         self.assertEqual(ProtoExecutionResult.ASSERTION,
@@ -528,8 +528,8 @@ class ProcessorTests(TestCase):
 
         processor.process_cache_file_request(request)
 
-        self.assertEqual(registry.is_implemented('foo1'), False)
-        self.assertEqual(registry.is_implemented('foo {}'), True)
+        self.assertFalse(registry.is_implemented('foo1'))
+        self.assertTrue(registry.is_implemented('foo {}'))
 
     def test_Processor_cache_file_with_changed_status(self):
         request = CacheFileRequest()

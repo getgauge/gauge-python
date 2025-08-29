@@ -98,8 +98,10 @@ def copy(src, dest):
 
 usage = """
 Usage: python build.py --[option]
+Example: python build.py --test --install
 
 Options:
+    --dist    :     creates the distributable.
     --test    :     runs unit tests.
     --install :     installs python plugin and generates the pip package
 """
@@ -113,8 +115,9 @@ def run_tests() -> int:
     for i, file_name_path in enumerate(all_python_test_files):
         command = ["coverage", "run", file_name_path]
         exit_code = call(command) if exit_code == 0 else exit_code
-        # Keep coverage files
-        os.rename(".coverage", f".coverage.{i}")
+        if Path(".coverage").is_file():
+            # Keep coverage files
+            os.rename(".coverage", f".coverage.{i}")
     call(["coverage", "combine"])
     return exit_code
 
@@ -123,15 +126,15 @@ def main():
     if len(sys.argv) < 2:
         print(usage)
     else:
-        if sys.argv[1] == '--dist':
+        if '--dist' in sys.argv:
             create_zip()
             generate_package()
-        else:
+        if '--test' in sys.argv:
             exit_code = run_tests()
             if exit_code != 0:
                 sys.exit(exit_code)
-            elif sys.argv[1] == '--install':
-                install()
+        if '--install' in sys.argv:
+            install()
 
 
 if __name__ == '__main__':

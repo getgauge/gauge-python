@@ -2,7 +2,9 @@ import inspect
 import os
 import re
 import sys
+from pathlib import Path
 from subprocess import call
+from typing import Union
 from uuid import uuid1
 
 from getgauge import logger
@@ -111,6 +113,9 @@ class Registry(object):
         for hook in Registry.hooks:
             self.__def_hook(hook)
 
+    def get_steps_map(self):
+        return self.__steps_map
+
     def __def_hook(self, hook):
         def get(self, tags=None):
             return _filter_hooks(tags, getattr(self, '__{}'.format(hook)))
@@ -172,33 +177,33 @@ class Registry(object):
         positions = []
         for step, infos in self.__steps_map.items():
             positions = positions + [{'stepValue': step, 'span': i.span}
-                                     for i in infos if i.file_name == file_name]
+                                     for i in infos if paths_equal(i.file_name, file_name)]
         return positions
 
     def _get_all_hooks(self, file_name):
         all_hooks = []
         for hook in self.hooks:
             all_hooks = all_hooks + \
-                        [h for h in getattr(self, "__{}".format(hook))
-                         if h.file_name == file_name]
+                [h for h in getattr(self, "__{}".format(hook))
+                 if paths_equal(h.file_name, file_name)]
         return all_hooks
 
-    def get_all_methods_in(self, file_name):
+    def get_all_methods_in(self, file_name: str):
         methods = []
         for _, infos in self.__steps_map.items():
-            methods = methods + [i for i in infos if i.file_name == file_name]
+            methods = methods + [i for i in infos if paths_equal(i.file_name, file_name)]
         return methods + self._get_all_hooks(file_name)
 
     def is_file_cached(self, file_name):
         for _, infos in self.__steps_map.items():
-            if any(i.file_name == file_name for i in infos):
+            if any(paths_equal(i.file_name, file_name) for i in infos):
                 return True
         return False
 
     def remove_steps(self, file_name):
         new_map = {}
         for step, infos in self.__steps_map.items():
-            filtered_info = [i for i in infos if i.file_name != file_name]
+            filtered_info = [i for i in infos if not paths_equal(i.file_name, file_name)]
             if len(filtered_info) > 0:
                 new_map[step] = filtered_info
         self.__steps_map = new_map
@@ -207,6 +212,11 @@ class Registry(object):
         self.__steps_map, self.__continue_on_failures = {}, {}
         for hook in Registry.hooks:
             setattr(self, '__{}'.format(hook), [])
+
+
+def paths_equal(p1: Union[str, Path], p2: Union[str, Path]) -> bool:
+    """ Normalize paths in order to compare them. """
+    return os.path.normcase(str(p1)) == os.path.normcase(str(p2))
 
 
 def _filter_hooks(tags, hooks):
