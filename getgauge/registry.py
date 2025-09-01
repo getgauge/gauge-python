@@ -238,7 +238,7 @@ def _get_step_value(step_text):
 
 
 def _take_screenshot():
-    temp_file = _uniqe_screenshot_file()
+    temp_file = _unique_screenshot_file()
     try:
         call(['gauge_screenshot', temp_file])
         return os.path.basename(temp_file)
@@ -271,7 +271,7 @@ class ScreenshotsStore:
     @staticmethod
     def capture_to_file():
         if not registry.is_screenshot_writer:
-            screenshot_file = _uniqe_screenshot_file()
+            screenshot_file = _unique_screenshot_file()
             content = registry.screenshot_provider()()
             with open(screenshot_file, "wb") as file:
                 file.write(content)
@@ -289,7 +289,7 @@ class ScreenshotsStore:
         ScreenshotsStore.__screenshots = []
 
 
-def _uniqe_screenshot_file():
+def _unique_screenshot_file():
     return os.path.join(_screenshots_dir(), "screenshot-{0}.png".format(uuid1().int))
 
 

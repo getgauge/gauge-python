@@ -38,8 +38,10 @@ def install():
     call(install_cmd)
     sys.exit(exit_code)
 
+
 def in_venv():
     return sys.prefix != sys.base_prefix
+
 
 def create_setup_file():
     with open("setup.tmpl", "r", encoding="utf-8") as tmpl:
@@ -114,25 +116,29 @@ def run_tests() -> int:
     all_python_test_files = glob.glob(f"{ROOT_DIR}/tests/**/test_*.py", recursive=True)
     for i, file_name_path in enumerate(all_python_test_files):
         command = ["coverage", "run", file_name_path]
-        exit_code = call(command) if exit_code == 0 else exit_code
-        if Path(".coverage").is_file():
-            # Keep coverage files
-            os.rename(".coverage", f".coverage.{i}")
+
+        exit_code = call(command)
+        if exit_code != 0:
+            break
+
+        # Keep coverage files
+        os.rename(".coverage", f".coverage.{i}")
+
     call(["coverage", "combine"])
     return exit_code
 
 
 def main():
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2 or '--help' in sys.argv:
         print(usage)
     else:
-        if '--dist' in sys.argv:
-            create_zip()
-            generate_package()
         if '--test' in sys.argv:
             exit_code = run_tests()
             if exit_code != 0:
                 sys.exit(exit_code)
+        if '--dist' in sys.argv:
+            create_zip()
+            generate_package()
         if '--install' in sys.argv:
             install()
 
