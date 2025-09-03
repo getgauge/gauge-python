@@ -172,8 +172,7 @@ class Registry(object):
         positions = []
         for step, infos in self.__steps_map.items():
             positions.extend(
-                [{'stepValue': step, 'span': i.span}
-                    for i in infos if paths_equal(i.file_name, file_name)]
+                [{'stepValue': step, 'span': i.span} for i in infos if paths_equal(i.file_name, file_name)]
             )
         return positions
 
@@ -181,8 +180,7 @@ class Registry(object):
         all_hooks = []
         for hook in self.hooks:
             all_hooks.extend(
-                [h for h in getattr(self, "__{}".format(hook))
-                 if paths_equal(h.file_name, file_name)]
+                [h for h in getattr(self, "__{}".format(hook)) if paths_equal(h.file_name, file_name)]
             )
         return all_hooks
 
@@ -214,7 +212,7 @@ class Registry(object):
             setattr(self, '__{}'.format(hook), [])
 
 
-def paths_equal(first_file_path, second_file_path) -> bool:
+def paths_equal(first_file_path, second_file_path):
     """ Normalize paths in order to compare them. """
     return os.path.normcase(str(first_file_path)) == os.path.normcase(str(second_file_path))
 
