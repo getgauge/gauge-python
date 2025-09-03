@@ -171,34 +171,39 @@ class Registry(object):
     def get_step_positions(self, file_name):
         positions = []
         for step, infos in self.__steps_map.items():
-            positions = positions + [{'stepValue': step, 'span': i.span}
-                                     for i in infos if i.file_name == file_name]
+            positions.extend(
+                [{'stepValue': step, 'span': i.span}
+                    for i in infos if paths_equal(i.file_name, file_name)]
+            )
         return positions
 
     def _get_all_hooks(self, file_name):
         all_hooks = []
         for hook in self.hooks:
-            all_hooks = all_hooks + \
-                        [h for h in getattr(self, "__{}".format(hook))
-                         if h.file_name == file_name]
+            all_hooks.extend(
+                [h for h in getattr(self, "__{}".format(hook))
+                 if paths_equal(h.file_name, file_name)]
+            )
         return all_hooks
 
     def get_all_methods_in(self, file_name):
         methods = []
         for _, infos in self.__steps_map.items():
-            methods = methods + [i for i in infos if i.file_name == file_name]
+            methods.extend(
+                [i for i in infos if paths_equal(i.file_name, file_name)]
+            )
         return methods + self._get_all_hooks(file_name)
 
     def is_file_cached(self, file_name):
         for _, infos in self.__steps_map.items():
-            if any(i.file_name == file_name for i in infos):
+            if any(paths_equal(i.file_name, file_name) for i in infos):
                 return True
         return False
 
     def remove_steps(self, file_name):
         new_map = {}
         for step, infos in self.__steps_map.items():
-            filtered_info = [i for i in infos if i.file_name != file_name]
+            filtered_info = [i for i in infos if not paths_equal(i.file_name, file_name)]
             if len(filtered_info) > 0:
                 new_map[step] = filtered_info
         self.__steps_map = new_map
@@ -207,6 +212,11 @@ class Registry(object):
         self.__steps_map, self.__continue_on_failures = {}, {}
         for hook in Registry.hooks:
             setattr(self, '__{}'.format(hook), [])
+
+
+def paths_equal(first_file_path, second_file_path) -> bool:
+    """ Normalize paths in order to compare them. """
+    return os.path.normcase(str(first_file_path)) == os.path.normcase(str(second_file_path))
 
 
 def _filter_hooks(tags, hooks):

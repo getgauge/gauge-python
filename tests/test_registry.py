@@ -1,4 +1,5 @@
 import re
+import sys
 import unittest
 
 from getgauge.registry import Registry
@@ -360,6 +361,38 @@ class RegistryTests(unittest.TestCase):
 
         self.assertEqual(3, len(registry.get_all_methods_in("foo.py")))
         self.assertEqual(2, len(registry.get_all_methods_in("bar.py")))
+
+    @unittest.skipIf(not sys.platform.startswith("win"), "Test is designed to cover Windows like paths")
+    def test_Registry_get_all_methods_in_should_handle_paths_case_sensitive(self):
+        lower_c_drive = 'c:/random/path/foo.py'
+        upper_c_drive = 'C:/random/path/foo.py'
+
+        step_infos = [
+            {'text': 'Foo', 'func': 'func1', 'file_name': lower_c_drive},
+            {'text': 'Foo <>', 'func': 'func2', 'file_name': upper_c_drive}
+        ]
+        for info in step_infos:
+            registry.add_step(info['text'], info['func'], info['file_name'])
+
+        """ Note: we should find both steps regardless the different spelling as the path is in fact equal! """
+        self.assertEqual(2, len(registry.get_all_methods_in(lower_c_drive)))
+        self.assertEqual(2, len(registry.get_all_methods_in(upper_c_drive)))
+
+    @unittest.skipIf(sys.platform.startswith("win"), "Fails on Windows due to case sensitivity")
+    def test_Registry_get_all_methods_in_should_handle_paths_case_sensitive_on_mac(self):
+        path1 = '/random/path/foo.py'
+        path2 = '/random/PATH/foo.py'
+
+        step_infos = [
+            {'text': 'Foo', 'func': 'func1', 'file_name': path1},
+            {'text': 'Foo <>', 'func': 'func2', 'file_name': path2}
+        ]
+        for info in step_infos:
+            registry.add_step(info['text'], info['func'], info['file_name'])
+
+        """ Note: since the paths are in fact different, they should be treated as different paths! """
+        self.assertEqual(1, len(registry.get_all_methods_in(path1)))
+        self.assertEqual(1, len(registry.get_all_methods_in(path2)))
 
     def tearDown(self):
         global registry
