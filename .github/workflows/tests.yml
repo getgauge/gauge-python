@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.9, 3.13]
+        python-version: ['3.10', '3.14']
 
     steps:
       - uses: actions/checkout@v5
@@ -42,7 +42,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-        python-version: [3.9, 3.13]
+        python-version: ['3.10', '3.14']
     steps:
       - uses: actions/checkout@v5
 
@@ -56,7 +56,7 @@ jobs:
         uses: actions/setup-go@v6
         with:
           check-latest: true
-          go-version: '1.24'
+          go-version: '1.25'
 
       - name: Setup java
         uses: actions/setup-java@v5
@@ -98,7 +98,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-        python-version: [3.9, 3.13]
+        python-version: ['3.10', '3.14']
     steps:
       - uses: actions/checkout@v5
 
@@ -117,7 +117,7 @@ jobs:
         uses: actions/setup-go@v6
         with:
           check-latest: true
-          go-version: '1.24'
+          go-version: '1.25'
 
       - uses: getgauge/setup-gauge@master
         with:
