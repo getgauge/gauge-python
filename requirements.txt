@@ -5,8 +5,8 @@ certifi==2025.8.3
 charset-normalizer==3.4.3
 debugpy==1.8.16
 docutils==0.22
-grpcio==1.74.0
-grpcio-tools==1.74.0
+grpcio==1.76.0
+grpcio-tools==1.76.0
 idna==3.10
 importlib-metadata==8.7.0
 jaraco.classes==3.4.0
@@ -15,7 +15,7 @@ markdown-it-py==3.0.0
 mdurl==0.1.2
 more-itertools==10.7.0
 pkginfo==1.12.1.2
-protobuf==6.32.0
+protobuf==6.33.0
 pyfakefs==5.9.3
 Pygments==2.19.2
 readme-renderer==44.0
