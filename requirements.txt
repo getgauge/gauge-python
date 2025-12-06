@@ -28,7 +28,7 @@ rply==0.7.8
 setuptools==80.9.0
 six==1.17.0
 twine==6.2.0
-urllib3==2.5.0
+urllib3==2.6.0
 webencodings==0.5.1
 zipp==3.23.0
 coverage==7.12.0
