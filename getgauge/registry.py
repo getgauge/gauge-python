@@ -246,7 +246,7 @@ def _take_screenshot():
     except:
         logger.error("\nFailed to take screenshot using gauge_screenshot.\n{0}".format(
             sys.exc_info()[0]))
-    return str.encode("")
+    return ""
 
 
 registry = Registry()
