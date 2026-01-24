@@ -1,7 +1,7 @@
 appdirs==1.4.4
 baron==0.10.1
 bleach==6.3.0
-certifi==2025.11.12
+certifi==2026.1.4
 charset-normalizer==3.4.4
 debugpy==1.8.19
 docutils==0.22.4
@@ -15,7 +15,7 @@ markdown-it-py==4.0.0
 mdurl==0.1.2
 more-itertools==10.8.0
 pkginfo==1.12.1.2
-protobuf==6.33.2
+protobuf==6.33.4
 pyfakefs==6.0.0
 Pygments==2.19.2
 readme-renderer==44.0
@@ -25,7 +25,7 @@ requests-toolbelt==1.0.0
 rfc3986==2.0.0
 rich==14.2.0
 rply==0.7.8
-setuptools==80.9.0
+setuptools==80.10.1
 six==1.17.0
 twine==6.2.0
 urllib3==2.6.3
