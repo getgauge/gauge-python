@@ -5,7 +5,7 @@ import warnings
 
 import getgauge.messages.messages_pb2 as messages__pb2
 
-GRPC_GENERATED_VERSION = '1.74.0'
+GRPC_GENERATED_VERSION = '1.81.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 
@@ -18,14 +18,14 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in services_pb2_grpc.py depends on'
+        + ' but the generated code in services_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
 
 
-class RunnerStub(object):
+class RunnerStub:
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -156,7 +156,7 @@ class RunnerStub(object):
                 _registered_method=True)
 
 
-class RunnerServicer(object):
+class RunnerServicer:
     """Missing associated documentation comment in .proto file."""
 
     def ValidateStep(self, request, context):
@@ -506,7 +506,7 @@ def add_RunnerServicer_to_server(servicer, server):
 
 
  # This class is part of an EXPERIMENTAL API.
-class Runner(object):
+class Runner:
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -1158,7 +1158,7 @@ class Runner(object):
             _registered_method=True)
 
 
-class ReporterStub(object):
+class ReporterStub:
     """Reporter services is meant for reporting plugins, or others plugins which are interested the live events
     """
 
@@ -1230,7 +1230,7 @@ class ReporterStub(object):
                 _registered_method=True)
 
 
-class ReporterServicer(object):
+class ReporterServicer:
     """Reporter services is meant for reporting plugins, or others plugins which are interested the live events
     """
 
@@ -1413,7 +1413,7 @@ def add_ReporterServicer_to_server(servicer, server):
 
 
  # This class is part of an EXPERIMENTAL API.
-class Reporter(object):
+class Reporter:
     """Reporter services is meant for reporting plugins, or others plugins which are interested the live events
     """
 
@@ -1742,7 +1742,7 @@ class Reporter(object):
             _registered_method=True)
 
 
-class DocumenterStub(object):
+class DocumenterStub:
     """Reporter services is meant for documentation plugins
     """
 
@@ -1764,7 +1764,7 @@ class DocumenterStub(object):
                 _registered_method=True)
 
 
-class DocumenterServicer(object):
+class DocumenterServicer:
     """Reporter services is meant for documentation plugins
     """
 
@@ -1807,7 +1807,7 @@ def add_DocumenterServicer_to_server(servicer, server):
 
 
  # This class is part of an EXPERIMENTAL API.
-class Documenter(object):
+class Documenter:
     """Reporter services is meant for documentation plugins
     """
 
