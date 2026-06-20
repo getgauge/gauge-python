@@ -7,11 +7,11 @@
 # Runtime (mirrors install_requires in setup.tmpl)
 redbaron==0.9.2
 debugpy==1.8.21
-grpcio==1.81.0
+grpcio==1.81.1
 protobuf==6.33.6
 
 # Build / codegen
-grpcio-tools==1.81.0
+grpcio-tools==1.81.1
 setuptools==82.0.1
 
 # Test
