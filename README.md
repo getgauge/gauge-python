@@ -52,10 +52,6 @@ gauge install python --file gauge-python-0.2.3.zip
 
 #### Build from Source
 
-##### Pre-Requisites
-
-* [Golang](http://golang.org/)
-
 ##### Installing package dependencies
 ```
 pip install -r requirements.txt
