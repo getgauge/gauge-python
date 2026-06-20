@@ -1,6 +1,6 @@
 appdirs==1.4.4
 baron==0.10.1
-bleach==6.3.0
+bleach==6.4.0
 certifi==2026.5.20
 charset-normalizer==3.4.7
 debugpy==1.8.21
