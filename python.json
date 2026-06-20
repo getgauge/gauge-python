@@ -1,10 +1,10 @@
 {
   "id": "python",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Python support for gauge",
   "run": {
     "windows": [
-      "start.bat",
+      ".\\start.bat",
       "--start"
     ],
     "linux": [
@@ -18,7 +18,7 @@
   },
   "init": {
     "windows": [
-      "start.bat",
+      ".\\start.bat",
       "--init"
     ],
     "linux": [
