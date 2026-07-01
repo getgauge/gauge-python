@@ -15,7 +15,7 @@ grpcio-tools==1.81.1
 setuptools==82.0.1
 
 # Test
-coverage==7.14.1
+coverage==7.14.3
 pyfakefs==6.2.0
 
 # Publish
@@ -41,7 +41,7 @@ keyring==25.7.0
 markdown-it-py==4.2.0
 mdurl==0.1.2
 more-itertools==11.1.0
-nh3==0.3.5
+nh3==0.3.6
 packaging==26.2
 Pygments==2.20.0
 readme_renderer==45.0
