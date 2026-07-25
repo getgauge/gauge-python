@@ -12,7 +12,7 @@ protobuf==6.33.6
 
 # Build / codegen
 grpcio-tools==1.81.1
-setuptools==82.0.1
+setuptools==83.0.0
 
 # Test
 coverage==7.14.3
