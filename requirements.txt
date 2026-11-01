@@ -7,15 +7,15 @@
 # Runtime (mirrors install_requires in setup.tmpl)
 redbaron==0.9.2
 debugpy==1.8.22
-grpcio==1.84.0
+grpcio==1.85.0
 protobuf==7.36.2
 
 # Build / codegen
-grpcio-tools==1.84.0
-setuptools==84.1.0
+grpcio-tools==1.85.0
+setuptools==84.2.1
 
 # Test
-coverage==7.16.2
+coverage==7.17.0
 pyfakefs==6.2.0
 
 # Publish
@@ -29,8 +29,8 @@ twine==7.0.0
 # =============================================================================
 appdirs==1.4.4
 baron==0.10.1
-certifi==2026.10.19
-charset-normalizer==3.5.1
+certifi==2026.10.23
+charset-normalizer==3.5.2
 docutils==0.23
 id==1.6.1
 idna==3.20
@@ -40,7 +40,7 @@ jaraco.functools==4.6.0
 keyring==25.7.0
 markdown-it-py==4.2.0
 mdurl==0.1.2
-more-itertools==11.1.0
+more-itertools==11.2.1
 nh3==0.3.7
 packaging==26.3
 Pygments==2.21.0
