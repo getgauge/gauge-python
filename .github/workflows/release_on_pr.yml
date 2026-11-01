@@ -51,14 +51,14 @@ jobs:
 
       - name: 'deployment success'
         if: success()
-        uses: 'deliverybot/deployment-status@v1'
+        uses: 'deliverybot/deployment-status@v2'
         with:
           state: 'success'
           token: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: 'deployment failure'
         if: failure()
-        uses: 'deliverybot/deployment-status@v1'
+        uses: 'deliverybot/deployment-status@v2'
         with:
           state: 'failure'
           token: '${{ secrets.GITHUB_TOKEN }}'
